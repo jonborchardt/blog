@@ -17,11 +17,11 @@ A statically generated technical blog (Astro 7 + React islands + MDX + Tailwind/
 
 - `astro.config.mjs` sets `site` + `base: "/blog"` + `trailingSlash: "always"`.
 - **Never hardcode `/blog/`.** Build links with `href("/path/")` / `absoluteUrl()` from `src/lib/url.ts`. Never create `src/pages/blog/`.
-- Post URLs are flat: `/<slug>/`. Reserved route names: `archive`, `series`, `about`, `admin`, `rss.xml`, `robots.txt`, `sitemap-index.xml` (see `RESERVED_SLUGS` in `src/lib/posts.ts`).
+- Post URLs are flat: `/<slug>/`. Reserved route names live in `src/lib/reserved-slugs.ts` (`archive`, `series`, `about`, `admin`, `404`, `og`, `search-index.json`, `rss.xml`, `robots.txt`, `sitemap-index.xml`); add there whenever a new top-level route is created.
 
 ## Content contract
 
-- Posts live in `src/content/posts/<dir>/index.mdx`. Entry id = `<dir>`; slug = `slug` frontmatter or `<dir>`. Slugs are kebab-case.
+- Posts live in `src/content/posts/<dir>/index.mdx`. Entry id = `<dir>`; slug = `slug` frontmatter or `<dir>`. Slugs are kebab-case. Scaffold with `npm run new-post -- <slug> …` (validates slug/series/tags, computes `seriesOrder`, always `draft: true`).
 - Shared MDX primitives (Callout, Figure, Tabs, …) are catalogued in `src/components/blog/README.md`; use them instead of ad-hoc markup.
 - Internal links in MDX are root-relative (`/some-post/`, `/about/`); the build prefixes the base.
 - Diagrams: `mermaid` fences; math: `$`/`$$` (remark-math). Both render at build time (Mermaid needs Chromium: `npx playwright install chromium`).
@@ -59,4 +59,4 @@ Before claiming done: `npm run validate` (typecheck + lint + format:check + unit
 - New shared MDX primitives go in `src/components/blog/` as `.astro` (static) unless interactivity is required.
 - shadcn components go in `src/components/ui/` via `npx shadcn add <name>`; do not hand-edit them beyond styling.
 - `/admin/` is dev-only (`getStaticPaths` returns nothing in prod). Never let it into `dist/`.
-- Skills, not this file, hold step-by-step workflows (`write-post`, `create-visual`, `create-series`, `review-post`, `publish-post`).
+- Skills, not this file, hold step-by-step workflows: `.claude/skills/{write-post,create-series,create-visual,review-post,publish-post}` (index in `.claude/skills/README.md`).

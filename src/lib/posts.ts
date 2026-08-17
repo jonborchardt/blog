@@ -1,22 +1,12 @@
 import { getCollection, type CollectionEntry } from "astro:content";
 import { series, type SeriesId } from "@/config/series";
 import { site } from "@/config/site";
+import { RESERVED_SLUGS_LIST } from "@/lib/reserved-slugs";
 
 export type Post = CollectionEntry<"posts">;
 
-/** Route names posts may not collide with. */
-export const RESERVED_SLUGS = new Set([
-  "archive",
-  "series",
-  "about",
-  "admin",
-  "404",
-  "og",
-  "search-index.json",
-  "rss.xml",
-  "robots.txt",
-  "sitemap-index.xml",
-]);
+/** Route names posts may not collide with (list lives in reserved-slugs.ts so Node scripts can read it). */
+export const RESERVED_SLUGS = new Set(RESERVED_SLUGS_LIST);
 
 export const postSlug = (post: Post): string => post.data.slug ?? post.id;
 export const postPath = (post: Post): string => `/${postSlug(post)}/`;

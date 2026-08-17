@@ -23,6 +23,7 @@ Personal technical blog by Jonathan Borchardt. Static site built with Astro, pub
 | `npm run format`    | Prettier (write) — `format:check` to verify                                                       |
 | `npm test`          | Vitest unit tests                                                                                 |
 | `npm run test:e2e`  | Playwright + axe against a production build on port 4322 (`npx playwright install chromium` once) |
+| `npm run new-post`  | scaffold a draft post: `npm run new-post -- <slug> [--title "…"] [--series <id>] [--tags a,b]`    |
 | `npm run validate`  | typecheck + lint + format:check + unit tests                                                      |
 
 ## Branding
@@ -42,7 +43,7 @@ Every post without a bespoke `ogImage` gets a generated 1200×630 card at `/og/<
 - **MDX** for posts and the about page. **Tailwind 4 + shadcn/ui (Radix)** for styling; light/dark/system theme with a persisted override.
 - **Content**: `src/content/posts/<slug>/index.mdx` with colocated assets and components. Frontmatter is validated by the schema in `src/content.config.ts` against typed registries in `src/config/series.ts` and `src/config/tags.ts`. Cross-post checks (duplicate/reserved slugs, duplicate series order) fail the build.
 - **Drafts** (`draft: true`) render only in `npm run dev`.
-- **Routes**: `/`, `/archive/`, `/<slug>/`, `/series/`, `/series/<id>/`, `/about/`, `/rss.xml`, `/robots.txt`, `/sitemap-index.xml`; `/admin/` exists in dev only.
+- **Routes**: `/`, `/archive/`, `/<slug>/`, `/series/`, `/series/<id>/`, `/about/`, `/rss.xml`, `/robots.txt`, `/sitemap-index.xml`, `/search-index.json`, `/og/<slug>.png`, custom 404; `/admin/` exists in dev only.
 - **Base path**: `astro.config.mjs` sets `site` and `base: "/blog"`; links are built with `href()` from `src/lib/url.ts` so nothing hardcodes `/blog/`.
 
 ```
@@ -51,11 +52,12 @@ src/
   content/posts/ one directory per post
   components/    blog/ (shared MDX primitives), ui/ (shadcn), site chrome
   layouts/       BaseLayout (head/meta/JSON-LD/theme), PageLayout (MDX pages)
-  lib/           posts (loading + validation), url, seo
+  lib/           posts (loading + validation), url, seo, og cards, search core, dist checks
   pages/         routes
   styles/        global.css (Tailwind + design tokens)
 e2e/             Playwright + axe smoke tests (+ shots.mjs: ad-hoc screenshots of a preview)
-.claude/skills/  agent workflows (planned)
+.claude/skills/  agent workflows: write-post, create-series, create-visual, review-post, publish-post
+scripts/         new-post scaffold, config regeneration
 ```
 
 ## Validation
@@ -72,4 +74,4 @@ e2e/             Playwright + axe smoke tests (+ shots.mjs: ad-hoc screenshots o
 
 ## Agents
 
-See `CLAUDE.md` for repository invariants and `.claude/skills/` for workflows.
+Most content here is written by coding agents. `CLAUDE.md` holds the invariants, `.claude/skills/` the procedures (write → review → publish), `src/components/blog/README.md` the authoring vocabulary. The build is the reviewer of last resort: it fails with a message that says what to change.

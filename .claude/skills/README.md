@@ -1,13 +1,9 @@
 # Skills
 
-Procedural workflows for agents live here, one directory per skill (`<name>/SKILL.md`).
+Procedural workflows for agents, one directory per skill (`<name>/SKILL.md`). Invariants live in `CLAUDE.md`, commands and setup in `README.md`, the primitive API in `src/components/blog/README.md` — skills link to those rather than restating them.
 
-Planned skills (not yet written):
-
-- `write-post` — create `src/content/posts/<slug>/index.mdx` with valid frontmatter; when in a series without an explicit order, assign `seriesOrder = max(existing) + 1`
-- `create-visual` — author an SVG or React island colocated with a post
-- `create-series` — add an entry to `src/config/series.ts`
-- `review-post` — check content contracts, accessibility, links, SEO metadata
-- `publish-post` — set `draft: false`, run `npm run validate` and `npm run build`
-
-Repository invariants live in `CLAUDE.md`; keep skills procedural.
+- `write-post` — scaffold with `npm run new-post`, write MDX with the shared primitives, validate/build; leaves `draft: true`.
+- `create-series` — add an entry to `src/config/series.ts` (or via `/admin/`), optionally scaffold part 1.
+- `create-visual` — SVG → HTML/CSS → post-local React island decision tree, with the accessibility checklist.
+- `review-post` — automated gates + read-through + visual pass; outputs a findings list.
+- `publish-post` — `draft: false`, dates, full checks, commit, push `main`, verify live.
