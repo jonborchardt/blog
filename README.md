@@ -62,6 +62,10 @@ e2e/             Playwright + axe smoke tests (+ shots.mjs: ad-hoc screenshots o
 
 `npm run build` fails on invalid content, and says how to fix it: frontmatter schema violations, unknown series/tags, duplicate or reserved slugs, duplicate series order, and — after the HTML is emitted (`check-dist`) — broken internal links or `#fragments`, links not under the base, images without alt/width/height, pages missing title/description/canonical/og:image, and any admin output. `npm run validate` covers types, lint, formatting and unit tests; `npm run test:e2e` runs axe and behaviour tests against a production preview.
 
+## Local admin (dev only)
+
+`npm run dev` serves `/blog/admin/`: forms for site identity, navigation, featured post, author profile and links, series and tags. Each Save validates against `src/config/types.ts` and rewrites the matching `src/config/*.ts` immediately (Prettier-formatted, byte-identical to `npm run format`); the dev server hot-reloads. Deleting a series or tag still used by a post is refused with the list of posts. Posts are not editable here; there is no undo (use git). The route is never built (`npm run build` and e2e assert `dist/` has no `admin/`). `node scripts/regen-config.mts` rewrites all four files through the same template.
+
 ## Deployment
 
 `.github/workflows/deploy.yml` runs typecheck, lint, format check, unit tests, build, and e2e on every push/PR, then deploys `dist/` to GitHub Pages on `main`. In the repository settings set **Pages → Source → GitHub Actions**. No secrets required.

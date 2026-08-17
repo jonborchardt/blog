@@ -10,6 +10,7 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import rehypeMermaid from "rehype-mermaid";
 import { checkDist } from "./src/integrations/check-dist.ts";
+import { adminPlugin } from "./src/dev/admin-plugin.ts";
 
 /**
  * Plain text of a heading hast node (for anchor aria-labels).
@@ -97,6 +98,7 @@ export default defineConfig({
     }),
   },
   vite: {
-    plugins: [tailwindcss()],
+    // adminPlugin is apply:"serve" (dev only): backs /admin/ config writes; never in a build.
+    plugins: [tailwindcss(), adminPlugin()],
   },
 });

@@ -1,21 +1,54 @@
 ---
 /**
- * Local-development-only admin. In production getStaticPaths returns no paths,
- * so nothing under /admin/ is ever emitted to dist/. e2e tests assert this.
+ * Local-development-only admin for the typed config registries. In production getStaticPaths
+ * returns no paths, so nothing under /admin/ is ever emitted to dist/ (e2e + check-dist assert
+ * this). Writes go through the dev-only Vite middleware in src/dev/admin-plugin.ts.
+ * The route stays a rest param so the empty-getStaticPaths guard applies.
  */
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import AdminApp from "@/components/admin/AdminApp";
+import { site } from "@/config/site";
+import { author } from "@/config/author";
+import { series } from "@/config/series";
+import { tags } from "@/config/tags";
+import { getPosts, postSlug } from "@/lib/posts";
 
 export function getStaticPaths() {
   return import.meta.env.DEV ? [{ params: { path: undefined } }] : [];
 }
+
+const posts = (await getPosts()).map((p) => ({
+  slug: postSlug(p),
+  title: p.data.title,
+  draft: p.data.draft,
+}));
 ---
 
 <BaseLayout
-  meta={{ title: "Admin (dev only)", description: "Local admin.", path: "/admin/", noindex: true }}
+  meta={{
+    title: "Admin (dev only)",
+    description: "Local admin for site configuration.",
+    path: "/admin/",
+    noindex: true,
+  }}
 >
-  <h1 class="text-3xl font-bold tracking-tight">Admin</h1>
-  <p class="text-muted-foreground mt-2">
-    Placeholder. Config editing UI (site, author, nav, series, tags, featured post) is planned. This
-    route exists only in <code>astro dev</code>.
-  </p>
+  <div class="max-w-wide mx-auto">
+    <p class="text-destructive text-xs font-medium tracking-wide uppercase">Development only</p>
+    <h1 class="text-display mt-2 font-semibold">Admin</h1>
+    <p class="text-muted-foreground mt-3">
+      Edits <code>src/config/*.ts</code> directly and immediately (no undo — use git). Posts are not editable
+      here. This route does not exist in the production build.
+    </p>
+    <div class="mt-8">
+      <AdminApp
+        client:load
+        site={site}
+        author={author}
+        series={series}
+        tags={tags}
+        posts={posts}
+        endpoint="/__admin/config"
+      />
+    </div>
+  </div>
 </BaseLayout>
