@@ -28,6 +28,7 @@ A statically generated technical blog (Astro 7 + React islands + MDX + Tailwind/
 - `draft: true` = dev-only. Drafts never appear in the production build, listings, RSS, or sitemap. Do not add any production draft-preview mechanism.
 - Frontmatter dates are calendar dates in UTC; render them only via `formatDate`/`isoDate` in `src/lib/dates.ts`.
 - Every image needs meaningful `alt`. Hero images require `alt` in the schema.
+- Colocated images: use Markdown `![alt](./file.png)` or `<Image>` from `astro:assets`; never `<img>` for raster. SVG may use `<img>` with `width`/`height`/`alt`.
 - Site identity/nav/featured post: `src/config/site.ts`. Author: `src/config/author.ts`. About page prose: `src/pages/about/index.mdx`.
 
 ## Validation (build must fail on invalid state)

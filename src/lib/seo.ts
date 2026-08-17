@@ -29,10 +29,11 @@ export const personJsonLd = (siteUrl: URL) => ({
   sameAs: Object.values(author.links),
 });
 
-export const articleJsonLd = (post: Post, path: string, siteUrl: URL) => ({
+export const articleJsonLd = (post: Post, path: string, siteUrl: URL, image?: string) => ({
   "@context": "https://schema.org",
   "@type": "BlogPosting",
   headline: post.data.title,
+  ...(image && { image: image.startsWith("http") ? image : absoluteUrl(image, siteUrl) }),
   description: post.data.description,
   datePublished: post.data.publishedAt.toISOString(),
   ...(post.data.updatedAt && { dateModified: post.data.updatedAt.toISOString() }),

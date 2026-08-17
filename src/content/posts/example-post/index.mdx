@@ -26,7 +26,9 @@ export const alwaysShippable = true;
   This callout is an Astro component from `src/components/blog/`. Zero JS shipped.
 </Callout>
 
-## Colocated asset
+## Colocated assets
+
+An SVG rendered with a plain `<img>`:
 
 <img
   src={example.src}
@@ -34,6 +36,20 @@ export const alwaysShippable = true;
   height={example.height}
   alt="A grey circle labelled SVG"
 />
+
+A raster image via Markdown syntax gets responsive `srcset`, dimensions and lazy loading:
+
+![A schematic card on a grid background standing in for a real screenshot](./pipeline.png)
+
+## Tables
+
+| Check                     | Where it runs   | Fails the build? | Notes                                        |
+| ------------------------- | --------------- | ---------------- | -------------------------------------------- |
+| Frontmatter schema        | content loader  | yes              | Zod, `src/content.config.ts`                 |
+| Unknown series/tags       | content loader  | yes              | registries in `src/config/`                  |
+| Duplicate or reserved     | `validatePosts` | yes              | every page that lists posts                  |
+| axe WCAG 2.2 AA           | e2e             | yes              | every sitemap URL, in the production preview |
+| Horizontal overflow @360w | e2e             | yes              | every sitemap URL                            |
 
 ## React island
 

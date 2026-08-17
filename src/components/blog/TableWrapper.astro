@@ -1,0 +1,9 @@
+---
+/**
+ * Wraps Markdown tables so wide tables scroll horizontally on narrow screens instead of
+ * overflowing the page. Applied automatically to every table in a post via
+ * `<Content components={{ table: TableWrapper }} />` — authors write plain Markdown tables.
+ */
+---
+
+<div class="overflow-x-auto"><table {...Astro.props}><slot /></table></div>

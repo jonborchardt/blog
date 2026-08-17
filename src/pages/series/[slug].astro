@@ -1,8 +1,10 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import PostList from "@/components/PostList.astro";
+import DraftBadge from "@/components/DraftBadge.astro";
 import { series, SERIES_IDS, type SeriesId } from "@/config/series";
-import { getSeriesPosts, seriesPath } from "@/lib/posts";
+import { getSeriesPosts, postPath, seriesPath } from "@/lib/posts";
+import { formatDate, isoDate } from "@/lib/dates";
+import { href } from "@/lib/url";
 
 export function getStaticPaths() {
   return SERIES_IDS.map((slug) => ({ params: { slug } }));
@@ -25,7 +27,29 @@ const posts = await getSeriesPosts(id);
     <div class="mt-10 border-t pt-8">
       {
         posts.length ? (
-          <PostList posts={posts} />
+          <ol class="divide-y">
+            {posts.map((post, i) => (
+              <li class="grid grid-cols-[3rem_1fr] gap-x-4 py-5 first:pt-0 last:pb-0">
+                <span class="text-primary pt-1 text-xs font-medium tracking-wide uppercase">
+                  Part {i + 1}
+                </span>
+                <div>
+                  <h2 class="text-lg leading-snug font-semibold tracking-tight">
+                    <a href={href(postPath(post))} class="hover:text-primary no-underline">
+                      {post.data.title}
+                    </a>
+                    {post.data.draft && <DraftBadge />}
+                  </h2>
+                  <p class="text-muted-foreground mt-1">{post.data.description}</p>
+                  <p class="text-muted-foreground mt-2 text-sm">
+                    <time datetime={isoDate(post.data.publishedAt)}>
+                      {formatDate(post.data.publishedAt)}
+                    </time>
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ol>
         ) : (
           <p class="text-muted-foreground">No posts yet.</p>
         )

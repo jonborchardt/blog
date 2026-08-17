@@ -44,6 +44,30 @@ export async function getSeriesPosts(id: SeriesId): Promise<Post[]> {
     .sort((a, b) => (a.data.seriesOrder ?? Infinity) - (b.data.seriesOrder ?? Infinity));
 }
 
+export interface SeriesContext {
+  /** 1-based positional part number (consistent even if seriesOrder has gaps). */
+  index: number;
+  total: number;
+  prev?: Post;
+  next?: Post;
+  series: { id: SeriesId; title: string; description: string };
+}
+
+/** Position of a post within its series, or undefined when it has none. */
+export async function getSeriesContext(post: Post): Promise<SeriesContext | undefined> {
+  const id = post.data.series;
+  if (!id) return undefined;
+  const siblings = await getSeriesPosts(id);
+  const i = siblings.findIndex((p) => p.id === post.id);
+  return {
+    index: i + 1,
+    total: siblings.length,
+    prev: siblings[i - 1],
+    next: siblings[i + 1],
+    series: { id, ...series[id] },
+  };
+}
+
 /** Pure validation over post metadata. Throws listing every problem found. */
 export function validatePosts(posts: Pick<Post, "id" | "data">[]): void {
   const errors: string[] = [];
