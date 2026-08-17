@@ -16,7 +16,8 @@ const siteUrl = Astro.site!;
 const canonical = absoluteUrl(meta.path, siteUrl);
 const fullTitle = meta.path === "/" ? site.name : `${meta.title} · ${site.name}`;
 // Every page has a social image: bespoke/derived one from meta, else the generated site card.
-const imagePath = meta.image ?? "/og/site.png";
+// Default: the hand-made site card in public/og/site.jpg; posts get generated cards (src/pages/og/).
+const imagePath = meta.image ?? "/og/site.jpg";
 const image = imagePath.startsWith("http") ? imagePath : absoluteUrl(imagePath, siteUrl);
 const imageAlt = meta.imageAlt ?? `${meta.title} — ${site.name}`;
 const imageWidth = meta.imageWidth ?? 1200;

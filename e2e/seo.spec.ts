@@ -39,7 +39,7 @@ test("every sitemap page has complete, consistent SEO metadata", async ({ page, 
 });
 
 test("generated OG cards are 1200x630 PNGs", async ({ request }) => {
-  for (const p of ["og/site.png", "og/building-blocks-of-this-blog.png"]) {
+  for (const p of ["og/building-blocks-of-this-blog.png", "og/interactive-islands-in-mdx.png"]) {
     const res = await request.get(p);
     expect(res.ok(), p).toBe(true);
     expect(res.headers()["content-type"]).toBe("image/png");

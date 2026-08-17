@@ -34,7 +34,7 @@ Personal technical blog by Jonathan Borchardt. Static site built with Astro, pub
 
 ## Social cards
 
-Every post without a bespoke `ogImage` gets a generated 1200×630 card at `/og/<slug>.png` (built by `src/lib/og.ts` with satori + resvg — no browser). Non-post pages use `/og/site.png`. The card font (IBM Plex Sans, OFL) lives in `src/assets/fonts/og/` and is used only for cards; pages keep the system font stack.
+Every post without a bespoke `ogImage` gets a generated 1200×630 card at `/og/<slug>.png` (built by `src/lib/og.ts` with satori + resvg — no browser). Non-post pages use the hand-made `public/og/site.jpg` (1200×630, replace the file to change it). The card font (IBM Plex Sans, OFL) lives in `src/assets/fonts/og/` and is used only for cards; pages keep the system font stack.
 
 ## Architecture
 

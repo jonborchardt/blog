@@ -140,7 +140,7 @@ export function checkDist({ pages, files, base, site }: DistCheckInput): DistChe
     }
     if (!doc.querySelector("meta[property='og:image']")?.getAttribute("content")) {
       errors.push(
-        `${file}: missing og:image → BaseLayout falls back to /og/site.png; check meta.image`,
+        `${file}: missing og:image → BaseLayout falls back to /og/site.jpg; check meta.image`,
       );
     }
   }
