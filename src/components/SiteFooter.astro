@@ -1,0 +1,18 @@
+---
+import { author } from "@/config/author";
+import { site } from "@/config/site";
+import { href } from "@/lib/url";
+---
+
+<footer class="border-t">
+  <div
+    class="text-muted-foreground mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-4 px-4 py-6 text-sm"
+  >
+    <p>© {new Date().getFullYear()} {author.name} · {site.name}</p>
+    <ul class="flex gap-4">
+      <li><a href={author.links.github} rel="me" class="hover:underline">GitHub</a></li>
+      <li><a href={author.links.linkedin} rel="me" class="hover:underline">LinkedIn</a></li>
+      <li><a href={href("/rss.xml")} class="hover:underline">RSS</a></li>
+    </ul>
+  </div>
+</footer>

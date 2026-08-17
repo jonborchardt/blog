@@ -1,0 +1,83 @@
+---
+import { render } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { series as seriesRegistry } from "@/config/series";
+import { tags as tagRegistry } from "@/config/tags";
+import { getPosts, getSeriesPosts, postPath, postSlug, seriesPath } from "@/lib/posts";
+import { articleJsonLd } from "@/lib/seo";
+import { href } from "@/lib/url";
+
+export async function getStaticPaths() {
+  // getPosts() excludes drafts in production, so draft pages are never generated.
+  return (await getPosts()).map((post) => ({ params: { slug: postSlug(post) }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const path = postPath(post);
+const seriesInfo = post.data.series ? seriesRegistry[post.data.series] : undefined;
+const siblings = post.data.series ? await getSeriesPosts(post.data.series) : [];
+---
+
+<BaseLayout
+  meta={{
+    title: post.data.title,
+    description: post.data.description,
+    path,
+    type: "article",
+    image: post.data.ogImage?.src,
+    publishedAt: post.data.publishedAt,
+    updatedAt: post.data.updatedAt,
+    noindex: post.data.draft,
+    jsonLd: [articleJsonLd(post, path, Astro.site!)],
+  }}
+>
+  <article>
+    <header class="mb-8">
+      {
+        post.data.draft && (
+          <p class="text-destructive mb-2 text-sm font-semibold">DRAFT — dev only</p>
+        )
+      }
+      <h1 class="text-3xl font-bold tracking-tight">{post.data.title}</h1>
+      <p class="text-muted-foreground mt-2 text-sm">
+        <time datetime={post.data.publishedAt.toISOString()}>
+          {post.data.publishedAt.toLocaleDateString("en-US", { dateStyle: "long" })}
+        </time>
+        {
+          post.data.updatedAt && (
+            <>
+              {" · Updated "}
+              <time datetime={post.data.updatedAt.toISOString()}>
+                {post.data.updatedAt.toLocaleDateString("en-US", { dateStyle: "long" })}
+              </time>
+            </>
+          )
+        }
+      </p>
+      {
+        seriesInfo && post.data.series && (
+          <p class="mt-2 text-sm">
+            Series:{" "}
+            <a href={href(seriesPath(post.data.series))} class="underline">
+              {seriesInfo.title}
+            </a>
+            {post.data.seriesOrder && ` · Part ${post.data.seriesOrder} of ${siblings.length}`}
+          </p>
+        )
+      }
+      {
+        post.data.tags.length > 0 && (
+          <ul class="mt-2 flex flex-wrap gap-2 text-xs" aria-label="Tags">
+            {post.data.tags.map((t) => (
+              <li class="bg-muted rounded px-2 py-0.5">{tagRegistry[t].label}</li>
+            ))}
+          </ul>
+        )
+      }
+    </header>
+    <div class="prose dark:prose-invert max-w-none">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

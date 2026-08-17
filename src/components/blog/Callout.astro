@@ -1,0 +1,12 @@
+---
+/** Minimal shared MDX primitive proving the shared component path. Static, no JS. */
+interface Props {
+  title?: string;
+}
+const { title } = Astro.props;
+---
+
+<aside class="not-prose border-primary bg-muted my-6 rounded-md border-l-4 p-4">
+  {title && <p class="mb-1 font-semibold">{title}</p>}
+  <div class="text-sm"><slot /></div>
+</aside>

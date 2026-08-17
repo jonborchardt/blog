@@ -1,0 +1,28 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { series, SERIES_IDS } from "@/config/series";
+import { getSeriesPosts, seriesPath } from "@/lib/posts";
+import { href } from "@/lib/url";
+
+const entries = await Promise.all(
+  SERIES_IDS.map(async (id) => ({ id, ...series[id], count: (await getSeriesPosts(id)).length })),
+);
+---
+
+<BaseLayout meta={{ title: "Series", description: "Multi-part series.", path: "/series/" }}>
+  <h1 class="text-3xl font-bold tracking-tight">Series</h1>
+  <ul class="mt-8 space-y-4">
+    {
+      entries.map((s) => (
+        <li>
+          <a href={href(seriesPath(s.id))} class="font-medium hover:underline">
+            {s.title}
+          </a>
+          <p class="text-muted-foreground text-sm">
+            {s.description} · {s.count} {s.count === 1 ? "post" : "posts"}
+          </p>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>

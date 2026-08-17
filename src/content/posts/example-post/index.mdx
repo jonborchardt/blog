@@ -1,0 +1,42 @@
+---
+title: Example Post
+description: A temporary post proving the content pipeline — frontmatter, MDX, colocated assets, series, tags, and a React island.
+publishedAt: 2026-08-17
+series: example-series
+seriesOrder: 1
+tags: [meta, engineering]
+draft: false
+---
+
+import Callout from "@/components/blog/Callout.astro";
+import ExampleInteractive from "./components/ExampleInteractive";
+import example from "./example.svg";
+
+This post exists to prove the scaffold works. It will be deleted.
+
+## Static content stays static
+
+Prose, headings, and code render to plain HTML with **no client JavaScript**.
+
+```ts
+export const alwaysShippable = true;
+```
+
+<Callout title="Shared component">
+  This callout is an Astro component from `src/components/blog/`. Zero JS shipped.
+</Callout>
+
+## Colocated asset
+
+<img
+  src={example.src}
+  width={example.width}
+  height={example.height}
+  alt="A grey circle labelled SVG"
+/>
+
+## React island
+
+Only the component below hydrates. Everything else on the page is static.
+
+<ExampleInteractive client:visible />

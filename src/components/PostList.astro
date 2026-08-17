@@ -1,0 +1,32 @@
+---
+import type { Post } from "@/lib/posts";
+import { postPath } from "@/lib/posts";
+import { href } from "@/lib/url";
+
+interface Props {
+  posts: Post[];
+}
+const { posts } = Astro.props;
+---
+
+<ul class="space-y-4">
+  {
+    posts.map((post) => (
+      <li>
+        <a href={href(postPath(post))} class="font-medium hover:underline">
+          {post.data.title}
+        </a>
+        {post.data.draft && (
+          <span class="bg-destructive ml-2 rounded px-1.5 py-0.5 text-xs text-white">draft</span>
+        )}
+        <p class="text-muted-foreground text-sm">
+          <time datetime={post.data.publishedAt.toISOString()}>
+            {post.data.publishedAt.toLocaleDateString("en-US", { dateStyle: "medium" })}
+          </time>
+          {" · "}
+          {post.data.description}
+        </p>
+      </li>
+    ))
+  }
+</ul>

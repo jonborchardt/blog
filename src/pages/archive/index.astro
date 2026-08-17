@@ -1,0 +1,15 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PostList from "@/components/PostList.astro";
+import { getPosts } from "@/lib/posts";
+
+// ponytail: static list for now. Client-side search/filter/sort (URL-query-driven React island)
+// is planned; the data it needs is exactly `posts` below, serialized as props.
+const posts = await getPosts();
+---
+
+<BaseLayout meta={{ title: "Archive", description: "All posts.", path: "/archive/" }}>
+  <h1 class="text-3xl font-bold tracking-tight">Archive</h1>
+  <p class="text-muted-foreground mt-2">{posts.length} posts</p>
+  <div class="mt-8"><PostList posts={posts} /></div>
+</BaseLayout>

@@ -1,0 +1,52 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PostList from "@/components/PostList.astro";
+import { site } from "@/config/site";
+import { author } from "@/config/author";
+import { getFeaturedPost, getPosts, postPath } from "@/lib/posts";
+import { personJsonLd } from "@/lib/seo";
+import { href } from "@/lib/url";
+
+const featured = await getFeaturedPost();
+const recent = (await getPosts()).filter((p) => p !== featured).slice(0, 5);
+---
+
+<BaseLayout
+  meta={{
+    title: site.name,
+    description: site.description,
+    path: "/",
+    jsonLd: [personJsonLd(Astro.site!)],
+  }}
+>
+  <h1 class="text-3xl font-bold tracking-tight">{site.name}</h1>
+  <p class="text-muted-foreground mt-2">{site.description}</p>
+  <p class="mt-1 text-sm">{author.name} — {author.tagline}</p>
+
+  {
+    featured && (
+      <section class="mt-10" aria-labelledby="featured">
+        <h2 id="featured" class="text-xs font-semibold tracking-wide uppercase">
+          Featured
+        </h2>
+        <a href={href(postPath(featured))} class="mt-2 block text-xl font-semibold hover:underline">
+          {featured.data.title}
+        </a>
+        <p class="text-muted-foreground">{featured.data.description}</p>
+      </section>
+    )
+  }
+
+  <section class="mt-10" aria-labelledby="recent">
+    <h2 id="recent" class="text-xs font-semibold tracking-wide uppercase">Recent</h2>
+    <div class="mt-2">
+      {
+        recent.length ? (
+          <PostList posts={recent} />
+        ) : (
+          <p class="text-muted-foreground">No other posts yet.</p>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>

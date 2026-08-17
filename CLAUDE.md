@@ -1,0 +1,52 @@
+# CLAUDE.md — Always Shippable
+
+Rules and invariants for agents working in this repo. Procedural workflows live in `.claude/skills/`; keep this file short.
+
+## What this is
+
+A statically generated technical blog (Astro 7 + React islands + MDX + Tailwind/shadcn) deployed as a GitHub Pages **project site** at `https://jonborchardt.github.io/blog/`. It is designed to be an agent-authored publishing system: explicit contracts, typed registries, build-time failure for invalid content.
+
+## Architecture boundaries
+
+- **Astro owns** pages, routing, layouts, content loading, metadata, static rendering.
+- **React is only for genuinely interactive islands** (demos, visualizations, archive search). Never hydrate a whole page. No React Router, no SPA. A prose/code/SVG article must ship ~zero client JS.
+- **Static first.** Prefer semantic HTML + CSS → SVG → React DOM. No charting library unless a concrete post needs one.
+- Theme toggle, nav, footer are plain Astro + a tiny inline script — do not React-ify them.
+
+## URLs and base path
+
+- `astro.config.mjs` sets `site` + `base: "/blog"` + `trailingSlash: "always"`.
+- **Never hardcode `/blog/`.** Build links with `href("/path/")` / `absoluteUrl()` from `src/lib/url.ts`. Never create `src/pages/blog/`.
+- Post URLs are flat: `/<slug>/`. Reserved route names: `archive`, `series`, `about`, `admin`, `rss.xml`, `robots.txt`, `sitemap-index.xml` (see `RESERVED_SLUGS` in `src/lib/posts.ts`).
+
+## Content contract
+
+- Posts live in `src/content/posts/<dir>/index.mdx`. Entry id = `<dir>`; slug = `slug` frontmatter or `<dir>`. Slugs are kebab-case.
+- Post-specific assets and components stay in the post directory (`./components/*.tsx`, `./*.svg`). Do not promote them to `src/components/blog/` unless reused by 2+ posts.
+- Frontmatter schema: `src/content.config.ts`. `series` must be a key of `src/config/series.ts`; `tags` must be keys of `src/config/tags.ts`. Add to the registry first, then use.
+- `seriesOrder` requires `series`; when adding to a series without an explicit order use `max(existing) + 1`.
+- `draft: true` = dev-only. Drafts never appear in the production build, listings, RSS, or sitemap. Do not add any production draft-preview mechanism.
+- Every image needs meaningful `alt`. Hero images require `alt` in the schema.
+- Site identity/nav/featured post: `src/config/site.ts`. Author: `src/config/author.ts`. About page prose: `src/pages/about/index.mdx`.
+
+## Validation (build must fail on invalid state)
+
+Implemented now: frontmatter schema (Zod), unknown series/tags, `seriesOrder` without series, duplicate/reserved slugs, duplicate `seriesOrder` within a series (`validatePosts` in `src/lib/posts.ts`, run by every page that lists posts), TypeScript (`astro check`), ESLint, Prettier, unit + e2e (axe WCAG 2.2 AA on every page).
+
+Planned, not implemented: broken internal link check, alt-text lint inside MDX bodies, required OG image. Add them to `validatePosts` or a Vitest test rather than a new system.
+
+## Dependencies
+
+npm only. Prefer Astro built-ins, then existing deps, then nothing. Do not add a dependency for a possible future need. No analytics, comments, newsletter, tracking, runtime secrets, or server infrastructure — this is a static site.
+
+## Quality gates
+
+Before claiming done: `npm run validate` (typecheck + lint + format:check + unit tests) and `npm run build`. Run `npm run test:e2e` when touching layout, routing, or hydration.
+
+## Agent maintenance rules
+
+- Change the smallest surface that satisfies the task; keep conventions boring and deterministic.
+- New shared MDX primitives go in `src/components/blog/` as `.astro` (static) unless interactivity is required.
+- shadcn components go in `src/components/ui/` via `npx shadcn add <name>`; do not hand-edit them beyond styling.
+- `/admin/` is dev-only (`getStaticPaths` returns nothing in prod). Never let it into `dist/`.
+- Skills, not this file, hold step-by-step workflows (`write-post`, `create-visual`, `create-series`, `review-post`, `publish-post`).

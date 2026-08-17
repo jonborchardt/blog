@@ -1,0 +1,16 @@
+---
+/** Layout for MDX pages (e.g. /about/). Frontmatter supplies title/description/path. */
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { personJsonLd } from "@/lib/seo";
+
+interface Props {
+  frontmatter: { title: string; description: string; path: string };
+}
+const { frontmatter } = Astro.props;
+---
+
+<BaseLayout meta={{ ...frontmatter, jsonLd: [personJsonLd(Astro.site!)] }}>
+  <div class="prose dark:prose-invert max-w-none">
+    <slot />
+  </div>
+</BaseLayout>

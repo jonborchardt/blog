@@ -1,0 +1,44 @@
+---
+/**
+ * Light/dark toggle. Plain <script>, no hydration: it's a single button.
+ * Cycles: system → light → dark → system. Persists to localStorage("theme").
+ */
+---
+
+<button
+  type="button"
+  data-theme-toggle
+  class="hover:bg-accent rounded border px-2 py-1 text-xs"
+  aria-label="Toggle color theme"
+>
+  <span data-theme-label>Theme</span>
+</button>
+
+<script>
+  const KEY = "theme";
+  const order = ["system", "light", "dark"] as const;
+  type Mode = (typeof order)[number];
+
+  const apply = (mode: Mode) => {
+    const dark =
+      mode === "dark" || (mode === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
+    document.documentElement.classList.toggle("dark", dark);
+    for (const el of document.querySelectorAll("[data-theme-label]")) el.textContent = mode;
+  };
+
+  const current = (): Mode => {
+    const v = localStorage.getItem(KEY);
+    return v === "light" || v === "dark" ? v : "system";
+  };
+
+  apply(current());
+  for (const btn of document.querySelectorAll("[data-theme-toggle]")) {
+    btn.addEventListener("click", () => {
+      const next = order[(order.indexOf(current()) + 1) % order.length]!;
+      if (next === "system") localStorage.removeItem(KEY);
+      else localStorage.setItem(KEY, next);
+      apply(next);
+    });
+  }
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => apply(current()));
+</script>

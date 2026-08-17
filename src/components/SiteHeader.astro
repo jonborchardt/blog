@@ -1,0 +1,25 @@
+---
+import { site } from "@/config/site";
+import { href } from "@/lib/url";
+import ThemeToggle from "@/components/ThemeToggle.astro";
+---
+
+<header class="border-b">
+  <div class="mx-auto flex max-w-3xl items-center justify-between gap-4 px-4 py-4">
+    <a href={href("/")} class="font-semibold tracking-tight">{site.name}</a>
+    <nav aria-label="Main">
+      <ul class="flex items-center gap-4 text-sm">
+        {
+          site.nav.map((item) => (
+            <li>
+              <a href={href(item.href)} class="hover:underline">
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+        <li><ThemeToggle /></li>
+      </ul>
+    </nav>
+  </div>
+</header>

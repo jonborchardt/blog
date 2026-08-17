@@ -1,0 +1,21 @@
+---
+/**
+ * Local-development-only admin. In production getStaticPaths returns no paths,
+ * so nothing under /admin/ is ever emitted to dist/. e2e tests assert this.
+ */
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+export function getStaticPaths() {
+  return import.meta.env.DEV ? [{ params: { path: undefined } }] : [];
+}
+---
+
+<BaseLayout
+  meta={{ title: "Admin (dev only)", description: "Local admin.", path: "/admin/", noindex: true }}
+>
+  <h1 class="text-3xl font-bold tracking-tight">Admin</h1>
+  <p class="text-muted-foreground mt-2">
+    Placeholder. Config editing UI (site, author, nav, series, tags, featured post) is planned. This
+    route exists only in <code>astro dev</code>.
+  </p>
+</BaseLayout>
