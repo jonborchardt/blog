@@ -16,19 +16,20 @@ const { headings } = Astro.props;
 <nav
   id="post-toc"
   aria-label="On this page"
-  class="fixed top-1/2 left-4 z-10 hidden -translate-y-1/2 xl:block"
+  class="absolute top-0 bottom-0 left-[calc(50%-50vw+1rem)] z-10 hidden xl:block"
 >
-  <div class="toc-panel rounded-md p-3">
+  <div class="toc-panel sticky top-4 rounded-md p-3">
     <p class="toc-title text-muted-foreground mb-3 text-xs font-semibold tracking-wide uppercase">
       On this page
     </p>
-    <ul class="space-y-1.5 text-sm">
+    <ul class="toc-list text-sm">
       {
         headings.map((h) => (
           <li class:list={[h.depth === 3 && "pl-3"]}>
             <a
               href={`#${h.slug}`}
-              class="toc-link text-muted-foreground block no-underline"
+              aria-label={h.text}
+              class="toc-link text-muted-foreground flex min-h-6 items-center no-underline"
               style={`--bar: ${Math.min(72, 20 + h.text.length * 1.4)}px`}
             >
               <span class="toc-bar" aria-hidden="true" />
@@ -42,7 +43,8 @@ const { headings } = Astro.props;
 </nav>
 
 <style>
-  /* Collapsed: bars only. */
+  /* Collapsed: bars only. Each link stays 24px tall (WCAG 2.2 target size) and carries an
+     aria-label because the visible label is hidden until hover/focus. */
   .toc-title,
   .toc-label {
     display: none;

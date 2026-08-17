@@ -52,7 +52,7 @@ describe("ArchiveExplorer", () => {
         }),
       ),
     );
-    history.replaceState(null, "", "/blog/archive/");
+    history.replaceState(null, "", "/blog/all-posts/");
   });
 
   it("lists everything, filters by typing, and clears", async () => {
@@ -76,7 +76,7 @@ describe("ArchiveExplorer", () => {
   });
 
   it("reads initial state from the URL", () => {
-    history.replaceState(null, "", "/blog/archive/?tag=engineering&sort=oldest");
+    history.replaceState(null, "", "/blog/all-posts/?tag=engineering&sort=oldest");
     render(<ArchiveExplorer {...props} />);
     expect(screen.getAllByRole("heading", { level: 2 })).toHaveLength(1);
     expect(screen.getByRole("status")).toHaveTextContent("tagged Engineering");

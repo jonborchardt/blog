@@ -16,14 +16,14 @@ const series = SERIES_IDS.map((id) => ({ id, title: seriesRegistry[id].title }))
 
 <BaseLayout
   meta={{
-    title: "Archive",
+    title: "All Posts",
     description:
       "Every post on Always Shippable — search the full text, filter by tag or series, sort.",
-    path: "/archive/",
+    path: "/all-posts/",
   }}
 >
   <div class="max-w-wide mx-auto">
-    <h1 class="text-display font-semibold">Archive</h1>
+    <h1 class="text-display font-semibold">All Posts</h1>
     <div class="mt-8">
       <ArchiveExplorer
         client:load

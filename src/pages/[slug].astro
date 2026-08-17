@@ -58,7 +58,6 @@ const words = (post.body ?? "").trim().split(/\s+/).filter(Boolean).length;
     ],
   }}
 >
-  {showToc && <PostToc headings={toc} />}
   <article class="max-w-wide mx-auto">
     <header class="mx-auto max-w-prose">
       {
@@ -97,7 +96,7 @@ const words = (post.body ?? "").trim().split(/\s+/).filter(Boolean).length;
               {post.data.tags.map((t) => (
                 <li>
                   <a
-                    href={href(`/archive/?tag=${t}`)}
+                    href={href(`/all-posts/?tag=${t}`)}
                     class="bg-muted hover:bg-accent rounded-sm px-1.5 py-0.5 no-underline"
                   >
                     {tagRegistry[t].label}
@@ -129,95 +128,98 @@ const words = (post.body ?? "").trim().split(/\s+/).filter(Boolean).length;
       />
     </figure>
 
-    <div class="mx-auto mt-10 max-w-prose">
-      {
-        showToc && (
-          <details open class="bg-muted/50 mb-8 rounded-md border px-4 py-3 text-sm xl:hidden">
-            <summary class="cursor-pointer font-medium">On this page</summary>
-            <nav aria-label="On this page" class="mt-2">
-              <ul class="space-y-1">
-                {toc.map((h) => (
-                  <li class:list={[h.depth === 3 && "pl-4"]}>
-                    <a href={`#${h.slug}`} class="text-muted-foreground hover:text-foreground">
-                      {h.text}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </details>
-        )
-      }
-
-      <div class="prose dark:prose-invert">
-        <Content components={{ table: TableWrapper }} />
-      </div>
-
-      <footer class="mt-14 border-t pt-8">
+    <div class="relative">
+      {showToc && <PostToc headings={toc} />}
+      <div class="mx-auto mt-10 max-w-prose">
         {
-          ctx && (
-            <nav
-              aria-label="Series navigation"
-              class="bg-card mb-8 overflow-hidden rounded-xl border"
-            >
-              <div class="border-b p-5">
-                <a
-                  href={href(seriesPath(ctx.series.id))}
-                  class="font-semibold no-underline hover:underline"
-                >
-                  {ctx.series.title}
-                </a>
-                <div class="mt-3 flex items-center gap-3 text-sm">
-                  <span class="text-muted-foreground shrink-0">
-                    Part {ctx.index} of {ctx.total}
-                  </span>
-                  <div
-                    role="progressbar"
-                    aria-label="Series progress"
-                    aria-valuemin="0"
-                    aria-valuemax={ctx.total}
-                    aria-valuenow={ctx.index}
-                    class="bg-muted h-1.5 w-full rounded-full"
-                  >
-                    <div
-                      class="bg-primary h-full rounded-full"
-                      style={`width:${(ctx.index / ctx.total) * 100}%`}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="p-5">
-                {ctx.next ? (
-                  <a href={href(postPath(ctx.next))} class="block no-underline">
-                    <span class="text-muted-foreground block text-sm">Up next</span>
-                    <span class="hover:text-primary mt-1 block text-lg font-semibold">
-                      {ctx.next.data.title}
-                    </span>
-                    <span class="text-muted-foreground mt-1 line-clamp-2 block text-sm">
-                      {ctx.next.data.description}
-                    </span>
-                  </a>
-                ) : (
-                  <p class="text-muted-foreground text-sm">
-                    You've reached the end of this series.
-                  </p>
-                )}
-                {ctx.prev && (
-                  <p class="text-muted-foreground mt-4 text-sm">
-                    <a href={href(postPath(ctx.prev))}>
-                      ← Part {ctx.index - 1}: {ctx.prev.data.title}
-                    </a>
-                  </p>
-                )}
-                <p class="mt-4 text-sm">
-                  <a href={href(seriesPath(ctx.series.id))}>All posts in this series</a>
-                </p>
-              </div>
-            </nav>
+          showToc && (
+            <details open class="bg-muted/50 mb-8 rounded-md border px-4 py-3 text-sm xl:hidden">
+              <summary class="cursor-pointer font-medium">On this page</summary>
+              <nav aria-label="On this page" class="mt-2">
+                <ul class="space-y-1">
+                  {toc.map((h) => (
+                    <li class:list={[h.depth === 3 && "pl-4"]}>
+                      <a href={`#${h.slug}`} class="text-muted-foreground hover:text-foreground">
+                        {h.text}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            </details>
           )
         }
-        <p class="text-sm"><a href={href("/archive/")}>← Archive</a></p>
-      </footer>
+
+        <div class="prose dark:prose-invert">
+          <Content components={{ table: TableWrapper }} />
+        </div>
+
+        <footer class="mt-14 border-t pt-8">
+          {
+            ctx && (
+              <nav
+                aria-label="Series navigation"
+                class="bg-card mb-8 overflow-hidden rounded-xl border"
+              >
+                <div class="border-b p-5">
+                  <a
+                    href={href(seriesPath(ctx.series.id))}
+                    class="font-semibold no-underline hover:underline"
+                  >
+                    {ctx.series.title}
+                  </a>
+                  <div class="mt-3 flex items-center gap-3 text-sm">
+                    <span class="text-muted-foreground shrink-0">
+                      Part {ctx.index} of {ctx.total}
+                    </span>
+                    <div
+                      role="progressbar"
+                      aria-label="Series progress"
+                      aria-valuemin="0"
+                      aria-valuemax={ctx.total}
+                      aria-valuenow={ctx.index}
+                      class="bg-muted h-1.5 w-full rounded-full"
+                    >
+                      <div
+                        class="bg-primary h-full rounded-full"
+                        style={`width:${(ctx.index / ctx.total) * 100}%`}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="p-5">
+                  {ctx.next ? (
+                    <a href={href(postPath(ctx.next))} class="block no-underline">
+                      <span class="text-muted-foreground block text-sm">Up next</span>
+                      <span class="hover:text-primary mt-1 block text-lg font-semibold">
+                        {ctx.next.data.title}
+                      </span>
+                      <span class="text-muted-foreground mt-1 line-clamp-2 block text-sm">
+                        {ctx.next.data.description}
+                      </span>
+                    </a>
+                  ) : (
+                    <p class="text-muted-foreground text-sm">
+                      You've reached the end of this series.
+                    </p>
+                  )}
+                  {ctx.prev && (
+                    <p class="text-muted-foreground mt-4 text-sm">
+                      <a href={href(postPath(ctx.prev))}>
+                        ← Part {ctx.index - 1}: {ctx.prev.data.title}
+                      </a>
+                    </p>
+                  )}
+                  <p class="mt-4 text-sm">
+                    <a href={href(seriesPath(ctx.series.id))}>All posts in this series</a>
+                  </p>
+                </div>
+              </nav>
+            )
+          }
+          <p class="text-sm"><a href={href("/all-posts/")}>← All posts</a></p>
+        </footer>
+      </div>
     </div>
   </article>
 </BaseLayout>

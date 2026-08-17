@@ -3,7 +3,7 @@
  * created. Dependency-free so scripts/new-post.mjs can import it under plain Node.
  */
 export const RESERVED_SLUGS_LIST = [
-  "archive",
+  "all-posts",
   "series",
   "about",
   "admin",

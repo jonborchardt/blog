@@ -44,7 +44,7 @@ const recent = (await getPosts()).filter((p) => p.id !== featured?.id).slice(0, 
         <h2 id="recent" class="text-muted-foreground text-xs font-medium tracking-wide uppercase">
           Recent
         </h2>
-        <a href={href("/archive/")} class="text-sm">All posts →</a>
+        <a href={href("/all-posts/")} class="text-sm">All posts →</a>
       </div>
       {
         recent.length ? (

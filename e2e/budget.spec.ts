@@ -30,7 +30,7 @@ test("static pages ship zero JavaScript files", async ({ page }) => {
 });
 
 test("archive loads a small React bundle only", async ({ page }) => {
-  const js = await jsRequests(page, "archive/");
+  const js = await jsRequests(page, "all-posts/");
   expect(js.length).toBeGreaterThan(0);
   // Astro splits react, react-dom, the client runtime, shadcn ui and the island: a handful of files.
   expect(js.length, js.map((j) => j.url).join(", ")).toBeLessThanOrEqual(8);

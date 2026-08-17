@@ -10,7 +10,7 @@ export const site: SiteConfig = {
   locale: "en",
   featuredPost: null,
   nav: [
-    { label: "Archive", href: "/archive/" },
+    { label: "All Posts", href: "/all-posts/" },
     { label: "Series", href: "/series/" },
     { label: "About", href: "/about/" },
   ],

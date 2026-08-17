@@ -20,7 +20,7 @@ describe("validatePosts", () => {
   });
 
   it("rejects reserved slugs", () => {
-    expect(() => validatePosts([post("archive")])).toThrow(/reserved/);
+    expect(() => validatePosts([post("all-posts")])).toThrow(/reserved/);
   });
 
   it("rejects duplicate seriesOrder within a series", () => {

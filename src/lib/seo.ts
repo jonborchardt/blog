@@ -7,7 +7,7 @@ import type { Post } from "@/lib/posts";
 export interface PageMeta {
   title: string;
   description: string;
-  /** Root-relative path, e.g. "/archive/". */
+  /** Root-relative path, e.g. "/all-posts/". */
   path: string;
   type?: "website" | "article";
   /** Root-relative or absolute image URL. Falls back to the generated site card. */
