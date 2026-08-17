@@ -27,3 +27,12 @@ pnpm-debug.log*
 playwright-report/
 test-results/
 coverage/
+
+.secrets/
+.env
+.claude/*
+!.claude/skills/
+!.claude/skills/**
+plans/
+docs/
+.playwright-mcp/

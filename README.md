@@ -30,7 +30,7 @@ Personal technical blog by Jonathan Borchardt. Static site built with Astro, pub
 
 - Logo: replace `src/assets/logo.svg` (rendered in the header; keep a square-ish mark with `width`/`height` attributes).
 - Favicon: replace `public/favicon.svg`. Files in `public/` are served as-is under the `/blog/` base.
-- No code change is needed for either.
+- No code change is needed for either. Placeholders are in place until the real files are dropped in. Optionally add `public/apple-touch-icon.png` (180×180) and link it in `src/layouts/BaseLayout.astro`.
 
 ## Social cards
 
@@ -55,7 +55,8 @@ src/
   lib/           posts (loading + validation), url, seo, og cards, search core, dist checks
   pages/         routes
   styles/        global.css (Tailwind + design tokens)
-e2e/             Playwright + axe smoke tests (+ shots.mjs: ad-hoc screenshots of a preview)
+e2e/             Playwright specs: smoke, article, primitives, seo, archive, budget, keyboard
+                 (+ shots.mjs: screenshots of a preview; WIDTHS=360,768 env selects viewports)
 .claude/skills/  agent workflows: write-post, create-series, create-visual, review-post, publish-post
 scripts/         new-post scaffold, config regeneration
 ```
@@ -67,6 +68,10 @@ scripts/         new-post scaffold, config regeneration
 ## Local admin (dev only)
 
 `npm run dev` serves `/blog/admin/`: forms for site identity, navigation, featured post, author profile and links, series and tags. Each Save validates against `src/config/types.ts` and rewrites the matching `src/config/*.ts` immediately (Prettier-formatted, byte-identical to `npm run format`); the dev server hot-reloads. Deleting a series or tag still used by a post is refused with the list of posts. Posts are not editable here; there is no undo (use git). The route is never built (`npm run build` and e2e assert `dist/` has no `admin/`). `node scripts/regen-config.mts` rewrites all four files through the same template.
+
+## Performance
+
+Lighthouse (mobile preset, production preview, 2026-08-17): home, prose post, interactive post and archive all score 100 for Performance, Accessibility, Best Practices and SEO. `e2e/budget.spec.ts` enforces the JS budget: static pages load zero JavaScript files; the archive loads only the React island bundle (< 120 KB gzipped). `e2e/keyboard.spec.ts` covers the keyboard tour (skip link, header, toggle, tabs, details, copy button, anchors) and reduced motion.
 
 ## Deployment
 

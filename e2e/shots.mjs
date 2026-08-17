@@ -6,7 +6,7 @@ const browser = await chromium.launch();
 for (const p of paths.length
   ? paths
   : ["", "building-blocks-of-this-blog/", "archive/", "does-not-exist/"]) {
-  for (const width of [360, 1280]) {
+  for (const width of (process.env.WIDTHS ?? "360,1280").split(",").map(Number)) {
     for (const scheme of ["light", "dark"]) {
       const page = await browser.newPage({ viewport: { width, height: 900 }, colorScheme: scheme });
       await page.goto(base + p);
