@@ -10,19 +10,25 @@ const entries = await Promise.all(
 ---
 
 <BaseLayout meta={{ title: "Series", description: "Multi-part series.", path: "/series/" }}>
-  <h1 class="text-3xl font-bold tracking-tight">Series</h1>
-  <ul class="mt-8 space-y-4">
-    {
-      entries.map((s) => (
-        <li>
-          <a href={href(seriesPath(s.id))} class="font-medium hover:underline">
-            {s.title}
-          </a>
-          <p class="text-muted-foreground text-sm">
-            {s.description} · {s.count} {s.count === 1 ? "post" : "posts"}
-          </p>
-        </li>
-      ))
-    }
-  </ul>
+  <div class="max-w-wide mx-auto">
+    <h1 class="text-display font-semibold">Series</h1>
+    <p class="text-muted-foreground mt-3">Multi-part explorations, meant to be read in order.</p>
+    <ul class="mt-10 divide-y border-t">
+      {
+        entries.map((s) => (
+          <li class="py-6">
+            <h2 class="text-xl font-semibold tracking-tight">
+              <a href={href(seriesPath(s.id))} class="hover:text-primary no-underline">
+                {s.title}
+              </a>
+            </h2>
+            <p class="text-muted-foreground mt-1">{s.description}</p>
+            <p class="text-muted-foreground mt-2 text-sm">
+              {s.count} {s.count === 1 ? "part" : "parts"}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
 </BaseLayout>

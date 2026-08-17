@@ -1,0 +1,46 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PostList from "@/components/PostList.astro";
+import { getPosts } from "@/lib/posts";
+import { href } from "@/lib/url";
+
+const recent = (await getPosts()).slice(0, 5);
+---
+
+<BaseLayout
+  meta={{
+    title: "Page not found",
+    description: "That page does not exist. Try the archive, series, or about pages.",
+    path: "/404/",
+    noindex: true,
+  }}
+>
+  <div class="mx-auto max-w-prose">
+    <p class="text-muted-foreground text-xs font-medium tracking-wide uppercase">404</p>
+    <h1 class="text-display mt-2 font-semibold">Page not found</h1>
+    <p class="text-muted-foreground mt-4 text-lg">
+      There is nothing at this address. The link may be outdated, or the post may have moved.
+    </p>
+    <nav aria-label="Recovery" class="mt-6">
+      <ul class="flex flex-wrap gap-x-5 gap-y-2">
+        <li><a href={href("/")}>Home</a></li>
+        <li><a href={href("/archive/")}>Archive</a></li>
+        <li><a href={href("/series/")}>Series</a></li>
+        <li><a href={href("/about/")}>About</a></li>
+      </ul>
+    </nav>
+    {
+      recent.length > 0 && (
+        <section class="mt-14 border-t pt-8" aria-labelledby="recent">
+          <h2
+            id="recent"
+            class="text-muted-foreground mb-5 text-xs font-medium tracking-wide uppercase"
+          >
+            Recent posts
+          </h2>
+          <PostList posts={recent} heading="h3" />
+        </section>
+      )
+    }
+  </div>
+</BaseLayout>

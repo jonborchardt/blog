@@ -10,6 +10,7 @@ export const RESERVED_SLUGS = new Set([
   "series",
   "about",
   "admin",
+  "404",
   "rss.xml",
   "robots.txt",
   "sitemap-index.xml",

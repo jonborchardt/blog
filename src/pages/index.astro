@@ -1,14 +1,15 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import PostList from "@/components/PostList.astro";
+import PostCard from "@/components/PostCard.astro";
 import { site } from "@/config/site";
 import { author } from "@/config/author";
-import { getFeaturedPost, getPosts, postPath } from "@/lib/posts";
+import { getFeaturedPost, getPosts } from "@/lib/posts";
 import { personJsonLd } from "@/lib/seo";
 import { href } from "@/lib/url";
 
 const featured = await getFeaturedPost();
-const recent = (await getPosts()).filter((p) => p !== featured).slice(0, 5);
+const recent = (await getPosts()).filter((p) => p.id !== featured?.id).slice(0, 6);
 ---
 
 <BaseLayout
@@ -19,34 +20,43 @@ const recent = (await getPosts()).filter((p) => p !== featured).slice(0, 5);
     jsonLd: [personJsonLd(Astro.site!)],
   }}
 >
-  <h1 class="text-3xl font-bold tracking-tight">{site.name}</h1>
-  <p class="text-muted-foreground mt-2">{site.description}</p>
-  <p class="mt-1 text-sm">{author.name} — {author.tagline}</p>
+  <div class="max-w-wide mx-auto">
+    <header class="max-w-prose">
+      <h1 class="text-display font-semibold">{site.name}</h1>
+      <p class="text-muted-foreground mt-4 text-lg leading-relaxed">{site.description}</p>
+      <p class="text-muted-foreground mt-2 text-sm">
+        By <a href={href("/about/")}>{author.name}</a> — {author.tagline}
+      </p>
+    </header>
 
-  {
-    featured && (
-      <section class="mt-10" aria-labelledby="featured">
-        <h2 id="featured" class="text-xs font-semibold tracking-wide uppercase">
-          Featured
+    {
+      featured && (
+        <section class="mt-14 border-t pt-8" aria-labelledby="featured">
+          <h2
+            id="featured"
+            class="text-muted-foreground mb-5 text-xs font-medium tracking-wide uppercase"
+          >
+            Featured
+          </h2>
+          <PostCard post={featured} />
+        </section>
+      )
+    }
+
+    <section class="mt-14 border-t pt-8" aria-labelledby="recent">
+      <div class="mb-5 flex items-baseline justify-between gap-4">
+        <h2 id="recent" class="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+          Recent
         </h2>
-        <a href={href(postPath(featured))} class="mt-2 block text-xl font-semibold hover:underline">
-          {featured.data.title}
-        </a>
-        <p class="text-muted-foreground">{featured.data.description}</p>
-      </section>
-    )
-  }
-
-  <section class="mt-10" aria-labelledby="recent">
-    <h2 id="recent" class="text-xs font-semibold tracking-wide uppercase">Recent</h2>
-    <div class="mt-2">
+        <a href={href("/archive/")} class="text-sm">All posts →</a>
+      </div>
       {
         recent.length ? (
-          <PostList posts={recent} />
+          <PostList posts={recent} heading="h3" />
         ) : (
           <p class="text-muted-foreground">No other posts yet.</p>
         )
       }
-    </div>
-  </section>
+    </section>
+  </div>
 </BaseLayout>

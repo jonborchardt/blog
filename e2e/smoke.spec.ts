@@ -73,3 +73,42 @@ test("rss, sitemap and robots exist under the base", async ({ request }) => {
     expect(res.ok(), p).toBe(true);
   }
 });
+
+test("custom 404 page", async ({ page }) => {
+  const res = await page.goto("does-not-exist/");
+  expect(res?.status()).toBe(404);
+  await expect(page.locator("h1")).toHaveText("Page not found");
+  const { violations } = await new AxeBuilder({ page })
+    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
+    .analyze();
+  expect(violations).toEqual([]);
+});
+
+test("no horizontal overflow at 360px and nav visible", async ({ page, request }) => {
+  await page.setViewportSize({ width: 360, height: 740 });
+  for (const url of [...(await sitemapUrls(request)), "does-not-exist/"]) {
+    await page.goto(url);
+    await expect(page.getByRole("navigation", { name: "Main" }), url).toBeVisible();
+    const width = await page.evaluate(() => document.documentElement.scrollWidth);
+    expect(width, url).toBeLessThanOrEqual(360);
+  }
+});
+
+test("theme toggle cycles and persists", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "light" });
+  await page.goto("");
+  const toggle = page.locator("[data-theme-toggle]");
+  const html = page.locator("html");
+  await expect(toggle).toHaveAttribute("aria-label", /Theme: system/);
+  await toggle.click();
+  await expect(html).toHaveAttribute("data-theme", "light");
+  await toggle.click();
+  await expect(html).toHaveAttribute("data-theme", "dark");
+  await expect(html).toHaveClass(/dark/);
+  await page.reload();
+  await expect(html).toHaveClass(/dark/);
+  await expect(toggle).toHaveAttribute("aria-label", /Theme: dark/);
+  await toggle.click();
+  await expect(html).toHaveAttribute("data-theme", "system");
+  await expect(html).not.toHaveClass(/dark/);
+});

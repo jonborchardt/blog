@@ -9,7 +9,12 @@ const posts = await getPosts();
 ---
 
 <BaseLayout meta={{ title: "Archive", description: "All posts.", path: "/archive/" }}>
-  <h1 class="text-3xl font-bold tracking-tight">Archive</h1>
-  <p class="text-muted-foreground mt-2">{posts.length} posts</p>
-  <div class="mt-8"><PostList posts={posts} /></div>
+  <div class="max-w-wide mx-auto">
+    <h1 class="text-display font-semibold">Archive</h1>
+    <p class="text-muted-foreground mt-3">
+      {posts.length}
+      {posts.length === 1 ? "post" : "posts"}
+    </p>
+    <div class="mt-10 border-t pt-8"><PostList posts={posts} /></div>
+  </div>
 </BaseLayout>

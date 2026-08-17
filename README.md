@@ -24,6 +24,12 @@ Personal technical blog by Jonathan Borchardt. Static site built with Astro, pub
 | `npm run test:e2e`  | Playwright + axe against a production build on port 4322 (`npx playwright install chromium` once) |
 | `npm run validate`  | typecheck + lint + format:check + unit tests                                                      |
 
+## Branding
+
+- Logo: replace `src/assets/logo.svg` (rendered in the header; keep a square-ish mark with `width`/`height` attributes).
+- Favicon: replace `public/favicon.svg`. Files in `public/` are served as-is under the `/blog/` base.
+- No code change is needed for either.
+
 ## Architecture
 
 - **Astro 7** (static output) owns routing, layouts, content collections, metadata, RSS, sitemap.
@@ -43,7 +49,7 @@ src/
   lib/           posts (loading + validation), url, seo
   pages/         routes
   styles/        global.css (Tailwind + design tokens)
-e2e/             Playwright + axe smoke tests
+e2e/             Playwright + axe smoke tests (+ shots.mjs: ad-hoc screenshots of a preview)
 .claude/skills/  agent workflows (planned)
 ```
 

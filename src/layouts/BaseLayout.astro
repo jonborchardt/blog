@@ -28,6 +28,8 @@ const image = meta.image
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href={href("/favicon.svg")} type="image/svg+xml" />
     <title>{fullTitle}</title>
     <meta name="description" content={meta.description} />
     <link rel="canonical" href={canonical} />
@@ -70,18 +72,20 @@ const image = meta.image
           stored === "dark" ||
           (stored !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
         document.documentElement.classList.toggle("dark", dark);
+        document.documentElement.dataset.theme =
+          stored === "light" || stored === "dark" ? stored : "system";
       })();
     </script>
   </head>
   <body class="flex min-h-svh flex-col">
     <a
       href="#main"
-      class="focus:bg-background sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:rounded focus:px-3 focus:py-2"
+      class="focus:bg-background focus:text-foreground sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:border focus:px-3 focus:py-2"
     >
       Skip to content
     </a>
     <SiteHeader />
-    <main id="main" class="mx-auto w-full max-w-3xl flex-1 px-4 py-10">
+    <main id="main" class="w-full flex-1 px-4 py-10 sm:px-6 md:py-14">
       <slot />
     </main>
     <SiteFooter />
