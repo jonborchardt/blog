@@ -1,20 +1,34 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="Always Shippable: a rocket launching from an open box">
-  <!-- Bold mark on a navy tile so it reads at 16px and matches the social card art. -->
-  <rect width="64" height="64" rx="10" fill="#0B1120"/>
-  <!-- box -->
-  <path d="M 6 40 20 33 34 40 20 47 Z" fill="#0F2A6B"/>
-  <!-- flame (emerges from the opening, in front of the back wall, behind the rocket) -->
-  <path d="M21 43C24 34 30 29 38 26" fill="none" stroke="#F97316" stroke-width="7.5" stroke-linecap="round"/>
-  <path d="M21 43C24 34 30 29 38 26" fill="none" stroke="#FBBF24" stroke-width="3" stroke-linecap="round"/>
-  <path d="M 6 40 20 47 V 61 L 6 54 Z" fill="#1D4ED8"/>
-  <path d="M 20 47 34 40 V 54 L 20 61 Z" fill="#2563EB"/>
-  <path d="M 6 40 20 33 13 27 3 33 Z" fill="#3B82F6"/>
-  <path d="M 20 33 34 40 41 33 28 26 Z" fill="#3B82F6"/>
+  <style>
+    /* Standalone (favicon): rocket dark on light, light on dark. Inlined in a page, the page's
+       currentColor / --background win (a class on the element beats these bare selectors). */
+    svg { color: #0b1120; }
+    .r { fill: currentColor; }
+    .p { fill: var(--background, #fff); }
+    @media (prefers-color-scheme: dark) {
+      svg { color: #f8fafc; }
+      .p { fill: var(--background, #0b1120); }
+    }
+  </style>
+  <!-- back flaps -->
+  <path d="M7 40 23 32 18 25 2 33Z" fill="#3B82F6"/>
+  <path d="M23 32 39 40 44 33 28 25Z" fill="#60A5FA"/>
+  <!-- inside -->
+  <path d="M7 40 23 32 39 40 23 48Z" fill="#1E3A8A"/>
+  <!-- flame, rising out of the opening -->
+  <path d="M23 44C26 36 31 29 38 24" fill="none" stroke="#F97316" stroke-width="7" stroke-linecap="round"/>
+  <path d="M23 44C26 36 31 29 38 24" fill="none" stroke="#FBBF24" stroke-width="3" stroke-linecap="round"/>
+  <!-- front faces -->
+  <path d="M7 40 23 48V62L7 54Z" fill="#1D4ED8"/>
+  <path d="M23 48 39 40V54L23 62Z" fill="#2563EB"/>
+  <!-- front flaps, folded down over the faces -->
+  <path d="M7 40 23 48 20 55 4 47Z" fill="#3B82F6"/>
+  <path d="M23 48 39 40 42 47 26 55Z" fill="#60A5FA"/>
   <!-- rocket -->
-  <g transform="translate(48 16) rotate(45) scale(1.15)">
-    <path d="M-4 5-10 13-3 11Z" fill="#F8FAFC"/>
-    <path d="M4 5 10 13 3 11Z" fill="#F8FAFC"/>
-    <path d="M0-15C5-10 5.5 3 4.5 10H-4.5C-5.5 3-5-10 0-15Z" fill="#F8FAFC"/>
-    <circle cx="0" cy="-4" r="2.6" fill="#0B1120"/>
+  <g transform="translate(47 15) rotate(45) scale(1.2)">
+    <path class="r" d="M-4 5-10 13-3 11Z"/>
+    <path class="r" d="M4 5 10 13 3 11Z"/>
+    <path class="r" d="M0-15C5-10 5.5 3 4.5 10H-4.5C-5.5 3-5-10 0-15Z"/>
+    <circle class="p" cx="0" cy="-4" r="2.6"/>
   </g>
 </svg>

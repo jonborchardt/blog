@@ -2,7 +2,8 @@
 import { site } from "@/config/site";
 import { href } from "@/lib/url";
 import ThemeToggle from "@/components/ThemeToggle.astro";
-import logo from "@/assets/logo.svg";
+// Inlined so the rocket uses currentColor / --background and follows the site theme toggle.
+import logo from "@/assets/logo.svg?raw";
 
 const current = Astro.url.pathname;
 const isActive = (path: string) => current === href(path) || current.startsWith(href(path));
@@ -13,13 +14,10 @@ const isActive = (path: string) => current === href(path) || current.startsWith(
     class="max-w-page mx-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-3 sm:px-6"
   >
     <a href={href("/")} class="flex items-center gap-2 font-semibold tracking-tight no-underline">
-      <img
-        src={logo.src}
-        width={logo.width}
-        height={logo.height}
-        alt=""
+      <span
+        class="inline-block h-8 w-8 [&>svg]:h-full [&>svg]:w-full [&>svg]:text-foreground"
         aria-hidden="true"
-        class="h-7 w-7"
+        set:html={logo}
       />
       <span>{site.name}</span>
     </a>
