@@ -8,6 +8,7 @@ Personal technical blog by Jonathan Borchardt. Static site built with Astro, pub
 
 - Node 22.12+ (`.nvmrc` pins 24; `nvm use`)
 - npm 9.6+
+- Chromium for Playwright: `npx playwright install chromium` — used by e2e **and by `npm run build`** (Mermaid diagrams render at build time)
 
 ## Commands
 

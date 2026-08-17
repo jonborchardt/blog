@@ -5,7 +5,10 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import { rehypeHeadingIds } from "@astrojs/markdown-remark";
+import { rehypeHeadingIds, unified } from "@astrojs/markdown-remark";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
+import rehypeMermaid from "rehype-mermaid";
 
 /**
  * Plain text of a heading hast node (for anchor aria-labels).
@@ -53,26 +56,43 @@ export default defineConfig({
   image: { layout: "constrained", responsiveStyles: true },
   markdown: {
     // High-contrast pair: the default github-light orange (#e36209) fails WCAG AA on white.
+    syntaxHighlight: { type: "shiki", excludeLangs: ["mermaid", "math"] },
     shikiConfig: {
       themes: { light: "github-light-high-contrast", dark: "github-dark-high-contrast" },
     },
-    rehypePlugins: [
-      // Astro adds heading ids after user plugins by default; run it first so anchors can link.
-      rehypeHeadingIds,
-      [rehypeBaseLinks, { base: BASE }],
-      [
-        rehypeAutolinkHeadings,
-        {
-          behavior: "append",
-          /** @param {import("hast").Element} node */
-          properties: (node) => ({
-            class: "heading-anchor",
-            "aria-label": "Link to section: " + headingText(node),
-          }),
-          content: { type: "text", value: "#" },
-        },
+    processor: unified({
+      // Math ($ / $$) and Mermaid fences render at build time to static HTML/SVG. Zero client JS.
+      remarkPlugins: [remarkMath],
+      rehypePlugins: [
+        // Astro adds heading ids after user plugins by default; run it first so anchors can link.
+        rehypeHeadingIds,
+        [rehypeBaseLinks, { base: BASE }],
+        rehypeKatex,
+        [
+          rehypeMermaid,
+          {
+            strategy: "inline-svg",
+            mermaidConfig: {
+              theme: "neutral",
+              // Same stack as the site so build-time text measurement matches what renders.
+              fontFamily: "ui-sans-serif, system-ui, sans-serif",
+            },
+          },
+        ],
+        [
+          rehypeAutolinkHeadings,
+          {
+            behavior: "append",
+            /** @param {import("hast").Element} node */
+            properties: (node) => ({
+              class: "heading-anchor",
+              "aria-label": "Link to section: " + headingText(node),
+            }),
+            content: { type: "text", value: "#" },
+          },
+        ],
       ],
-    ],
+    }),
   },
   vite: {
     plugins: [tailwindcss()],

@@ -56,3 +56,11 @@ for (const scheme of ["light", "dark"] as const) {
     expect(violations).toEqual([]);
   });
 }
+
+test("Mermaid diagrams and math render at build time with no scripts", async ({ page }) => {
+  await page.goto(POST);
+  await expect(page.locator("svg[id^='mermaid']").first()).toBeVisible();
+  await expect(page.locator(".katex").first()).toBeVisible();
+  await expect(page.locator(".katex-display").first()).toBeVisible();
+  expect(await page.locator("script[src]").count()).toBe(0);
+});

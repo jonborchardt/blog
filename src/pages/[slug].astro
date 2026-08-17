@@ -1,5 +1,7 @@
 ---
 import { render } from "astro:content";
+// KaTeX styles only on article pages (math never appears elsewhere).
+import "katex/dist/katex.min.css";
 import { Image } from "astro:assets";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import DraftBadge from "@/components/DraftBadge.astro";

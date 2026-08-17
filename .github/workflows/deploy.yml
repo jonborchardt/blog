@@ -29,9 +29,9 @@ jobs:
       - run: npm run lint
       - run: npm run format:check
       - run: npm test
-      - run: npm run build
-      - name: Install Playwright browsers
+      - name: Install Playwright browsers (used by the build for Mermaid and by e2e)
         run: npx playwright install --with-deps chromium
+      - run: npm run build
       - run: npm run test:e2e
         env:
           CI: true

@@ -142,6 +142,31 @@ export default defineConfig({ base: "/blog" });
 </CodeBlock>
 ````
 
+## Diagrams and math (fence syntax, not components)
+
+Both render at build time to static SVG/HTML — no client JavaScript.
+
+````mdx
+```mermaid
+flowchart LR
+  accTitle: Short accessible title
+  accDescr: One sentence describing what the diagram shows.
+  A[Source] --> B[Build] --> C[Deploy]
+```
+````
+
+Always precede or follow a diagram with a sentence that says what it shows, and include `accTitle`/`accDescr` inside the fence (they become the SVG's accessible name and description). Dark mode inverts the neutral render with a CSS filter.
+
+```mdx
+Inline math: $E = mc^2$. Display math:
+
+$$
+\int_0^1 x^2 \, dx = \tfrac{1}{3}
+$$
+```
+
+Wide diagrams and long formulas scroll horizontally on narrow screens.
+
 ## Rules
 
 - **Images**: put them next to the post and import relatively (`./file.png`) or use Markdown image syntax. Every image needs meaningful `alt`. Never use `<img>` for raster files; SVG may use `<img>` with `width`/`height`/`alt`.

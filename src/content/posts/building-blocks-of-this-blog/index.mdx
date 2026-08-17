@@ -189,6 +189,33 @@ export function href(path: string): string {
 
 </CodeBlock>
 
+## Diagrams and math
+
+Diagrams are Mermaid fences and are rendered to SVG **at build time** — the reader gets a picture,
+not a script that draws one. Every diagram gets a sentence describing it, because a picture without
+words is invisible to a screen reader (Mermaid's `accTitle`/`accDescr` lines add an accessible
+title and description to the SVG itself). This one shows the path from an MDX file to a deployed page:
+
+```mermaid
+flowchart LR
+  accTitle: From source to deployed page
+  accDescr: MDX source is validated, built to static HTML, tested, and deployed to GitHub Pages.
+  A[MDX + frontmatter] --> B{validate}
+  B -- ok --> C[astro build]
+  B -- error --> A
+  C --> D[e2e + axe]
+  D --> E[GitHub Pages]
+```
+
+Math uses TeX syntax and renders through KaTeX, also at build time. Inline, reading time is
+$\lceil w / 230 \rceil$ minutes for $w$ words; the display form of the same idea:
+
+$$
+t_{\text{read}} = \max\left(1, \left\lceil \frac{w}{230} \right\rceil\right)
+$$
+
+Neither of these adds a byte of JavaScript to the page.
+
 ## What is not here
 
 There is no chart component, no carousel, no embed of the week. Each of those would be a
