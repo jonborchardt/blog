@@ -274,7 +274,7 @@ export default function ArchiveExplorer({ docs, tags, series, indexUrl }: Archiv
             <p className="text-muted-foreground mb-1.5 text-xs font-medium tracking-wide uppercase">
               Tags
             </p>
-            <div className="flex flex-wrap gap-1.5">{tagChips}</div>
+            <div className="flex max-h-64 flex-wrap gap-1.5 overflow-y-auto">{tagChips}</div>
             <p className="text-muted-foreground mt-3 mb-1.5 text-xs font-medium tracking-wide uppercase">
               Series
             </p>
