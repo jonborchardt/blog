@@ -2,7 +2,7 @@
 import { site } from "@/config/site";
 import { href } from "@/lib/url";
 import ThemeToggle from "@/components/ThemeToggle.astro";
-// Inlined so the rocket uses currentColor / --background and follows the site theme toggle.
+// Inlined SVG (no extra request; theme-independent colours).
 import logo from "@/assets/logo.svg?raw";
 
 const current = Astro.url.pathname;
@@ -15,7 +15,7 @@ const isActive = (path: string) => current === href(path) || current.startsWith(
   >
     <a href={href("/")} class="flex items-center gap-2 font-semibold tracking-tight no-underline">
       <span
-        class="inline-block h-8 w-8 [&>svg]:h-full [&>svg]:w-full [&>svg]:text-foreground"
+        class="[&>svg]:text-foreground inline-block h-8 w-8 [&>svg]:h-full [&>svg]:w-full"
         aria-hidden="true"
         set:html={logo}
       />
@@ -36,7 +36,7 @@ const isActive = (path: string) => current === href(path) || current.startsWith(
             </li>
           ))
         }
-        <li class="ml-1"><ThemeToggle /></li>
+        <li class="ml-2"><ThemeToggle /></li>
       </ul>
     </nav>
   </div>
