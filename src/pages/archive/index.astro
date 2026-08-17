@@ -1,20 +1,41 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import PostList from "@/components/PostList.astro";
+import ArchiveExplorer from "@/components/archive/ArchiveExplorer";
+import { series as seriesRegistry, SERIES_IDS } from "@/config/series";
+import { tags as tagRegistry, TAG_IDS } from "@/config/tags";
 import { getPosts } from "@/lib/posts";
+import { toSearchDocMeta } from "@/lib/search-index";
+import { href } from "@/lib/url";
 
-// ponytail: static list for now. Client-side search/filter/sort (URL-query-driven React island)
-// is planned; the data it needs is exactly `posts` below, serialized as props.
+// Metadata only goes to the island as props; headings/body load lazily from /search-index.json.
 const posts = await getPosts();
+const docs = await Promise.all(posts.map(toSearchDocMeta));
+const tags = TAG_IDS.map((id) => ({ id, label: tagRegistry[id].label }));
+const series = SERIES_IDS.map((id) => ({ id, title: seriesRegistry[id].title }));
+const count = posts.length === 1 ? "1 post" : `${posts.length} posts`;
 ---
 
-<BaseLayout meta={{ title: "Archive", description: "All posts.", path: "/archive/" }}>
+<BaseLayout
+  meta={{
+    title: "Archive",
+    description:
+      "Every post on Always Shippable — search the full text, filter by tag or series, sort.",
+    path: "/archive/",
+  }}
+>
   <div class="max-w-wide mx-auto">
     <h1 class="text-display font-semibold">Archive</h1>
     <p class="text-muted-foreground mt-3">
-      {posts.length}
-      {posts.length === 1 ? "post" : "posts"}
+      {count}. Search runs in your browser; nothing leaves the page.
     </p>
-    <div class="mt-10 border-t pt-8"><PostList posts={posts} /></div>
+    <div class="mt-8">
+      <ArchiveExplorer
+        client:load
+        docs={docs}
+        tags={tags}
+        series={series}
+        indexUrl={href("/search-index.json")}
+      />
+    </div>
   </div>
 </BaseLayout>

@@ -13,6 +13,13 @@ export default defineConfig(
   {
     files: ["**/*.{ts,tsx,js,mjs}"],
     languageOptions: { globals: { ...globals.browser, ...globals.node } },
+    rules: {
+      // `_x` marks an intentionally unused binding (e.g. rest-destructuring a field away).
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_", destructuredArrayIgnorePattern: "^_" },
+      ],
+    },
   },
   {
     // shadcn-generated files export helpers alongside components; allow that.

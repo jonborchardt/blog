@@ -21,8 +21,8 @@ const posts = await getSeriesPosts(id);
     <h1 class="text-display mt-2 font-semibold">{info.title}</h1>
     <p class="text-muted-foreground mt-4 text-lg">{info.description}</p>
     <p class="text-muted-foreground mt-2 text-sm">
-      {posts.length}
-      {posts.length === 1 ? "part" : "parts"}
+      {posts.length === 1 ? "1 part" : `${posts.length} parts`} ·{" "}
+      <a href={href(`/archive/?series=${id}`)}>Filter the archive by this series</a>
     </p>
     <div class="mt-10 border-t pt-8">
       {
