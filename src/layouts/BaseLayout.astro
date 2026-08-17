@@ -5,7 +5,7 @@ import SiteFooter from "@/components/SiteFooter.astro";
 import { site } from "@/config/site";
 import { author } from "@/config/author";
 import { absoluteUrl, href } from "@/lib/url";
-import type { PageMeta } from "@/lib/seo";
+import { websiteJsonLd, type PageMeta } from "@/lib/seo";
 
 interface Props {
   meta: PageMeta;
@@ -15,11 +15,12 @@ const { meta } = Astro.props;
 const siteUrl = Astro.site!;
 const canonical = absoluteUrl(meta.path, siteUrl);
 const fullTitle = meta.path === "/" ? site.name : `${meta.title} · ${site.name}`;
-const image = meta.image
-  ? meta.image.startsWith("http")
-    ? meta.image
-    : absoluteUrl(meta.image, siteUrl)
-  : undefined;
+// Every page has a social image: bespoke/derived one from meta, else the generated site card.
+const imagePath = meta.image ?? "/og/site.png";
+const image = imagePath.startsWith("http") ? imagePath : absoluteUrl(imagePath, siteUrl);
+const imageAlt = meta.imageAlt ?? `${meta.title} — ${site.name}`;
+const imageWidth = meta.imageWidth ?? 1200;
+const imageHeight = meta.imageHeight ?? 630;
 ---
 
 <!doctype html>
@@ -43,7 +44,10 @@ const image = meta.image
     <meta property="og:description" content={meta.description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={site.locale} />
-    {image && <meta property="og:image" content={image} />}
+    <meta property="og:image" content={image} />
+    <meta property="og:image:width" content={String(imageWidth)} />
+    <meta property="og:image:height" content={String(imageHeight)} />
+    <meta property="og:image:alt" content={imageAlt} />
     {
       meta.publishedAt && (
         <meta property="article:published_time" content={meta.publishedAt.toISOString()} />
@@ -54,12 +58,27 @@ const image = meta.image
         <meta property="article:modified_time" content={meta.updatedAt.toISOString()} />
       )
     }
-    <meta name="twitter:card" content={image ? "summary_large_image" : "summary"} />
+    {
+      meta.type === "article" && (
+        <>
+          <meta property="article:author" content={absoluteUrl("/about/", siteUrl)} />
+          {meta.section && <meta property="article:section" content={meta.section} />}
+          {meta.tags?.map((t) => (
+            <meta property="article:tag" content={t} />
+          ))}
+        </>
+      )
+    }
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={meta.title} />
+    <meta name="twitter:description" content={meta.description} />
+    <meta name="twitter:image" content={image} />
+    <meta name="twitter:image:alt" content={imageAlt} />
     <meta name="author" content={author.name} />
 
     {
       !meta.noindex &&
-        meta.jsonLd?.map((obj) => (
+        [websiteJsonLd(siteUrl), ...(meta.jsonLd ?? [])].map((obj) => (
           <script is:inline type="application/ld+json" set:html={JSON.stringify(obj)} />
         ))
     }

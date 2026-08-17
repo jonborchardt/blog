@@ -4,6 +4,10 @@ import { glob } from "astro/loaders";
 import { SERIES_IDS } from "@/config/series";
 import { TAG_IDS } from "@/config/tags";
 
+/** Actionable message for the description length rule (search snippets + social previews). */
+const descriptionLength = (issue: { input?: unknown }) =>
+  `description must be 40-160 characters for search/social previews (got ${String(issue.input).length})`;
+
 /** kebab-case: lowercase letters, digits, single hyphens */
 export const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
@@ -17,10 +21,19 @@ const posts = defineCollection({
   schema: ({ image }) =>
     z
       .object({
-        title: z.string().min(1),
+        title: z
+          .string()
+          .min(1, "title is required")
+          .max(90, {
+            error: (issue) =>
+              `title must be at most 90 characters for search results (got ${String(issue.input).length})`,
+          }),
         /** Defaults to the post directory name. Set explicitly to override. */
         slug: z.string().regex(SLUG_PATTERN).optional(),
-        description: z.string().min(1).max(200),
+        description: z
+          .string()
+          .min(40, { error: descriptionLength })
+          .max(160, { error: descriptionLength }),
         publishedAt: z.coerce.date(),
         updatedAt: z.coerce.date().optional(),
         series: z.enum(SERIES_IDS).optional(),

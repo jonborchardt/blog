@@ -31,6 +31,10 @@ Personal technical blog by Jonathan Borchardt. Static site built with Astro, pub
 - Favicon: replace `public/favicon.svg`. Files in `public/` are served as-is under the `/blog/` base.
 - No code change is needed for either.
 
+## Social cards
+
+Every post without a bespoke `ogImage` gets a generated 1200×630 card at `/og/<slug>.png` (built by `src/lib/og.ts` with satori + resvg — no browser). Non-post pages use `/og/site.png`. The card font (IBM Plex Sans, OFL) lives in `src/assets/fonts/og/` and is used only for cards; pages keep the system font stack.
+
 ## Architecture
 
 - **Astro 7** (static output) owns routing, layouts, content collections, metadata, RSS, sitemap.

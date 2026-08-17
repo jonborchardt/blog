@@ -10,8 +10,14 @@ export interface PageMeta {
   /** Root-relative path, e.g. "/archive/". */
   path: string;
   type?: "website" | "article";
-  /** Root-relative or absolute image URL. */
+  /** Root-relative or absolute image URL. Falls back to the generated site card. */
   image?: string;
+  imageAlt?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  /** Article pages: tag labels and series title for article:* OG tags. */
+  tags?: string[];
+  section?: string;
   publishedAt?: Date;
   updatedAt?: Date;
   /** Draft/dev-only pages: emit noindex and no structured data. */
@@ -29,15 +35,40 @@ export const personJsonLd = (siteUrl: URL) => ({
   sameAs: Object.values(author.links),
 });
 
-export const articleJsonLd = (post: Post, path: string, siteUrl: URL, image?: string) => ({
+export const websiteJsonLd = (siteUrl: URL) => ({
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: site.name,
+  description: site.description,
+  url: absoluteUrl("/", siteUrl),
+  publisher: { "@type": "Person", name: author.name, url: absoluteUrl("/about/", siteUrl) },
+});
+
+export interface ArticleExtras {
+  image?: string;
+  section?: string;
+  wordCount?: number;
+}
+
+export const articleJsonLd = (
+  post: Post,
+  path: string,
+  siteUrl: URL,
+  extras: ArticleExtras = {},
+) => ({
   "@context": "https://schema.org",
   "@type": "BlogPosting",
   headline: post.data.title,
-  ...(image && { image: image.startsWith("http") ? image : absoluteUrl(image, siteUrl) }),
+  url: absoluteUrl(path, siteUrl),
+  ...(extras.image && {
+    image: extras.image.startsWith("http") ? extras.image : absoluteUrl(extras.image, siteUrl),
+  }),
+  ...(extras.section && { articleSection: extras.section }),
+  ...(extras.wordCount && { wordCount: extras.wordCount }),
   description: post.data.description,
   datePublished: post.data.publishedAt.toISOString(),
   ...(post.data.updatedAt && { dateModified: post.data.updatedAt.toISOString() }),
-  author: { "@type": "Person", name: author.name },
+  author: { "@type": "Person", name: author.name, url: absoluteUrl("/about/", siteUrl) },
   publisher: { "@type": "Person", name: author.name },
   mainEntityOfPage: absoluteUrl(path, siteUrl),
   keywords: post.data.tags,

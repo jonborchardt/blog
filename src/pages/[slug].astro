@@ -26,7 +26,9 @@ const minutes = readingTime(post.body ?? "");
 const toc = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
 const showToc = toc.length >= 3;
 const { hero, ogImage } = post.data;
-const image = ogImage?.src ?? hero?.src.src;
+// Social image: bespoke ogImage, else the card generated at /og/<slug>.png (see src/pages/og/).
+const image = ogImage?.src ?? `/og/${postSlug(post)}.png`;
+const words = (post.body ?? "").trim().split(/\s+/).filter(Boolean).length;
 ---
 
 <BaseLayout
@@ -36,10 +38,23 @@ const image = ogImage?.src ?? hero?.src.src;
     path,
     type: "article",
     image,
+    imageAlt: ogImage
+      ? post.data.title
+      : `${post.data.title} — ${ctx?.series.title ?? "Always Shippable"}`,
+    imageWidth: ogImage?.width,
+    imageHeight: ogImage?.height,
+    tags: post.data.tags.map((t) => tagRegistry[t].label),
+    section: ctx?.series.title,
     publishedAt: post.data.publishedAt,
     updatedAt: post.data.updatedAt,
     noindex: post.data.draft,
-    jsonLd: [articleJsonLd(post, path, Astro.site!, image)],
+    jsonLd: [
+      articleJsonLd(post, path, Astro.site!, {
+        image,
+        section: ctx?.series.title,
+        wordCount: words,
+      }),
+    ],
   }}
 >
   <article class="max-w-wide mx-auto">
