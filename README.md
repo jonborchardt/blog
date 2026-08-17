@@ -11,18 +11,18 @@ Personal technical blog by Jonathan Borchardt. Static site built with Astro, pub
 
 ## Commands
 
-| Command             | What it does                                                                           |
-| ------------------- | -------------------------------------------------------------------------------------- |
-| `npm install`       | install dependencies                                                                   |
-| `npm run dev`       | dev server at <http://localhost:4321/blog/> (drafts and `/admin/` on)                  |
-| `npm run build`     | production build to `dist/`                                                            |
-| `npm run preview`   | serve `dist/` locally                                                                  |
-| `npm run typecheck` | `astro check` (strict TypeScript across `.astro`/`.ts`/`.tsx`)                         |
-| `npm run lint`      | ESLint                                                                                 |
-| `npm run format`    | Prettier (write) — `format:check` to verify                                            |
-| `npm test`          | Vitest unit tests                                                                      |
-| `npm run test:e2e`  | Playwright + axe against the production build (`npx playwright install chromium` once) |
-| `npm run validate`  | typecheck + lint + format:check + unit tests                                           |
+| Command             | What it does                                                                                      |
+| ------------------- | ------------------------------------------------------------------------------------------------- |
+| `npm install`       | install dependencies                                                                              |
+| `npm run dev`       | dev server at <http://localhost:4321/blog/> (drafts and `/admin/` on)                             |
+| `npm run build`     | production build to `dist/`                                                                       |
+| `npm run preview`   | serve `dist/` locally                                                                             |
+| `npm run typecheck` | `astro check` (strict TypeScript across `.astro`/`.ts`/`.tsx`)                                    |
+| `npm run lint`      | ESLint                                                                                            |
+| `npm run format`    | Prettier (write) — `format:check` to verify                                                       |
+| `npm test`          | Vitest unit tests                                                                                 |
+| `npm run test:e2e`  | Playwright + axe against a production build on port 4322 (`npx playwright install chromium` once) |
+| `npm run validate`  | typecheck + lint + format:check + unit tests                                                      |
 
 ## Architecture
 

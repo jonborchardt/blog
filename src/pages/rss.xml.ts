@@ -5,7 +5,8 @@ import { getPosts, postPath } from "@/lib/posts";
 import { href } from "@/lib/url";
 
 export async function GET(context: APIContext) {
-  const posts = (await getPosts()).filter((p) => !p.data.draft);
+  // getPosts() already excludes drafts in production builds.
+  const posts = await getPosts();
   return rss({
     title: siteConfig.name,
     description: siteConfig.description,

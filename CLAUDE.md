@@ -26,6 +26,7 @@ A statically generated technical blog (Astro 7 + React islands + MDX + Tailwind/
 - Frontmatter schema: `src/content.config.ts`. `series` must be a key of `src/config/series.ts`; `tags` must be keys of `src/config/tags.ts`. Add to the registry first, then use.
 - `seriesOrder` requires `series`; when adding to a series without an explicit order use `max(existing) + 1`.
 - `draft: true` = dev-only. Drafts never appear in the production build, listings, RSS, or sitemap. Do not add any production draft-preview mechanism.
+- Frontmatter dates are calendar dates in UTC; render them only via `formatDate`/`isoDate` in `src/lib/dates.ts`.
 - Every image needs meaningful `alt`. Hero images require `alt` in the schema.
 - Site identity/nav/featured post: `src/config/site.ts`. Author: `src/config/author.ts`. About page prose: `src/pages/about/index.mdx`.
 
@@ -41,7 +42,7 @@ npm only. Prefer Astro built-ins, then existing deps, then nothing. Do not add a
 
 ## Quality gates
 
-Before claiming done: `npm run validate` (typecheck + lint + format:check + unit tests) and `npm run build`. Run `npm run test:e2e` when touching layout, routing, or hydration.
+Before claiming done: `npm run validate` (typecheck + lint + format:check + unit tests) and `npm run build`. Run `npm run test:e2e` when touching layout, routing, or hydration. e2e serves the production build on port 4322; dev stays on 4321.
 
 ## Agent maintenance rules
 

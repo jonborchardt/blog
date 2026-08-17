@@ -6,6 +6,7 @@ import { tags as tagRegistry } from "@/config/tags";
 import { getPosts, getSeriesPosts, postPath, postSlug, seriesPath } from "@/lib/posts";
 import { articleJsonLd } from "@/lib/seo";
 import { href } from "@/lib/url";
+import { formatDate, isoDate } from "@/lib/dates";
 
 export async function getStaticPaths() {
   // getPosts() excludes drafts in production, so draft pages are never generated.
@@ -41,15 +42,15 @@ const siblings = post.data.series ? await getSeriesPosts(post.data.series) : [];
       }
       <h1 class="text-3xl font-bold tracking-tight">{post.data.title}</h1>
       <p class="text-muted-foreground mt-2 text-sm">
-        <time datetime={post.data.publishedAt.toISOString()}>
-          {post.data.publishedAt.toLocaleDateString("en-US", { dateStyle: "long" })}
+        <time datetime={isoDate(post.data.publishedAt)}>
+          {formatDate(post.data.publishedAt, "long")}
         </time>
         {
           post.data.updatedAt && (
             <>
               {" · Updated "}
-              <time datetime={post.data.updatedAt.toISOString()}>
-                {post.data.updatedAt.toLocaleDateString("en-US", { dateStyle: "long" })}
+              <time datetime={isoDate(post.data.updatedAt)}>
+                {formatDate(post.data.updatedAt, "long")}
               </time>
             </>
           )
