@@ -24,14 +24,14 @@ test("every sitemap page renders and has no axe violations", async ({ page, requ
 
 test("dates render as UTC calendar dates", async ({ page }) => {
   await page.goto("");
-  await expect(page.locator("time").first()).toHaveText("Aug 17, 2026");
-  await page.goto("example-post/");
+  await expect(page.locator("time").first()).toHaveText("Aug 18, 2026");
+  await page.goto("building-blocks-of-this-blog/");
   await expect(page.locator("article time").first()).toHaveText("August 17, 2026");
 });
 
 test("code blocks switch to the dark Shiki theme", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "dark" });
-  await page.goto("example-post/");
+  await page.goto("building-blocks-of-this-blog/");
   await page.evaluate(() => localStorage.clear());
   await page.reload();
   const bg = await page
@@ -51,7 +51,7 @@ test("internal links and assets use the /blog/ base", async ({ page }) => {
 });
 
 test("MDX post hydrates its React island", async ({ page }) => {
-  await page.goto("example-post/");
+  await page.goto("interactive-islands-in-mdx/");
   const button = page.getByTestId("island").getByRole("button");
   await expect(button).toHaveText(/Clicked 0 times/);
   // client:visible — scroll it into view and wait for hydration (Astro drops `ssr` once hydrated).
@@ -59,7 +59,7 @@ test("MDX post hydrates its React island", async ({ page }) => {
   await expect(page.locator("astro-island[ssr]")).toHaveCount(0);
   await button.click();
   await expect(button).toHaveText(/Clicked 1 time/);
-  await expect(page.locator("img[alt='A grey circle labelled SVG']")).toBeVisible();
+  await expect(page.locator("figure img[src$='.svg']")).toBeVisible();
 });
 
 test("dev-only admin route is not in the production build", async ({ page }) => {

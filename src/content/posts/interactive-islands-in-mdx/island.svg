@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="200" viewBox="0 0 560 200" role="img" aria-labelledby="island-title island-desc" font-family="system-ui, sans-serif" font-size="14">
+  <title id="island-title">A page made of static HTML with one hydrated island</title>
+  <desc id="island-desc">A grey page outline containing text blocks; one small block near the bottom is highlighted and labelled "island", the only part that loads JavaScript.</desc>
+  <rect x="20" y="20" width="520" height="160" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.35"/>
+  <rect x="40" y="40" width="300" height="12" rx="3" fill="currentColor" fill-opacity="0.35"/>
+  <rect x="40" y="62" width="460" height="8" rx="3" fill="currentColor" fill-opacity="0.2"/>
+  <rect x="40" y="78" width="420" height="8" rx="3" fill="currentColor" fill-opacity="0.2"/>
+  <rect x="40" y="94" width="440" height="8" rx="3" fill="currentColor" fill-opacity="0.2"/>
+  <rect x="40" y="120" width="200" height="40" rx="6" fill="#006a90" fill-opacity="0.15" stroke="#006a90" stroke-width="2"/>
+  <text x="52" y="145" fill="currentColor">island (hydrated)</text>
+  <text x="270" y="145" fill="currentColor" fill-opacity="0.7">everything else: static HTML</text>
+</svg>

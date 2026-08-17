@@ -22,6 +22,8 @@ A statically generated technical blog (Astro 7 + React islands + MDX + Tailwind/
 ## Content contract
 
 - Posts live in `src/content/posts/<dir>/index.mdx`. Entry id = `<dir>`; slug = `slug` frontmatter or `<dir>`. Slugs are kebab-case.
+- Shared MDX primitives (Callout, Figure, Tabs, …) are catalogued in `src/components/blog/README.md`; use them instead of ad-hoc markup.
+- Internal links in MDX are root-relative (`/some-post/`, `/about/`); the build prefixes the base.
 - Post-specific assets and components stay in the post directory (`./components/*.tsx`, `./*.svg`). Do not promote them to `src/components/blog/` unless reused by 2+ posts.
 - Frontmatter schema: `src/content.config.ts`. `series` must be a key of `src/config/series.ts`; `tags` must be keys of `src/config/tags.ts`. Add to the registry first, then use.
 - `seriesOrder` requires `series`; when adding to a series without an explicit order use `max(existing) + 1`.

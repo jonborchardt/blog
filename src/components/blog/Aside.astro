@@ -1,0 +1,32 @@
+---
+/**
+ * Aside — a short side note. On ≥xl screens it sits in the right margin next to the paragraph
+ * that precedes it; otherwise it renders as an inline muted block. Keep it to a few sentences.
+ *
+ * ```mdx
+ * import Aside from "@/components/blog/Aside.astro";
+ *
+ * <Aside>Astro calls this "partial hydration"; the islands metaphor is from Jason Miller.</Aside>
+ * ```
+ */
+---
+
+<aside
+  class="side-note text-muted-foreground not-prose my-4 border-l-2 pl-3 text-sm leading-relaxed"
+>
+  <slot />
+</aside>
+
+<style is:global>
+  @media (min-width: 80rem) {
+    /* Margin note: float into the gutter to the right of the 42rem prose column. */
+    .side-note {
+      float: right;
+      clear: right;
+      width: 14rem;
+      margin: 0 calc(-14rem - 2rem) 1rem 1.5rem;
+      border-left: 0;
+      padding-left: 0;
+    }
+  }
+</style>

@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
 // Reference fixture: a post in a series with ≥3 headings, a raster image, a table and a code block.
-const POST = "example-post/";
+const POST = "building-blocks-of-this-blog/";
 
 test("article structure: one h1, landmarks, series nav, TOC, anchors", async ({ page }) => {
   await page.goto(POST);
@@ -14,7 +14,7 @@ test("article structure: one h1, landmarks, series nav, TOC, anchors", async ({ 
   expect(await anchors.count()).toBeGreaterThanOrEqual(3);
   await expect(anchors.first()).toHaveAttribute("aria-label", /^Link to section: /);
   await expect(page.getByText(/\d+ min read/)).toBeVisible();
-  await expect(page.getByText("Part 1 of 1").first()).toBeVisible();
+  await expect(page.getByText("Part 1 of 2").first()).toBeVisible();
 });
 
 test("images are lazy, sized and responsive; tables scroll", async ({ page }) => {
@@ -25,6 +25,7 @@ test("images are lazy, sized and responsive; tables scroll", async ({ page }) =>
   await expect(img).toHaveAttribute("height", /\d+/);
   await expect(img).toHaveAttribute("src", /\.webp$/);
   await expect(page.locator(".overflow-x-auto > table")).toHaveCount(1);
+  await expect(page.locator("figure figcaption").first()).toBeVisible();
 });
 
 test("no horizontal overflow at 360px with a wide table and code block", async ({ page }) => {

@@ -1,10 +1,10 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import ExampleInteractive from "./ExampleInteractive";
+import Counter from "./Counter";
 
-describe("ExampleInteractive", () => {
+describe("Counter", () => {
   it("counts clicks", () => {
-    render(<ExampleInteractive />);
+    render(<Counter />);
     const button = screen.getByRole("button");
     expect(button).toHaveTextContent("Clicked 0 times");
     fireEvent.click(button);

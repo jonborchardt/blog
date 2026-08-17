@@ -1,0 +1,84 @@
+---
+title: Interactive Islands in MDX
+description: How this blog embeds React components in posts without turning the page into an app — selective hydration, and when it is worth it.
+publishedAt: 2026-08-18
+series: building-always-shippable
+seriesOrder: 2
+tags: [meta, engineering]
+draft: false
+---
+
+import Callout from "@/components/blog/Callout.astro";
+import Figure from "@/components/blog/Figure.astro";
+import Counter from "./components/Counter";
+import island from "./island.svg";
+
+[Part 1](/building-blocks-of-this-blog/) made the case that a post is a document and should ship as
+one: HTML and CSS, no framework. This part is about the exception. Some things a technical blog wants
+to show — a simulation, a sortable table of results, a search box — must respond to the reader, and
+for those a small amount of client-side code is the honest answer.
+
+## Islands, not apps
+
+Astro renders every page to static HTML. A component marked with a `client:*` directive is an
+_island_: it renders to HTML at build time like everything else, and then, in the browser, only that
+component's JavaScript loads and takes over its own DOM. The rest of the page never hydrates.
+
+<Figure caption="One island in a sea of static HTML. Only the highlighted block loads script.">
+  <img
+    src={island.src}
+    width={island.width}
+    height={island.height}
+    alt="A page outline made of text blocks; one small block near the bottom is highlighted and labelled island, the only part that loads JavaScript"
+  />
+</Figure>
+
+The figure above is an inline SVG file. It is the first thing to reach for when a post needs a
+picture: it scales, it respects the theme via `currentColor`, and it costs nothing at runtime.
+
+## A real island
+
+Below is the smallest possible island — a counter — living in this post's own directory as
+`components/Counter.tsx`. It hydrates when scrolled into view (`client:visible`), so a reader who
+never gets this far never downloads it.
+
+<Counter client:visible />
+
+```mdx
+import Counter from "./components/Counter";
+
+<Counter client:visible />
+```
+
+That is the entire authoring surface: import a component that lives next to the post, add a
+directive. The component is ordinary React with the same design tokens as the rest of the site, and
+it has an ordinary unit test next to it.
+
+## When an island is worth it
+
+<Callout variant="note" title="The ladder">
+  Static HTML and CSS → SVG → a React island. Stop at the first rung that holds. A chart with fixed
+  data is an SVG. A chart the reader can filter is an island.
+</Callout>
+
+Good reasons for an island:
+
+- The reader manipulates it: sliders, filters, a search box, a playground.
+- It animates in a way CSS cannot express, and the animation carries meaning.
+- It fetches or computes something on demand that would be absurd to precompute.
+
+Bad reasons:
+
+- It was easier to write in React. (It is usually not, once you count the hydration.)
+- A library exists for it. (The library is now the reader's download.)
+- Everything else on the site is React. (Nothing else on the site is React.)
+
+## Where islands live
+
+Post-specific components stay in the post's directory (`./components/*.tsx`), with their tests.
+They are promoted to the shared component library only when a second post needs the same thing —
+which is also when it becomes worth designing an API for. Site chrome (header, footer, theme toggle)
+is never an island; those are plain Astro components with, at most, a few lines of inline script.
+
+The one island in the site's own chrome is the archive page's search and filter explorer, and it
+gets its own post later in this series.

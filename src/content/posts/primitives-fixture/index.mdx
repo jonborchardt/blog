@@ -1,0 +1,128 @@
+---
+title: Primitives Fixture (dev only)
+description: Exhaustive, dev-only exercise of every shared MDX primitive and variant, for visual and axe checks during development.
+publishedAt: 2026-08-17
+tags: [meta]
+draft: true
+---
+
+import Callout from "@/components/blog/Callout.astro";
+import Figure from "@/components/blog/Figure.astro";
+import Quote from "@/components/blog/Quote.astro";
+import Aside from "@/components/blog/Aside.astro";
+import Comparison from "@/components/blog/Comparison.astro";
+import Steps from "@/components/blog/Steps.astro";
+import Details from "@/components/blog/Details.astro";
+import Tabs from "@/components/blog/Tabs.astro";
+import Tab from "@/components/blog/Tab.astro";
+import Video from "@/components/blog/Video.astro";
+import CodeBlock from "@/components/blog/CodeBlock.astro";
+
+This draft never builds. It exists so every primitive and variant can be eyeballed in both themes at
+360/768/1280 and run through axe in `npm run dev`. The published posts in the
+_Building Always Shippable_ series are the e2e fixtures.
+
+## Callout variants
+
+<Callout>Default note, no title.</Callout>
+<Callout variant="tip" title="Tip">
+  Tip with title.
+</Callout>
+<Callout variant="warning" title="Warning">
+  Warning with title.
+</Callout>
+<Callout variant="danger">Danger, no title.</Callout>
+<Callout variant="info" title="Info">
+  Info with a [link](/about/) and `code`.
+</Callout>
+
+## Figure widths
+
+<Figure caption="prose width (default)">
+  <svg width="600" height="120" viewBox="0 0 600 120" role="img" aria-label="Grey placeholder bar">
+    <rect width="600" height="120" rx="8" fill="currentColor" fill-opacity="0.2" />
+  </svg>
+</Figure>
+<Figure caption="wide" width="wide">
+  <svg
+    width="900"
+    height="120"
+    viewBox="0 0 900 120"
+    role="img"
+    aria-label="Grey placeholder bar, wide"
+  >
+    <rect width="900" height="120" rx="8" fill="currentColor" fill-opacity="0.2" />
+  </svg>
+</Figure>
+<Figure caption="full" width="full">
+  <svg
+    width="1200"
+    height="120"
+    viewBox="0 0 1200 120"
+    role="img"
+    aria-label="Grey placeholder bar, full"
+  >
+    <rect width="1200" height="120" rx="8" fill="currentColor" fill-opacity="0.2" />
+  </svg>
+</Figure>
+
+## Quote, Aside
+
+<Quote>No attribution.</Quote>
+<Quote cite="Someone">With cite, no link.</Quote>
+<Quote cite="Someone" href="https://example.com">
+  With cite and link.
+</Quote>
+
+Paragraph before an aside so the margin note has something to sit next to on wide screens.
+
+<Aside>An aside. On ≥xl it floats into the right margin.</Aside>
+
+## Comparison (three columns)
+
+<Comparison labels={["A", "B", "C"]}>
+  <Fragment slot="a">Column A</Fragment>
+  <Fragment slot="b">Column B</Fragment>
+  <Fragment slot="c">Column C</Fragment>
+</Comparison>
+
+## Steps
+
+<Steps>
+
+1. One
+2. Two, with a paragraph.
+
+   Second paragraph.
+
+3. Three
+
+</Steps>
+
+## Details (open)
+
+<Details summary="Open by default" open>
+  Content.
+</Details>
+
+## Tabs (three)
+
+<Tabs>
+  <Tab label="One">First panel.</Tab>
+  <Tab label="Two">Second panel.</Tab>
+  <Tab label="Three">Third panel.</Tab>
+</Tabs>
+
+## Video
+
+<Video youtube="dQw4w9WgXcQ" title="Placeholder YouTube embed" caption="YouTube, lazy iframe." />
+
+## CodeBlock without title
+
+<CodeBlock>
+
+```sh
+npm run build
+```
+
+</CodeBlock>

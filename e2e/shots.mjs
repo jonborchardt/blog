@@ -3,7 +3,9 @@ import { chromium } from "@playwright/test";
 const [out = "shots", ...paths] = process.argv.slice(2);
 const base = "http://localhost:4322/blog/";
 const browser = await chromium.launch();
-for (const p of paths.length ? paths : ["", "example-post/", "archive/", "does-not-exist/"]) {
+for (const p of paths.length
+  ? paths
+  : ["", "building-blocks-of-this-blog/", "archive/", "does-not-exist/"]) {
   for (const width of [360, 1280]) {
     for (const scheme of ["light", "dark"]) {
       const page = await browser.newPage({ viewport: { width, height: 900 }, colorScheme: scheme });

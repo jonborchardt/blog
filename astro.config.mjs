@@ -18,19 +18,48 @@ function headingText(node) {
   return node.children.map(headingText).join("").trim();
 }
 
+/**
+ * Rehype plugin: prefix root-relative links/images in Markdown/MDX with the configured base so
+ * authors write `/some-post/` and never `/blog/`. External, hash and protocol-relative URLs are
+ * left alone.
+ * @param {{ base: string }} opts
+ */
+function rehypeBaseLinks({ base }) {
+  const prefix = base.replace(/\/$/, "");
+  /** @param {import("hast").Nodes} node */
+  const walk = (node) => {
+    if (node.type === "element") {
+      for (const attr of ["href", "src"]) {
+        const v = node.properties?.[attr];
+        if (typeof v === "string" && v.startsWith("/") && !v.startsWith("//")) {
+          node.properties[attr] = prefix + v;
+        }
+      }
+    }
+    if ("children" in node) node.children.forEach(walk);
+  };
+  return walk;
+}
+
+const BASE = "/blog";
+
 // GitHub Pages project site: https://jonborchardt.github.io/blog/
 // `site` + `base` make Astro emit correct URLs; never hardcode "/blog/" in source.
 export default defineConfig({
   site: "https://jonborchardt.github.io",
-  base: "/blog",
+  base: BASE,
   trailingSlash: "always",
   integrations: [react(), mdx(), sitemap()],
   image: { layout: "constrained", responsiveStyles: true },
   markdown: {
-    shikiConfig: { themes: { light: "github-light", dark: "github-dark" } },
+    // High-contrast pair: the default github-light orange (#e36209) fails WCAG AA on white.
+    shikiConfig: {
+      themes: { light: "github-light-high-contrast", dark: "github-dark-high-contrast" },
+    },
     rehypePlugins: [
       // Astro adds heading ids after user plugins by default; run it first so anchors can link.
       rehypeHeadingIds,
+      [rehypeBaseLinks, { base: BASE }],
       [
         rehypeAutolinkHeadings,
         {

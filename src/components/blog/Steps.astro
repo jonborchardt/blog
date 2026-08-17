@@ -1,0 +1,63 @@
+---
+/**
+ * Steps — numbered procedure with a connector line. Write a plain Markdown ordered list inside.
+ *
+ * ```mdx
+ * import Steps from "@/components/blog/Steps.astro";
+ *
+ * <Steps>
+ * 1. Scaffold the post.
+ * 2. Write it.
+ * 3. Run `npm run build`.
+ * </Steps>
+ * ```
+ */
+---
+
+<div class="steps my-8"><slot /></div>
+
+<style is:global>
+  .steps > ol {
+    list-style: none;
+    counter-reset: step;
+    margin: 0;
+    padding: 0;
+  }
+  .steps > ol > li {
+    counter-increment: step;
+    position: relative;
+    margin: 0;
+    padding: 0 0 1.5rem 3rem;
+  }
+  .steps > ol > li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 2rem;
+    height: 2rem;
+    display: grid;
+    place-items: center;
+    border-radius: 9999px;
+    border: 1px solid var(--border);
+    background: var(--background);
+    color: var(--primary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1;
+  }
+  .steps > ol > li:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: 1rem;
+    top: 2rem;
+    bottom: 0;
+    border-left: 1px solid var(--border);
+  }
+  .steps > ol > li > :first-child {
+    margin-top: 0.3rem;
+  }
+  .steps > ol > li > :last-child {
+    margin-bottom: 0;
+  }
+</style>

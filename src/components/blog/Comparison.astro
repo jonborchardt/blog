@@ -1,0 +1,35 @@
+---
+/**
+ * Comparison — two or three labelled columns (before/after, pros/cons, option A/B/C).
+ * Columns stack below `md`.
+ *
+ * Props: `labels: string[]` (2 or 3). Content goes in named slots `a`, `b`, `c`.
+ *
+ * ```mdx
+ * import Comparison from "@/components/blog/Comparison.astro";
+ *
+ * <Comparison labels={["Static", "Island"]}>
+ *   <Fragment slot="a">- zero JS\n- renders once</Fragment>
+ *   <Fragment slot="b">- ships React\n- responds to input</Fragment>
+ * </Comparison>
+ * ```
+ */
+interface Props {
+  labels: string[];
+}
+const { labels } = Astro.props;
+const slots = ["a", "b", "c"] as const;
+---
+
+<div class:list={["my-8 grid gap-4", labels.length > 2 ? "md:grid-cols-3" : "md:grid-cols-2"]}>
+  {
+    labels.map((label, i) => (
+      <section class="bg-muted/40 rounded-md border p-4" aria-label={label}>
+        <p class="not-prose mb-2 text-sm font-semibold">{label}</p>
+        <div class="text-sm [&_ul]:my-2 [&_ul]:pl-4 [&>:first-child]:mt-0 [&>:last-child]:mb-0">
+          <slot name={slots[i]!} />
+        </div>
+      </section>
+    ))
+  }
+</div>

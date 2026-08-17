@@ -9,8 +9,8 @@ describe("validatePosts", () => {
   it("accepts distinct slugs and series orders", () => {
     expect(() =>
       validatePosts([
-        post("a", { series: "example-series", seriesOrder: 1 }),
-        post("b", { series: "example-series", seriesOrder: 2 }),
+        post("a", { series: "building-always-shippable", seriesOrder: 1 }),
+        post("b", { series: "building-always-shippable", seriesOrder: 2 }),
       ]),
     ).not.toThrow();
   });
@@ -26,8 +26,8 @@ describe("validatePosts", () => {
   it("rejects duplicate seriesOrder within a series", () => {
     expect(() =>
       validatePosts([
-        post("a", { series: "example-series", seriesOrder: 1 }),
-        post("b", { series: "example-series", seriesOrder: 1 }),
+        post("a", { series: "building-always-shippable", seriesOrder: 1 }),
+        post("b", { series: "building-always-shippable", seriesOrder: 1 }),
       ]),
     ).toThrow(/duplicate seriesOrder/);
   });

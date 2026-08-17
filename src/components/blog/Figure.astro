@@ -1,0 +1,58 @@
+---
+/**
+ * Figure — wraps an image/SVG/anything with an optional caption and a width.
+ *
+ * Props: `caption?` (rendered as <figcaption>), `width` = "prose" | "wide" | "full" (default "prose").
+ * "wide"/"full" break out of the prose measure on ≥lg screens; on narrow screens nothing breaks out.
+ *
+ * ```mdx
+ * import { Image } from "astro:assets";
+ * import Figure from "@/components/blog/Figure.astro";
+ * import shot from "./shot.png";
+ *
+ * <Figure caption="The build pipeline, end to end." width="wide">
+ *   <Image src={shot} alt="Flow from MDX source to static HTML" />
+ * </Figure>
+ * ```
+ */
+interface Props {
+  caption?: string;
+  width?: "prose" | "wide" | "full";
+}
+const { caption, width = "prose" } = Astro.props;
+---
+
+<figure class:list={["figure my-8", `figure-${width}`]}>
+  <slot />
+  {
+    caption && (
+      <figcaption class="text-muted-foreground mt-3 text-center text-sm">{caption}</figcaption>
+    )
+  }
+</figure>
+
+<style is:global>
+  .figure > :not(figcaption) {
+    margin: 0 auto;
+  }
+  .figure > img,
+  .figure > picture,
+  .figure > svg,
+  .figure > video {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-md);
+  }
+  @media (min-width: 64rem) {
+    /* Break out symmetrically past the prose measure (42rem) up to wide (56rem) / page (72rem). */
+    .figure-wide {
+      width: min(var(--container-wide), calc(100vw - 3rem));
+      margin-inline: calc((var(--container-prose) - min(var(--container-wide), 100vw - 3rem)) / 2);
+    }
+    .figure-full {
+      width: min(var(--container-page), calc(100vw - 3rem));
+      margin-inline: calc((var(--container-prose) - min(var(--container-page), 100vw - 3rem)) / 2);
+    }
+  }
+</style>

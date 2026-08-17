@@ -1,0 +1,14 @@
+---
+/**
+ * Tab — one panel inside `Tabs`. Props: `label` (tab text). See Tabs.astro for usage.
+ */
+interface Props {
+  label: string;
+}
+const { label } = Astro.props;
+---
+
+<section data-tab>
+  <p data-tab-label>{label}</p>
+  <slot />
+</section>

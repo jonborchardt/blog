@@ -1,0 +1,29 @@
+---
+/**
+ * Details — expandable section (native <details>). No JS.
+ *
+ * Props: `summary` (visible label), `open?`.
+ *
+ * ```mdx
+ * import Details from "@/components/blog/Details.astro";
+ *
+ * <Details summary="Full config file">```ts ... ```</Details>
+ * ```
+ */
+interface Props {
+  summary: string;
+  open?: boolean;
+}
+const { summary, open = false } = Astro.props;
+---
+
+<details open={open} class="group my-6 rounded-md border">
+  <summary
+    class="hover:bg-muted/60 marker:text-muted-foreground cursor-pointer rounded-md px-4 py-3 font-medium select-none"
+  >
+    {summary}
+  </summary>
+  <div class="border-t px-4 py-3 text-sm [&>:first-child]:mt-0 [&>:last-child]:mb-0">
+    <slot />
+  </div>
+</details>

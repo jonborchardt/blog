@@ -1,0 +1,61 @@
+---
+/**
+ * Video — a local video file or a YouTube embed, in a <figure> with optional caption. No autoplay.
+ *
+ * Props: either `src` (imported local file URL) with `poster?`, or `youtube` (video id).
+ * `title` is required (accessible name of the player). `caption?`.
+ *
+ * ```mdx
+ * import Video from "@/components/blog/Video.astro";
+ * import demo from "./demo.mp4";
+ *
+ * <Video src={demo} title="Archive search demo" caption="Typing filters the list." />
+ * <Video youtube="dQw4w9WgXcQ" title="Talk: Always Shippable" />
+ * ```
+ */
+interface Props {
+  src?: string;
+  poster?: string;
+  youtube?: string;
+  title: string;
+  caption?: string;
+}
+const { src, poster, youtube, title, caption } = Astro.props;
+if (!src && !youtube) throw new Error("Video: pass either `src` or `youtube`.");
+---
+
+<figure class="my-8">
+  {
+    youtube ? (
+      <div class="aspect-video overflow-hidden rounded-md border">
+        <iframe
+          src={`https://www.youtube-nocookie.com/embed/${youtube}`}
+          title={title}
+          loading="lazy"
+          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          class="h-full w-full"
+        />
+      </div>
+    ) : (
+      <video
+        controls
+        preload="metadata"
+        playsinline
+        poster={poster}
+        title={title}
+        class="w-full rounded-md border"
+      >
+        <source src={src} />
+        <p>
+          Your browser does not support embedded video. <a href={src}>Download the video</a>.
+        </p>
+      </video>
+    )
+  }
+  {
+    caption && (
+      <figcaption class="text-muted-foreground mt-3 text-center text-sm">{caption}</figcaption>
+    )
+  }
+</figure>

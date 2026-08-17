@@ -1,0 +1,33 @@
+---
+/**
+ * Quote — a pull quote with attribution.
+ *
+ * Props: `cite?` (who said it), `href?` (source URL; makes the attribution a link).
+ *
+ * ```mdx
+ * import Quote from "@/components/blog/Quote.astro";
+ *
+ * <Quote cite="Fred Brooks" href="https://example.com">
+ *   Plan to throw one away; you will, anyhow.
+ * </Quote>
+ * ```
+ */
+interface Props {
+  cite?: string;
+  href?: string;
+}
+const { cite, href } = Astro.props;
+---
+
+<figure class="not-prose border-primary my-8 border-l-4 py-1 pl-5">
+  <blockquote cite={href} class="text-lg leading-relaxed [&_p+p]:mt-3">
+    <slot />
+  </blockquote>
+  {
+    cite && (
+      <figcaption class="text-muted-foreground mt-3 text-sm">
+        — {href ? <a href={href}>{cite}</a> : <cite class="not-italic">{cite}</cite>}
+      </figcaption>
+    )
+  }
+</figure>

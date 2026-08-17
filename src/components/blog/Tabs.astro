@@ -1,0 +1,141 @@
+---
+/**
+ * Tabs — ARIA tabs pattern (tablist / tab / tabpanel, roving tabindex, arrow keys).
+ * Progressive enhancement: without JS the panels render stacked with their labels as headings.
+ * The small inline script below is delegated and idempotent (any number of Tabs per page).
+ *
+ * Use with `Tab` (`label` prop). No React, no Radix.
+ *
+ * ```mdx
+ * import Tabs from "@/components/blog/Tabs.astro";
+ * import Tab from "@/components/blog/Tab.astro";
+ *
+ * <Tabs>
+ *   <Tab label="npm">```sh npm install ```</Tab>
+ *   <Tab label="pnpm">```sh pnpm add ```</Tab>
+ * </Tabs>
+ * ```
+ */
+---
+
+<div class="tabs my-6 rounded-md border" data-tabs>
+  <slot />
+</div>
+
+<style is:global>
+  .tabs [role="tablist"] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    border-bottom: 1px solid var(--border);
+    padding: 0.35rem 0.5rem 0;
+  }
+  .tabs [role="tab"] {
+    border: 0;
+    background: none;
+    color: var(--muted-foreground);
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    cursor: pointer;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  }
+  .tabs [role="tab"]:hover {
+    color: var(--foreground);
+  }
+  .tabs [role="tab"][aria-selected="true"] {
+    color: var(--foreground);
+    border-bottom-color: var(--primary);
+  }
+  .tabs [role="tabpanel"] {
+    padding: 0.75rem 1rem;
+  }
+  .tabs [role="tabpanel"][hidden] {
+    display: none;
+  }
+  .tabs [role="tabpanel"] > :first-child {
+    margin-top: 0;
+  }
+  .tabs [role="tabpanel"] > :last-child {
+    margin-bottom: 0;
+  }
+  /* No-JS fallback: stacked sections with their labels. */
+  .tabs [data-tab] {
+    padding: 0.75rem 1rem;
+  }
+  .tabs [data-tab] + [data-tab] {
+    border-top: 1px solid var(--border);
+  }
+  .tabs [data-tab-label] {
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin: 0 0 0.5rem;
+  }
+</style>
+
+<script>
+  let uid = 0;
+  const upgrade = (root: HTMLElement) => {
+    if (root.dataset.upgraded) return;
+    root.dataset.upgraded = "true";
+    const panels = [...root.querySelectorAll<HTMLElement>(":scope > [data-tab]")];
+    if (!panels.length) return;
+    const id = `tabs-${++uid}`;
+    const list = document.createElement("div");
+    list.setAttribute("role", "tablist");
+    const tabs = panels.map((panel, i) => {
+      const label = panel.querySelector<HTMLElement>("[data-tab-label]");
+      const tab = document.createElement("button");
+      tab.type = "button";
+      tab.id = `${id}-tab-${i}`;
+      tab.setAttribute("role", "tab");
+      tab.textContent = label?.textContent ?? `Tab ${i + 1}`;
+      label?.remove();
+      panel.id = `${id}-panel-${i}`;
+      panel.setAttribute("role", "tabpanel");
+      panel.setAttribute("aria-labelledby", tab.id);
+      panel.tabIndex = 0;
+      panel.removeAttribute("data-tab");
+      list.append(tab);
+      return tab;
+    });
+    const select = (i: number, focus = false) => {
+      tabs.forEach((t, j) => {
+        const on = i === j;
+        t.setAttribute("aria-selected", String(on));
+        t.tabIndex = on ? 0 : -1;
+        t.setAttribute("aria-controls", panels[j]!.id);
+        panels[j]!.hidden = !on;
+      });
+      if (focus) tabs[i]!.focus();
+    };
+    list.addEventListener("click", (e) => {
+      const i = tabs.indexOf(e.target as HTMLButtonElement);
+      if (i >= 0) select(i);
+    });
+    list.addEventListener("keydown", (e) => {
+      const i = tabs.indexOf(document.activeElement as HTMLButtonElement);
+      if (i < 0) return;
+      const n = tabs.length;
+      const next =
+        e.key === "ArrowRight"
+          ? (i + 1) % n
+          : e.key === "ArrowLeft"
+            ? (i - 1 + n) % n
+            : e.key === "Home"
+              ? 0
+              : e.key === "End"
+                ? n - 1
+                : -1;
+      if (next < 0) return;
+      e.preventDefault();
+      select(next, true);
+    });
+    root.prepend(list);
+    select(0);
+  };
+  document.querySelectorAll<HTMLElement>("[data-tabs]").forEach(upgrade);
+</script>

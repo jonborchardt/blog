@@ -1,0 +1,70 @@
+---
+/**
+ * CodeBlock — optional wrapper around a fenced code block that adds a title (filename) header and
+ * a copy button. Bare fences stay valid; use this only when the title or copy button earns it.
+ * One delegated inline script (defined here, deduplicated by the browser per page) wires every
+ * copy button; "Copied" is announced via aria-live.
+ *
+ * Props: `title?`.
+ *
+ * ```mdx
+ * import CodeBlock from "@/components/blog/CodeBlock.astro";
+ *
+ * <CodeBlock title="astro.config.mjs">
+ * ```js
+ * export default defineConfig({ base: "/blog" });
+ * ```
+ * </CodeBlock>
+ * ```
+ */
+interface Props {
+  title?: string;
+}
+const { title } = Astro.props;
+---
+
+<div class="code-block not-prose my-6 overflow-hidden rounded-md border" data-code-block>
+  <div class="bg-muted/60 flex items-center justify-between gap-3 border-b px-3 py-1.5 text-xs">
+    <span class="text-muted-foreground truncate font-mono">{title}</span>
+    <button
+      type="button"
+      data-copy
+      aria-label="Copy code"
+      class="hover:bg-accent text-muted-foreground hover:text-foreground rounded-sm border px-2 py-0.5 font-medium"
+    >
+      Copy
+    </button>
+    <span data-copy-status class="sr-only" aria-live="polite"></span>
+  </div>
+  <div class="code-block-body"><slot /></div>
+</div>
+
+<style is:global>
+  .code-block-body pre.astro-code {
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+  }
+</style>
+
+<script>
+  document.addEventListener("click", async (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-copy]");
+    if (!btn) return;
+    const block = btn.closest("[data-code-block]");
+    const code = block?.querySelector("pre")?.textContent ?? "";
+    const status = block?.querySelector("[data-copy-status]");
+    try {
+      await navigator.clipboard.writeText(code);
+      btn.textContent = "Copied";
+      if (status) status.textContent = "Copied to clipboard";
+    } catch {
+      btn.textContent = "Failed";
+      if (status) status.textContent = "Copy failed";
+    }
+    setTimeout(() => {
+      btn.textContent = "Copy";
+      if (status) status.textContent = "";
+    }, 1500);
+  });
+</script>

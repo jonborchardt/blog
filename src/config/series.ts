@@ -3,9 +3,10 @@
  * Unknown series IDs fail content validation at build time.
  */
 export const series = {
-  "example-series": {
-    title: "Example Series",
-    description: "A temporary series proving the series data model works.",
+  "building-always-shippable": {
+    title: "Building Always Shippable",
+    description:
+      "How this blog is built: the authoring primitives, the validation that keeps it shippable, and the choices behind them.",
   },
 } as const satisfies Record<string, { title: string; description: string }>;
 
