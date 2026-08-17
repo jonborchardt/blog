@@ -27,7 +27,7 @@ import { linkLabels } from "@/lib/link-labels";
       <li><a href={href("/rss.xml")} class="hover:text-foreground">RSS</a></li>
     </ul>
     <p class="basis-full text-xs">
-      © {new Date().getFullYear()}
+      © {new Date().getFullYear()}{" "}
       {author.name} · {site.name}{site.disclaimer && <> · {site.disclaimer}</>}
     </p>
   </div>

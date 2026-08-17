@@ -4,7 +4,14 @@
  * Creates src/content/posts/<slug>/index.mdx with valid frontmatter (draft: true always —
  * publishing is a deliberate step, see .claude/skills/publish-post). Node only, no deps.
  */
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import {
+  copyFileSync,
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  writeFileSync,
+} from "node:fs";
 import { join } from "node:path";
 import { parseArgs } from "node:util";
 import { nextSeriesOrder, readFrontmatter } from "./lib/next-series-order.mjs";
@@ -92,6 +99,9 @@ const fm = [
   `publishedAt: ${today}`,
   ...(values.series ? [`series: ${values.series}`, `seriesOrder: ${seriesOrder}`] : []),
   `tags: [${tagIds.join(", ")}]`,
+  "hero:",
+  "  src: ./hero.png",
+  "  alt: REPLACE ME — describe the hero image (placeholder gray 1200x630 until you replace it)",
   "draft: true",
   "---",
 ].join("\n");
@@ -110,6 +120,7 @@ rendered with \`client:visible\`.
 
 mkdirSync(dir, { recursive: true });
 writeFileSync(join(dir, "index.mdx"), body, "utf8");
+copyFileSync(join(process.cwd(), "src/assets/hero-placeholder.png"), join(dir, "hero.png"));
 mkdirSync(join(dir, "components"), { recursive: true });
 writeFileSync(
   join(dir, "components", ".gitkeep"),

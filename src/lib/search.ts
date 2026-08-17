@@ -15,6 +15,10 @@ export interface SearchDocMeta {
   series?: { id: string; title: string; part: number; total: number };
   tags: { id: string; label: string }[];
   readingTime: number;
+  /** Optimized thumbnail URL for list rows. */
+  hero: { src: string; alt: string };
+  /** Dev-only: drafts never reach the production index. */
+  draft?: boolean;
 }
 
 export interface SearchDoc extends SearchDocMeta {

@@ -1,0 +1,107 @@
+---
+/**
+ * Left-rail table of contents for posts (viewports ≥ xl only).
+ * Collapsed: one bar per heading, width ~ title length; the current section is dark.
+ * Hover / keyboard focus: expands into the clickable "On this page" list.
+ * Scrollspy is a tiny inline scroll listener — no framework.
+ */
+import type { MarkdownHeading } from "astro";
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+const { headings } = Astro.props;
+---
+
+<nav
+  id="post-toc"
+  aria-label="On this page"
+  class="fixed top-1/2 left-4 z-10 hidden -translate-y-1/2 xl:block"
+>
+  <div class="toc-panel rounded-md p-3">
+    <p class="toc-title text-muted-foreground mb-3 text-xs font-semibold tracking-wide uppercase">
+      On this page
+    </p>
+    <ul class="space-y-1.5 text-sm">
+      {
+        headings.map((h) => (
+          <li class:list={[h.depth === 3 && "pl-3"]}>
+            <a
+              href={`#${h.slug}`}
+              class="toc-link text-muted-foreground block no-underline"
+              style={`--bar: ${Math.min(72, 20 + h.text.length * 1.4)}px`}
+            >
+              <span class="toc-bar" aria-hidden="true" />
+              <span class="toc-label">{h.text}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</nav>
+
+<style>
+  /* Collapsed: bars only. */
+  .toc-title,
+  .toc-label {
+    display: none;
+  }
+  .toc-bar {
+    display: block;
+    width: var(--bar);
+    height: 2px;
+    background: currentColor;
+    opacity: 0.35;
+  }
+  .toc-link[aria-current="true"] {
+    color: var(--foreground);
+  }
+  .toc-link[aria-current="true"] .toc-bar {
+    opacity: 1;
+  }
+  /* Expanded on hover / focus. */
+  #post-toc:hover .toc-panel,
+  #post-toc:focus-within .toc-panel {
+    background: var(--background);
+    border: 1px solid var(--border);
+    max-width: 16rem;
+  }
+  #post-toc:hover .toc-title,
+  #post-toc:hover .toc-label,
+  #post-toc:focus-within .toc-title,
+  #post-toc:focus-within .toc-label {
+    display: block;
+  }
+  #post-toc:hover .toc-bar,
+  #post-toc:focus-within .toc-bar {
+    display: none;
+  }
+  .toc-link:hover {
+    color: var(--foreground);
+  }
+</style>
+
+<script>
+  const links = [...document.querySelectorAll<HTMLAnchorElement>("#post-toc .toc-link")];
+  const targets = links
+    .map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1))))
+    .filter((el): el is HTMLElement => el !== null);
+  if (targets.length) {
+    const setCurrent = (id: string) =>
+      links.forEach((a) =>
+        a.hash === `#${id}`
+          ? a.setAttribute("aria-current", "true")
+          : a.removeAttribute("aria-current"),
+      );
+    // Current = last heading whose top has passed ~30% of the viewport.
+    const update = () => {
+      let current = targets[0]!;
+      const line = window.innerHeight * 0.3;
+      for (const t of targets) if (t.getBoundingClientRect().top <= line) current = t;
+      setCurrent(current.id);
+    };
+    addEventListener("scroll", update, { passive: true });
+    update();
+  }
+</script>

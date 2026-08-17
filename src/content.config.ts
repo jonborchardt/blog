@@ -40,7 +40,13 @@ const posts = defineCollection({
         seriesOrder: z.number().int().positive().optional(),
         tags: z.array(z.enum(TAG_IDS)).default([]),
         draft: z.boolean().default(false),
-        hero: z.object({ src: image(), alt: z.string().min(1) }).optional(),
+        hero: z.object(
+          { src: image(), alt: z.string().min(1) },
+          {
+            error:
+              "hero is required (1200x630 image next to index.mdx + meaningful alt); copy src/assets/hero-placeholder.png until you have one",
+          },
+        ),
         ogImage: image().optional(),
       })
       .refine((d) => d.series || d.seriesOrder === undefined, {

@@ -6,6 +6,7 @@ export const series = {
     title: "Finances",
     description:
       "Notes on personal finance: the models, the numbers, and the tools built to track them.",
+    hero: { src: "series/finances.png", alt: "Placeholder series image" },
   },
   worldlock: {
     title: "WorldLock",
@@ -16,6 +17,7 @@ export const series = {
     title: "Sierra Games",
     description:
       "Revisiting the Sierra adventure games: their design, their engines, and what still holds up.",
+    hero: { src: "series/sierra-games.png", alt: "Placeholder series image" },
   },
 } as const satisfies SeriesRegistry;
 

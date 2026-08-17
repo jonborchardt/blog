@@ -1,11 +1,17 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { series, SERIES_IDS } from "@/config/series";
-import { getSeriesPosts, seriesPath } from "@/lib/posts";
+import { Image } from "astro:assets";
+import { getSeriesHero, getSeriesPosts, seriesPath } from "@/lib/posts";
 import { href } from "@/lib/url";
 
 const entries = await Promise.all(
-  SERIES_IDS.map(async (id) => ({ id, ...series[id], count: (await getSeriesPosts(id)).length })),
+  SERIES_IDS.map(async (id) => ({
+    id,
+    ...series[id],
+    count: (await getSeriesPosts(id)).length,
+    hero: await getSeriesHero(id),
+  })),
 );
 ---
 
@@ -16,16 +22,27 @@ const entries = await Promise.all(
     <ul class="mt-10 divide-y border-t">
       {
         entries.map((s) => (
-          <li class="py-6">
-            <h2 class="text-xl font-semibold tracking-tight">
-              <a href={href(seriesPath(s.id))} class="hover:text-primary no-underline">
-                {s.title}
-              </a>
-            </h2>
-            <p class="text-muted-foreground mt-1">{s.description}</p>
-            <p class="text-muted-foreground mt-2 text-sm">
-              {s.count} {s.count === 1 ? "part" : "parts"}
-            </p>
+          <li class="grid grid-cols-[6rem_1fr] gap-x-4 py-6 sm:grid-cols-[10rem_1fr]">
+            <a href={href(seriesPath(s.id))} tabindex="-1" aria-hidden="true">
+              <Image
+                src={s.hero.src}
+                alt={s.hero.alt}
+                width={320}
+                height={168}
+                class="aspect-[40/21] w-full rounded-md border object-cover"
+              />
+            </a>
+            <div>
+              <h2 class="text-xl font-semibold tracking-tight">
+                <a href={href(seriesPath(s.id))} class="hover:text-primary no-underline">
+                  {s.title}
+                </a>
+              </h2>
+              <p class="text-muted-foreground mt-1">{s.description}</p>
+              <p class="text-muted-foreground mt-2 text-sm">
+                {s.count} {s.count === 1 ? "part" : "parts"}
+              </p>
+            </div>
           </li>
         ))
       }

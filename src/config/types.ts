@@ -7,7 +7,9 @@
  *
  * - `site`: identity, canonical origin, locale, featured post, primary navigation.
  * - `author`: byline, tagline, personal links (used in footer, about header, Person JSON-LD).
- * - `series`: id → { title, description }. Posts reference a series by key; unknown ids fail the build.
+ * - `series`: id → { title, description, hero? }. Posts reference a series by key; unknown ids fail the build.
+ *   `hero.src` is a path under src/assets/ (e.g. "series/finances.png"); without it a series shows its
+ *   first post's hero.
  * - `tags`: id → { label }. Posts may only use tags listed here; add here first.
  */
 import { z } from "astro/zod";
@@ -39,7 +41,11 @@ export type AuthorConfig = z.infer<typeof authorSchema>;
 
 export const seriesSchema = z.record(
   z.string().regex(kebab, "series ids are kebab-case"),
-  z.object({ title: z.string().min(1), description: z.string().min(1) }),
+  z.object({
+    title: z.string().min(1),
+    description: z.string().min(1),
+    hero: z.object({ src: z.string().min(1), alt: z.string().min(1) }).optional(),
+  }),
 );
 export type SeriesRegistry = z.infer<typeof seriesSchema>;
 

@@ -3,6 +3,7 @@
  * headings + stripped body are served lazily from /search-index.json (src/pages/search-index.json.ts).
  */
 import { render } from "astro:content";
+import { getImage } from "astro:assets";
 import { series as seriesRegistry } from "@/config/series";
 import { tags as tagRegistry } from "@/config/tags";
 import { getSeriesContext, postPath, postSlug, type Post } from "@/lib/posts";
@@ -31,6 +32,12 @@ export async function toSearchDocMeta(post: Post): Promise<SearchDocMeta> {
     }),
     tags: post.data.tags.map((t) => ({ id: t, label: tagRegistry[t].label })),
     readingTime: readingTime(post.body ?? ""),
+    ...(post.data.draft && { draft: true }),
+    ...(post.data.draft && { draft: true }),
+    hero: {
+      src: (await getImage({ src: post.data.hero.src, width: 320, format: "webp" })).src,
+      alt: post.data.hero.alt,
+    },
   };
 }
 

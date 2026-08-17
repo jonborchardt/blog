@@ -1,5 +1,7 @@
 import { getCollection, type CollectionEntry } from "astro:content";
+import type { ImageMetadata } from "astro";
 import { series, type SeriesId } from "@/config/series";
+import type { SeriesRegistry } from "@/config/types";
 import { site } from "@/config/site";
 import { RESERVED_SLUGS_LIST } from "@/lib/reserved-slugs";
 
@@ -34,6 +36,33 @@ export async function getSeriesPosts(id: SeriesId): Promise<Post[]> {
   return (await getPosts())
     .filter((p) => p.data.series === id)
     .sort((a, b) => (a.data.seriesOrder ?? Infinity) - (b.data.seriesOrder ?? Infinity));
+}
+
+export type Hero = { src: ImageMetadata; alt: string };
+
+// Series heroes are referenced from generated config as paths under src/assets/, so resolve them here.
+const assetImages = import.meta.glob<ImageMetadata>(
+  "/src/assets/**/*.{png,jpg,jpeg,webp,avif,gif,svg}",
+  { eager: true, import: "default" },
+);
+
+/** Series image: configured in src/config/series.ts, else the first post's hero, else the placeholder. */
+export async function getSeriesHero(id: SeriesId): Promise<Hero> {
+  const cfg = (series as SeriesRegistry)[id]!.hero;
+  if (cfg) {
+    const src = assetImages[`/src/assets/${cfg.src}`];
+    if (!src)
+      throw new Error(
+        `series "${id}": hero.src "${cfg.src}" not found under src/assets/ → fix the path in src/config/series.ts`,
+      );
+    return { src, alt: cfg.alt };
+  }
+  return (
+    (await getSeriesPosts(id))[0]?.data.hero ?? {
+      src: assetImages["/src/assets/hero-placeholder.png"]!,
+      alt: "Placeholder series image",
+    }
+  );
 }
 
 export interface SeriesContext {

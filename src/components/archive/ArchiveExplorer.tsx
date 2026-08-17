@@ -64,31 +64,48 @@ const formatDate = (iso: string) =>
 /** Mirrors PostList.astro row markup/styling — the one accepted duplication (React vs Astro). */
 function PostRow({ doc, snippet }: { doc: SearchDocMeta; snippet: string }) {
   return (
-    <li className="py-5 first:pt-0 last:pb-0">
-      {doc.series && (
-        <p className="text-primary mb-1 text-xs font-medium tracking-wide uppercase">
-          {doc.series.title} · Part {doc.series.part}
-        </p>
-      )}
-      <h2 className="text-lg leading-snug font-semibold tracking-tight">
-        <a href={doc.url} className="hover:text-primary no-underline">
-          {doc.title}
-        </a>
-      </h2>
-      <p className="text-muted-foreground mt-1">{snippet}</p>
-      <p className="text-muted-foreground mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
-        <time dateTime={doc.publishedAt}>{formatDate(doc.publishedAt)}</time>
-        <span>{doc.readingTime} min read</span>
-        {doc.tags.length > 0 && (
-          <span className="flex flex-wrap gap-1.5" aria-label="Tags">
-            {doc.tags.map((t) => (
-              <span key={t.id} className="bg-muted rounded-sm px-1.5 py-0.5 text-xs">
-                {t.label}
-              </span>
-            ))}
-          </span>
+    <li className="grid grid-cols-[6rem_1fr] gap-x-4 py-5 first:pt-0 last:pb-0 sm:grid-cols-[10rem_1fr]">
+      <a href={doc.url} tabIndex={-1} aria-hidden="true">
+        <img
+          src={doc.hero.src}
+          alt={doc.hero.alt}
+          width={320}
+          height={168}
+          loading="lazy"
+          className="aspect-[40/21] w-full rounded-md border object-cover"
+        />
+      </a>
+      <div>
+        {doc.series && (
+          <p className="text-primary mb-1 text-xs font-medium tracking-wide uppercase">
+            {doc.series.title} · Part {doc.series.part}
+          </p>
         )}
-      </p>
+        <h2 className="text-lg leading-snug font-semibold tracking-tight">
+          <a href={doc.url} className="hover:text-primary no-underline">
+            {doc.title}
+          </a>
+          {doc.draft && (
+            <span className="bg-destructive text-background ml-2 rounded-sm px-1.5 py-0.5 align-middle text-xs font-medium tracking-wide uppercase">
+              Draft
+            </span>
+          )}
+        </h2>
+        <p className="text-muted-foreground mt-1">{snippet}</p>
+        <p className="text-muted-foreground mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+          <time dateTime={doc.publishedAt}>{formatDate(doc.publishedAt)}</time>
+          <span>{doc.readingTime} min read</span>
+          {doc.tags.length > 0 && (
+            <span className="flex flex-wrap gap-1.5" aria-label="Tags">
+              {doc.tags.map((t) => (
+                <span key={t.id} className="bg-muted rounded-sm px-1.5 py-0.5 text-xs">
+                  {t.label}
+                </span>
+              ))}
+            </span>
+          )}
+        </p>
+      </div>
     </li>
   );
 }
@@ -99,7 +116,6 @@ export default function ArchiveExplorer({ docs, tags, series, indexUrl }: Archiv
   const [state, setState] = useState<UiState>(EMPTY);
   const [fullDocs, setFullDocs] = useState<SearchDoc[] | null>(null);
   const [indexStatus, setIndexStatus] = useState<"idle" | "loading" | "ready" | "failed">("idle");
-  const [filtersOpen, setFiltersOpen] = useState(false);
   const hydrated = useRef(false);
 
   // URL → state on load and on back/forward.
@@ -163,64 +179,125 @@ export default function ArchiveExplorer({ docs, tags, series, indexUrl }: Archiv
       : ""
   }${state.series ? ` · in ${series.find((s) => s.id === state.series)?.title ?? state.series}` : ""}`;
 
-  const filters = (
-    <div className="flex flex-col gap-4">
-      <fieldset className="min-w-0">
-        <legend className="text-muted-foreground mb-2 text-xs font-medium tracking-wide uppercase">
-          Tags
-        </legend>
-        <div className="flex flex-wrap gap-1.5">
-          {tags.map((t) => {
-            const on = state.tags.includes(t.id);
-            return (
-              <button
-                key={t.id}
-                type="button"
-                aria-pressed={on}
-                onClick={() => toggleTag(t.id)}
-                className="bg-muted hover:bg-accent aria-pressed:bg-primary aria-pressed:text-primary-foreground rounded-sm border border-transparent px-2 py-0.5 text-xs"
-              >
-                {t.label}
-              </button>
-            );
-          })}
-        </div>
-      </fieldset>
-      <div className="grid gap-4 sm:grid-cols-2">
-        <label className="flex flex-col gap-1 text-sm">
-          <span className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-            Series
-          </span>
-          <select
-            value={state.series}
-            onChange={(e) => setState((s) => ({ ...s, series: e.target.value }))}
-            className="border-input bg-background h-8 rounded-md border px-2 text-sm"
-          >
-            <option value="">All series</option>
-            {series.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.title}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="flex flex-col gap-1 text-sm">
-          <span className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-            Sort
-          </span>
-          <select
-            value={state.sort || (state.q ? "relevance" : "newest")}
-            onChange={(e) => setState((s) => ({ ...s, sort: e.target.value as SortKey }))}
-            className="border-input bg-background h-8 rounded-md border px-2 text-sm"
-          >
-            {SORTS.map((s) => (
-              <option key={s.value} value={s.value}>
-                {s.label}
-              </option>
-            ))}
-          </select>
-        </label>
+  const setSeries = (v: string) => setState((s) => ({ ...s, series: v }));
+  const setSort = (v: string) => setState((s) => ({ ...s, sort: v as SortKey }));
+  const sortValue = state.sort || (state.q ? "relevance" : "newest");
+  const searchInput = (id: string, className: string) => (
+    <>
+      <label htmlFor={id} className="sr-only">
+        Search posts
+      </label>
+      <Input
+        id={id}
+        type="search"
+        placeholder="Search…"
+        value={state.q}
+        autoComplete="off"
+        onFocus={loadIndex}
+        onChange={(e) => {
+          loadIndex();
+          setState((s) => ({ ...s, q: e.target.value }));
+        }}
+        className={className}
+      />
+    </>
+  );
+  const chip = (on: boolean, onClick: () => void, label: string, key: string) => (
+    <button
+      key={key}
+      type="button"
+      aria-pressed={on}
+      onClick={onClick}
+      className="bg-muted hover:bg-accent aria-pressed:bg-primary aria-pressed:text-primary-foreground rounded-full border border-transparent px-2.5 py-0.5 text-xs"
+    >
+      {label}
+    </button>
+  );
+  const tagChips = tags.map((t) =>
+    chip(state.tags.includes(t.id), () => toggleTag(t.id), t.label, t.id),
+  );
+  const selectCls = "border-input bg-background h-8 rounded-md border px-2 text-sm";
+  const seriesSelect = (
+    <select
+      aria-label="Series"
+      value={state.series}
+      onChange={(e) => setSeries(e.target.value)}
+      className={selectCls}
+    >
+      <option value="">All series</option>
+      {series.map((s) => (
+        <option key={s.id} value={s.id}>
+          {s.title}
+        </option>
+      ))}
+    </select>
+  );
+  const sortSelect = (cls = selectCls) => (
+    <select
+      aria-label="Sort"
+      value={sortValue}
+      onChange={(e) => setSort(e.target.value)}
+      className={cls}
+    >
+      {SORTS.map((s) => (
+        <option key={s.value} value={s.value}>
+          {s.label}
+        </option>
+      ))}
+    </select>
+  );
+
+  // Search + Filter disclosure (native details) + sort; active filters shown as removable chips.
+  const active = [
+    ...state.tags.map((t) => ({
+      label: tags.find((x) => x.id === t)?.label ?? t,
+      off: () => toggleTag(t),
+    })),
+    ...(state.series
+      ? [
+          {
+            label: series.find((s) => s.id === state.series)?.title ?? state.series,
+            off: () => setSeries(""),
+          },
+        ]
+      : []),
+  ];
+  const filterBar = (
+    <div className="flex flex-col gap-2">
+      <div className="flex items-center gap-2">
+        <div className="flex-1">{searchInput("archive-q", "h-9")}</div>
+        <details className="relative">
+          <summary className="border-input bg-background hover:bg-accent flex h-8 cursor-pointer list-none items-center rounded-md border px-3 text-sm select-none">
+            Filter{active.length ? ` (${active.length})` : ""}
+          </summary>
+          <div className="bg-background absolute right-0 z-10 mt-1 w-72 rounded-md border p-3 shadow-md">
+            <p className="text-muted-foreground mb-1.5 text-xs font-medium tracking-wide uppercase">
+              Tags
+            </p>
+            <div className="flex flex-wrap gap-1.5">{tagChips}</div>
+            <p className="text-muted-foreground mt-3 mb-1.5 text-xs font-medium tracking-wide uppercase">
+              Series
+            </p>
+            {seriesSelect}
+          </div>
+        </details>
+        {sortSelect("bg-transparent text-muted-foreground h-8 border-0 text-sm")}
       </div>
+      {active.length > 0 && (
+        <div className="flex flex-wrap gap-1.5">
+          {active.map((a) => (
+            <button
+              key={a.label}
+              type="button"
+              onClick={a.off}
+              className="bg-primary text-primary-foreground rounded-full px-2.5 py-0.5 text-xs"
+              aria-label={`Remove filter ${a.label}`}
+            >
+              {a.label} ×
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 
@@ -232,39 +309,11 @@ export default function ArchiveExplorer({ docs, tags, series, indexUrl }: Archiv
         className="border-b pb-6"
         aria-label="Search and filter posts"
       >
-        <label htmlFor="archive-q" className="sr-only">
-          Search posts
-        </label>
-        <Input
-          id="archive-q"
-          type="search"
-          placeholder="Search titles, text, tags…"
-          value={state.q}
-          autoComplete="off"
-          onFocus={loadIndex}
-          onChange={(e) => {
-            loadIndex();
-            setState((s) => ({ ...s, q: e.target.value }));
-          }}
-          className="h-10 text-base"
-        />
+        {filterBar}
         <p className="text-muted-foreground mt-1 min-h-4 text-xs" aria-live="polite">
           {indexStatus === "loading" && "Loading full-text index…"}
           {indexStatus === "failed" && "Full-text index unavailable; searching titles and tags."}
         </p>
-        {/* Filters collapse under md; always visible from md up. */}
-        <button
-          type="button"
-          className="mt-4 text-sm font-medium md:hidden"
-          aria-expanded={filtersOpen}
-          aria-controls="archive-filters"
-          onClick={() => setFiltersOpen((o) => !o)}
-        >
-          {filtersOpen ? "Hide filters" : "Show filters"}
-        </button>
-        <div id="archive-filters" className={filtersOpen ? "mt-4 block" : "mt-4 hidden md:block"}>
-          {filters}
-        </div>
       </form>
 
       <div className="mt-4 flex flex-wrap items-center justify-between gap-2">

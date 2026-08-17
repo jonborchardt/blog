@@ -1,10 +1,12 @@
 ---
+import { Image } from "astro:assets";
 import type { Post } from "@/lib/posts";
 import { postPath } from "@/lib/posts";
 import { series as seriesRegistry } from "@/config/series";
 import { tags as tagRegistry } from "@/config/tags";
 import { href } from "@/lib/url";
 import { formatDate, isoDate } from "@/lib/dates";
+import { readingTime } from "@/lib/reading-time";
 import DraftBadge from "@/components/DraftBadge.astro";
 
 interface Props {
@@ -18,32 +20,46 @@ const { posts, heading: Heading = "h2" } = Astro.props;
 <ul class="divide-y">
   {
     posts.map((post) => (
-      <li class="py-5 first:pt-0 last:pb-0">
-        {post.data.series && (
-          <p class="text-primary mb-1 text-xs font-medium tracking-wide uppercase">
-            {seriesRegistry[post.data.series].title}
-            {post.data.seriesOrder && ` · Part ${post.data.seriesOrder}`}
-          </p>
-        )}
-        <Heading class="text-lg leading-snug font-semibold tracking-tight">
-          <a href={href(postPath(post))} class="hover:text-primary no-underline">
-            {post.data.title}
-          </a>
-          {post.data.draft && <DraftBadge />}
-        </Heading>
-        <p class="text-muted-foreground mt-1">{post.data.description}</p>
-        <p class="text-muted-foreground mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
-          <time datetime={isoDate(post.data.publishedAt)}>{formatDate(post.data.publishedAt)}</time>
-          {post.data.tags.length > 0 && (
-            <span class="flex flex-wrap gap-1.5" aria-label="Tags">
-              {post.data.tags.map((t) => (
-                <span class="bg-muted rounded-sm px-1.5 py-0.5 text-xs">
-                  {tagRegistry[t].label}
-                </span>
-              ))}
-            </span>
+      <li class="grid grid-cols-[6rem_1fr] gap-x-4 py-5 first:pt-0 last:pb-0 sm:grid-cols-[10rem_1fr]">
+        <a href={href(postPath(post))} tabindex="-1" aria-hidden="true">
+          <Image
+            src={post.data.hero.src}
+            alt={post.data.hero.alt}
+            width={320}
+            height={168}
+            class="aspect-[40/21] w-full rounded-md border object-cover"
+          />
+        </a>
+        <div>
+          {post.data.series && (
+            <p class="text-primary mb-1 text-xs font-medium tracking-wide uppercase">
+              {seriesRegistry[post.data.series].title}
+              {post.data.seriesOrder && ` · Part ${post.data.seriesOrder}`}
+            </p>
           )}
-        </p>
+          <Heading class="text-lg leading-snug font-semibold tracking-tight">
+            <a href={href(postPath(post))} class="hover:text-primary no-underline">
+              {post.data.title}
+            </a>
+            {post.data.draft && <DraftBadge />}
+          </Heading>
+          <p class="text-muted-foreground mt-1">{post.data.description}</p>
+          <p class="text-muted-foreground mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+            <time datetime={isoDate(post.data.publishedAt)}>
+              {formatDate(post.data.publishedAt)}
+            </time>
+            <span>{readingTime(post.body ?? "")} min read</span>
+            {post.data.tags.length > 0 && (
+              <span class="flex flex-wrap gap-1.5" aria-label="Tags">
+                {post.data.tags.map((t) => (
+                  <span class="bg-muted rounded-sm px-1.5 py-0.5 text-xs">
+                    {tagRegistry[t].label}
+                  </span>
+                ))}
+              </span>
+            )}
+          </p>
+        </div>
       </li>
     ))
   }

@@ -1,5 +1,5 @@
 ---
-/** Featured-post card for the homepage: title, description, date, series/tags, optional hero. */
+/** Featured-post card for the homepage: title, description, date, series/tags, hero. */
 import { Image } from "astro:assets";
 import type { Post } from "@/lib/posts";
 import { postPath } from "@/lib/posts";
@@ -7,6 +7,7 @@ import { series as seriesRegistry } from "@/config/series";
 import { tags as tagRegistry } from "@/config/tags";
 import { href } from "@/lib/url";
 import { formatDate, isoDate } from "@/lib/dates";
+import { readingTime } from "@/lib/reading-time";
 import DraftBadge from "@/components/DraftBadge.astro";
 
 interface Props {
@@ -17,21 +18,17 @@ const { hero, series, seriesOrder, tags, title, description, publishedAt, draft 
 ---
 
 <article class="grid gap-6 md:grid-cols-5 md:items-center">
-  {
-    hero && (
-      <a href={href(postPath(post))} class="md:col-span-2" tabindex="-1" aria-hidden="true">
-        <Image
-          src={hero.src}
-          alt={hero.alt}
-          widths={[480, 800]}
-          sizes="(min-width: 48rem) 24rem, 100vw"
-          loading="eager"
-          class="rounded-md border"
-        />
-      </a>
-    )
-  }
-  <div class:list={[hero ? "md:col-span-3" : "md:col-span-5"]}>
+  <a href={href(postPath(post))} class="md:col-span-2" tabindex="-1" aria-hidden="true">
+    <Image
+      src={hero.src}
+      alt={hero.alt}
+      widths={[480, 800]}
+      sizes="(min-width: 48rem) 24rem, 100vw"
+      loading="eager"
+      class="rounded-md border"
+    />
+  </a>
+  <div class="md:col-span-3">
     {
       series && (
         <p class="text-primary mb-2 text-xs font-medium tracking-wide uppercase">
@@ -47,6 +44,7 @@ const { hero, series, seriesOrder, tags, title, description, publishedAt, draft 
     <p class="text-muted-foreground mt-3 text-lg">{description}</p>
     <p class="text-muted-foreground mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
       <time datetime={isoDate(publishedAt)}>{formatDate(publishedAt)}</time>
+      <span>{readingTime(post.body ?? "")} min read</span>
       {
         tags.length > 0 && (
           <span class="flex flex-wrap gap-1.5" aria-label="Tags">

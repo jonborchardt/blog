@@ -310,7 +310,7 @@ function AuthorSection({ initial, endpoint }: { initial: AuthorConfig; endpoint:
   );
 }
 
-function RegistrySection<T extends Record<string, Record<string, string>>>({
+function RegistrySection<T extends Record<string, Record<string, unknown>>>({
   name,
   title,
   description,
@@ -325,7 +325,7 @@ function RegistrySection<T extends Record<string, Record<string, string>>>({
   fields: (keyof T[string] & string)[];
   endpoint: string;
 }) {
-  const [reg, setReg] = useState<Record<string, Record<string, string>>>(initial);
+  const [reg, setReg] = useState<Record<string, Record<string, unknown>>>(initial);
   const [newId, setNewId] = useState("");
   const { state, save } = useSave(endpoint, name);
   return (
@@ -351,13 +351,13 @@ function RegistrySection<T extends Record<string, Record<string, string>>>({
               {f === "description" ? (
                 <Textarea
                   id={`${name}-${id}-${f}`}
-                  value={entry[f] ?? ""}
+                  value={String(entry[f] ?? "")}
                   onChange={(e) => setReg({ ...reg, [id]: { ...entry, [f]: e.target.value } })}
                 />
               ) : (
                 <Input
                   id={`${name}-${id}-${f}`}
-                  value={entry[f] ?? ""}
+                  value={String(entry[f] ?? "")}
                   onChange={(e) => setReg({ ...reg, [id]: { ...entry, [f]: e.target.value } })}
                 />
               )}

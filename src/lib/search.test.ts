@@ -8,6 +8,7 @@ const doc = (o: Partial<SearchDoc> & { slug: string; title: string }): SearchDoc
   publishedAt: "2026-01-01",
   tags: [],
   readingTime: 1,
+  hero: { src: "/blog/_astro/x.webp", alt: "x" },
   headings: [],
   body: "",
   ...o,

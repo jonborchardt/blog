@@ -12,6 +12,7 @@ const docs: SearchDocMeta[] = [
     publishedAt: "2026-08-18",
     tags: [{ id: "meta", label: "Meta" }],
     readingTime: 2,
+    hero: { src: "/blog/_astro/a.webp", alt: "A" },
   },
   {
     slug: "b",
@@ -24,6 +25,7 @@ const docs: SearchDocMeta[] = [
       { id: "engineering", label: "Engineering" },
     ],
     readingTime: 4,
+    hero: { src: "/blog/_astro/b.webp", alt: "B" },
   },
 ];
 const props = {

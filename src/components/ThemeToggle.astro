@@ -5,13 +5,13 @@
  * The pre-paint script in BaseLayout sets `html[data-theme]`; CSS below picks the icon from it,
  * so the right icon shows before this script runs.
  */
-const icon = "h-4 w-4";
+const icon = "h-3.5 w-3.5";
 ---
 
 <button
   type="button"
   data-theme-toggle
-  class="hover:bg-accent text-muted-foreground hover:text-foreground inline-flex h-8 w-8 items-center justify-center rounded-md border"
+  class="text-muted-foreground/70 hover:text-foreground inline-flex h-7 w-7 items-center justify-center rounded-sm"
   aria-label="Theme: system, switch to light"
 >
   <svg

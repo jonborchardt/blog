@@ -6,6 +6,7 @@ import { Image } from "astro:assets";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import DraftBadge from "@/components/DraftBadge.astro";
 import TableWrapper from "@/components/blog/TableWrapper.astro";
+import PostToc from "@/components/PostToc.astro";
 import { tags as tagRegistry } from "@/config/tags";
 import { getPosts, getSeriesContext, postPath, postSlug, seriesPath } from "@/lib/posts";
 import { readingTime } from "@/lib/reading-time";
@@ -57,6 +58,7 @@ const words = (post.body ?? "").trim().split(/\s+/).filter(Boolean).length;
     ],
   }}
 >
+  {showToc && <PostToc headings={toc} />}
   <article class="max-w-wide mx-auto">
     <header class="mx-auto max-w-prose">
       {
@@ -74,7 +76,7 @@ const words = (post.body ?? "").trim().split(/\s+/).filter(Boolean).length;
         {post.data.draft && <DraftBadge />}
       </h1>
       <p class="text-muted-foreground mt-4 text-lg leading-relaxed">{post.data.description}</p>
-      <p class="text-muted-foreground mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+      <div class="text-muted-foreground mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
         <time datetime={isoDate(post.data.publishedAt)}>
           {formatDate(post.data.publishedAt, "long")}
         </time>
@@ -89,23 +91,23 @@ const words = (post.body ?? "").trim().split(/\s+/).filter(Boolean).length;
           )
         }
         <span>{minutes} min read</span>
-      </p>
-      {
-        post.data.tags.length > 0 && (
-          <ul class="mt-3 flex flex-wrap gap-1.5 text-xs" aria-label="Tags">
-            {post.data.tags.map((t) => (
-              <li>
-                <a
-                  href={href(`/archive/?tag=${t}`)}
-                  class="bg-muted hover:bg-accent rounded-sm px-1.5 py-0.5 no-underline"
-                >
-                  {tagRegistry[t].label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        )
-      }
+        {
+          post.data.tags.length > 0 && (
+            <ul class="flex flex-wrap gap-1.5 text-xs" aria-label="Tags">
+              {post.data.tags.map((t) => (
+                <li>
+                  <a
+                    href={href(`/archive/?tag=${t}`)}
+                    class="bg-muted hover:bg-accent rounded-sm px-1.5 py-0.5 no-underline"
+                  >
+                    {tagRegistry[t].label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </div>
       {
         post.data.draft && (
           <p class="border-destructive text-destructive mt-6 border-l-4 pl-3 text-sm font-medium">
@@ -115,26 +117,22 @@ const words = (post.body ?? "").trim().split(/\s+/).filter(Boolean).length;
       }
     </header>
 
-    {
-      hero && (
-        <figure class="mt-10">
-          <Image
-            src={hero.src}
-            alt={hero.alt}
-            widths={[640, 960, 1280]}
-            sizes="(min-width: 56rem) 56rem, 100vw"
-            loading="eager"
-            fetchpriority="high"
-            class="rounded-md border"
-          />
-        </figure>
-      )
-    }
+    <figure class="relative left-1/2 mt-10 w-screen -translate-x-1/2">
+      <Image
+        src={hero.src}
+        alt={hero.alt}
+        widths={[640, 960, 1280, 1920]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        class="max-h-[50vh] w-full object-cover"
+      />
+    </figure>
 
     <div class="mx-auto mt-10 max-w-prose">
       {
         showToc && (
-          <details open class="bg-muted/50 mb-8 rounded-md border px-4 py-3 text-sm">
+          <details open class="bg-muted/50 mb-8 rounded-md border px-4 py-3 text-sm xl:hidden">
             <summary class="cursor-pointer font-medium">On this page</summary>
             <nav aria-label="On this page" class="mt-2">
               <ul class="space-y-1">
@@ -158,39 +156,63 @@ const words = (post.body ?? "").trim().split(/\s+/).filter(Boolean).length;
       <footer class="mt-14 border-t pt-8">
         {
           ctx && (
-            <nav aria-label="Series navigation" class="mb-8">
-              <p class="text-muted-foreground mb-3 text-xs font-medium tracking-wide uppercase">
-                {ctx.series.title} · Part {ctx.index} of {ctx.total}
-              </p>
-              <ul class="grid gap-4 sm:grid-cols-2">
-                <li>
-                  {ctx.prev ? (
-                    <a href={href(postPath(ctx.prev))} class="block no-underline">
-                      <span class="text-muted-foreground block text-xs">
-                        ← Previous · Part {ctx.index - 1}
-                      </span>
-                      <span class="hover:text-primary font-medium">{ctx.prev.data.title}</span>
+            <nav
+              aria-label="Series navigation"
+              class="bg-card mb-8 overflow-hidden rounded-xl border"
+            >
+              <div class="border-b p-5">
+                <a
+                  href={href(seriesPath(ctx.series.id))}
+                  class="font-semibold no-underline hover:underline"
+                >
+                  {ctx.series.title}
+                </a>
+                <div class="mt-3 flex items-center gap-3 text-sm">
+                  <span class="text-muted-foreground shrink-0">
+                    Part {ctx.index} of {ctx.total}
+                  </span>
+                  <div
+                    role="progressbar"
+                    aria-label="Series progress"
+                    aria-valuemin="0"
+                    aria-valuemax={ctx.total}
+                    aria-valuenow={ctx.index}
+                    class="bg-muted h-1.5 w-full rounded-full"
+                  >
+                    <div
+                      class="bg-primary h-full rounded-full"
+                      style={`width:${(ctx.index / ctx.total) * 100}%`}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="p-5">
+                {ctx.next ? (
+                  <a href={href(postPath(ctx.next))} class="block no-underline">
+                    <span class="text-muted-foreground block text-sm">Up next</span>
+                    <span class="hover:text-primary mt-1 block text-lg font-semibold">
+                      {ctx.next.data.title}
+                    </span>
+                    <span class="text-muted-foreground mt-1 line-clamp-2 block text-sm">
+                      {ctx.next.data.description}
+                    </span>
+                  </a>
+                ) : (
+                  <p class="text-muted-foreground text-sm">
+                    You've reached the end of this series.
+                  </p>
+                )}
+                {ctx.prev && (
+                  <p class="text-muted-foreground mt-4 text-sm">
+                    <a href={href(postPath(ctx.prev))}>
+                      ← Part {ctx.index - 1}: {ctx.prev.data.title}
                     </a>
-                  ) : (
-                    <span class="text-muted-foreground block text-xs">Start of series</span>
-                  )}
-                </li>
-                <li class="sm:text-right">
-                  {ctx.next ? (
-                    <a href={href(postPath(ctx.next))} class="block no-underline">
-                      <span class="text-muted-foreground block text-xs">
-                        Next · Part {ctx.index + 1} →
-                      </span>
-                      <span class="hover:text-primary font-medium">{ctx.next.data.title}</span>
-                    </a>
-                  ) : (
-                    <span class="text-muted-foreground block text-xs">End of series</span>
-                  )}
-                </li>
-              </ul>
-              <p class="mt-4 text-sm">
-                <a href={href(seriesPath(ctx.series.id))}>All posts in this series</a>
-              </p>
+                  </p>
+                )}
+                <p class="mt-4 text-sm">
+                  <a href={href(seriesPath(ctx.series.id))}>All posts in this series</a>
+                </p>
+              </div>
             </nav>
           )
         }

@@ -6,6 +6,7 @@ path: /about/
 ---
 
 import { author } from "@/config/author";
+import AuthorLinks from "@/components/AuthorLinks.astro";
 
 # {author.name}
 
@@ -13,12 +14,4 @@ _{author.tagline}_ · {author.location}
 
 I've spent 25 years turning complex data into things people can actually use and understand, from large-scale search at Microsoft to interactive research demos at Allen Institute for AI. These days I lead engineering teams focused on making cutting-edge AI work accessible, not just impressive. My bias is speed with structure: move fast, but in a way that holds up. I've built UI platforms, visualization systems, and front-end architecture that help teams ship continuously without chaos. I care about clean systems, good design, and making work something people actually enjoy. People do better work when they like what they're building.
 
-- <a href={author.links.github} rel="me">
-    GitHub
-  </a>
-- <a href={author.links.linkedin} rel="me">
-    LinkedIn
-  </a>
-- <a href={author.links.youtube} rel="me">
-    YouTube
-  </a>
+<AuthorLinks />
