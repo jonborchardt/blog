@@ -35,8 +35,8 @@ test("URL state pre-filters and back button restores", async ({ page }) => {
   await expect(page.getByRole("button", { name: "Meta", pressed: true })).toHaveCount(1);
   await expect(page.getByRole("status")).toContainText("tagged Meta");
   await expect(rows(page).first()).toContainText("The Building Blocks of This Blog"); // oldest first
-  await page.goto("archive/?series=building-always-shippable");
-  await expect(page.getByRole("status")).toContainText("in Building Always Shippable");
+  await page.goto("archive/?series=worldlock");
+  await expect(page.getByRole("status")).toContainText("in WorldLock");
 });
 
 test("keyboard-only: chips toggle with Enter/Space, selects work", async ({ page }) => {

@@ -4,8 +4,10 @@ import type { AuthorConfig } from "./types";
 export const author: AuthorConfig = {
   name: "Jonathan Borchardt",
   tagline: "Always shippable, always improving",
+  location: "Seattle, USA",
   links: {
     github: "https://github.com/jonborchardt",
     linkedin: "https://www.linkedin.com/in/borchardt/",
+    youtube: "https://www.youtube.com/@JonathanBorchardt",
   },
 };

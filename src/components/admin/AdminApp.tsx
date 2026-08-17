@@ -136,6 +136,13 @@ function SiteSection({
           onChange={(e) => setSite({ ...site, description: e.target.value })}
         />
       </Field>
+      <Field id="site-disclaimer" label="Footer disclaimer">
+        <Input
+          id="site-disclaimer"
+          value={site.disclaimer}
+          onChange={(e) => setSite({ ...site, disclaimer: e.target.value })}
+        />
+      </Field>
       <div className="grid gap-4 sm:grid-cols-2">
         <Field id="site-url" label="Canonical origin">
           <Input
@@ -253,6 +260,13 @@ function AuthorSection({ initial, endpoint }: { initial: AuthorConfig; endpoint:
           id="author-tagline"
           value={author.tagline}
           onChange={(e) => setAuthor({ ...author, tagline: e.target.value })}
+        />
+      </Field>
+      <Field id="author-location" label="Location">
+        <Input
+          id="author-location"
+          value={author.location}
+          onChange={(e) => setAuthor({ ...author, location: e.target.value })}
         />
       </Field>
       <fieldset className="flex flex-col gap-2">

@@ -2,6 +2,7 @@
 import { author } from "@/config/author";
 import { site } from "@/config/site";
 import { href } from "@/lib/url";
+import { linkLabels } from "@/lib/link-labels";
 ---
 
 <footer class="border-t">
@@ -14,10 +15,20 @@ import { href } from "@/lib/url";
       <span>{author.tagline}</span>
     </p>
     <ul class="flex flex-wrap gap-x-4 gap-y-2">
-      <li><a href={author.links.github} rel="me" class="hover:text-foreground">GitHub</a></li>
-      <li><a href={author.links.linkedin} rel="me" class="hover:text-foreground">LinkedIn</a></li>
+      {
+        Object.entries(author.links).map(([key, url]) => (
+          <li>
+            <a href={url} rel="me" class="hover:text-foreground">
+              {linkLabels[key] ?? key}
+            </a>
+          </li>
+        ))
+      }
       <li><a href={href("/rss.xml")} class="hover:text-foreground">RSS</a></li>
     </ul>
-    <p class="basis-full text-xs">© {new Date().getFullYear()} {author.name} · {site.name}</p>
+    <p class="basis-full text-xs">
+      © {new Date().getFullYear()}
+      {author.name} · {site.name}{site.disclaimer && <> · {site.disclaimer}</>}
+    </p>
   </div>
 </footer>

@@ -31,6 +31,7 @@ export const personJsonLd = (siteUrl: URL) => ({
   "@type": "Person",
   name: author.name,
   description: author.tagline,
+  address: author.location,
   url: absoluteUrl("/about/", siteUrl),
   sameAs: Object.values(author.links),
 });

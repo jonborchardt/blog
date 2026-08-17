@@ -4,7 +4,8 @@ import type { SiteConfig } from "./types";
 export const site: SiteConfig = {
   name: "Always Shippable",
   description:
-    "Thoughts on engineering systems, product design, AI tooling, and keeping things always shippable.",
+    "Thoughts on building always shippable systems, moving fast without breaking things, and making complex work simple and enjoyable.",
+  disclaimer: "Views are my own and do not represent my employer.",
   url: "https://jonborchardt.github.io",
   locale: "en",
   featuredPost: null,

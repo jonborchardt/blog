@@ -2,10 +2,20 @@
 import type { SeriesRegistry } from "./types";
 
 export const series = {
-  "building-always-shippable": {
-    title: "Building Always Shippable",
+  finances: {
+    title: "Finances",
     description:
-      "How this blog is built: the authoring primitives, the validation that keeps it shippable, and the choices behind them.",
+      "Notes on personal finance: the models, the numbers, and the tools built to track them.",
+  },
+  worldlock: {
+    title: "WorldLock",
+    description:
+      "Building WorldLock in the open: the design decisions, the tooling, and what shipped along the way.",
+  },
+  "sierra-games": {
+    title: "Sierra Games",
+    description:
+      "Revisiting the Sierra adventure games: their design, their engines, and what still holds up.",
   },
 } as const satisfies SeriesRegistry;
 

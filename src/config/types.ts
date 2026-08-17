@@ -17,6 +17,8 @@ const kebab = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 export const siteSchema = z.object({
   name: z.string().min(1),
   description: z.string().min(1),
+  /** Legal disclaimer shown in the footer (e.g. "Views are my own"). Empty string = none. */
+  disclaimer: z.string(),
   /** Canonical production origin (no trailing slash). The `/blog` base is set in astro.config. */
   url: z.url(),
   locale: z.string().min(2),
@@ -29,6 +31,8 @@ export type SiteConfig = z.infer<typeof siteSchema>;
 export const authorSchema = z.object({
   name: z.string().min(1),
   tagline: z.string().min(1),
+  /** Where the author is based, shown on the about page and in Person JSON-LD. */
+  location: z.string().min(1),
   links: z.record(z.string().regex(/^[a-z][a-z0-9]*$/), z.url()),
 });
 export type AuthorConfig = z.infer<typeof authorSchema>;

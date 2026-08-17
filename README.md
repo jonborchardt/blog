@@ -1,6 +1,6 @@
 # Always Shippable
 
-Thoughts on engineering systems, product design, AI tooling, and keeping things always shippable.
+Thoughts on building always shippable systems, moving fast without breaking things, and making complex work simple and enjoyable.
 
 Personal technical blog by Jonathan Borchardt. Static site built with Astro, published to GitHub Pages at <https://jonborchardt.github.io/blog/>.
 

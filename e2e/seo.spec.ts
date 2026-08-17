@@ -54,7 +54,7 @@ test("article pages carry article:* tags and BlogPosting JSON-LD", async ({ page
   expect(await page.locator("meta[property='article:tag']").count()).toBeGreaterThan(0);
   await expect(page.locator("meta[property='article:section']")).toHaveAttribute(
     "content",
-    "Building Always Shippable",
+    "WorldLock",
   );
   const lds = await page.locator("script[type='application/ld+json']").allTextContents();
   const obj = lds.map((t) => JSON.parse(t)).find((o) => o["@type"] === "BlogPosting");

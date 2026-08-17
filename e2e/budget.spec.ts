@@ -20,7 +20,7 @@ test("static pages ship zero JavaScript files", async ({ page }) => {
     "about/",
     "building-blocks-of-this-blog/",
     "series/",
-    "series/building-always-shippable/",
+    "series/worldlock/",
     "does-not-exist/",
   ]) {
     const js = await jsRequests(page, p);
