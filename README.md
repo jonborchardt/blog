@@ -58,6 +58,10 @@ e2e/             Playwright + axe smoke tests (+ shots.mjs: ad-hoc screenshots o
 .claude/skills/  agent workflows (planned)
 ```
 
+## Validation
+
+`npm run build` fails on invalid content, and says how to fix it: frontmatter schema violations, unknown series/tags, duplicate or reserved slugs, duplicate series order, and — after the HTML is emitted (`check-dist`) — broken internal links or `#fragments`, links not under the base, images without alt/width/height, pages missing title/description/canonical/og:image, and any admin output. `npm run validate` covers types, lint, formatting and unit tests; `npm run test:e2e` runs axe and behaviour tests against a production preview.
+
 ## Deployment
 
 `.github/workflows/deploy.yml` runs typecheck, lint, format check, unit tests, build, and e2e on every push/PR, then deploys `dist/` to GitHub Pages on `main`. In the repository settings set **Pages → Source → GitHub Actions**. No secrets required.

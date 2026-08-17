@@ -13,7 +13,14 @@ const isActive = (path: string) => current === href(path) || current.startsWith(
     class="max-w-page mx-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-3 sm:px-6"
   >
     <a href={href("/")} class="flex items-center gap-2 font-semibold tracking-tight no-underline">
-      <img src={logo.src} width={logo.width} height={logo.height} alt="" class="h-7 w-7" />
+      <img
+        src={logo.src}
+        width={logo.width}
+        height={logo.height}
+        alt=""
+        aria-hidden="true"
+        class="h-7 w-7"
+      />
       <span>{site.name}</span>
     </a>
     <nav aria-label="Main">

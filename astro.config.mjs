@@ -9,6 +9,7 @@ import { rehypeHeadingIds, unified } from "@astrojs/markdown-remark";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import rehypeMermaid from "rehype-mermaid";
+import { checkDist } from "./src/integrations/check-dist.ts";
 
 /**
  * Plain text of a heading hast node (for anchor aria-labels).
@@ -52,7 +53,8 @@ export default defineConfig({
   site: "https://jonborchardt.github.io",
   base: BASE,
   trailingSlash: "always",
-  integrations: [react(), mdx(), sitemap()],
+  // checkDist runs after `astro build` and fails it on broken links, alt-less images, SEO gaps.
+  integrations: [react(), mdx(), sitemap(), checkDist()],
   image: { layout: "constrained", responsiveStyles: true },
   markdown: {
     // High-contrast pair: the default github-light orange (#e36209) fails WCAG AA on white.

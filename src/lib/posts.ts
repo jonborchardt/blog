@@ -12,6 +12,7 @@ export const RESERVED_SLUGS = new Set([
   "admin",
   "404",
   "og",
+  "search-index.json",
   "rss.xml",
   "robots.txt",
   "sitemap-index.xml",
@@ -77,19 +78,31 @@ export function validatePosts(posts: Pick<Post, "id" | "data">[]): void {
 
   for (const p of posts) {
     const slug = p.data.slug ?? p.id;
-    if (RESERVED_SLUGS.has(slug)) errors.push(`${p.id}: slug "${slug}" is reserved`);
+    if (RESERVED_SLUGS.has(slug)) {
+      errors.push(
+        `${p.id}: slug "${slug}" is a reserved route name → rename the post directory or set a different "slug" in frontmatter`,
+      );
+    }
     const dup = seenSlugs.get(slug);
-    if (dup) errors.push(`${p.id}: duplicate slug "${slug}" (also ${dup})`);
+    if (dup) {
+      errors.push(
+        `${p.id}: duplicate slug "${slug}" (also used by ${dup}) → rename one post directory or set a different "slug"`,
+      );
+    }
     seenSlugs.set(slug, p.id);
 
     if (p.data.series) {
-      if (!(p.data.series in series)) errors.push(`${p.id}: unknown series "${p.data.series}"`);
+      if (!(p.data.series in series)) {
+        errors.push(
+          `${p.id}: unknown series "${p.data.series}" → add it to src/config/series.ts first, or fix the frontmatter`,
+        );
+      }
       if (p.data.seriesOrder !== undefined) {
         const key = `${p.data.series}#${p.data.seriesOrder}`;
         const other = seenOrder.get(key);
         if (other) {
           errors.push(
-            `${p.id}: duplicate seriesOrder ${p.data.seriesOrder} in "${p.data.series}" (also ${other})`,
+            `${p.id}: duplicate seriesOrder ${p.data.seriesOrder} in "${p.data.series}" (also ${other}) → give one of them the next free order (max existing + 1)`,
           );
         }
         seenOrder.set(key, p.id);

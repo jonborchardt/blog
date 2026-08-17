@@ -1,0 +1,91 @@
+// @vitest-environment node
+import { describe, expect, it } from "vitest";
+import { checkDist } from "./dist-checks";
+
+const BASE = "/blog";
+const SITE = "https://example.test";
+
+const page = (file: string, body: string, opts: { path?: string; head?: string } = {}) => ({
+  file,
+  html: `<!doctype html><html><head><title>${file}</title>
+    <meta name="description" content="A description that is long enough.">
+    <link rel="canonical" href="${SITE}${BASE}${opts.path ?? "/" + file.replace(/index\.html$/, "")}">
+    <meta property="og:image" content="${SITE}${BASE}/og/site.png">${opts.head ?? ""}</head>
+    <body>${body}</body></html>`,
+});
+
+const run = (pages: ReturnType<typeof page>[], files: string[] = []) =>
+  checkDist({ pages, files: [...files, ...pages.map((p) => p.file)], base: BASE, site: SITE });
+
+describe("checkDist", () => {
+  it("passes a clean site and reports stats", () => {
+    const r = run(
+      [
+        page("index.html", `<a href="/blog/about/">About</a><a href="/blog/rss.xml">RSS</a>`),
+        page(
+          "about/index.html",
+          `<h2 id="bio">Bio</h2><a href="/blog/#top">home</a><a href="#bio">bio</a>`,
+        ),
+        page("404.html", `<img src="/blog/x.png" alt="An x" width="1" height="1">`, {
+          path: "/404/",
+        }),
+      ],
+      ["rss.xml", "x.png"],
+    );
+    // 404 canonical rule is skipped; "#top" on index is missing → one error expected
+    expect(r.errors).toEqual([
+      expect.stringContaining('about/index.html: link "/blog/#top" points to #top'),
+    ]);
+    expect(r.stats).toEqual({ pages: 3, links: 4, images: 1 });
+  });
+
+  it("flags hardcoded root links outside the base with a fix", () => {
+    const r = run([page("index.html", `<a href="/archive/">x</a>`)]);
+    expect(r.errors[0]).toMatch(/index\.html: link "\/archive\/" .*outside the base .* href\(\)/);
+  });
+
+  it("flags links to missing pages and missing fragments", () => {
+    const r = run([page("index.html", `<a href="/blog/nope/">x</a><a href="#missing">y</a>`)]);
+    expect(r.errors).toHaveLength(2);
+    expect(r.errors[0]).toMatch(/"\/blog\/nope\/" does not resolve .* fix the path/);
+    expect(r.errors[1]).toMatch(/#missing which does not exist on index\.html .* heading/);
+  });
+
+  it("flags images without alt, with undeclared-empty alt, or without dimensions", () => {
+    const r = run([
+      page(
+        "index.html",
+        `<img src="a.png" width="1" height="1">
+         <img src="b.png" alt="" width="1" height="1">
+         <img src="c.png" alt="ok">
+         <img src="d.png" alt="" aria-hidden="true" width="1" height="1">`,
+      ),
+    ]);
+    expect(r.errors).toEqual([
+      expect.stringMatching(/a\.png.*no alt attribute .* add meaningful alt/),
+      expect.stringMatching(/b\.png.*empty alt but is not marked decorative/),
+      expect.stringMatching(/c\.png.*lacks width\/height/),
+    ]);
+  });
+
+  it("flags missing SEO essentials", () => {
+    const r = checkDist({
+      pages: [{ file: "x/index.html", html: `<html><head></head><body></body></html>` }],
+      files: ["x/index.html"],
+      base: BASE,
+      site: SITE,
+    });
+    expect(r.errors.map((e) => e.split(" → ")[0])).toEqual([
+      "x/index.html: missing <title>",
+      "x/index.html: missing meta description",
+      'x/index.html: canonical "undefined" is not under https://example.test/blog/',
+      "x/index.html: missing og:image",
+    ]);
+    for (const e of r.errors) expect(e).toContain(" → ");
+  });
+
+  it("flags admin output", () => {
+    const r = run([page("index.html", "")], ["admin/index.html"]);
+    expect(r.errors[0]).toMatch(/admin\/index\.html: dev-only admin output/);
+  });
+});

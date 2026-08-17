@@ -37,9 +37,12 @@ A statically generated technical blog (Astro 7 + React islands + MDX + Tailwind/
 
 ## Validation (build must fail on invalid state)
 
-Implemented now: frontmatter schema (Zod), unknown series/tags, `seriesOrder` without series, duplicate/reserved slugs, duplicate `seriesOrder` within a series (`validatePosts` in `src/lib/posts.ts`, run by every page that lists posts), TypeScript (`astro check`), ESLint, Prettier, unit + e2e (axe WCAG 2.2 AA on every page).
+- Frontmatter (content loader): Zod schema, unknown series/tags, `seriesOrder` without series, title ≤ 90, description 40–160.
+- Cross-post (`validatePosts` in `src/lib/posts.ts`, run by every page that lists posts): duplicate/reserved slugs, duplicate `seriesOrder` within a series.
+- Built output (`src/integrations/check-dist.ts` → `src/lib/dist-checks.ts`, after `astro build`): internal links and `#fragments` resolve, no root-relative links outside the base, every `<img>` has alt + width/height, every page has title/description/canonical/og:image, no `admin/` output.
+- Also: TypeScript (`astro check`), ESLint, Prettier, unit + e2e (axe WCAG 2.2 AA on every page).
 
-Planned, not implemented: broken internal link check, alt-text lint inside MDX bodies, required OG image. Add them to `validatePosts` or a Vitest test rather than a new system.
+Add new checks to `src/lib/dist-checks.ts` (post-build, HTML) or `validatePosts` (frontmatter) — not a new system. Messages must say what is wrong _and_ what to change.
 
 ## Dependencies
 
