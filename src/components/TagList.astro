@@ -1,0 +1,24 @@
+---
+/** Post tags as links to the archive filtered by that tag. Renders nothing when there are none. */
+import { tags as tagRegistry, type TagId } from "@/config/tags";
+import { href } from "@/lib/url";
+
+interface Props {
+  tags: readonly TagId[];
+}
+const { tags } = Astro.props;
+---
+
+{
+  tags.length > 0 && (
+    <ul class="flex flex-wrap gap-1.5" aria-label="Tags">
+      {tags.map((t) => (
+        <li>
+          <a href={href(`/all-posts/?tag=${t}`)} class="tag-pill">
+            {tagRegistry[t].label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  )
+}

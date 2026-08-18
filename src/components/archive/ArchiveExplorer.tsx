@@ -62,7 +62,15 @@ const formatDate = (iso: string) =>
   new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeZone: "UTC" }).format(new Date(iso));
 
 /** Mirrors PostList.astro row markup/styling — the one accepted duplication (React vs Astro). */
-function PostRow({ doc, snippet }: { doc: SearchDocMeta; snippet: string }) {
+function PostRow({
+  doc,
+  snippet,
+  onTag,
+}: {
+  doc: SearchDocMeta;
+  snippet: string;
+  onTag: (id: string) => void;
+}) {
   return (
     <li className="grid-cols-thumb grid gap-x-4 py-5 first:pt-0 last:pb-0">
       <a href={doc.url} tabIndex={-1} aria-hidden="true">
@@ -101,9 +109,9 @@ function PostRow({ doc, snippet }: { doc: SearchDocMeta; snippet: string }) {
           {doc.tags.length > 0 && (
             <span className="flex flex-wrap gap-1.5" aria-label="Tags">
               {doc.tags.map((t) => (
-                <span key={t.id} className="bg-muted rounded-sm px-1.5 py-0.5 text-xs">
+                <button key={t.id} type="button" className="tag-pill" onClick={() => onTag(t.id)}>
                   {t.label}
-                </span>
+                </button>
               ))}
             </span>
           )}
@@ -121,14 +129,11 @@ export default function ArchiveExplorer({ docs, tags, series, indexUrl }: Archiv
   const [indexStatus, setIndexStatus] = useState<"idle" | "loading" | "ready" | "failed">("idle");
   const hydrated = useRef(false);
 
-  // URL → state on load and on back/forward.
+  // URL → state on load. Filter changes below use replaceState, so no history entry is ever
+  // pushed and popstate can't fire for them; back/forward leaves the page.
   useEffect(() => {
-    const read = () =>
-      setState(parseState(new URLSearchParams(window.location.search), validTags, validSeries));
-    read();
+    setState(parseState(new URLSearchParams(window.location.search), validTags, validSeries));
     hydrated.current = true;
-    window.addEventListener("popstate", read);
-    return () => window.removeEventListener("popstate", read);
   }, [validTags, validSeries]);
 
   // state → URL (debounced replaceState).
@@ -329,7 +334,7 @@ export default function ArchiveExplorer({ docs, tags, series, indexUrl }: Archiv
       {results.length ? (
         <ul className="mt-4 divide-y">
           {results.map((r) => (
-            <PostRow key={r.doc.slug} doc={r.doc} snippet={r.snippet} />
+            <PostRow key={r.doc.slug} doc={r.doc} snippet={r.snippet} onTag={toggleTag} />
           ))}
         </ul>
       ) : (

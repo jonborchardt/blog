@@ -131,12 +131,21 @@ export function checkDist({ pages, files, base, site }: DistCheckInput): DistChe
       errors.push(`${file}: missing meta description → pass meta.description to BaseLayout`);
     }
     const canonical = doc.querySelector("link[rel=canonical]")?.getAttribute("href");
-    if (file !== "404.html") {
-      if (!canonical?.startsWith(`${site}${base}/`)) {
+    const noindex = /noindex/i.test(
+      doc.querySelector("meta[name=robots]")?.getAttribute("content") ?? "",
+    );
+    if (noindex) {
+      // A page that tells crawlers to ignore it must not also claim a canonical URL — the two
+      // directives contradict each other, and 404.html has no URL of its own to point at.
+      if (canonical) {
         errors.push(
-          `${file}: canonical "${canonical}" is not under ${site}${base}/ → BaseLayout builds it with absoluteUrl(meta.path); check meta.path`,
+          `${file}: page is noindex but still declares canonical "${canonical}" → drop the canonical (BaseLayout omits it when meta.noindex is set)`,
         );
       }
+    } else if (!canonical?.startsWith(`${site}${base}/`)) {
+      errors.push(
+        `${file}: canonical "${canonical}" is not under ${site}${base}/ → BaseLayout builds it with absoluteUrl(meta.path); check meta.path`,
+      );
     }
     if (!doc.querySelector("meta[property='og:image']")?.getAttribute("content")) {
       errors.push(

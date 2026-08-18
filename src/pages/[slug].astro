@@ -7,6 +7,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import DraftBadge from "@/components/DraftBadge.astro";
 import TableWrapper from "@/components/blog/TableWrapper.astro";
 import PostToc from "@/components/PostToc.astro";
+import TagList from "@/components/TagList.astro";
 import { tags as tagRegistry } from "@/config/tags";
 import { getPosts, getSeriesContext, postPath, postSlug, seriesPath } from "@/lib/posts";
 import { readingTime, wordCount } from "@/lib/reading-time";
@@ -89,22 +90,7 @@ const image = ogImage?.src ?? `/og/${postSlug(post)}.png`;
           )
         }
         <span>{minutes} min read</span>
-        {
-          post.data.tags.length > 0 && (
-            <ul class="flex flex-wrap gap-1.5 text-xs" aria-label="Tags">
-              {post.data.tags.map((t) => (
-                <li>
-                  <a
-                    href={href(`/all-posts/?tag=${t}`)}
-                    class="bg-muted hover:bg-accent rounded-sm px-1.5 py-0.5 no-underline"
-                  >
-                    {tagRegistry[t].label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          )
-        }
+        <TagList tags={post.data.tags} />
       </div>
       {
         post.data.draft && (

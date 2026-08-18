@@ -65,7 +65,7 @@ test("article pages carry article:* tags and BlogPosting JSON-LD", async ({ page
 
 test("rss feed is well-formed with language, self link and categories", async ({ request }) => {
   const xml = await (await request.get("rss.xml")).text();
-  expect(xml).toContain("<language>en</language>");
+  expect(xml).toContain("<language>en-US</language>");
   expect(xml).toContain('rel="self"');
   expect(xml).toContain("<category>Engineering</category>");
   expect(xml).toContain("<author>");

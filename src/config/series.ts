@@ -5,22 +5,22 @@ export const series = {
   "blog-features": {
     title: "Blog Features",
     description:
-      "How this blog is built: the primitives, the interactive islands, and the tooling behind each feature.",
+      "How this blog is built: the authoring primitives, the few places React actually earns hydration, and the one page that renders all of it as a live fixture.",
   },
   finances: {
     title: "Finances",
     description:
-      "Notes on personal finance: the models, the numbers, and the tools built to track them.",
+      "Replaying one retirement plan across every start year since 1928: the simulator, the agent pipeline behind it, and 98 lives ending broke or on $5.8 million.",
   },
   worldlock: {
     title: "WorldLock",
     description:
-      "Point your phone west from Seattle and there's a glowing tower rising out of Tacoma, labeled Tacoma 42.4 km. Pan up and the night side of the Earth curves away from you, city lights and all, with NYC's tower readable 3,815 km over the horizon. A white dash crosses the sky where the ISS actually is, right now.",
+      "A native Android AR app pinning city towers, the Earth and the live ISS to where they actually are — built by an agent-driven workflow, no IDE and no cable.",
   },
   "sierra-games": {
     title: "Sierra Games",
     description:
-      "Revisiting the Sierra adventure games: their design, their engines, and what still holds up.",
+      "Upscaling Sierra's SCI0 vector backgrounds 6× without breaking them: flood fills that leak, a native-resolution render as the oracle, an anchor-graph rewrite.",
   },
 } as const satisfies SeriesRegistry;
 

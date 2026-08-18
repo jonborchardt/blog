@@ -5,14 +5,20 @@ import { checkDist } from "./dist-checks";
 const BASE = "/blog";
 const SITE = "https://example.test";
 
-const page = (file: string, body: string, opts: { path?: string; head?: string } = {}) => ({
+const page = (
+  file: string,
+  body: string,
+  opts: { path?: string; head?: string; canonical?: boolean } = {},
+) => ({
   file,
   html: `<!doctype html><html><head><title>${file}</title>
     <meta name="description" content="A description that is long enough.">
-    <link rel="canonical" href="${SITE}${BASE}${opts.path ?? "/" + file.replace(/index\.html$/, "")}">
+    ${opts.canonical === false ? "" : `<link rel="canonical" href="${SITE}${BASE}${opts.path ?? "/" + file.replace(/index\.html$/, "")}">`}
     <meta property="og:image" content="${SITE}${BASE}/og/site.png">${opts.head ?? ""}</head>
     <body>${body}</body></html>`,
 });
+
+const NOINDEX = `<meta name="robots" content="noindex, nofollow">`;
 
 const run = (pages: ReturnType<typeof page>[], files: string[] = []) =>
   checkDist({ pages, files: [...files, ...pages.map((p) => p.file)], base: BASE, site: SITE });
@@ -27,12 +33,13 @@ describe("checkDist", () => {
           `<h2 id="bio">Bio</h2><a href="/blog/#top">home</a><a href="#bio">bio</a>`,
         ),
         page("404.html", `<img src="/blog/x.png" alt="An x" width="1" height="1">`, {
-          path: "/404/",
+          canonical: false,
+          head: NOINDEX,
         }),
       ],
       ["rss.xml", "x.png"],
     );
-    // 404 canonical rule is skipped; "#top" on index is missing → one error expected
+    // noindex 404 needs no canonical; "#top" on index is missing → one error expected
     expect(r.errors).toEqual([
       expect.stringContaining('resume/index.html: link "/blog/#top" points to #top'),
     ]);
@@ -82,6 +89,11 @@ describe("checkDist", () => {
       "x/index.html: missing og:image",
     ]);
     for (const e of r.errors) expect(e).toContain(" → ");
+  });
+
+  it("flags a noindex page that still claims a canonical", () => {
+    const r = run([page("resume/index.html", "", { head: NOINDEX })]);
+    expect(r.errors[0]).toMatch(/noindex but still declares canonical .* → drop the canonical/);
   });
 
   it("flags admin output", () => {

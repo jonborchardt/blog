@@ -59,7 +59,14 @@ export default defineConfig({
   base: BASE,
   trailingSlash: "always",
   // checkDist runs after `astro build` and fails it on broken links, alt-less images, SEO gaps.
-  integrations: [react(), mdx(), sitemap(), checkDist()],
+  integrations: [
+    react(),
+    mdx(),
+    // Keep the sitemap in step with `noindex: true` in a page's meta (portfolio, resume) —
+    // the integration cannot see page metadata, so noindex routes are listed here too.
+    sitemap({ filter: (page) => !/\/(portfolio|resume)\/$/.test(page) }),
+    checkDist(),
+  ],
   image: { layout: "constrained", responsiveStyles: true },
   markdown: {
     // High-contrast pair: the default github-light orange (#e36209) fails WCAG AA on white.

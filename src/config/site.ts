@@ -7,7 +7,7 @@ export const site: SiteConfig = {
     "Thoughts on building always shippable systems, moving fast without breaking things, and making complex work simple and enjoyable.",
   disclaimer: "Views are my own and do not represent my employer.",
   url: "https://jonborchardt.github.io",
-  locale: "en",
+  locale: "en-US",
   featuredPost: "interactive-islands-in-mdx",
   nav: [
     { label: "All Posts", href: "/all-posts/" },

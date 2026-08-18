@@ -22,9 +22,11 @@ const posts = defineCollection({
         title: z
           .string()
           .min(1, "title is required")
-          .max(90, {
+          // A post's title is its whole <title> — BaseLayout drops the " · <site>" suffix on
+          // articles — so this is the full length Google gets, and it truncates past ~60.
+          .max(60, {
             error: (issue) =>
-              `title must be at most 90 characters for search results (got ${String(issue.input).length})`,
+              `title must be at most 60 characters — it is the post's entire <title> and search results cut off past ~60 (got ${String(issue.input).length})`,
           }),
         /** Defaults to the post directory name. Set explicitly to override. */
         slug: z.string().regex(SLUG_PATTERN).optional(),

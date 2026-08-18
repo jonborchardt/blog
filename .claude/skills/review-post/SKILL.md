@@ -10,7 +10,7 @@ Output: a short findings list (blocking / should-fix / nits), each with file:lin
 ## Automated (run these; they catch most contract issues)
 
 1. `npm run validate` — types, lint, format, unit tests.
-2. `npm run build` — frontmatter schema (title ≤ 90, description 40–160, registry ids, series order), then `check-dist`: broken links/fragments, base path, image alt/size, SEO essentials. Read its messages verbatim; they say what to change.
+2. `npm run build` — frontmatter schema (title ≤ 60, description 40–160, registry ids, series order), then `check-dist`: broken links/fragments, base path, image alt/size, SEO essentials. Read its messages verbatim; they say what to change.
 3. `npm run test:e2e` when the post adds a primitive, an island, or anything layout-affecting (axe on every sitemap URL, 360px overflow, JS-budget checks).
 
 ## Read-through (the machine can't judge these)

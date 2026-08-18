@@ -14,7 +14,8 @@ test("article structure: one h1, landmarks, series nav, TOC, anchors", async ({ 
   expect(await anchors.count()).toBeGreaterThanOrEqual(3);
   await expect(anchors.first()).toHaveAttribute("aria-label", /^Link to section: /);
   await expect(page.getByText(/\d+ min read/)).toBeVisible();
-  await expect(page.getByText("Part 1 of 3").first()).toBeVisible();
+  // Part count tracks how many posts in the series are published, so don't pin it.
+  await expect(page.getByText(/Part 1 of \d+/).first()).toBeVisible();
 });
 
 test("images are lazy, sized and responsive; tables scroll", async ({ page }) => {

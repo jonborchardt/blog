@@ -28,7 +28,8 @@ test("every sitemap page renders and has no axe violations", async ({ page, requ
 
 test("dates render as UTC calendar dates", async ({ page }) => {
   await page.goto("");
-  await expect(page.locator("time").first()).toHaveText("Aug 18, 2026");
+  // Format, not value: the newest post's date changes every time one is published.
+  await expect(page.locator("time").first()).toHaveText(/^[A-Z][a-z]{2} \d{1,2}, \d{4}$/);
   await page.goto("building-blocks-of-this-blog/");
   await expect(page.locator("article time").first()).toHaveText("August 17, 2026");
 });

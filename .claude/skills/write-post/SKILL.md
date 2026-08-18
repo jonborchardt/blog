@@ -55,7 +55,7 @@ Invariants are in `CLAUDE.md`; component API is in `src/components/blog/README.m
    - When the post describes code, check every diagram against the source (states, thresholds, order of operations) before drawing it — a plausible-looking wrong diagram is worse than none.
    - Placement: after the paragraph it illustrates; never inside a list item (put it after the list). Every visual scales to fit — no `overflow-x-auto` wrapper, no `min-w-*`, no horizontal scrollbar at 360px (redraw narrower/taller instead). Fix overlapping labels before moving on (view at 1280 and 360, both themes).
    - Typical yield for a technical post is 2–4 visuals; zero means the pass was skipped, not that nothing qualified.
-4. Fix the frontmatter description placeholder; `title` ≤ 90 chars.
+4. Fix the frontmatter description placeholder; `title` ≤ 60 chars (it is the post's entire `<title>` — no site-name suffix on articles).
    Hero: unless the author handed you an image, use `create-hero` (draw `hero.svg`, `npm run render-hero -- <slug>`, real alt). Never leave the grey placeholder.
 5. `npm run validate && npm run build` — the build tells you exactly what to fix (schema, unknown tag/series, duplicate order, broken link, missing alt, description length).
 6. Look at it: `npm run dev` → `http://localhost:4321/blog/<slug>/` (drafts show only in dev), or `node e2e/shots.mjs <outdir> <slug>/` against a preview for 360/1280 × light/dark screenshots.

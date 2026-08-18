@@ -14,12 +14,17 @@ interface Props {
 const { meta } = Astro.props;
 const siteUrl = Astro.site!;
 const canonical = absoluteUrl(meta.path, siteUrl);
-const fullTitle = meta.path === "/" ? site.name : `${meta.title} · ${site.name}`;
+// Posts stand alone: the " · Always Shippable" suffix eats 19 of a ~60-char search result and the
+// brand is already in og:site_name. Section pages keep it — "Series" alone means nothing in a SERP.
+const fullTitle =
+  meta.path === "/" || meta.type === "article" ? meta.title : `${meta.title} · ${site.name}`;
 // Every page has a social image: bespoke/derived one from meta, else the generated site card.
 // Default: the hand-made site card in public/og/site.jpg; posts get generated cards (src/pages/og/).
 const imagePath = meta.image ?? "/og/site.jpg";
 const image = imagePath.startsWith("http") ? imagePath : absoluteUrl(imagePath, siteUrl);
-const imageAlt = meta.imageAlt ?? `${meta.title} — ${site.name}`;
+// Don't repeat the site name when the title already is it (the homepage).
+const imageAlt =
+  meta.imageAlt ?? (meta.title === site.name ? site.name : `${meta.title} — ${site.name}`);
 const imageWidth = meta.imageWidth ?? 1200;
 const imageHeight = meta.imageHeight ?? 630;
 ---
@@ -34,7 +39,8 @@ const imageHeight = meta.imageHeight ?? 630;
     <link rel="icon" href={href("/favicon.svg")} type="image/svg+xml" />
     <title>{fullTitle}</title>
     <meta name="description" content={meta.description} />
-    <link rel="canonical" href={canonical} />
+    {/* A noindex page makes no canonical claim — 404.html has no URL of its own to point at. */}
+    {!meta.noindex && <link rel="canonical" href={canonical} />}
     <link rel="alternate" type="application/rss+xml" title={site.name} href={href("/rss.xml")} />
     <link rel="sitemap" href={href("/sitemap-index.xml")} />
     {meta.noindex && <meta name="robots" content="noindex, nofollow" />}
@@ -44,7 +50,8 @@ const imageHeight = meta.imageHeight ?? 630;
     <meta property="og:title" content={meta.title} />
     <meta property="og:description" content={meta.description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:locale" content={site.locale} />
+    {/* BCP 47 for `lang`/RSS ("en-US"); OpenGraph wants language_TERRITORY ("en_US"). */}
+    <meta property="og:locale" content={site.locale.replace("-", "_")} />
     <meta property="og:image" content={image} />
     <meta property="og:image:width" content={String(imageWidth)} />
     <meta property="og:image:height" content={String(imageHeight)} />

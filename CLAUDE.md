@@ -44,7 +44,7 @@ A statically generated technical blog (Astro 7 + React islands + MDX + Tailwind/
 
 ## Validation (build must fail on invalid state)
 
-- Frontmatter (content loader): Zod schema, unknown series/tags, `seriesOrder` without series, title ≤ 90, description 40–160.
+- Frontmatter (content loader): Zod schema, unknown series/tags, `seriesOrder` without series, title ≤ 60, description 40–160.
 - Cross-post (`validatePosts` in `src/lib/posts.ts`, run by every page that lists posts): duplicate/reserved slugs, duplicate `seriesOrder` within a series.
 - Built output (`src/integrations/check-dist.ts` → `src/lib/dist-checks.ts`, after `astro build`): internal links and `#fragments` resolve, no root-relative links outside the base, every `<img>` has alt + width/height, every page has title/description/canonical/og:image, no `admin/` output.
 - Also: TypeScript (`astro check`), ESLint, Prettier, unit + e2e (axe WCAG 2.2 AA on every page).

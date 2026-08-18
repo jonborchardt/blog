@@ -10,9 +10,10 @@ test("skip link, header nav and theme toggle are reachable and operable by keybo
   await expect(skip).toBeFocused();
   await page.keyboard.press("Enter");
   await expect.poll(() => page.evaluate(() => location.hash)).toBe("#main");
-  // Tab through: skip link, logo/home, 3 nav links, theme toggle.
+  // Tab through: skip link, logo/home, every nav link, theme toggle.
   await page.goto("");
-  for (let i = 0; i < 6; i++) await page.keyboard.press("Tab");
+  const stops = 3 + (await page.locator("header nav a").count());
+  for (let i = 0; i < stops; i++) await page.keyboard.press("Tab");
   const toggle = page.locator("[data-theme-toggle]");
   await expect(toggle).toBeFocused();
   await page.keyboard.press("Enter");

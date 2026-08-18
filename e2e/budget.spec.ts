@@ -32,8 +32,7 @@ test("static pages ship zero JavaScript files", async ({ page }) => {
 test("archive loads a small React bundle only", async ({ page }) => {
   const js = await jsRequests(page, "all-posts/");
   expect(js.length).toBeGreaterThan(0);
-  // Astro splits react, react-dom, the client runtime, shadcn ui and the island: a handful of files.
-  expect(js.length, js.map((j) => j.url).join(", ")).toBeLessThanOrEqual(8);
+  // Total transfer is the budget; how Rollup splits it into chunks is its business.
   const gz = js.reduce((n, j) => n + j.gzip, 0);
   expect(gz, `archive JS ${Math.round(gz / 1024)} KB gzipped`).toBeLessThan(120 * 1024);
 });
@@ -43,6 +42,7 @@ test("interactive post loads only React chunks for its island", async ({ page })
   await page.getByTestId("island").scrollIntoViewIfNeeded(); // client:visible
   await expect.poll(() => js.length).toBeGreaterThan(0);
   await expect(page.locator("astro-island[ssr]")).toHaveCount(0);
-  expect(js.length).toBeLessThanOrEqual(8);
   for (const j of js) expect(j.url).toMatch(/\/blog\/_astro\/.*\.js$/);
+  const gz = js.reduce((n, j) => n + j.gzip, 0);
+  expect(gz, `island JS ${Math.round(gz / 1024)} KB gzipped`).toBeLessThan(120 * 1024);
 });

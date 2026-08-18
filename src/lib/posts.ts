@@ -95,6 +95,17 @@ export function validatePosts(posts: Pick<Post, "id" | "data">[]): void {
   const seenSlugs = new Map<string, string>();
   const seenOrder = new Map<string, string>();
 
+  // A series description is the <meta name="description"> of /series/<id>/, so hold it to the same
+  // 40-160 the post schema enforces. `satisfies SeriesRegistry` is a type check only, not a length one.
+  for (const [id, info] of Object.entries(series)) {
+    const n = info.description.length;
+    if (n < 40 || n > 160) {
+      errors.push(
+        `series "${id}": description is ${n} characters → rewrite it to 40-160 in src/config/series.ts (it is the page's meta description; search results cut off past ~160)`,
+      );
+    }
+  }
+
   for (const p of posts) {
     const slug = p.data.slug ?? p.id;
     if (RESERVED_SLUGS.has(slug)) {

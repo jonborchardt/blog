@@ -4,7 +4,13 @@ import AuthorLinks from "@/components/AuthorLinks.astro";
 ---
 
 <BaseLayout
-  meta={{ title: "Portfolio", description: "Selected projects and work.", path: "/portfolio/" }}
+  meta={{
+    title: "Portfolio",
+    description: "Selected projects and work.",
+    path: "/portfolio/",
+    // Placeholder page: keep it out of the index until it has real content.
+    noindex: true,
+  }}
 >
   <div class="mx-auto max-w-prose">
     <p class="text-muted-foreground eyebrow">Coming soon</p>
