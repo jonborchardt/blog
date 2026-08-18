@@ -72,6 +72,11 @@
   @apply text-xs font-medium tracking-wide uppercase;
 }
 
+/* Post hero image cap: never taller than half the viewport. */
+@utility max-h-hero {
+  max-height: 50vh;
+}
+
 /* Tailwind's built-in max-w-prose is a fixed 65ch; point it at our token instead. */
 @utility max-w-prose {
   max-width: var(--container-prose);

@@ -13,8 +13,9 @@ draft: false
 
 import Callout from "@/components/blog/Callout.astro";
 import Figure from "@/components/blog/Figure.astro";
+import VizFigure from "@/components/blog/VizFigure.astro";
 import Counter from "./components/Counter";
-import island from "./island.svg";
+import Island from "./island.svg";
 
 [Part 1](/building-blocks-of-this-blog/) made the case that a post is a document and should ship as
 one: HTML and CSS, no framework. This part is about the exception. Some things a technical blog wants
@@ -28,12 +29,12 @@ _island_: it renders to HTML at build time like everything else, and then, in th
 component's JavaScript loads and takes over its own DOM. The rest of the page never hydrates.
 
 <Figure caption="One island in a sea of static HTML. Only the highlighted block loads script.">
-  <img
-    src={island.src}
-    width={island.width}
-    height={island.height}
-    alt="A page outline made of text blocks; one small block near the bottom is highlighted and labelled island, the only part that loads JavaScript"
-  />
+  <VizFigure
+    name="A page outline with one hydrated island"
+    summary="Most of the page is plain text blocks; a single small block near the bottom is highlighted as the island, so client JavaScript is a small fraction of the document."
+  >
+    <Island class="h-auto w-full max-w-xl" />
+  </VizFigure>
 </Figure>
 
 The figure above is an inline SVG file. It is the first thing to reach for when a post needs a
@@ -45,7 +46,13 @@ Below is the smallest possible island — a counter — living in this post's ow
 `components/Counter.tsx`. It hydrates when scrolled into view (`client:visible`), so a reader who
 never gets this far never downloads it.
 
-<Counter client:visible />
+<VizFigure
+  name="Counter demo"
+  summary="A button that counts its own clicks; the count updates without a page reload."
+  interactive
+>
+  <Counter client:visible />
+</VizFigure>
 
 ```mdx
 import Counter from "./components/Counter";

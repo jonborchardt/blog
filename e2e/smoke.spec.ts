@@ -59,7 +59,7 @@ test("MDX post hydrates its React island", async ({ page }) => {
   await expect(page.locator("astro-island[ssr]")).toHaveCount(0);
   await button.click();
   await expect(button).toHaveText(/Clicked 1 time/);
-  await expect(page.locator("figure img[src$='.svg']")).toBeVisible();
+  await expect(page.locator("figure svg[role='img']")).toBeVisible();
 });
 
 test("dev-only admin route is not in the production build", async ({ page }) => {
