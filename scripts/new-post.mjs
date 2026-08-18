@@ -17,7 +17,7 @@ import { parseArgs } from "node:util";
 import { nextSeriesOrder, readFrontmatter } from "./lib/next-series-order.mjs";
 import { series } from "../src/config/series.ts";
 import { tags } from "../src/config/tags.ts";
-import { RESERVED_SLUGS_LIST } from "../src/lib/reserved-slugs.ts";
+import { RESERVED_SLUGS_LIST, SLUG_PATTERN } from "../src/lib/reserved-slugs.ts";
 
 const { values, positionals } = parseArgs({
   allowPositionals: true,
@@ -44,7 +44,7 @@ if (values.help || !slug) {
   process.exit(values.help ? 0 : 1);
 }
 
-if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
+if (!SLUG_PATTERN.test(slug)) {
   fail(`slug "${slug}" must be kebab-case (lowercase letters, digits, single hyphens)`);
 }
 if (RESERVED_SLUGS_LIST.includes(slug)) {

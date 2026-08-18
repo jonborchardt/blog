@@ -42,15 +42,7 @@ const posts = (await getPosts()).map((p) => ({
       (no undo — use git). This route does not exist in the production build.
     </p>
     <div class="mt-8">
-      <AdminApp
-        client:load
-        site={site}
-        author={author}
-        series={series}
-        tags={tags}
-        posts={posts}
-        endpoint="/__admin"
-      />
+      <AdminApp client:load site={site} author={author} series={series} tags={tags} posts={posts} />
     </div>
   </div>
 </BaseLayout>

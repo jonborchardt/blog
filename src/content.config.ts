@@ -3,13 +3,11 @@ import { z } from "astro/zod";
 import { glob } from "astro/loaders";
 import { SERIES_IDS } from "@/config/series";
 import { TAG_IDS } from "@/config/tags";
+import { SLUG_PATTERN } from "@/lib/reserved-slugs";
 
 /** Actionable message for the description length rule (search snippets + social previews). */
 const descriptionLength = (issue: { input?: unknown }) =>
   `description must be 40-160 characters for search/social previews (got ${String(issue.input).length})`;
-
-/** kebab-case: lowercase letters, digits, single hyphens */
-export const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 const posts = defineCollection({
   // Each post is a directory: src/content/posts/<dir>/index.mdx. Entry id = <dir>.

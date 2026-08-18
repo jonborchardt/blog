@@ -9,7 +9,7 @@ import TableWrapper from "@/components/blog/TableWrapper.astro";
 import PostToc from "@/components/PostToc.astro";
 import { tags as tagRegistry } from "@/config/tags";
 import { getPosts, getSeriesContext, postPath, postSlug, seriesPath } from "@/lib/posts";
-import { readingTime } from "@/lib/reading-time";
+import { readingTime, wordCount } from "@/lib/reading-time";
 import { articleJsonLd } from "@/lib/seo";
 import { href } from "@/lib/url";
 import { formatDate, isoDate } from "@/lib/dates";
@@ -29,7 +29,6 @@ const showToc = toc.length >= 3;
 const { hero, ogImage } = post.data;
 // Social image: bespoke ogImage, else the card generated at /og/<slug>.png (see src/pages/og/).
 const image = ogImage?.src ?? `/og/${postSlug(post)}.png`;
-const words = (post.body ?? "").trim().split(/\s+/).filter(Boolean).length;
 ---
 
 <BaseLayout
@@ -53,7 +52,7 @@ const words = (post.body ?? "").trim().split(/\s+/).filter(Boolean).length;
       articleJsonLd(post, path, Astro.site!, {
         image,
         section: ctx?.series.title,
-        wordCount: words,
+        wordCount: wordCount(post.body ?? ""),
       }),
     ],
   }}

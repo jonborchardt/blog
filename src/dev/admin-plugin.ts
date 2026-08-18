@@ -10,6 +10,7 @@ import { join } from "node:path";
 import type { Plugin } from "vite";
 import { CONFIG_NAMES, configSchemas, type ConfigName } from "../config/types.ts";
 import { configPath, writeConfig } from "./config-writer.ts";
+import { SLUG_PATTERN } from "../lib/reserved-slugs.ts";
 
 const isConfigName = (s: string): s is ConfigName =>
   (CONFIG_NAMES as readonly string[]).includes(s);
@@ -60,7 +61,7 @@ export function adminPlugin(): Plugin {
         const send = sender(res);
         const id = pathId(req);
         if (req.method !== "POST") return send(405, { error: "POST only" });
-        if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id)) return send(400, { error: "bad post id" });
+        if (!SLUG_PATTERN.test(id)) return send(400, { error: "bad post id" });
         try {
           const { draft } = JSON.parse(await readBody(req)) as { draft?: unknown };
           if (typeof draft !== "boolean") {

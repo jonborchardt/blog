@@ -33,7 +33,6 @@ export async function toSearchDocMeta(post: Post): Promise<SearchDocMeta> {
     tags: post.data.tags.map((t) => ({ id: t, label: tagRegistry[t].label })),
     readingTime: readingTime(post.body ?? ""),
     ...(post.data.draft && { draft: true }),
-    ...(post.data.draft && { draft: true }),
     hero: {
       src: (await getImage({ src: post.data.hero.src, width: 320, format: "webp" })).src,
       alt: post.data.hero.alt,

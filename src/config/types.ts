@@ -13,8 +13,7 @@
  * - `tags`: id → { label }. Posts may only use tags listed here; add here first.
  */
 import { z } from "astro/zod";
-
-const kebab = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+import { SLUG_PATTERN as kebab } from "../lib/reserved-slugs.ts";
 
 export const siteSchema = z.object({
   name: z.string().min(1),

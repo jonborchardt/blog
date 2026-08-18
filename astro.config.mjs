@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from "astro/config";
+import { realpathSync } from "node:fs";
 import react from "@astrojs/react";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
@@ -51,6 +52,9 @@ const BASE = "/blog";
 // GitHub Pages project site: https://jonborchardt.github.io/blog/
 // `site` + `base` make Astro emit correct URLs; never hardcode "/blog/" in source.
 export default defineConfig({
+  // Canonical-case root: on Windows a lowercase-drive cwd (e:\...) makes Vite's import.meta.glob
+  // build bogus "../../E:/..." image ids and every page 500s in dev.
+  root: realpathSync.native(process.cwd()),
   site: "https://jonborchardt.github.io",
   base: BASE,
   trailingSlash: "always",

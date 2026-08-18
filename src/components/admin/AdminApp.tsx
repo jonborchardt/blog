@@ -3,13 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import type {
-  AuthorConfig,
-  ConfigName,
-  SeriesRegistry,
-  SiteConfig,
-  TagRegistry,
-} from "@/config/types";
+import type { AuthorConfig, SeriesRegistry, SiteConfig, TagRegistry } from "@/config/types";
 
 /**
  * Dev-only admin (rendered by src/pages/admin, never built). Each section edits one registry and
@@ -24,24 +18,26 @@ export interface AdminAppProps {
   /** All posts visible in dev (published + drafts) for the featured-post picker. */
   /** `date` is the ISO publishedAt (YYYY-MM-DD). */
   posts: { slug: string; title: string; draft: boolean; date: string }[];
-  /** Dev endpoint root, "/__admin" (Vite middleware ignores base). */
-  endpoint: string;
 }
 
 type SaveState =
   { kind: "idle" } | { kind: "saving" } | { kind: "ok" } | { kind: "error"; message: string };
 
-function useSave(endpoint: string, name: ConfigName) {
+const ENDPOINT = "/__admin"; // Vite dev middleware (src/dev/admin-plugin.ts); ignores base.
+
+/** POST JSON to the dev middleware and track the result for a status line. */
+function useSave() {
   const [state, setState] = useState<SaveState>({ kind: "idle" });
-  const save = async (data: unknown) => {
+  const save = async (path: string, data: unknown, onOk?: () => void) => {
     setState({ kind: "saving" });
     try {
-      const res = await fetch(`${endpoint}/config/${name}`, {
+      const res = await fetch(`${ENDPOINT}${path}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-      const body = (await res.json()) as { ok?: boolean; error?: string };
+      const body = (await res.json()) as { error?: string };
+      if (res.ok) onOk?.();
       setState(res.ok ? { kind: "ok" } : { kind: "error", message: body.error ?? res.statusText });
     } catch (e) {
       setState({ kind: "error", message: e instanceof Error ? e.message : String(e) });
@@ -109,17 +105,9 @@ const Field = ({ id, label, children }: { id: string; label: string; children: R
   </div>
 );
 
-function SiteSection({
-  initial,
-  posts,
-  endpoint,
-}: {
-  initial: SiteConfig;
-  posts: AdminAppProps["posts"];
-  endpoint: string;
-}) {
+function SiteSection({ initial, posts }: { initial: SiteConfig; posts: AdminAppProps["posts"] }) {
   const [site, setSite] = useState(initial);
-  const { state, save } = useSave(endpoint, "site");
+  const { state, save } = useSave();
   const setNav = (i: number, patch: Partial<SiteConfig["nav"][number]>) =>
     setSite((s) => ({ ...s, nav: s.nav.map((n, j) => (j === i ? { ...n, ...patch } : n)) }));
   const moveNav = (i: number, dir: -1 | 1) =>
@@ -135,7 +123,7 @@ function SiteSection({
       title="Site"
       description="Identity, canonical origin, featured post and primary navigation."
       state={state}
-      onSave={() => save(site)}
+      onSave={() => save("/config/site", site)}
     >
       <Field id="site-name" label="Name">
         <Input
@@ -247,9 +235,9 @@ function SiteSection({
   );
 }
 
-function AuthorSection({ initial, endpoint }: { initial: AuthorConfig; endpoint: string }) {
+function AuthorSection({ initial }: { initial: AuthorConfig }) {
   const [author, setAuthor] = useState(initial);
-  const { state, save } = useSave(endpoint, "author");
+  const { state, save } = useSave();
   const links = Object.entries(author.links);
   const setLink = (i: number, key: string, url: string) =>
     setAuthor((a) => ({
@@ -261,7 +249,7 @@ function AuthorSection({ initial, endpoint }: { initial: AuthorConfig; endpoint:
       title="Author"
       description="Byline, tagline and personal links (footer, about header, Person JSON-LD)."
       state={state}
-      onSave={() => save(author)}
+      onSave={() => save("/config/author", author)}
     >
       <Field id="author-name" label="Name">
         <Input
@@ -331,20 +319,23 @@ function RegistrySection<T extends Record<string, Record<string, unknown>>>({
   description,
   initial,
   fields,
-  endpoint,
 }: {
   name: "series" | "tags";
   title: string;
   description: string;
   initial: T;
   fields: (keyof T[string] & string)[];
-  endpoint: string;
 }) {
   const [reg, setReg] = useState<Record<string, Record<string, unknown>>>(initial);
   const [newId, setNewId] = useState("");
-  const { state, save } = useSave(endpoint, name);
+  const { state, save } = useSave();
   return (
-    <Section title={title} description={description} state={state} onSave={() => save(reg)}>
+    <Section
+      title={title}
+      description={description}
+      state={state}
+      onSave={() => save(`/config/${name}`, reg)}
+    >
       {Object.entries(reg).map(([id, entry]) => (
         <div key={id} className="flex flex-col gap-2 rounded-md border p-3">
           <div className="flex items-center justify-between gap-2">
@@ -409,39 +400,16 @@ function RegistrySection<T extends Record<string, Record<string, unknown>>>({
  * Per-post actions: publish/unpublish (rewrites `draft:` in the post's frontmatter via
  * `<endpoint>/draft/<id>`) and "set featured" (saves site config with `featuredPost`).
  */
-function PostsSection({
-  site,
-  posts,
-  endpoint,
-}: {
-  site: SiteConfig;
-  posts: AdminAppProps["posts"];
-  endpoint: string;
-}) {
+function PostsSection({ site, posts }: { site: SiteConfig; posts: AdminAppProps["posts"] }) {
   const [rows, setRows] = useState(posts);
   const [featured, setFeatured] = useState(site.featuredPost);
-  const [status, setStatus] = useState<SaveState>({ kind: "idle" });
-  const post = async (url: string, body: unknown, onOk: () => void) => {
-    setStatus({ kind: "saving" });
-    try {
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-      const json = (await res.json()) as { error?: string };
-      if (res.ok) onOk();
-      setStatus(res.ok ? { kind: "ok" } : { kind: "error", message: json.error ?? res.statusText });
-    } catch (e) {
-      setStatus({ kind: "error", message: e instanceof Error ? e.message : String(e) });
-    }
-  };
+  const { state: status, save } = useSave();
   const toggleDraft = (slug: string, draft: boolean) =>
-    post(`${endpoint}/draft/${slug}`, { draft }, () =>
+    save(`/draft/${slug}`, { draft }, () =>
       setRows((r) => r.map((p) => (p.slug === slug ? { ...p, draft } : p))),
     );
   const setFeaturedPost = (slug: string | null) =>
-    post(`${endpoint}/config/site`, { ...site, featuredPost: slug }, () => setFeatured(slug));
+    save("/config/site", { ...site, featuredPost: slug }, () => setFeatured(slug));
   return (
     <Panel
       title="Posts"
@@ -493,19 +461,18 @@ function PostsSection({
   );
 }
 
-export default function AdminApp({ site, author, series, tags, posts, endpoint }: AdminAppProps) {
+export default function AdminApp({ site, author, series, tags, posts }: AdminAppProps) {
   return (
     <div className="flex flex-col gap-8">
-      <PostsSection site={site} posts={posts} endpoint={endpoint} />
-      <SiteSection initial={site} posts={posts} endpoint={endpoint} />
-      <AuthorSection initial={author} endpoint={endpoint} />
+      <PostsSection site={site} posts={posts} />
+      <SiteSection initial={site} posts={posts} />
+      <AuthorSection initial={author} />
       <RegistrySection
         name="series"
         title="Series"
         description="id → title, description. Deleting a series still used by a post is refused."
         initial={series}
         fields={["title", "description"]}
-        endpoint={endpoint}
       />
       <RegistrySection
         name="tags"
@@ -513,7 +480,6 @@ export default function AdminApp({ site, author, series, tags, posts, endpoint }
         description="id → label. Deleting a tag still used by a post is refused."
         initial={tags}
         fields={["label"]}
-        endpoint={endpoint}
       />
     </div>
   );

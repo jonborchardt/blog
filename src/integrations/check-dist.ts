@@ -10,16 +10,6 @@ import { join, relative } from "node:path";
 import type { AstroIntegration } from "astro";
 import { checkDist as runChecks } from "../lib/dist-checks";
 
-async function walk(dir: string): Promise<string[]> {
-  const out: string[] = [];
-  for (const entry of await readdir(dir, { withFileTypes: true })) {
-    const p = join(dir, entry.name);
-    if (entry.isDirectory()) out.push(...(await walk(p)));
-    else out.push(p);
-  }
-  return out;
-}
-
 export function checkDist(): AstroIntegration {
   let base = "";
   let site = "";
@@ -32,10 +22,10 @@ export function checkDist(): AstroIntegration {
       },
       "astro:build:done": async ({ dir, logger }) => {
         const root = fileURLToPath(dir);
-        const all = await walk(root);
-        const files = all
-          .filter((f) => !relative(root, f).startsWith(".prerender"))
-          .map((f) => relative(root, f).split("\\").join("/"));
+        const files = (await readdir(root, { recursive: true, withFileTypes: true }))
+          .filter((e) => e.isFile())
+          .map((e) => relative(root, join(e.parentPath, e.name)).split("\\").join("/"))
+          .filter((f) => !f.startsWith(".prerender"));
         const pages = await Promise.all(
           files
             .filter((f) => f.endsWith(".html"))

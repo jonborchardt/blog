@@ -23,6 +23,7 @@ import Tab from "@/components/blog/Tab.astro";
 import Video from "@/components/blog/Video.astro";
 import CodeBlock from "@/components/blog/CodeBlock.astro";
 import VizFigure from "@/components/blog/VizFigure.astro";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 
 This draft never builds. It exists so every primitive and variant can be eyeballed in both themes at
 360/768/1280 and run through axe in `npm run dev`. The published posts in the
@@ -156,3 +157,14 @@ npm run build
 ```
 
 </CodeBlock>
+
+## shadcn Card (server-rendered React, no client directive → zero JS)
+
+<Card className="not-prose my-6">
+  <CardHeader>
+    <CardTitle>Card title</CardTitle>
+    <CardDescription>Card description under the title.</CardDescription>
+  </CardHeader>
+  <CardContent>Body content. Use for a boxed summary or a static island frame.</CardContent>
+  <CardFooter className="text-muted-foreground text-sm">Footer line.</CardFooter>
+</Card>
