@@ -36,3 +36,4 @@ coverage/
 plans/
 docs/
 .playwright-mcp/
+temp/
