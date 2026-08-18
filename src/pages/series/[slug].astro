@@ -19,7 +19,9 @@ const posts = await getSeriesPosts(id);
 
 <BaseLayout meta={{ title: info.title, description: info.description, path: seriesPath(id) }}>
   <div class="max-w-wide mx-auto">
-    <p class="text-primary eyebrow">Series</p>
+    <p class="text-primary eyebrow">
+      <a href={href("/series/")} class="hover:underline">All series</a>
+    </p>
     <h1 class="text-display mt-2 font-semibold">{info.title}</h1>
     <p class="text-muted-foreground mt-4 text-lg">{info.description}</p>
     <p class="text-muted-foreground mt-2 text-sm">

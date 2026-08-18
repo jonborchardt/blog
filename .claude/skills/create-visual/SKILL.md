@@ -1,11 +1,15 @@
 ---
 name: create-visual
-description: Use when a post needs a figure, chart, diagram, animation, illustration or interactive widget — creating one, modifying one, or auditing an existing visual's accessibility (name/summary/alt, decorative vs meaningful).
+description: Use when a post needs a figure, chart, diagram, animation, illustration or interactive widget — creating one, modifying one, finding where an existing post should have one, or auditing an existing visual's accessibility (name/summary/alt, decorative vs meaningful).
 ---
 
 # create-visual
 
 **Announce:** "Using create-visual for the visuals in <post>."
+
+## Step 0 — Find the spots (when asked to add visuals to an existing post)
+
+Read the whole post, then use the candidate table in `write-post` step 3 (data flow → flowchart; states → state diagram; quantitative claim → chart with `data`; spatial idea → schematic; side-by-side → two-panel). Verify anything that describes code against the source before drawing. Then continue below for each one.
 
 ## Step 1 — Pick the medium
 

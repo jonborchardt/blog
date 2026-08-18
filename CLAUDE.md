@@ -65,4 +65,5 @@ Before claiming done: `npm run validate` (typecheck + lint + format:check + unit
 - New shared MDX primitives go in `src/components/blog/` as `.astro` (static) unless interactivity is required.
 - shadcn components go in `src/components/ui/` via `npx shadcn add <name>`; do not hand-edit them beyond styling.
 - `/admin/` is dev-only (`getStaticPaths` returns nothing in prod). Never let it into `dist/`.
+- **Bash tool on this Windows setup is `eval`-wrapped (Git Bash):** backticks, `$`/`${…}` and non-ASCII characters inside heredocs or arguments get expanded or fail the call (exit 127). For any content containing them, use the Edit/Write tools, or write a script to the scratchpad and run it. Keep Bash one-liners ASCII-only.
 - Skills, not this file, hold step-by-step workflows: `.claude/skills/{write-post,create-series,create-hero,create-visual,review-post,publish-post,wrapup}` (index in `.claude/skills/README.md`).
