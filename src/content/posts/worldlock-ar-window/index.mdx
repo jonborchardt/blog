@@ -1,0 +1,60 @@
+---
+title: "WorldLock: an AR window onto the actual planet"
+description: A native Android AR app that georegisters city towers, the whole Earth and the live ISS to the real world with ARCore's Geospatial API.
+publishedAt: 2026-07-25
+series: worldlock
+seriesOrder: 1
+tags: [engineering]
+hero:
+  src: ./hero.png
+  alt: A phone on a mount above the Seattle skyline at dusk, its screen showing an AR tower over Tacoma labeled 42.4 km, with the night side of the Earth and the ISS drawn across the sky
+draft: true
+---
+
+import { Image } from "astro:assets";
+import Figure from "@/components/blog/Figure.astro";
+import globe from "./globe-spokane-missoula-nyc.jpg";
+import towers from "./tacoma-seattle-towers.jpg";
+import pillar from "./data-pillar-collar-rings.jpg";
+
+Point your phone west from Seattle and there's a glowing tower rising out of Tacoma, labeled `Tacoma 42.4 km`. Pan up and the night side of the Earth curves away from you, city lights and all, with NYC's tower readable 3,815 km over the horizon. A white dash crosses the sky where the ISS actually is, right now.
+
+Source: [github.com/jonborchardt/worldlock](https://github.com/jonborchardt/worldlock)
+
+That's WorldLock: a native Android AR app that georegisters content to the real world using ARCore's Geospatial API. Not "AR" as in a dinosaur on your coffee table — AR as in the phone knows where it is and which way it's pointing to within a few meters and degrees, so a tower drawn over a city 3,800 km away lines up with where that city actually is.
+
+<Figure caption="Left to right: the night side of the Earth with towers on the horizon; Tacoma and Seattle towers at ground level; the data-pillar tower style.">
+  <div class="not-prose grid grid-cols-3 gap-3">
+    <Image
+      src={globe}
+      width={360}
+      alt="Phone screenshot looking up: the night side of the Earth with city lights, towers labeled Spokane 367 km and Missoula 635 km on the horizon and NYC 3,815 km beyond it"
+    />
+    <Image
+      src={towers}
+      width={360}
+      alt="Phone screenshot at ground level: a thin blue tower labeled Tacoma 42.4 km and a wide red glowing tower labeled Seattle 2.5 km against a black sky"
+    />
+    <Image
+      src={pillar}
+      width={360}
+      alt="Phone screenshot of the data-pillar tower style: orange scrolling bands and rotating collar rings on the Seattle tower, with the Tacoma tower in the distance"
+    />
+  </div>
+</Figure>
+
+## What's in it
+
+- **City towers.** A default set (Seattle, Tacoma, Spokane, Missoula, NYC, Tokyo, …) plus any city you add by name — it geocodes and drops a tower. Seven render styles, from a Tron-shell prism to a shrine beam to a "data pillar" with scrolling bands and rotating collar rings, all done in one shader with a style table. Bases sit on real terrain via ARCore terrain anchors.
+- **The whole Earth.** The globe isn't a mesh — it's a per-fragment ray-cast against the WGS84 ellipsoid, drawn as one fullscreen quad. Blue Marble day and night textures, blended at the real solar terminator computed from the current time. Tessellating a planet-sized sphere near the camera is a precision disaster; a ray that solves the quadratic in the fragment shader is exact at every distance.
+- **The live ISS.** Position fetched every 3 seconds from wheretheiss.at, linearly extrapolated between fixes, drawn as a little truss-and-solar-wings model that scales with distance so it stays visible at 400+ km.
+
+## The one hard rule
+
+Everything interesting in this app is a coordinate-precision problem wearing a trench coat. Earth-centered coordinates are ~6.4 million meters from the origin; 32-bit floats have ~7 significant digits; do the math and your geometry jitters by meters. So the rule is: authoritative positions are ECEF in **doubles**, converted to camera-relative ENU in doubles, and only the final origin-relative meters ever touch a GL float. The render origin stays pinned near you, where float precision is millimeters.
+
+The other quiet trick is the reference anchor: the first time the Geospatial pose is accurate enough (position < 15 m, yaw < 15°), the app plants a SLAM anchor and rides it from then on. Georegistration survives pause/resume and works indoors after the first good fix, instead of waiting for VPS to re-converge every time.
+
+## The stats that matter
+
+The entire app is **8 Kotlin files, about 1,900 lines**, with exactly **one dependency** (`com.google.ar:core`). No Android Studio was involved at any point — it's built, deployed, and debugged entirely from the command line. How that works, and why the codebase stayed that small, are the next two posts.

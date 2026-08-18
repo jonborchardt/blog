@@ -30,7 +30,7 @@ A statically generated technical blog (Astro 7 + React islands + MDX + Tailwind/
 - `seriesOrder` requires `series`; when adding to a series without an explicit order use `max(existing) + 1`.
 - `draft: true` = dev-only. Drafts never appear in the production build, listings, RSS, or sitemap. Do not add any production draft-preview mechanism.
 - Frontmatter dates are calendar dates in UTC; render them only via `formatDate`/`isoDate` in `src/lib/dates.ts`.
-- Every post has a `hero` (1200×630 next to `index.mdx`, meaningful `alt`); it shows on the post and in every listing. `npm run new-post` copies `src/assets/hero-placeholder.png` as `./hero.png` — replace it. A series shows `hero` from `src/config/series.ts` (path under `src/assets/`) else its first post's hero.
+- Every post has a `hero` (1200×630 next to `index.mdx`, meaningful `alt`); it shows on the post and in every listing. `npm run new-post` copies `src/assets/hero-placeholder.png` as `./hero.png` — replace it: unless an image was supplied, draw one via skill `create-hero` (`hero.svg` → `npm run render-hero -- <slug>`). A series shows `hero` from `src/config/series.ts` (path under `src/assets/`) else its first post's hero.
 - Colocated images: use Markdown `![alt](./file.png)` or `<Image>` from `astro:assets`; never `<img>` for raster. SVG may use `<img>` with `width`/`height`/`alt`.
 - Every page has an OG image; posts may set `ogImage` (1200×630) else a card is generated at `/og/<slug>.png` (`src/lib/og.ts`). `og` is a reserved slug.
 - Site identity/nav/featured post: `src/config/site.ts`. Author: `src/config/author.ts`. About page prose: `src/pages/about/index.mdx`.
@@ -59,4 +59,4 @@ Before claiming done: `npm run validate` (typecheck + lint + format:check + unit
 - New shared MDX primitives go in `src/components/blog/` as `.astro` (static) unless interactivity is required.
 - shadcn components go in `src/components/ui/` via `npx shadcn add <name>`; do not hand-edit them beyond styling.
 - `/admin/` is dev-only (`getStaticPaths` returns nothing in prod). Never let it into `dist/`.
-- Skills, not this file, hold step-by-step workflows: `.claude/skills/{write-post,create-series,create-visual,review-post,publish-post}` (index in `.claude/skills/README.md`).
+- Skills, not this file, hold step-by-step workflows: `.claude/skills/{write-post,create-series,create-hero,create-visual,review-post,publish-post}` (index in `.claude/skills/README.md`).

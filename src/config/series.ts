@@ -2,6 +2,11 @@
 import type { SeriesRegistry } from "./types";
 
 export const series = {
+  "blog-features": {
+    title: "Blog Features",
+    description:
+      "How this blog is built: the primitives, the interactive islands, and the tooling behind each feature.",
+  },
   finances: {
     title: "Finances",
     description:

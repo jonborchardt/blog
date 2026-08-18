@@ -22,6 +22,7 @@ Invariants are in `CLAUDE.md`; component API is in `src/components/blog/README.m
    - Diagrams: `mermaid` fences with `accTitle`/`accDescr`; math: `$…$` / `$$…$$`.
    - Interactive bits: `create-visual` (SVG first; a React island only when it must respond to the reader).
 3. Fix the frontmatter description placeholder; `title` ≤ 90 chars.
+   Hero: unless the author handed you an image, use `create-hero` (draw `hero.svg`, `npm run render-hero -- <slug>`, real alt). Never leave the grey placeholder.
 4. `npm run validate && npm run build` — the build tells you exactly what to fix (schema, unknown tag/series, duplicate order, broken link, missing alt, description length).
 5. Look at it: `npm run dev` → `http://localhost:4321/blog/<slug>/` (drafts show only in dev), or `node e2e/shots.mjs <outdir> <slug>/` against a preview for 360/1280 × light/dark screenshots.
 6. Hand off to `review-post`. Publishing (`draft: false`, dates, push) is `publish-post`.

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <title>A page of static text lines with two small highlighted island blocks, each with a lightning bolt, in a sea of prose</title>
+  <rect width="1200" height="630" fill="#f7f8fa"/>
+  <!-- sea of static prose -->
+  <g fill="#dbe7f1">
+    <rect x="200" y="100" width="800" height="14" rx="7"/>
+    <rect x="200" y="132" width="720" height="14" rx="7"/>
+    <rect x="200" y="164" width="780" height="14" rx="7"/>
+    <rect x="200" y="196" width="640" height="14" rx="7"/>
+    <rect x="200" y="228" width="800" height="14" rx="7"/>
+    <rect x="200" y="392" width="760" height="14" rx="7"/>
+    <rect x="200" y="424" width="800" height="14" rx="7"/>
+    <rect x="200" y="456" width="700" height="14" rx="7"/>
+    <rect x="200" y="488" width="800" height="14" rx="7"/>
+    <rect x="200" y="520" width="560" height="14" rx="7"/>
+  </g>
+  <!-- islands -->
+  <g>
+    <rect x="200" y="270" width="360" height="94" rx="12" fill="#ffffff" stroke="#2f6f9f" stroke-width="5"/>
+    <path d="M300 285 L280 320 L298 320 L288 350 L322 305 L303 305 L316 285 z" fill="#f0b35a"/>
+    <rect x="345" y="300" width="60" height="34" rx="6" fill="#2f6f9f"/>
+    <text x="375" y="325" font-family="IBM Plex Sans" font-size="24" font-weight="700" fill="#ffffff" text-anchor="middle">−</text>
+    <text x="440" y="326" font-family="IBM Plex Sans" font-size="26" font-weight="700" fill="#2b3340" text-anchor="middle">3</text>
+    <rect x="475" y="300" width="60" height="34" rx="6" fill="#2f6f9f"/>
+    <text x="505" y="325" font-family="IBM Plex Sans" font-size="24" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+  </g>
+  <g>
+    <rect x="640" y="270" width="360" height="94" rx="12" fill="#ffffff" stroke="#2f6f9f" stroke-width="5"/>
+    <path d="M740 285 L720 320 L738 320 L728 350 L762 305 L743 305 L756 285 z" fill="#f0b35a"/>
+    <rect x="790" y="312" width="180" height="10" rx="5" fill="#dbe7f1"/>
+    <circle cx="880" cy="317" r="16" fill="#2f6f9f"/>
+  </g>
+  <!-- ratio label: mostly static -->
+  <text x="600" y="590" font-family="IBM Plex Sans" font-size="22" fill="#2b3340" text-anchor="middle">static HTML · hydrate only the islands</text>
+</svg>

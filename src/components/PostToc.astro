@@ -1,6 +1,6 @@
 ---
 /**
- * Left-rail table of contents for posts (viewports ≥ xl only).
+ * Left-rail table of contents for posts (viewports ≥ lg only).
  * Collapsed: one bar per heading, width ~ title length; the current section is dark.
  * Hover / keyboard focus: expands into the clickable "On this page" list.
  * Scrollspy is a tiny inline scroll listener — no framework.
@@ -16,7 +16,7 @@ const { headings } = Astro.props;
 <nav
   id="post-toc"
   aria-label="On this page"
-  class="absolute top-0 bottom-0 left-[calc(50%-50vw+1rem)] z-10 hidden xl:block"
+  class="absolute top-0 bottom-0 left-[calc(50%-50vw+1rem)] z-10 hidden lg:block"
 >
   <div class="toc-panel sticky top-4 rounded-md p-3">
     <p class="toc-title text-muted-foreground mb-3 text-xs font-semibold tracking-wide uppercase">
