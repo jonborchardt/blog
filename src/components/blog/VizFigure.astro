@@ -1,0 +1,105 @@
+---
+/**
+ * VizFigure — accessibility wrapper for a meaningful visual (chart, diagram, illustration, demo).
+ *
+ * Gives the visual an accessible name and summary, hides its internals from assistive tech
+ * (unless `interactive`), and can expose the exact values as a visually-hidden data table.
+ * Wrap it in `Figure` when you also want a visible caption or a wide measure.
+ *
+ * Props:
+ * - `name` — concise accessible name: what the visual shows ("Downloads by year").
+ * - `summary?` — the takeaway a sighted reader gets at a glance (trend, outlier, comparison; keep units).
+ * - `interactive?` — set when children contain focusable/manipulable controls (island with buttons,
+ *   sliders, play). Children then stay in the a11y tree inside a `group` instead of an `img`.
+ * - `data?` — `{ caption, columns, rows }`; rendered as a screen-reader-only table when exact values matter.
+ *
+ * Purely decorative visuals do not use this — give them `aria-hidden="true"` and no label.
+ *
+ * ```mdx
+ * import VizFigure from "@/components/blog/VizFigure.astro";
+ * import chart from "./downloads.svg";
+ *
+ * <VizFigure
+ *   name="Downloads by year"
+ *   summary="Downloads roughly double each year from 2023 to 2026, from 1.2k to 9.8k."
+ *   data={{ caption: "Downloads by year", columns: ["Year", "Downloads"], rows: [[2023, 1200], [2026, 9800]] }}
+ * >
+ *   <img src={chart.src} width="800" height="400" alt="" />
+ * </VizFigure>
+ *
+ * <VizFigure name="Spring simulation" summary="Drag the mass to see damped oscillation." interactive>
+ *   <SpringDemo client:visible />
+ * </VizFigure>
+ * ```
+ */
+export interface VizData {
+  caption: string;
+  columns: string[];
+  rows: (string | number)[][];
+}
+interface Props {
+  name: string;
+  summary?: string;
+  interactive?: boolean;
+  data?: VizData;
+}
+const { name, summary, interactive = false, data } = Astro.props;
+// Deterministic ids: derived from the name so builds are reproducible; a page must not reuse a name.
+const base =
+  "viz-" +
+  name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+const nameId = `${base}-name`;
+const descId = `${base}-desc`;
+---
+
+<div>
+  <div
+    role={interactive ? "group" : "img"}
+    aria-labelledby={nameId}
+    aria-describedby={summary ? descId : undefined}
+  >
+    <span id={nameId} class="sr-only">{name}</span>
+    {
+      summary && (
+        <span id={descId} class="sr-only">
+          {summary}
+        </span>
+      )
+    }
+    {
+      interactive ? (
+        <slot />
+      ) : (
+        <div aria-hidden="true">
+          <slot />
+        </div>
+      )
+    }
+  </div>
+  {
+    data && (
+      <div class="sr-only">
+        <table>
+          <caption>{data.caption}</caption>
+          <thead>
+            <tr>
+              {data.columns.map((c) => (
+                <th scope="col">{c}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {data.rows.map((row) => (
+              <tr>
+                {row.map((cell, i) => (i === 0 ? <th scope="row">{cell}</th> : <td>{cell}</td>))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )
+  }
+</div>

@@ -111,7 +111,7 @@ export function checkDist({ pages, files, base, site }: DistCheckInput): DistChe
       } else if (
         img.getAttribute("alt") === "" &&
         img.getAttribute("role") !== "presentation" &&
-        img.getAttribute("aria-hidden") !== "true"
+        !img.closest('[aria-hidden="true"]')
       ) {
         errors.push(
           `${file}: ${desc} has empty alt but is not marked decorative → write alt text or add aria-hidden="true"`,

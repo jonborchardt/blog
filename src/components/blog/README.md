@@ -6,19 +6,20 @@ Static `.astro` components for use inside posts. All use design tokens, work in 
 import Callout from "@/components/blog/Callout.astro";
 ```
 
-| Primitive      | Props                                                               | Use it for                                                    |
-| -------------- | ------------------------------------------------------------------- | ------------------------------------------------------------- |
-| `Callout`      | `variant?: note\|tip\|warning\|danger\|info`, `title?`              | short highlighted notes the reader must not miss              |
-| `Figure`       | `caption?`, `width?: prose\|wide\|full`                             | an image/SVG with a caption; wide diagrams that need breakout |
-| `Quote`        | `cite?`, `href?`                                                    | pull quotes with attribution                                  |
-| `Aside`        | —                                                                   | short side notes (margin note on wide screens)                |
-| `Comparison`   | `labels: string[]` (2–3), slots `a`, `b`, `c`                       | before/after, pros/cons, option comparisons                   |
-| `Steps`        | — (wraps a Markdown `1.` list)                                      | numbered procedures                                           |
-| `Details`      | `summary`, `open?`                                                  | optional depth: long configs, digressions, answers            |
-| `Tabs` + `Tab` | `Tab.label`                                                         | alternatives of the same thing (npm/pnpm, JS/TS)              |
-| `Video`        | `src`+`poster?` or `youtube`, `title` (required), `caption?`        | local video files or YouTube embeds                           |
-| `CodeBlock`    | `title?`                                                            | a fenced block that needs a filename header or a copy button  |
-| `TableWrapper` | — (applied automatically to every Markdown table by `[slug].astro`) | never imported directly                                       |
+| Primitive      | Props                                                               | Use it for                                                                                                          |
+| -------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `Callout`      | `variant?: note\|tip\|warning\|danger\|info`, `title?`              | short highlighted notes the reader must not miss                                                                    |
+| `Figure`       | `caption?`, `width?: prose\|wide\|full`                             | an image/SVG with a caption; wide diagrams that need breakout                                                       |
+| `VizFigure`    | `name`, `summary?`, `interactive?`, `data?: {caption,columns,rows}` | any meaningful chart/diagram/demo: gives it an accessible name, summary and (optionally) a screen-reader data table |
+| `Quote`        | `cite?`, `href?`                                                    | pull quotes with attribution                                                                                        |
+| `Aside`        | —                                                                   | short side notes (margin note on wide screens)                                                                      |
+| `Comparison`   | `labels: string[]` (2–3), slots `a`, `b`, `c`                       | before/after, pros/cons, option comparisons                                                                         |
+| `Steps`        | — (wraps a Markdown `1.` list)                                      | numbered procedures                                                                                                 |
+| `Details`      | `summary`, `open?`                                                  | optional depth: long configs, digressions, answers                                                                  |
+| `Tabs` + `Tab` | `Tab.label`                                                         | alternatives of the same thing (npm/pnpm, JS/TS)                                                                    |
+| `Video`        | `src`+`poster?` or `youtube`, `title` (required), `caption?`        | local video files or YouTube embeds                                                                                 |
+| `CodeBlock`    | `title?`                                                            | a fenced block that needs a filename header or a copy button                                                        |
+| `TableWrapper` | — (applied automatically to every Markdown table by `[slug].astro`) | never imported directly                                                                                             |
 
 ## Examples
 
@@ -45,6 +46,29 @@ import shot from "./shot.png";
 ```
 
 Plain Markdown images (`![alt](./file.png)`) also work and get responsive `srcset` automatically; use `Figure` when you need a caption or a wider measure.
+
+### VizFigure (accessible chart / diagram / demo)
+
+```mdx
+import VizFigure from "@/components/blog/VizFigure.astro";
+import chart from "./downloads.svg";
+
+<Figure caption="Downloads by year">
+  <VizFigure
+    name="Downloads by year"
+    summary="Downloads roughly double each year, from 1.2k in 2023 to 9.8k in 2026."
+    data={{ caption: "Downloads by year", columns: ["Year", "Downloads"], rows: [[2023, 1200], [2026, 9800]] }}
+  >
+    <img src={chart.src} width="800" height="400" alt="" />
+  </VizFigure>
+</Figure>
+
+<VizFigure name="Spring simulation" summary="Drag the mass to see damped oscillation." interactive>
+  <SpringDemo client:visible />
+</VizFigure>
+```
+
+`name` = what it shows; `summary` = the takeaway a sighted reader gets at a glance (keep units and caveats); `data` when exact values matter; `interactive` when the children contain controls (they stay in the accessibility tree as a `group` instead of being hidden behind an `img`). Purely decorative visuals do not use it — mark them `aria-hidden="true"` instead. Wrap in `Figure` for a visible caption or wide measure.
 
 ### Quote
 

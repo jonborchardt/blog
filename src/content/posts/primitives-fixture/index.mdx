@@ -22,6 +22,7 @@ import Tabs from "@/components/blog/Tabs.astro";
 import Tab from "@/components/blog/Tab.astro";
 import Video from "@/components/blog/Video.astro";
 import CodeBlock from "@/components/blog/CodeBlock.astro";
+import VizFigure from "@/components/blog/VizFigure.astro";
 
 This draft never builds. It exists so every primitive and variant can be eyeballed in both themes at
 360/768/1280 and run through axe in `npm run dev`. The published posts in the
@@ -69,6 +70,30 @@ _WorldLock_ series are the e2e fixtures.
   >
     <rect width="1200" height="120" rx="8" fill="currentColor" fill-opacity="0.2" />
   </svg>
+</Figure>
+
+## VizFigure
+
+<Figure caption="Static chart with a hidden data table">
+  <VizFigure
+    name="Posts per year"
+    summary="Post count grows from 2 in 2024 to 6 in 2026."
+    data={{
+      caption: "Posts per year",
+      columns: ["Year", "Posts"],
+      rows: [
+        [2024, 2],
+        [2025, 4],
+        [2026, 6],
+      ],
+    }}
+  >
+    <svg width="600" height="120" viewBox="0 0 600 120">
+      <rect x="20" y="80" width="160" height="40" fill="currentColor" fill-opacity="0.3" />
+      <rect x="220" y="40" width="160" height="80" fill="currentColor" fill-opacity="0.3" />
+      <rect x="420" y="0" width="160" height="120" fill="currentColor" fill-opacity="0.3" />
+    </svg>
+  </VizFigure>
 </Figure>
 
 ## Quote, Aside

@@ -65,4 +65,4 @@ Before claiming done: `npm run validate` (typecheck + lint + format:check + unit
 - New shared MDX primitives go in `src/components/blog/` as `.astro` (static) unless interactivity is required.
 - shadcn components go in `src/components/ui/` via `npx shadcn add <name>`; do not hand-edit them beyond styling.
 - `/admin/` is dev-only (`getStaticPaths` returns nothing in prod). Never let it into `dist/`.
-- Skills, not this file, hold step-by-step workflows: `.claude/skills/{write-post,create-series,create-hero,create-visual,review-post,publish-post}` (index in `.claude/skills/README.md`).
+- Skills, not this file, hold step-by-step workflows: `.claude/skills/{write-post,create-series,create-hero,create-visual,review-post,publish-post,wrapup}` (index in `.claude/skills/README.md`).
