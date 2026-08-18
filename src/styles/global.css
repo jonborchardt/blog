@@ -19,6 +19,7 @@
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
+  --color-warning: var(--warning);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
@@ -51,6 +52,24 @@
   --text-display: 2.25rem;
   --text-display--line-height: 1.15;
   --text-display--letter-spacing: -0.02em;
+  /* Featured-post title -> text-featured; list-row / card title -> text-title */
+  --text-featured: 1.5rem;
+  --text-featured--line-height: 1.25;
+  --text-featured--letter-spacing: -0.02em;
+  --text-title: 1.125rem;
+  --text-title--line-height: 1.375;
+  --text-title--letter-spacing: -0.02em;
+  /* Listing thumbnail ratio → aspect-card (the 1200×630 hero cropped to ~16:9) */
+  --aspect-card: 40 / 21;
+}
+
+/* Listing row: thumbnail column + text (PostList, series lists, archive). */
+@utility grid-cols-thumb {
+  @apply grid-cols-[6rem_1fr] sm:grid-cols-[10rem_1fr];
+}
+/* Small uppercase label above a heading (series name, section label, badge). Colour is set at the call site. */
+@utility eyebrow {
+  @apply text-xs font-medium tracking-wide uppercase;
 }
 
 /* Tailwind's built-in max-w-prose is a fixed 65ch; point it at our token instead. */
@@ -74,6 +93,7 @@
   --accent: oklch(0.94 0.02 225);
   --accent-foreground: oklch(0.2 0.015 250);
   --destructive: oklch(0.55 0.2 27);
+  --warning: oklch(0.6 0.15 70);
   --border: oklch(0.9 0.008 240);
   --input: oklch(0.9 0.008 240);
   --ring: oklch(0.48 0.12 225);
@@ -97,6 +117,7 @@
   --accent: oklch(0.26 0.03 225);
   --accent-foreground: oklch(0.94 0.006 240);
   --destructive: oklch(0.7 0.18 22);
+  --warning: oklch(0.8 0.15 80);
   --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.8 0.1 225);
@@ -119,6 +140,7 @@
     }
     :root {
       --text-display: 2.75rem;
+      --text-featured: 1.875rem;
     }
   }
   body {

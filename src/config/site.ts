@@ -8,7 +8,7 @@ export const site: SiteConfig = {
   disclaimer: "Views are my own and do not represent my employer.",
   url: "https://jonborchardt.github.io",
   locale: "en",
-  featuredPost: "worldlock-ar-window",
+  featuredPost: "interactive-islands-in-mdx",
   nav: [
     { label: "All Posts", href: "/all-posts/" },
     { label: "Series", href: "/series/" },

@@ -62,7 +62,7 @@ const words = (post.body ?? "").trim().split(/\s+/).filter(Boolean).length;
     <header class="mx-auto max-w-prose">
       {
         ctx && (
-          <p class="text-primary mb-3 text-xs font-medium tracking-wide uppercase">
+          <p class="text-primary eyebrow mb-3">
             <a href={href(seriesPath(ctx.series.id))} class="no-underline hover:underline">
               {ctx.series.title}
             </a>

@@ -20,24 +20,24 @@ const { posts, heading: Heading = "h2" } = Astro.props;
 <ul class="divide-y">
   {
     posts.map((post) => (
-      <li class="grid grid-cols-[6rem_1fr] gap-x-4 py-5 first:pt-0 last:pb-0 sm:grid-cols-[10rem_1fr]">
+      <li class="grid-cols-thumb grid gap-x-4 py-5 first:pt-0 last:pb-0">
         <a href={href(postPath(post))} tabindex="-1" aria-hidden="true">
           <Image
             src={post.data.hero.src}
             alt={post.data.hero.alt}
             width={320}
             height={168}
-            class="aspect-[40/21] w-full rounded-md border object-cover"
+            class="aspect-card w-full rounded-md border object-cover"
           />
         </a>
         <div>
           {post.data.series && (
-            <p class="text-primary mb-1 text-xs font-medium tracking-wide uppercase">
+            <p class="text-primary eyebrow mb-1">
               {seriesRegistry[post.data.series].title}
               {post.data.seriesOrder && ` · Part ${post.data.seriesOrder}`}
             </p>
           )}
-          <Heading class="text-lg leading-snug font-semibold tracking-tight">
+          <Heading class="text-title font-semibold">
             <a href={href(postPath(post))} class="hover:text-primary no-underline">
               {post.data.title}
             </a>

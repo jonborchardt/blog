@@ -31,13 +31,13 @@ const { hero, series, seriesOrder, tags, title, description, publishedAt, draft 
   <div class="md:col-span-3">
     {
       series && (
-        <p class="text-primary mb-2 text-xs font-medium tracking-wide uppercase">
+        <p class="text-primary eyebrow mb-2">
           {seriesRegistry[series].title}
           {seriesOrder && ` · Part ${seriesOrder}`}
         </p>
       )
     }
-    <h3 class="text-2xl leading-tight font-semibold tracking-tight md:text-3xl">
+    <h3 class="text-featured font-semibold">
       <a href={href(postPath(post))} class="hover:text-primary no-underline">{title}</a>
       {draft && <DraftBadge />}
     </h3>

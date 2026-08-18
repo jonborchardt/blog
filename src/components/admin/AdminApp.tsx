@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type {
   AuthorConfig,
   ConfigName,
@@ -23,8 +22,9 @@ export interface AdminAppProps {
   series: SeriesRegistry;
   tags: TagRegistry;
   /** All posts visible in dev (published + drafts) for the featured-post picker. */
-  posts: { slug: string; title: string; draft: boolean }[];
-  /** Base-prefixed dev endpoint root, e.g. "/blog/__admin/config" (Vite middleware ignores base). */
+  /** `date` is the ISO publishedAt (YYYY-MM-DD). */
+  posts: { slug: string; title: string; draft: boolean; date: string }[];
+  /** Dev endpoint root, "/__admin" (Vite middleware ignores base). */
   endpoint: string;
 }
 
@@ -36,7 +36,7 @@ function useSave(endpoint: string, name: ConfigName) {
   const save = async (data: unknown) => {
     setState({ kind: "saving" });
     try {
-      const res = await fetch(`${endpoint}/${name}`, {
+      const res = await fetch(`${endpoint}/config/${name}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -49,6 +49,27 @@ function useSave(endpoint: string, name: ConfigName) {
   };
   return { state, save };
 }
+
+/** Collapsible section: native <details>, no JS. Collapsed unless `open`. */
+const Panel = ({
+  title,
+  description,
+  open,
+  children,
+}: {
+  title: string;
+  description: ReactNode;
+  open?: boolean;
+  children: ReactNode;
+}) => (
+  <details open={open} className="bg-card text-card-foreground rounded-xl border shadow-sm">
+    <summary className="cursor-pointer px-6 py-4 marker:content-none [&::-webkit-details-marker]:hidden">
+      <span className="font-semibold">{title}</span>
+      <span className="text-muted-foreground mt-1 block text-sm">{description}</span>
+    </summary>
+    <div className="flex flex-col gap-4 px-6 pb-6">{children}</div>
+  </details>
+);
 
 function Section({
   title,
@@ -64,26 +85,20 @@ function Section({
   children: ReactNode;
 }) {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-4">
-        {children}
-        <div className="flex items-center gap-3">
-          <Button type="button" onClick={onSave} disabled={state.kind === "saving"}>
-            {state.kind === "saving" ? "Saving…" : "Save"}
-          </Button>
-          <p className="text-sm" role="status" aria-live="polite">
-            {state.kind === "ok" && (
-              <span className="text-muted-foreground">Saved · dev server will reload</span>
-            )}
-            {state.kind === "error" && <span className="text-destructive">{state.message}</span>}
-          </p>
-        </div>
-      </CardContent>
-    </Card>
+    <Panel title={title} description={description}>
+      {children}
+      <div className="flex items-center gap-3">
+        <Button type="button" onClick={onSave} disabled={state.kind === "saving"}>
+          {state.kind === "saving" ? "Saving…" : "Save"}
+        </Button>
+        <p className="text-sm" role="status" aria-live="polite">
+          {state.kind === "ok" && (
+            <span className="text-muted-foreground">Saved · dev server will reload</span>
+          )}
+          {state.kind === "error" && <span className="text-destructive">{state.message}</span>}
+        </p>
+      </div>
+    </Panel>
   );
 }
 
@@ -390,9 +405,98 @@ function RegistrySection<T extends Record<string, Record<string, unknown>>>({
   );
 }
 
+/**
+ * Per-post actions: publish/unpublish (rewrites `draft:` in the post's frontmatter via
+ * `<endpoint>/draft/<id>`) and "set featured" (saves site config with `featuredPost`).
+ */
+function PostsSection({
+  site,
+  posts,
+  endpoint,
+}: {
+  site: SiteConfig;
+  posts: AdminAppProps["posts"];
+  endpoint: string;
+}) {
+  const [rows, setRows] = useState(posts);
+  const [featured, setFeatured] = useState(site.featuredPost);
+  const [status, setStatus] = useState<SaveState>({ kind: "idle" });
+  const post = async (url: string, body: unknown, onOk: () => void) => {
+    setStatus({ kind: "saving" });
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const json = (await res.json()) as { error?: string };
+      if (res.ok) onOk();
+      setStatus(res.ok ? { kind: "ok" } : { kind: "error", message: json.error ?? res.statusText });
+    } catch (e) {
+      setStatus({ kind: "error", message: e instanceof Error ? e.message : String(e) });
+    }
+  };
+  const toggleDraft = (slug: string, draft: boolean) =>
+    post(`${endpoint}/draft/${slug}`, { draft }, () =>
+      setRows((r) => r.map((p) => (p.slug === slug ? { ...p, draft } : p))),
+    );
+  const setFeaturedPost = (slug: string | null) =>
+    post(`${endpoint}/config/site`, { ...site, featuredPost: slug }, () => setFeatured(slug));
+  return (
+    <Panel
+      title="Posts"
+      open
+      description={
+        <>
+          Publish flips <code>draft</code> in the post&apos;s frontmatter and stamps{" "}
+          <code>publishedAt</code> with today; unpublish only flips <code>draft</code>. Featured
+          writes <code>site.featuredPost</code>.
+        </>
+      }
+    >
+      {rows.map((p) => (
+        <div key={p.slug} className="flex flex-wrap items-center gap-2 rounded-md border p-3">
+          <span className="min-w-0 grow">
+            {p.title}{" "}
+            <span className="text-muted-foreground text-sm">
+              {p.date} · {p.draft ? "draft" : "published"}
+              {featured === p.slug ? " · featured" : ""}
+            </span>
+          </span>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            disabled={status.kind === "saving"}
+            onClick={() => toggleDraft(p.slug, !p.draft)}
+          >
+            {p.draft ? "Publish" : "Unpublish"}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            disabled={status.kind === "saving" || featured === p.slug}
+            onClick={() => setFeaturedPost(p.slug)}
+          >
+            Set featured
+          </Button>
+        </div>
+      ))}
+      <p className="text-sm" role="status" aria-live="polite">
+        {status.kind === "ok" && (
+          <span className="text-muted-foreground">Saved · dev server will reload</span>
+        )}
+        {status.kind === "error" && <span className="text-destructive">{status.message}</span>}
+      </p>
+    </Panel>
+  );
+}
+
 export default function AdminApp({ site, author, series, tags, posts, endpoint }: AdminAppProps) {
   return (
     <div className="flex flex-col gap-8">
+      <PostsSection site={site} posts={posts} endpoint={endpoint} />
       <SiteSection initial={site} posts={posts} endpoint={endpoint} />
       <AuthorSection initial={author} endpoint={endpoint} />
       <RegistrySection

@@ -13,6 +13,12 @@ A statically generated technical blog (Astro 7 + React islands + MDX + Tailwind/
 - **Static first.** Prefer semantic HTML + CSS → SVG → React DOM. No charting library unless a concrete post needs one.
 - Theme toggle, nav, footer are plain Astro + a tiny inline script — do not React-ify them.
 
+## Theme (one source of truth)
+
+- All colours, type sizes, radii, widths and layout ratios live in `src/styles/global.css` (`@theme` tokens, `:root`/`.dark` values, `@utility` classes). Components and pages use only Tailwind classes backed by those tokens (`text-primary`, `border-warning`, `text-display`, `text-featured`, `text-title`, `eyebrow`, `max-w-prose`, `aspect-card`, `grid-cols-thumb`, …). No hex/oklch literals, no `text-[…]`/`bg-[…]`/`aspect-[…]` arbitrary values, no inline `style` colours or sizes outside `global.css`.
+- A class combination repeated in 2+ files (a label style, a list-row layout) becomes a token or `@utility` in `global.css`, not a copy.
+- Renderers that cannot read CSS variables (OG card, hero SVGs) take hex from `src/styles/theme.ts` — the only other place a colour literal may appear. Change `global.css` first, then mirror there. `src/assets/logo.svg` is the single logo source (header, favicon copy, OG card).
+
 ## URLs and base path
 
 - `astro.config.mjs` sets `site` + `base: "/blog"` + `trailingSlash: "always"`.

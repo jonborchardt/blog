@@ -28,10 +28,7 @@ const recent = (await getPosts()).filter((p) => p.id !== featured?.id).slice(0, 
     {
       featured && (
         <section class="mt-14 border-t pt-8" aria-labelledby="featured">
-          <h2
-            id="featured"
-            class="text-muted-foreground mb-5 text-xs font-medium tracking-wide uppercase"
-          >
+          <h2 id="featured" class="text-muted-foreground eyebrow mb-5">
             Featured
           </h2>
           <PostCard post={featured} />
@@ -41,9 +38,7 @@ const recent = (await getPosts()).filter((p) => p.id !== featured?.id).slice(0, 
 
     <section class="mt-14 border-t pt-8" aria-labelledby="recent">
       <div class="mb-5 flex items-baseline justify-between gap-4">
-        <h2 id="recent" class="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-          Recent
-        </h2>
+        <h2 id="recent" class="text-muted-foreground eyebrow">Recent</h2>
         <a href={href("/all-posts/")} class="text-sm">All posts →</a>
       </div>
       {

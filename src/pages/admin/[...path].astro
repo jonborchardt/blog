@@ -12,6 +12,7 @@ import { author } from "@/config/author";
 import { series } from "@/config/series";
 import { tags } from "@/config/tags";
 import { getPosts, postSlug } from "@/lib/posts";
+import { isoDate } from "@/lib/dates";
 
 export function getStaticPaths() {
   return import.meta.env.DEV ? [{ params: { path: undefined } }] : [];
@@ -21,6 +22,7 @@ const posts = (await getPosts()).map((p) => ({
   slug: postSlug(p),
   title: p.data.title,
   draft: p.data.draft,
+  date: isoDate(p.data.publishedAt),
 }));
 ---
 
@@ -33,11 +35,11 @@ const posts = (await getPosts()).map((p) => ({
   }}
 >
   <div class="max-w-wide mx-auto">
-    <p class="text-destructive text-xs font-medium tracking-wide uppercase">Development only</p>
+    <p class="text-destructive eyebrow">Development only</p>
     <h1 class="text-display mt-2 font-semibold">Admin</h1>
     <p class="text-muted-foreground mt-3">
-      Edits <code>src/config/*.ts</code> directly and immediately (no undo — use git). Posts are not editable
-      here. This route does not exist in the production build.
+      Edits <code>src/config/*.ts</code> and post <code>draft</code> frontmatter directly and immediately
+      (no undo — use git). This route does not exist in the production build.
     </p>
     <div class="mt-8">
       <AdminApp
@@ -47,7 +49,7 @@ const posts = (await getPosts()).map((p) => ({
         series={series}
         tags={tags}
         posts={posts}
-        endpoint="/__admin/config"
+        endpoint="/__admin"
       />
     </div>
   </div>

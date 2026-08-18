@@ -64,7 +64,7 @@ const formatDate = (iso: string) =>
 /** Mirrors PostList.astro row markup/styling — the one accepted duplication (React vs Astro). */
 function PostRow({ doc, snippet }: { doc: SearchDocMeta; snippet: string }) {
   return (
-    <li className="grid grid-cols-[6rem_1fr] gap-x-4 py-5 first:pt-0 last:pb-0 sm:grid-cols-[10rem_1fr]">
+    <li className="grid-cols-thumb grid gap-x-4 py-5 first:pt-0 last:pb-0">
       <a href={doc.url} tabIndex={-1} aria-hidden="true">
         <img
           src={doc.hero.src}
@@ -72,21 +72,21 @@ function PostRow({ doc, snippet }: { doc: SearchDocMeta; snippet: string }) {
           width={320}
           height={168}
           loading="lazy"
-          className="aspect-[40/21] w-full rounded-md border object-cover"
+          className="aspect-card w-full rounded-md border object-cover"
         />
       </a>
       <div>
         {doc.series && (
-          <p className="text-primary mb-1 text-xs font-medium tracking-wide uppercase">
+          <p className="text-primary eyebrow mb-1">
             {doc.series.title} · Part {doc.series.part}
           </p>
         )}
-        <h2 className="text-lg leading-snug font-semibold tracking-tight">
+        <h2 className="text-title font-semibold">
           <a href={doc.url} className="hover:text-primary no-underline">
             {doc.title}
           </a>
           {doc.draft && (
-            <span className="bg-destructive text-background ml-2 rounded-sm px-1.5 py-0.5 align-middle text-xs font-medium tracking-wide uppercase">
+            <span className="bg-destructive text-background eyebrow ml-2 rounded-sm px-1.5 py-0.5 align-middle">
               Draft
             </span>
           )}
@@ -271,13 +271,9 @@ export default function ArchiveExplorer({ docs, tags, series, indexUrl }: Archiv
             Filter{active.length ? ` (${active.length})` : ""}
           </summary>
           <div className="bg-background absolute right-0 z-10 mt-1 w-72 rounded-md border p-3 shadow-md">
-            <p className="text-muted-foreground mb-1.5 text-xs font-medium tracking-wide uppercase">
-              Tags
-            </p>
+            <p className="text-muted-foreground eyebrow mb-1.5">Tags</p>
             <div className="flex max-h-64 flex-wrap gap-1.5 overflow-y-auto">{tagChips}</div>
-            <p className="text-muted-foreground mt-3 mb-1.5 text-xs font-medium tracking-wide uppercase">
-              Series
-            </p>
+            <p className="text-muted-foreground eyebrow mt-3 mb-1.5">Series</p>
             {seriesSelect}
           </div>
         </details>

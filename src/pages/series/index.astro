@@ -22,18 +22,18 @@ const entries = await Promise.all(
     <ul class="mt-10 divide-y border-t">
       {
         entries.map((s) => (
-          <li class="grid grid-cols-[6rem_1fr] gap-x-4 py-6 sm:grid-cols-[10rem_1fr]">
+          <li class="grid-cols-thumb grid gap-x-4 py-6">
             <a href={href(seriesPath(s.id))} tabindex="-1" aria-hidden="true">
               <Image
                 src={s.hero.src}
                 alt={s.hero.alt}
                 width={320}
                 height={168}
-                class="aspect-[40/21] w-full rounded-md border object-cover"
+                class="aspect-card w-full rounded-md border object-cover"
               />
             </a>
             <div>
-              <h2 class="text-xl font-semibold tracking-tight">
+              <h2 class="text-title font-semibold">
                 <a href={href(seriesPath(s.id))} class="hover:text-primary no-underline">
                   {s.title}
                 </a>

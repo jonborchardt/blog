@@ -16,7 +16,7 @@ const recent = (await getPosts()).slice(0, 5);
   }}
 >
   <div class="mx-auto max-w-prose">
-    <p class="text-muted-foreground text-xs font-medium tracking-wide uppercase">404</p>
+    <p class="text-muted-foreground eyebrow">404</p>
     <h1 class="text-display mt-2 font-semibold">Page not found</h1>
     <p class="text-muted-foreground mt-4 text-lg">
       There is nothing at this address. The link may be outdated, or the post may have moved.
@@ -32,10 +32,7 @@ const recent = (await getPosts()).slice(0, 5);
     {
       recent.length > 0 && (
         <section class="mt-14 border-t pt-8" aria-labelledby="recent">
-          <h2
-            id="recent"
-            class="text-muted-foreground mb-5 text-xs font-medium tracking-wide uppercase"
-          >
+          <h2 id="recent" class="text-muted-foreground eyebrow mb-5">
             Recent posts
           </h2>
           <PostList posts={recent} heading="h3" />

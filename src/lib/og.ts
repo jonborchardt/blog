@@ -7,6 +7,7 @@ import { pathToFileURL } from "node:url";
 import satori from "satori";
 import { Resvg } from "@resvg/resvg-js";
 import type { ReactNode } from "react";
+import { theme } from "@/styles/theme";
 
 export interface OgCard {
   title: string;
@@ -19,23 +20,20 @@ export interface OgCard {
   byline?: string;
 }
 
-// Brand colours as literals — the one place outside global.css they appear (satori has no CSS vars).
-const COLORS = {
-  bg: "#fafcfe",
-  fg: "#11171d",
-  muted: "#555f69",
-  primary: "#006a90",
-  border: "#e2e7ec",
-};
-
 // Resolved from the project root (astro build runs there); import.meta.url points at the bundle.
-const fontDir = new URL("src/assets/fonts/og/", pathToFileURL(process.cwd() + "/"));
-let fonts: Promise<{ regular: Buffer; bold: Buffer }> | undefined;
-const loadFonts = () =>
-  (fonts ??= Promise.all([
+const root = pathToFileURL(process.cwd() + "/");
+const fontDir = new URL("src/assets/fonts/og/", root);
+let assets: Promise<{ regular: Buffer; bold: Buffer; logo: string }> | undefined;
+const loadAssets = () =>
+  (assets ??= Promise.all([
     readFile(new URL("IBMPlexSans-Regular.ttf", fontDir)),
     readFile(new URL("IBMPlexSans-Bold.ttf", fontDir)),
-  ]).then(([regular, bold]) => ({ regular, bold })));
+    readFile(new URL("src/assets/logo.svg", root)),
+  ]).then(([regular, bold, logo]) => ({
+    regular,
+    bold,
+    logo: `data:image/svg+xml;base64,${logo.toString("base64")}`,
+  })));
 
 /** Satori accepts React-like element objects; this avoids importing React into the build. */
 const h = (type: string, props: Record<string, unknown>, ...children: unknown[]): ReactNode =>
@@ -52,7 +50,7 @@ export function clampTitle(title: string, maxChars = 90): string {
 }
 
 export async function renderOgCard(card: OgCard): Promise<Buffer> {
-  const { regular, bold } = await loadFonts();
+  const { regular, bold, logo } = await loadAssets();
   const title = clampTitle(card.title);
   const titleSize = title.length > 60 ? 52 : 64;
 
@@ -67,10 +65,10 @@ export async function renderOgCard(card: OgCard): Promise<Buffer> {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "64px 72px",
-          background: COLORS.bg,
-          color: COLORS.fg,
+          background: theme.bg,
+          color: theme.fg,
           fontFamily: "IBM Plex Sans",
-          borderTop: `16px solid ${COLORS.primary}`,
+          borderTop: `16px solid ${theme.primary}`,
         },
       },
       h(
@@ -83,7 +81,7 @@ export async function renderOgCard(card: OgCard): Promise<Buffer> {
                 style: {
                   fontSize: 26,
                   fontWeight: 700,
-                  color: COLORS.primary,
+                  color: theme.primary,
                   textTransform: "uppercase",
                   letterSpacing: "0.06em",
                 },
@@ -111,50 +109,17 @@ export async function renderOgCard(card: OgCard): Promise<Buffer> {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            borderTop: `1px solid ${COLORS.border}`,
+            borderTop: `1px solid ${theme.border}`,
             paddingTop: "28px",
             fontSize: 26,
-            color: COLORS.muted,
+            color: theme.muted,
           },
         },
         h(
           "div",
           { style: { display: "flex", alignItems: "center", gap: "16px" } },
-          // Logo mark (mirrors src/assets/logo.svg) inlined as SVG so no image loading is needed.
-          h(
-            "svg",
-            { width: 48, height: 48, viewBox: "0 0 64 64" },
-            h("path", { d: "M7 40 23 32 18 25 2 33Z", fill: "#3B82F6" }),
-            h("path", { d: "M23 32 39 40 44 33 28 25Z", fill: "#60A5FA" }),
-            h("path", { d: "M7 40 23 32 39 40 23 48Z", fill: "#1E3A8A" }),
-            h("path", {
-              d: "M23 44C26 36 31 29 38 24",
-              fill: "none",
-              stroke: "#F97316",
-              strokeWidth: 7,
-              strokeLinecap: "round",
-            }),
-            h("path", {
-              d: "M23 44C26 36 31 29 38 24",
-              fill: "none",
-              stroke: "#FBBF24",
-              strokeWidth: 3,
-              strokeLinecap: "round",
-            }),
-            h("path", { d: "M7 40 23 48V62L7 54Z", fill: "#1D4ED8" }),
-            h("path", { d: "M23 48 39 40V54L23 62Z", fill: "#2563EB" }),
-            h("path", { d: "M7 40 23 48 20 55 4 47Z", fill: "#3B82F6" }),
-            h("path", { d: "M23 48 39 40 42 47 26 55Z", fill: "#60A5FA" }),
-            h(
-              "g",
-              { transform: "translate(47 15) rotate(45) scale(1.2)" },
-              h("path", { d: "M-4 5-10 13-3 11Z", fill: "#64748B" }),
-              h("path", { d: "M4 5 10 13 3 11Z", fill: "#64748B" }),
-              h("path", { d: "M0-15C5-10 5.5 3 4.5 10H-4.5C-5.5 3-5-10 0-15Z", fill: "#94A3B8" }),
-              h("circle", { cx: 0, cy: -4, r: 2.6, fill: "#0B1120" }),
-            ),
-          ),
-          h("span", { style: { fontWeight: 700, color: COLORS.fg } }, card.siteName),
+          h("img", { src: logo, width: 48, height: 48 }),
+          h("span", { style: { fontWeight: 700, color: theme.fg } }, card.siteName),
           card.byline ? h("span", {}, `· ${card.byline}`) : null,
         ),
         card.date ? h("span", {}, card.date) : null,

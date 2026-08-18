@@ -1,9 +1,11 @@
 /**
  * Dev-only Vite plugin backing /admin/: `POST /__admin/config/<name>` with a JSON body validates
  * against the registry schema, refuses to delete a series/tag still used by a post, then writes
- * src/config/<name>.ts through the template writer. `apply: "serve"` — never part of a build.
+ * src/config/<name>.ts through the template writer. `POST /__admin/draft/<postId>` with
+ * `{ draft: boolean }` rewrites that post's `draft:` frontmatter line (stamping `publishedAt`
+ * with today when publishing). `apply: "serve"` — never part of a build.
  */
-import { readdir, readFile } from "node:fs/promises";
+import { readdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import type { Plugin } from "vite";
 import { CONFIG_NAMES, configSchemas, type ConfigName } from "../config/types.ts";
@@ -21,7 +23,7 @@ async function postsUsing(kind: "series" | "tags", ids: string[], root: string) 
     if (!entry.isDirectory()) continue;
     const src = await readFile(join(dir, entry.name, "index.mdx"), "utf8").catch(() => null);
     if (src === null) continue;
-    const fm = src.match(/^---\n([\s\S]*?)\n---/)?.[1] ?? "";
+    const fm = src.match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1] ?? "";
     for (const id of ids) {
       const hit =
         kind === "series"
@@ -45,13 +47,50 @@ export function adminPlugin(): Plugin {
     name: "always-shippable-admin",
     apply: "serve",
     configureServer(server) {
-      server.middlewares.use("/__admin/config", async (req, res) => {
-        const send = (status: number, payload: unknown) => {
+      const sender =
+        (res: import("node:http").ServerResponse) => (status: number, payload: unknown) => {
           res.statusCode = status;
           res.setHeader("Content-Type", "application/json");
           res.end(JSON.stringify(payload));
         };
-        const name = (req.url ?? "").replace(/^\//, "").split(/[?#]/)[0] ?? "";
+      const pathId = (req: import("node:http").IncomingMessage) =>
+        (req.url ?? "").replace(/^\//, "").split(/[?#]/)[0] ?? "";
+
+      server.middlewares.use("/__admin/draft", async (req, res) => {
+        const send = sender(res);
+        const id = pathId(req);
+        if (req.method !== "POST") return send(405, { error: "POST only" });
+        if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id)) return send(400, { error: "bad post id" });
+        try {
+          const { draft } = JSON.parse(await readBody(req)) as { draft?: unknown };
+          if (typeof draft !== "boolean") {
+            return send(400, { error: "body must be { draft: boolean }" });
+          }
+          const file = join(server.config.root, "src/content/posts", id, "index.mdx");
+          const src = await readFile(file, "utf8").catch(() => null);
+          if (src === null) return send(404, { error: `no post "${id}"` });
+          const [, fm, rest] = src.match(/^---\r?\n([\s\S]*?)\r?\n---([\s\S]*)$/) ?? [];
+          if (fm === undefined) return send(500, { error: `no frontmatter block in ${id}` });
+          const nl = src.includes("\r\n") ? "\r\n" : "\n";
+          // (\r?)$ keeps the file's line endings intact.
+          let next = /^draft:.*$/m.test(fm)
+            ? fm.replace(/^draft:.*?(\r?)$/m, `draft: ${draft}$1`)
+            : `${fm}${nl}draft: ${draft}`;
+          if (!draft) {
+            const today = new Date().toISOString().slice(0, 10);
+            next = next.replace(/^publishedAt:.*?(\r?)$/m, `publishedAt: ${today}$1`);
+          }
+          await writeFile(file, `---${nl}${next}${nl}---${rest}`);
+          server.config.logger.info(`[admin] set draft: ${draft} on ${id}`);
+          return send(200, { ok: true });
+        } catch (e) {
+          return send(500, { error: e instanceof Error ? e.message : String(e) });
+        }
+      });
+
+      server.middlewares.use("/__admin/config", async (req, res) => {
+        const send = sender(res);
+        const name = pathId(req);
         if (req.method !== "POST") return send(405, { error: "POST only" });
         if (!isConfigName(name)) return send(404, { error: `unknown config "${name}"` });
         try {
