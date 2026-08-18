@@ -20,11 +20,11 @@
   <!-- retirement marker -->
   <line x1="275" y1="50" x2="275" y2="230" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5" stroke-dasharray="5 4"/>
   <text x="281" y="64" fill="currentColor" fill-opacity="0.8">retire</text>
-  <!-- gold window: 0 before -5, ~20% from -5 through +10, tapered to 0 by ~+15 -->
-  <path d="M80,230 L197,230 L210,110 L405,110 L470,230 L600,230 Z" fill="#f0b35a" fill-opacity="0.35"/>
-  <polyline fill="none" stroke="#f0b35a" stroke-width="3" stroke-linejoin="round" points="80,230 197,230 210,110 405,110 470,230 600,230"/>
+  <!-- gold window: 0 during accumulation, 22% from ret-6, stepping down to a permanent 10% at ret+9 -->
+  <path d="M80,230 L197,230 L197,98 L392,98 L392,170 L600,170 L600,230 Z" fill="#f0b35a" fill-opacity="0.35"/>
+  <polyline fill="none" stroke="#f0b35a" stroke-width="3" stroke-linejoin="round" points="80,230 197,230 197,98 392,98 392,170 600,170"/>
   <!-- annotations -->
-  <text x="307" y="98" fill="currentColor" text-anchor="middle">~a fifth of the portfolio</text>
+  <text x="294" y="86" fill="currentColor" text-anchor="middle">22% of the portfolio</text>
   <text x="140" y="212" fill="currentColor" fill-opacity="0.75" text-anchor="middle">accumulation: none</text>
-  <text x="535" y="212" fill="currentColor" fill-opacity="0.75" text-anchor="middle">tapered away</text>
+  <text x="500" y="160" fill="currentColor" fill-opacity="0.75" text-anchor="middle">10% held permanently</text>
 </svg>

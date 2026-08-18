@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
-  <title>A grid of many small wealth-over-time lines, one per historical start year, most rising and a few sinking to zero, with a lab flask beside them</title>
+  <title>A chart of many overlaid wealth-over-time lines, one per historical start year from 1928 onward, most rising and two sinking to zero after retirement, with a lab flask and a JSON experiment tag beside them</title>
   <rect width="1200" height="630" fill="#fafcfe"/>
   <!-- chart panel: x 130..820, baseline y=500, top y=120 -->
   <g stroke="#d9dfe3" stroke-width="2">
