@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <title>A desk terminal on the left streams a build over wifi arcs to a phone held up outdoors on the right, whose screen shows an AR tower; a logcat line flows back along the same path</title>
+  <defs>
+    <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#006a90" stop-opacity="0"/>
+      <stop offset="1" stop-color="#deeef5"/>
+    </linearGradient>
+    <clipPath id="screen"><rect x="838" y="118" width="212" height="404" rx="18"/></clipPath>
+  </defs>
+  <rect width="1200" height="630" fill="#11171d"/>
+
+  <!-- desk line -->
+  <path d="M100 500 L560 500" stroke="#555f69" stroke-width="4"/>
+  <!-- monitor -->
+  <rect x="150" y="150" width="400" height="270" rx="14" fill="#11171d" stroke="#fafcfe" stroke-width="4"/>
+  <rect x="330" y="420" width="40" height="40" fill="#555f69"/>
+  <rect x="270" y="460" width="160" height="10" rx="4" fill="#555f69"/>
+  <!-- terminal text as bars -->
+  <g font-family="IBM Plex Sans" font-size="20" fill="#fafcfe">
+    <text x="176" y="196"><tspan fill="#f0b35a">&gt;</tspan> gradlew assembleDebug</text>
+    <text x="176" y="232"><tspan fill="#f0b35a">&gt;</tspan> gradlew installDebug</text>
+    <text x="176" y="268"><tspan fill="#f0b35a">&gt;</tspan> adb logcat -s Earth</text>
+  </g>
+  <g fill="#555f69">
+    <rect x="176" y="292" width="300" height="10" rx="5"/>
+    <rect x="176" y="316" width="220" height="10" rx="5"/>
+    <rect x="176" y="340" width="260" height="10" rx="5"/>
+    <rect x="176" y="364" width="180" height="10" rx="5"/>
+  </g>
+  <text x="176" y="398" font-family="IBM Plex Sans" font-size="18" fill="#deeef5">Earth: anchored  delta=0.4m</text>
+  <rect x="470" y="384" width="12" height="20" fill="#f0b35a"/>
+
+  <!-- wifi arcs from monitor to phone -->
+  <g fill="none" stroke="#006a90" stroke-width="6" stroke-linecap="round">
+    <path d="M600 335 A70 70 0 0 1 600 265" transform="translate(30 0)"/>
+    <path d="M600 365 A110 110 0 0 1 600 235" transform="translate(70 0)"/>
+    <path d="M600 395 A150 150 0 0 1 600 205" transform="translate(110 0)"/>
+  </g>
+  <!-- APK forward -->
+  <path d="M580 300 L800 300" stroke="#f0b35a" stroke-width="4" stroke-dasharray="18 12"/>
+  <path d="M790 288 L812 300 L790 312 z" fill="#f0b35a"/>
+  <!-- logcat back -->
+  <path d="M800 420 L580 420" stroke="#deeef5" stroke-width="3" stroke-dasharray="6 10"/>
+  <path d="M590 408 L568 420 L590 432 z" fill="#deeef5"/>
+  <text x="690" y="290" font-family="IBM Plex Sans" font-size="16" fill="#f0b35a" text-anchor="middle">APK</text>
+  <text x="690" y="446" font-family="IBM Plex Sans" font-size="16" fill="#deeef5" text-anchor="middle">logcat</text>
+
+  <!-- phone -->
+  <rect x="826" y="106" width="236" height="428" rx="26" fill="#11171d" stroke="#fafcfe" stroke-width="4"/>
+  <g clip-path="url(#screen)">
+    <rect x="838" y="118" width="212" height="404" fill="#11171d"/>
+    <!-- horizon and hills outside -->
+    <path d="M838 440 Q900 400 960 430 T1050 420 L1050 522 L838 522 z" fill="#555f69"/>
+    <!-- tower -->
+    <rect x="936" y="170" width="16" height="270" fill="url(#beam)"/>
+    <rect x="941" y="170" width="6" height="270" fill="#deeef5"/>
+    <rect x="884" y="190" width="120" height="30" rx="5" fill="#11171d" stroke="#006a90" stroke-width="2"/>
+    <text x="944" y="211" font-family="IBM Plex Sans" font-size="15" font-weight="700" fill="#fafcfe" text-anchor="middle">Tacoma 42.4 km</text>
+    <!-- HUD corners -->
+    <g stroke="#006a90" stroke-width="3" fill="none">
+      <path d="M852 148 L852 132 L868 132"/><path d="M1036 148 L1036 132 L1020 132"/>
+      <path d="M852 492 L852 508 L868 508"/><path d="M1036 492 L1036 508 L1020 508"/>
+    </g>
+  </g>
+  <!-- hand holding phone: thumb and fingers as rounded shapes -->
+  <path d="M826 470 Q790 480 800 530 L860 560 L1040 560 Q1080 550 1062 500" fill="none" stroke="#fafcfe" stroke-width="4" stroke-linecap="round"/>
+  <path d="M1062 380 Q1100 380 1096 430 L1062 440" fill="none" stroke="#fafcfe" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- no cable: crossed-out USB plug under the desk -->
+  <g transform="translate(470 545)">
+    <rect x="0" y="0" width="60" height="26" rx="4" fill="none" stroke="#555f69" stroke-width="3"/>
+    <rect x="60" y="8" width="24" height="10" fill="#555f69"/>
+    <line x1="-8" y1="-8" x2="92" y2="34" stroke="#f0b35a" stroke-width="5" stroke-linecap="round"/>
+  </g>
+</svg>

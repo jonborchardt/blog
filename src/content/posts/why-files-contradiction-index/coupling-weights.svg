@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="300" viewBox="0 0 640 300" font-family="system-ui, sans-serif" font-size="13" aria-hidden="true">
+  <!-- Coupling weight applied to a contradicts edge during truth propagation, by typed subkind.
+       Bars: logical 1.0, debunks 1.0, alternative 0.5, undercuts 0 (applies a cap instead of pulling). -->
+  <g stroke="currentColor" stroke-opacity="0.15" stroke-width="1">
+    <line x1="150" y1="30" x2="150" y2="230"/><line x1="250" y1="30" x2="250" y2="230"/><line x1="350" y1="30" x2="350" y2="230"/><line x1="450" y1="30" x2="450" y2="230"/><line x1="550" y1="30" x2="550" y2="230"/>
+  </g>
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5">
+    <line x1="150" y1="30" x2="150" y2="230"/><line x1="150" y1="230" x2="550" y2="230"/>
+  </g>
+  <g fill="currentColor" fill-opacity="0.75" text-anchor="middle">
+    <text x="150" y="250">0</text><text x="250" y="250">0.25</text><text x="350" y="250">0.5</text><text x="450" y="250">0.75</text><text x="550" y="250">1.0</text>
+  </g>
+  <text x="350" y="278" fill="currentColor" text-anchor="middle">coupling weight: how hard a contradicting claim pulls on the target's truth</text>
+  <!-- labels -->
+  <g fill="currentColor" text-anchor="end" font-family="ui-monospace, monospace">
+    <text x="140" y="60">[logical]</text>
+    <text x="140" y="105">[debunks]</text>
+    <text x="140" y="150">[alternative]</text>
+    <text x="140" y="195">[undercuts]</text>
+  </g>
+  <!-- bars -->
+  <g fill="#006a90">
+    <rect x="150" y="45" width="400" height="22" rx="3"/>
+    <rect x="150" y="90" width="400" height="22" rx="3"/>
+    <rect x="150" y="135" width="200" height="22" rx="3"/>
+  </g>
+  <rect x="150" y="180" width="3" height="22" fill="#f0b35a"/>
+  <g fill="currentColor" fill-opacity="0.85">
+    <text x="558" y="61">1.0 - full weight</text>
+    <text x="558" y="106">1.0 - full weight</text>
+    <text x="358" y="151">0.5 - competing theories</text>
+    <text x="162" y="196">0 pull; instead caps target at 1 - 0.2 x truth x confidence</text>
+  </g>
+</svg>

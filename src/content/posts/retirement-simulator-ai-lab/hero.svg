@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <title>A grid of many small wealth-over-time lines, one per historical start year, most rising and a few sinking to zero, with a lab flask beside them</title>
+  <rect width="1200" height="630" fill="#fafcfe"/>
+  <!-- chart panel: x 130..820, baseline y=500, top y=120 -->
+  <g stroke="#d9dfe3" stroke-width="2">
+    <line x1="130" y1="500" x2="820" y2="500"/>
+    <line x1="130" y1="120" x2="130" y2="500"/>
+    <line x1="130" y1="405" x2="820" y2="405" stroke-dasharray="6 8"/>
+    <line x1="130" y1="310" x2="820" y2="310" stroke-dasharray="6 8"/>
+    <line x1="130" y1="215" x2="820" y2="215" stroke-dasharray="6 8"/>
+  </g>
+  <!-- retirement marker -->
+  <line x1="360" y1="120" x2="360" y2="500" stroke="#11171d" stroke-width="3" stroke-dasharray="10 8"/>
+  <text x="372" y="145" font-family="IBM Plex Sans" font-size="26" fill="#11171d">retire</text>
+  <!-- surviving paths, one per start year -->
+  <g fill="none" stroke="#006a90" stroke-width="3" stroke-opacity="0.55" stroke-linejoin="round" stroke-linecap="round">
+    <polyline points="130,470 200,455 270,445 360,430 440,400 520,370 600,330 680,290 760,240 820,200"/>
+    <polyline points="130,470 200,462 270,458 360,450 440,445 520,420 600,405 680,380 760,350 820,330"/>
+    <polyline points="130,470 200,450 270,430 360,415 440,420 520,395 600,360 680,340 760,300 820,270"/>
+    <polyline points="130,470 200,465 270,452 360,440 440,455 520,440 600,425 680,405 760,395 820,380"/>
+    <polyline points="130,470 200,458 270,440 360,420 440,395 520,405 600,375 680,320 760,290 820,240"/>
+    <polyline points="130,470 200,463 270,461 360,455 440,447 520,449 600,430 680,410 760,385 820,360"/>
+    <polyline points="130,470 200,455 270,438 360,410 440,380 520,340 600,300 680,260 760,200 820,150"/>
+    <polyline points="130,470 200,468 270,455 360,445 440,438 520,415 600,398 680,375 760,340 820,300"/>
+    <polyline points="130,470 200,452 270,448 360,436 440,428 520,432 600,412 680,385 760,355 820,320"/>
+    <polyline points="130,470 200,460 270,443 360,425 440,410 520,385 600,350 680,330 760,280 820,230"/>
+  </g>
+  <!-- the failing inflation cohorts -->
+  <g fill="none" stroke="#f0b35a" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+    <polyline points="130,470 200,462 270,458 360,450 440,462 520,472 600,485 680,494 720,500"/>
+    <polyline points="130,470 200,464 270,455 360,447 440,458 520,468 600,478 680,486 760,496 800,500"/>
+  </g>
+  <text x="470" y="535" font-family="IBM Plex Sans" font-size="24" fill="#555f69">1966-79 cohorts hit zero</text>
+  <!-- median line -->
+  <text x="150" y="110" font-family="IBM Plex Sans" font-size="26" fill="#11171d">one line per start year, 1928 onward</text>
+  <!-- lab flask -->
+  <g transform="translate(900 150)">
+    <path d="M70,0 H130 V90 L215,300 Q225,330 195,330 H5 Q-25,330 -15,300 L70,90 Z" fill="#deeef5" stroke="#11171d" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M40,190 L160,190 L206,306 Q210,318 198,318 H2 Q-10,318 -6,306 Z" fill="#f0b35a"/>
+    <line x1="60" y1="0" x2="140" y2="0" stroke="#11171d" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="70" cy="240" r="9" fill="#fafcfe"/>
+    <circle cx="120" cy="270" r="6" fill="#fafcfe"/>
+    <circle cx="95" cy="215" r="5" fill="#fafcfe"/>
+    <!-- JSON tag -->
+    <rect x="-40" y="360" width="280" height="54" rx="10" fill="#fafcfe" stroke="#006a90" stroke-width="3"/>
+    <text x="100" y="396" font-family="IBM Plex Sans" font-size="26" fill="#006a90" text-anchor="middle">{ "id": "bond-tent" }</text>
+  </g>
+</svg>

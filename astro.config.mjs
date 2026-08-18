@@ -83,6 +83,12 @@ export default defineConfig({
               theme: "neutral",
               // Same stack as the site so build-time text measurement matches what renders.
               fontFamily: "ui-sans-serif, system-ui, sans-serif",
+              // Compact: prose-sized text and tight spacing. Mermaid's defaults (16px, 50px gaps,
+              // 15px node padding) make even a five-box diagram fill a screen. The flowchart block
+              // also drives stateDiagram-v2 (both use the unified dagre layout).
+              themeVariables: { fontSize: "14px" },
+              flowchart: { nodeSpacing: 24, rankSpacing: 28, padding: 8, diagramPadding: 8 },
+              state: { padding: 6 },
             },
           },
         ],

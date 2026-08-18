@@ -19,7 +19,7 @@ Output: a short findings list (blocking / should-fix / nits), each with file:lin
 - **Structure**: one idea per post; headings `##` → `###` in order; TOC (≥3 headings) makes sense on its own; no heading inside `Comparison`/`Tabs`.
 - **Primitives**: used per `src/components/blog/README.md` "when to use which"; Tabs only for equivalents; Details for optional depth; nothing styled ad hoc.
 - **Accessibility**: images/SVG/diagrams have real alt/description; links have meaningful text; code samples are explained; colour is never the only signal; islands work by keyboard.
-- **Visual pass**: `node e2e/shots.mjs <outdir> <slug>/` against a preview (or the dev server) → look at 360 and 1280 in light and dark; check tables/code/diagrams scroll rather than overflow; check the OG card `dist/og/<slug>.png` after a build.
+- **Visual pass**: `node e2e/shots.mjs <outdir> <slug>/` against a preview (or the dev server) → look at 360 and 1280 in light and dark; check tables/code scroll rather than overflow, and diagrams/figures fit without any scrollbar (a scrolling visual is a finding: redraw it, don't wrap it); check the OG card `dist/og/<slug>.png` after a build.
 - **Reading flow**: opening says why it matters; ending closes; no placeholder text (`REPLACE ME`, lorem).
 
 ## Hand-off

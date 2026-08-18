@@ -1,0 +1,146 @@
+---
+title: What I learned trying to use agi-up as a reference renderer in my SCI0 pipeline
+description: "Borrowing from a native-resolution AGI upscaler for a 6× SCI0 pipeline: one geometric rule transferred, the architecture did not, and why."
+publishedAt: 2026-08-18
+series: sierra-games
+seriesOrder: 2
+tags: [engineering]
+hero:
+  src: ./hero.png
+  alt: Two pixel-art staircase lines from different draw commands meeting at a corner over a fill region, with a single dark seal pixel planted at the junction and a 6-by-6 grid showing the upscale
+draft: false
+---
+
+import Figure from "@/components/blog/Figure.astro";
+import VizFigure from "@/components/blog/VizFigure.astro";
+import LineThickness from "./line-thickness.svg";
+import JunctionSeal from "./junction-seal.svg";
+
+I've been working on a TypeScript reimplementation of the Sierra SCI0 engine, and one piece that's been giving me trouble is upscaling the 320×190 PIC backgrounds to a modern resolution (1920×1140, 6× scale) without flood-fill artifacts. I've got a lineage of rendering strategies, snap through snap-v8, that chip away at the problem from different angles ([the native render oracle post](/sci0-pic-upscaling-native-render-oracle/) covers how they are measured). snap-v5 is still the one I ship.
+
+Recently I came across [OldManYellsAtCode1's `agi-up` project](https://github.com/OldManYellsAtCode1/agi-up) (with a walkthrough on [YouTube](https://www.youtube.com/watch?v=z9Yp9S23ICo)) — a beautifully structured C implementation of an upscaler for Sierra's AGI engine, the predecessor to SCI0. Different approach entirely from mine: it uses an "anchor graph" built from per-pixel command provenance and re-rasterizes the boundaries from that graph. I wanted to see if it could help me past the ceiling my pixel-space tactics had hit. This post is a retrospective on that experiment.
+
+A couple of notes up front. AGI and SCI0 are related Sierra engines, but their PIC formats and opcode layouts differ substantially. This isn't a port between two renderers of the same format, it's two renderers solving the broader problem of "upscale a vector PIC without artifacts" under different constraints.
+
+The agi-up code is good engineering for the problem it solves; the problem it solves just isn't quite the one I have. I wanted to write down why, both for myself and because I'd love to find places we can collaborate.
+
+## The setup
+
+Before experimenting with the agi-up ideas, here's the state of my existing pipeline. My `snap-v*` lineage solves the upscale problem by:
+
+1. **Block expansion** — each native line pixel becomes a 6×6 block at 6× scale.
+2. **Endpoint snapping and seed nudging** (v1)
+3. **Adaptive per-fill leak guards** with rollback (v2/v3)
+4. **Native-mask fallback** when a guarded fill rolls back to zero pixels (v4)
+5. **Diagonal pixel-pattern gap closure** before each fill (v5)
+
+The block expansion constraint turned out to matter more than expected. My v6 experiment showed that lines thinner than the scale factor catastrophically leak (92 → 547 flagged fills) because Bresenham stepping creates gaps the flood fill can escape through.
+
+<Figure caption="The two failure modes of a 6× upscale. Left: a thin line leaves staircase gaps and the fill leaks out (v6). Right: block-expanded 6-px bands contain the fill, but the band itself eats fill area, which the metric counts as an undershoot.">
+  <VizFigure
+    name="Thin lines leak, thick lines steal fill area"
+    summary="Two-panel schematic. On the left a 1-pixel staircase line at 6× has gaps at every step and a fill seeded between two such lines spreads to both sides, the v6 result of 92 to 547 flagged fills. On the right the same lines drawn as 6-pixel bands keep the fill contained, but a hatched strip along each band marks fill area the thicker line now covers."
+  >
+    <LineThickness class="h-auto w-full max-w-2xl" />
+  </VizFigure>
+</Figure>
+
+These form a chain of additive defenses, validated by a metric I call "flagged fills": how many fill commands in a PIC produce a pixel count more than 25% off from the native render. Across 11 representative PICs, v5 reduced flagged fills from 534 to 193, a 64% improvement. But v5's own docstring is brutally honest about the wall: **92% of the remaining flagged fills are undershoots from thick upscaled lines stealing fill area. Gap closure cannot fix that.**
+
+That's the context I was bringing into this.
+
+## What drew me to the agi-up code
+
+The reference does something my lineage doesn't: it tracks which draw command rasterized each pixel (`ref_cmd_buf`) and what kind of command it was (line vs fill, via `cmd_type_buf`). It uses that to build an anchor graph — each cell's anchor is projected onto the nearest line segment of its owning command — and then connects anchors with geometrically reasoned rules, like "don't connect a diagonal if both flanking cardinals are line cells of different commands." It's a coherent model. The anchor graph and the enhancement passes both express ideas I hadn't seen elsewhere.
+
+What I hoped I could borrow:
+
+- Per-pixel command provenance
+- Structural geometric gap detection
+- Anchor-graph boundary rerasterization
+
+I built two new strategies: `snap-v9` (v4 + the structural rule applied as a barrier seal) and `snap-v10` (v5 + the same seal, stacked).
+
+Here is where the borrowed piece slots into the existing chain — a single extra pass, fed by the two new provenance buffers, that runs after gap closure and before each flood fill:
+
+```mermaid
+flowchart TB
+  accTitle: Where the borrowed junction seal fits in the snap pipeline
+  accDescr: The pipeline runs block expansion, then endpoint snapping and seed nudging, then diagonal gap closure, then the flood fill with a per-fill leak guard that can roll back and fall back to the native mask. The agi-up ideas add two provenance buffers, command id and command type per pixel, which feed one new junction-seal pass placed between gap closure and the fill. Stacked on v5 this is snap-v10.
+  A[Block expansion<br/>each native line pixel → 6×6 block] --> B[Endpoint snapping + seed nudging<br/>v1]
+  B --> C[Diagonal pixel-pattern gap closure<br/>v5]
+  C --> S[Junction seal<br/>borrowed from agi-up: v9 / v10]
+  S --> D[Flood fill with adaptive leak guard<br/>v2 / v3]
+  D -->|rolls back to zero pixels| E[Native-mask fallback<br/>v4]
+  P[(cmdId + cmdType buffers<br/>per-pixel provenance)] --> S
+  style S stroke-dasharray: 5 5
+```
+
+## What the numbers said
+
+On a 5-PIC sample (rooms 2–6, the worst offenders in my corpus), V10 improved the metric on every PIC in the sample, reducing total flagged fills by 10.9%:
+
+| Strategy            | Leaks | Undershoots | Total flagged | Δ vs v5    |
+| ------------------- | ----- | ----------- | ------------- | ---------- |
+| v5 (baseline)       | 6     | 40          | 46            | —          |
+| v9 (v4 + seal)      | 8     | 42          | 50            | +8.7%      |
+| **v10 (v5 + seal)** | **5** | **36**      | **41**        | **−10.9%** |
+
+I rendered the V10 output as a PNG and put it next to V5. At normal viewing distance, the visual difference is effectively imperceptible. The 5 "fixed" fills out of ~650 in the sample are localized boundary patches — fractions of a percent of total pixel area.
+
+## What helped, and why
+
+One specific thing transferred cleanly: **the diagonal-flanking suppression rule**.
+
+In the agi-up code, this rule lives inside the anchor-graph logic and decides whether to draw a connection between adjacent anchors. I lifted it out and used it as a pre-fill barrier seal: "for each native fill-fill diagonal flanked by two different line commands, plant a single pixel at the upscaled junction corner before the flood fill runs." The total change was only a few dozen pixels per PIC.
+
+<Figure caption="The one rule that transferred. Left: the native-resolution test — a fill–fill diagonal whose two flanking cells belong to different line commands. Right: the same four cells at 6×, with the single seal pixel planted at the junction corner before the fill runs.">
+  <VizFigure
+    name="The diagonal-flanking junction seal, native condition and 6× result"
+    summary="Two-panel schematic. On the left a 2-by-2 block of native cells: line A top-left, line B bottom-right, fill cells on the other diagonal, with the tested diagonal dashed between the two fills. On the right the same cells drawn on a 6-by-6 pixel grid per native cell, with one dark pixel planted at the corner where the four cells meet."
+  >
+    <JunctionSeal class="h-auto w-full max-w-2xl" />
+  </VizFigure>
+</Figure>
+
+That one rule produced the metric improvement on the leak side: it prevents fill seeds from being nudged into wrong regions through unsealed Bresenham staircase gaps at line junctions. A handful of fills that were leaking now stay contained.
+
+I could have arrived at the same observation from my own v5 docstring (which notes that diagonal gaps form "at line junction points where Bresenham lines meet at angles"), but the agi-up code crystallized the precise geometric condition — flanked by two _different_ line commands at native resolution — in a way I would not have gotten to on my own. That's a real contribution to my project, even if its impact ended up being small.
+
+## What didn't transfer, and why
+
+Most of the agi-up code didn't fit my pipeline. To be precise about _why_: it's not that the ideas are wrong or weaker than mine. Many of the agi-up code's best ideas depend on assumptions that don't hold in my pipeline.
+
+**The anchor projection** — projecting each fill cell's anchor onto its owning line segment — produces lovely junction geometry. In a native-resolution output it gives you a single coherent visual model. My pipeline draws lines at upscaled resolution directly from the source command, so I don't have a step where projected anchor positions would attach. The projection is doing real work in the agi-up renderer; there's just no slot for it in mine.
+
+**The anchor-to-anchor re-rasterization** — drawing thin Bresenham lines between connected anchors — is the structural heart of the agi-up approach, and it's elegant. At native resolution, where 1-pixel-wide lines are the right answer, this is the _correct_ design. In my 6× upscale pipeline, my v6 experiment had already shown that any line thickness below the scale factor causes flood-fill containment to collapse (92 → 547 flagged fills). So the elegance of the agi-up approach is bought against an assumption (native-resolution output) that my pipeline doesn't share.
+
+**The enhancement passes** (the `enhance()` kernel) apply neighborhood voting to fill in flat-region gaps. I didn't try porting them — partly because my v7 experiment already documented that any pass adding pixels _between_ fill commands inflates subsequent fill counts and confuses the per-fill leak metric. That's a constraint specific to how my pipeline is instrumented. The kernel itself is solid; it just collides with my measurement model.
+
+**The command-provenance data structure** is genuinely new infrastructure for my pipeline. On its own it's just two buffers; the value is in what you build with it. The diagonal-flanking rule is the one thing in this experiment I built with it that produced any metric movement. There may be more I could do with the same buffers later (smarter seed nudging is one idea I have for the future), and if so, the work of standing up that infrastructure won't have been wasted. But I want to be careful not to claim credit for value that isn't there yet.
+
+## What I wish I'd done differently
+
+I should have trusted my v5 conclusions earlier. The remaining defects were already telling me the same thing: thick upscaled lines structurally steal fill area, and no further pixel-space tactic was going to solve that.
+
+The real next step has nothing to do with the agi-up reference. It's a structural change to the pipeline itself: a dual-layer renderer where the visual layer uses thin lines while the control/barrier layer stays thick, letting containment and fidelity be tuned independently.
+
+The constraint check should have come before the prototyping. Once I'd written down "the agi-up approach assumes native-resolution output; my pipeline assumes upscale-from-native; the conflict is over line thickness," I would have known going in that the structural ideas couldn't transfer and only specific rules could. That would have saved a couple of strategy classes' worth of code.
+
+## What I'm taking forward
+
+V9 and V10 are archived alongside v6/v7/v8 in my repo as deprecated references. The shared infrastructure (`junction-seal.ts`, the cmdType/cmdId buffers) stays — it's useful scaffolding for any future experiment that wants to reason about command provenance.
+
+The one rule I borrowed (diagonal-flanking suppression) is solid, just too narrow for what V5 was already catching with its pixel-pattern closure. If I revisit native-resolution rendering as part of a future dual-layer split, I expect more of the agi-up approach to suddenly become applicable. (Spoiler: [I did go all the way in on the anchor graph](/omyac-upscaler-anchor-graph/) in a later experiment.)
+
+## A note to OldManYellsAtCode1
+
+If you're reading this: thank you for putting agi-up and the [walkthrough video](https://www.youtube.com/watch?v=z9Yp9S23ICo) out there. Your design taught me a precise geometric condition I hadn't articulated before (the X-junction flanking rule), and that rule directly improved my own renderer.
+
+I'd genuinely like to find places to collaborate where the constraints overlap. A dual-layer renderer, native-resolution debug tooling, or command-provenance-driven editor tooling all seem like promising areas to compare notes.
+
+## The takeaway for anyone else trying this
+
+If you're borrowing ideas from a renderer built around different assumptions, do the constraint check first. Identify which parts of the reference depend on assumptions your pipeline has already ruled out and which parts don't. Most of the time, the genuinely transferable insight from a different-paradigm reference is small and surgical — a specific rule or observation — not the architectural skeleton. That's not a criticism of either codebase; it's just what cross-paradigm porting looks like when both designs are well-thought-out within their own constraints.
+
+V5 is still the strategy I ship. The next real move is the dual-layer rendering split. That's the structural fix V5 told me to do five experiments ago.

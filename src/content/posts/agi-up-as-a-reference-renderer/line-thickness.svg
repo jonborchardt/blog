@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="300" viewBox="0 0 640 300" font-family="system-ui, sans-serif" font-size="13">
+  <!-- Left panel: thin line at 6x, fill escapes -->
+  <text x="160" y="24" fill="currentColor" text-anchor="middle" font-weight="600">Thin line at 6× (v6)</text>
+  <text x="160" y="42" fill="currentColor" fill-opacity="0.75" text-anchor="middle" font-size="12">1-px staircase, fill escapes through the steps</text>
+  <!-- fill region on both sides, same colour: it leaked -->
+  <rect x="30" y="60" width="260" height="180" fill="#f0b35a" fill-opacity="0.35"/>
+  <!-- thin staircase line with gaps at each step -->
+  <g fill="#006a90">
+    <rect x="30" y="80" width="40" height="6"/>
+    <rect x="76" y="86" width="40" height="6"/>
+    <rect x="122" y="92" width="40" height="6"/>
+    <rect x="168" y="98" width="40" height="6"/>
+    <rect x="214" y="104" width="40" height="6"/>
+    <rect x="260" y="110" width="30" height="6"/>
+    <rect x="30" y="200" width="40" height="6"/>
+    <rect x="76" y="194" width="40" height="6"/>
+    <rect x="122" y="188" width="40" height="6"/>
+    <rect x="168" y="182" width="40" height="6"/>
+    <rect x="214" y="176" width="40" height="6"/>
+    <rect x="260" y="170" width="30" height="6"/>
+  </g>
+  <!-- leak arrows through the step gaps -->
+  <g stroke="currentColor" stroke-width="1.5" fill="none">
+    <path d="M118 120 L118 70" marker-end="url(#arrow)"/>
+    <path d="M164 160 L164 226" marker-end="url(#arrow)"/>
+  </g>
+  <text x="160" y="150" fill="currentColor" text-anchor="middle" font-size="12">seed</text>
+  <circle cx="160" cy="132" r="4" fill="currentColor"/>
+  <text x="160" y="266" fill="currentColor" fill-opacity="0.75" text-anchor="middle" font-size="12">flagged fills 92 → 547 (leaks)</text>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
+    </marker>
+    <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="6" stroke="#f0b35a" stroke-width="2"/>
+    </pattern>
+  </defs>
+
+  <line x1="320" y1="20" x2="320" y2="280" stroke="currentColor" stroke-opacity="0.2"/>
+
+  <!-- Right panel: block-expanded band, contained but steals area -->
+  <text x="480" y="24" fill="currentColor" text-anchor="middle" font-weight="600">6-px band at 6× (v5, shipped)</text>
+  <text x="480" y="42" fill="currentColor" fill-opacity="0.75" text-anchor="middle" font-size="12">each native line pixel is a 6×6 block: contained</text>
+  <!-- outside stays unfilled -->
+  <rect x="350" y="60" width="260" height="180" fill="none" stroke="currentColor" stroke-opacity="0.25"/>
+  <!-- inner fill region between the two bands -->
+  <path d="M350 116 L396 116 L396 122 L442 122 L442 128 L488 128 L488 134 L534 134 L534 140 L580 140 L580 146 L610 146 L610 170 L580 170 L580 176 L534 176 L534 182 L488 182 L488 188 L442 188 L442 194 L396 194 L396 200 L350 200 Z" fill="#f0b35a" fill-opacity="0.35"/>
+  <!-- thick staircase bands -->
+  <g fill="#006a90">
+    <rect x="350" y="80" width="46" height="36"/>
+    <rect x="396" y="86" width="46" height="36"/>
+    <rect x="442" y="92" width="46" height="36"/>
+    <rect x="488" y="98" width="46" height="36"/>
+    <rect x="534" y="104" width="46" height="36"/>
+    <rect x="580" y="110" width="30" height="36"/>
+    <rect x="350" y="200" width="46" height="36"/>
+    <rect x="396" y="194" width="46" height="36"/>
+    <rect x="442" y="188" width="46" height="36"/>
+    <rect x="488" y="182" width="46" height="36"/>
+    <rect x="534" y="176" width="46" height="36"/>
+    <rect x="580" y="170" width="30" height="36"/>
+  </g>
+  <!-- stolen area: where the native fill would have reached, now under the band -->
+  <g fill="url(#hatch)" fill-opacity="0.9">
+    <rect x="350" y="104" width="46" height="12"/>
+    <rect x="396" y="110" width="46" height="12"/>
+    <rect x="442" y="116" width="46" height="12"/>
+    <rect x="488" y="122" width="46" height="12"/>
+    <rect x="534" y="128" width="46" height="12"/>
+    <rect x="580" y="134" width="30" height="12"/>
+    <rect x="350" y="200" width="46" height="12"/>
+    <rect x="396" y="194" width="46" height="12"/>
+    <rect x="442" y="188" width="46" height="12"/>
+    <rect x="488" y="182" width="46" height="12"/>
+    <rect x="534" y="176" width="46" height="12"/>
+    <rect x="580" y="170" width="30" height="12"/>
+  </g>
+  <circle cx="480" cy="158" r="4" fill="currentColor"/>
+  <text x="480" y="266" fill="currentColor" fill-opacity="0.75" text-anchor="middle" font-size="12">hatched: fill area the band steals (undershoot)</text>
+</svg>

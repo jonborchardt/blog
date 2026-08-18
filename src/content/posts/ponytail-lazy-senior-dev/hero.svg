@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <title>A seven-rung ladder where each of the top six rungs branches off to a stop marker, and only the bottom rung leads to a small block of code</title>
+  <defs>
+    <g id="stop">
+      <line x1="0" y1="0" x2="130" y2="0" stroke="#006a90" stroke-width="6" stroke-linecap="round"/>
+      <path d="M130 -14 L152 0 L130 14 z" fill="#006a90"/>
+      <circle cx="188" cy="0" r="22" fill="#deeef5" stroke="#006a90" stroke-width="6"/>
+      <line x1="176" y1="0" x2="200" y2="0" stroke="#006a90" stroke-width="7" stroke-linecap="round"/>
+    </g>
+  </defs>
+  <rect width="1200" height="630" fill="#fafcfe"/>
+
+  <!-- ladder rails -->
+  <g stroke="#11171d" stroke-width="14" stroke-linecap="round">
+    <line x1="400" y1="85" x2="400" y2="565"/>
+    <line x1="540" y1="85" x2="540" y2="565"/>
+  </g>
+  <!-- rungs 1-6 (exits) -->
+  <g stroke="#11171d" stroke-width="10" stroke-linecap="round">
+    <line x1="400" y1="120" x2="540" y2="120"/>
+    <line x1="400" y1="188" x2="540" y2="188"/>
+    <line x1="400" y1="256" x2="540" y2="256"/>
+    <line x1="400" y1="324" x2="540" y2="324"/>
+    <line x1="400" y1="392" x2="540" y2="392"/>
+    <line x1="400" y1="460" x2="540" y2="460"/>
+  </g>
+  <!-- rung 7 -->
+  <line x1="400" y1="528" x2="540" y2="528" stroke="#f0b35a" stroke-width="12" stroke-linecap="round"/>
+
+  <!-- exits off each rung -->
+  <use href="#stop" x="560" y="120"/>
+  <use href="#stop" x="560" y="188"/>
+  <use href="#stop" x="560" y="256"/>
+  <use href="#stop" x="560" y="324"/>
+  <use href="#stop" x="560" y="392"/>
+  <use href="#stop" x="560" y="460"/>
+
+  <!-- rung labels, left of the ladder -->
+  <g font-family="IBM Plex Sans" font-size="26" fill="#555f69" text-anchor="end">
+    <text x="370" y="129">needed?</text>
+    <text x="370" y="197">in the codebase?</text>
+    <text x="370" y="265">stdlib?</text>
+    <text x="370" y="333">platform?</text>
+    <text x="370" y="401">installed dep?</text>
+    <text x="370" y="469">one line?</text>
+  </g>
+
+  <!-- rung 7 leads to a small block of code -->
+  <line x1="560" y1="528" x2="770" y2="528" stroke="#f0b35a" stroke-width="6" stroke-linecap="round"/>
+  <path d="M770 514 L792 528 L770 542 z" fill="#f0b35a"/>
+  <g transform="translate(810 483)">
+    <rect x="0" y="0" width="140" height="90" rx="10" fill="#fafcfe" stroke="#11171d" stroke-width="5"/>
+    <g stroke="#f0b35a" stroke-width="8" stroke-linecap="round">
+      <line x1="20" y1="26" x2="84" y2="26"/>
+      <line x1="38" y1="46" x2="120" y2="46"/>
+      <line x1="38" y1="66" x2="94" y2="66"/>
+    </g>
+  </g>
+  <text x="970" y="537" font-family="IBM Plex Sans" font-size="26" fill="#555f69">minimum code</text>
+</svg>

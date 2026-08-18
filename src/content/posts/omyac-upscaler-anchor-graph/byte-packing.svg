@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="250" viewBox="0 0 640 250" font-family="system-ui, sans-serif" font-size="13">
+  <defs>
+    <g id="bits" stroke="currentColor" stroke-opacity="0.35" fill="none">
+      <rect x="0" y="0" width="26" height="28"/><rect x="26" y="0" width="26" height="28"/><rect x="52" y="0" width="26" height="28"/><rect x="78" y="0" width="26" height="28"/>
+      <rect x="112" y="0" width="26" height="28"/><rect x="138" y="0" width="26" height="28"/><rect x="164" y="0" width="26" height="28"/><rect x="190" y="0" width="26" height="28"/>
+    </g>
+  </defs>
+
+  <!-- AGI: one byte, one palette index -->
+  <text x="16" y="42" fill="currentColor" font-weight="700">AGI</text>
+  <g transform="translate(120 24)">
+    <rect x="0" y="0" width="104" height="28" fill="currentColor" fill-opacity="0.06"/>
+    <rect x="112" y="0" width="104" height="28" fill="#006a90" fill-opacity="0.18"/>
+    <use href="#bits"/>
+    <g fill="currentColor" fill-opacity="0.5" text-anchor="middle" font-family="ui-monospace, monospace">
+      <text x="13" y="19">0</text><text x="39" y="19">0</text><text x="65" y="19">0</text><text x="91" y="19">0</text>
+    </g>
+    <g fill="#006a90" text-anchor="middle" font-family="ui-monospace, monospace" font-weight="700">
+      <text x="125" y="19">c</text><text x="151" y="19">c</text><text x="177" y="19">c</text><text x="203" y="19">c</text>
+    </g>
+  </g>
+  <text x="352" y="42" fill="currentColor">one 4-bit palette index: 0x00–0x0f</text>
+  <text x="352" y="60" fill="currentColor" fill-opacity="0.7">0xff is out of range, so it can only mean “untouched”</text>
+
+  <!-- SCI0: two nibbles packed -->
+  <text x="16" y="112" fill="currentColor" font-weight="700">SCI0</text>
+  <g transform="translate(120 94)">
+    <rect x="0" y="0" width="104" height="28" fill="#006a90" fill-opacity="0.18"/>
+    <rect x="112" y="0" width="104" height="28" fill="#006a90" fill-opacity="0.18"/>
+    <use href="#bits"/>
+    <g fill="#006a90" text-anchor="middle" font-family="ui-monospace, monospace" font-weight="700">
+      <text x="13" y="19">h</text><text x="39" y="19">h</text><text x="65" y="19">h</text><text x="91" y="19">h</text>
+      <text x="125" y="19">l</text><text x="151" y="19">l</text><text x="177" y="19">l</text><text x="203" y="19">l</text>
+    </g>
+  </g>
+  <text x="352" y="112" fill="currentColor">(high &lt;&lt; 4) | low — two colours per byte</text>
+  <text x="352" y="130" fill="currentColor" fill-opacity="0.7">alternating pixels at native resolution</text>
+
+  <!-- examples -->
+  <g transform="translate(120 160)" font-family="ui-monospace, monospace">
+    <!-- 0x33 solid -->
+    <g stroke="currentColor" stroke-opacity="0.35">
+      <rect x="0" y="0" width="14" height="14" fill="#006a90"/><rect x="14" y="0" width="14" height="14" fill="#006a90"/>
+      <rect x="0" y="14" width="14" height="14" fill="#006a90"/><rect x="14" y="14" width="14" height="14" fill="#006a90"/>
+    </g>
+    <text x="38" y="12" fill="currentColor">0x33</text>
+    <text x="38" y="28" fill="currentColor" fill-opacity="0.7" font-family="system-ui, sans-serif">h = l: solid</text>
+
+    <!-- 0x3b dither pair -->
+    <g transform="translate(150 0)" stroke="currentColor" stroke-opacity="0.35">
+      <rect x="0" y="0" width="14" height="14" fill="#006a90"/><rect x="14" y="0" width="14" height="14" fill="#deeef5"/>
+      <rect x="0" y="14" width="14" height="14" fill="#deeef5"/><rect x="14" y="14" width="14" height="14" fill="#006a90"/>
+    </g>
+    <text x="188" y="12" fill="currentColor">0x3b</text>
+    <text x="188" y="28" fill="currentColor" fill-opacity="0.7" font-family="system-ui, sans-serif">h ≠ l: dither pair</text>
+
+    <!-- 0xff white == sentinel -->
+    <g transform="translate(310 0)" stroke="currentColor" stroke-opacity="0.35">
+      <rect x="0" y="0" width="14" height="14" fill="#fafcfe"/><rect x="14" y="0" width="14" height="14" fill="#fafcfe"/>
+      <rect x="0" y="14" width="14" height="14" fill="#fafcfe"/><rect x="14" y="14" width="14" height="14" fill="#fafcfe"/>
+    </g>
+    <rect x="306" y="-4" width="36" height="36" fill="none" stroke="#f0b35a" stroke-width="3" rx="3"/>
+    <text x="348" y="12" fill="currentColor">0xff</text>
+    <text x="348" y="28" fill="currentColor" fill-opacity="0.7" font-family="system-ui, sans-serif">solid white — and the untouched sentinel</text>
+  </g>
+  <text x="16" y="222" fill="currentColor" fill-opacity="0.7">Same byte, two meanings: the fix keeps the byte for colour and a separate cmdType buffer for “was this ever painted?”</text>
+</svg>

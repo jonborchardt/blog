@@ -15,8 +15,14 @@ Read the whole post, then use the candidate table in `write-post` step 3 (data f
 
 Ladder — stop at the first rung that holds (`CLAUDE.md`: static first, no charting library until a real post needs one):
 
-1. **Mermaid fence** for flow/sequence/state diagrams (build-time SVG; add `accTitle`/`accDescr` and a describing sentence nearby).
-2. **Static SVG file** in the post directory for bespoke illustrations and fixed-data charts: `viewBox` + width/height, `currentColor` / theme hex from `src/styles/theme.ts` so it follows both themes, `<text>` ≥ 11px at rendered size. Render with `<img src={svg.src} width height alt="…">` (or inline via `Figure` when it must inherit CSS).
+1. **Mermaid fence** for flow/sequence/state diagrams (build-time SVG; add `accTitle`/`accDescr` and a describing sentence nearby). Sizing (the site config already sets 14px text and tight spacing; you control the shape):
+   - The diagram must fit the prose measure at native size: **rendered `viewBox` width ≤ 640px** (check `dist/<slug>/index.html` after a build). Wider diagrams get scaled down and the text with them.
+   - Default to `flowchart TB`; use `LR` only for ≤ 4 short nodes in a row. Never place two subgraphs side by side.
+   - Keep node labels short and break them yourself with `<br/>` (2 lines max, ~30 chars each); mermaid's auto-wrap makes tall narrow boxes.
+   - Diamonds `{}` grow with their text and are the number-one cause of giant diagrams: use them only for a 1–3 word decision (`{oracle check}`) and put the conditions on the edge labels; a long question goes in a rectangle.
+   - Avoid a diagonal "staircase" (a chain of decisions each with a side exit): dagre drifts it sideways and it ends up as wide as it is tall. Fold each exit into its rung's label and draw one straight chain.
+   - Every diagram: view the built page at 1280 and 360; if it needs a scrollbar or the text is unreadable, reshape it (see the no-scroll rule below).
+2. **Static SVG file** in the post directory for bespoke illustrations and fixed-data charts: `viewBox` + width/height, `currentColor` / theme hex from `src/styles/theme.ts` so it follows both themes, `<text>` ≥ 11px at rendered size. Render with `<img src={svg.src} width height alt="…">` (or inline as `<Svg class="h-auto w-full max-w-2xl" />` when it must inherit CSS). **It must scale to fit — no scrollbars.** Never wrap a visual in `overflow-x-auto` or give it a `min-w-*`; if it is unreadable when scaled to 360px it is too wide, so redraw it (stack panels vertically, `TB` layout, fewer/shorter labels, larger `<text>`), never scroll it.
 3. **HTML + CSS** (inside a `Figure`) when the visual is really a table, a set of bars, or a layout — no script.
 4. **React island** only when the reader manipulates it or it must compute on demand:
    - `src/content/posts/<slug>/components/<Name>.tsx`; render with `<Name client:visible />` (`client:load` only if it must respond immediately, e.g. above the fold).
@@ -56,6 +62,7 @@ import chart from "./downloads.svg";
 
 Rules:
 
+- **Visuals fit their container at every width; they never scroll.** `overflow-x-auto` is for tables and code only. A diagram that needs a horizontal scrollbar is a defect: redraw it narrower or taller (Mermaid `TB` instead of `LR`, two panels stacked instead of side by side).
 - **Never hand-roll `role="img"` + `aria-label`** on a chart/diagram/demo — use `VizFigure`.
 - Inside a non-interactive `VizFigure` the child is hidden anyway: `<img alt="">` for a rendered SVG/PNG, `aria-hidden="true"` on an inline `<svg>` (a screen reader's per-tag check still sees it).
 - `data` only when the chart plots specific stated values; schematic/"illustrative" visuals get no table (a table would invent precision).

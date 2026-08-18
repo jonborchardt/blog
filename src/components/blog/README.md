@@ -189,7 +189,7 @@ $$
 $$
 ```
 
-Wide diagrams and long formulas scroll horizontally on narrow screens.
+Long formulas scroll horizontally on narrow screens. Diagrams and figures must not: they scale to fit (`viewBox` + `h-auto w-full max-w-2xl`, or `<img>` with width/height); never wrap one in `overflow-x-auto` or force a `min-w-*`.
 
 ## Rules
 

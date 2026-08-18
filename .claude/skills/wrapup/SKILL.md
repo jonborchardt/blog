@@ -51,7 +51,7 @@ grep -rhoE 'from "\.\./[^"]+/components/[^"]+"' src/content/posts | sort | uniq 
 
 `node e2e/shots.mjs <outdir> <paths…>` with `WIDTHS=360,768,1024,1280` for every changed page (default paths cover home/post/archive/404). Look at each in light and dark:
 
-- no horizontal overflow; tables/code/diagrams scroll inside their box
+- no horizontal overflow; tables/code scroll inside their box, diagrams and figures scale to fit (no scrollbar, no `min-w-*`)
 - grids collapse; wrapping flex rows keep gap between rows (use `gap-*`, not margins)
 - hero/CTA readable at 360; nothing you added stays fixed when the theme flips (`document.documentElement.classList.toggle("dark")` in devtools).
 

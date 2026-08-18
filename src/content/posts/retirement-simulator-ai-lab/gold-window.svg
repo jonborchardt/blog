@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="300" viewBox="0 0 640 300" font-family="system-ui, sans-serif" font-size="13">
+  <!-- x = years from retirement, -15 .. +25 (40 years over 520 px, 13 px/yr, x0 = 80 + 15*13 = 275); y = share of portfolio, 0 .. 30% (0% at y=230, 30% at y=50) -->
+  <g stroke="currentColor" stroke-opacity="0.15" stroke-width="1">
+    <line x1="80" y1="50" x2="600" y2="50"/><line x1="80" y1="110" x2="600" y2="110"/><line x1="80" y1="170" x2="600" y2="170"/>
+    <line x1="145" y1="50" x2="145" y2="230"/><line x1="210" y1="50" x2="210" y2="230"/><line x1="340" y1="50" x2="340" y2="230"/><line x1="405" y1="50" x2="405" y2="230"/><line x1="470" y1="50" x2="470" y2="230"/><line x1="535" y1="50" x2="535" y2="230"/>
+  </g>
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" fill="none">
+    <line x1="80" y1="230" x2="600" y2="230"/><line x1="80" y1="50" x2="80" y2="230"/>
+  </g>
+  <!-- y tick labels -->
+  <g fill="currentColor" fill-opacity="0.75" text-anchor="end">
+    <text x="72" y="234">0%</text><text x="72" y="174">10%</text><text x="72" y="114">20%</text><text x="72" y="54">30%</text>
+  </g>
+  <!-- x tick labels -->
+  <g fill="currentColor" fill-opacity="0.75" text-anchor="middle">
+    <text x="80" y="250">-15</text><text x="145" y="250">-10</text><text x="210" y="250">-5</text><text x="275" y="250">0</text><text x="340" y="250">+5</text><text x="405" y="250">+10</text><text x="470" y="250">+15</text><text x="535" y="250">+20</text><text x="600" y="250">+25</text>
+  </g>
+  <text x="340" y="278" fill="currentColor" text-anchor="middle">years from retirement</text>
+  <text transform="translate(18 140) rotate(-90)" fill="currentColor" text-anchor="middle">share of portfolio</text>
+  <!-- retirement marker -->
+  <line x1="275" y1="50" x2="275" y2="230" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text x="281" y="64" fill="currentColor" fill-opacity="0.8">retire</text>
+  <!-- gold window: 0 before -5, ~20% from -5 through +10, tapered to 0 by ~+15 -->
+  <path d="M80,230 L197,230 L210,110 L405,110 L470,230 L600,230 Z" fill="#f0b35a" fill-opacity="0.35"/>
+  <polyline fill="none" stroke="#f0b35a" stroke-width="3" stroke-linejoin="round" points="80,230 197,230 210,110 405,110 470,230 600,230"/>
+  <!-- annotations -->
+  <text x="307" y="98" fill="currentColor" text-anchor="middle">~a fifth of the portfolio</text>
+  <text x="140" y="212" fill="currentColor" fill-opacity="0.75" text-anchor="middle">accumulation: none</text>
+  <text x="535" y="212" fill="currentColor" fill-opacity="0.75" text-anchor="middle">tapered away</text>
+</svg>

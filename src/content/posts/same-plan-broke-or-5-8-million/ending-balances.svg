@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="180" viewBox="0 0 760 180" font-family="system-ui, sans-serif" font-size="12">
+  <!-- x = ending balance in today's dollars, 0..6M, 106.667 px per 1M from x=60 -->
+  <!-- 10th–90th percentile band -->
+  <rect x="97.3" y="92" width="357.4" height="16" fill="#006a90" fill-opacity="0.2"/>
+  <rect x="97.3" y="92" width="357.4" height="16" fill="none" stroke="#006a90" stroke-opacity="0.5"/>
+  <!-- median -->
+  <line x1="241.3" y1="84" x2="241.3" y2="116" stroke="#006a90" stroke-width="2.5"/>
+  <!-- axis -->
+  <line x1="60" y1="100" x2="700" y2="100" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5"/>
+  <g stroke="currentColor" stroke-opacity="0.6">
+    <line x1="60" y1="108" x2="60" y2="112"/><line x1="166.7" y1="108" x2="166.7" y2="112"/><line x1="273.3" y1="108" x2="273.3" y2="112"/><line x1="380" y1="108" x2="380" y2="112"/><line x1="486.7" y1="108" x2="486.7" y2="112"/><line x1="593.3" y1="108" x2="593.3" y2="112"/><line x1="700" y1="108" x2="700" y2="112"/>
+  </g>
+  <g fill="currentColor" fill-opacity="0.7" text-anchor="middle">
+    <text x="60" y="124">$0</text><text x="166.7" y="124">$1M</text><text x="273.3" y="124">$2M</text><text x="380" y="124">$3M</text><text x="486.7" y="124">$4M</text><text x="593.3" y="124">$5M</text><text x="700" y="124">$6M</text>
+  </g>
+  <!-- distribution labels (above) -->
+  <g fill="currentColor" text-anchor="middle">
+    <text x="97.3" y="46">bottom tenth</text><text x="97.3" y="60">≈$350k</text>
+    <text x="241.3" y="46" font-weight="600">median</text><text x="241.3" y="60" font-weight="600">$1.7M</text>
+    <text x="454.7" y="46">top tenth</text><text x="454.7" y="60">$3.7M</text>
+    <text x="380" y="20" fill-opacity="0.7">all 98 start years, 1928–2025: where the plan ends after 30 years</text>
+  </g>
+  <line x1="97.3" y1="64" x2="97.3" y2="90" stroke="currentColor" stroke-opacity="0.4"/>
+  <line x1="454.7" y1="64" x2="454.7" y2="90" stroke="currentColor" stroke-opacity="0.4"/>
+  <!-- the four lives (below) -->
+  <circle cx="60" cy="100" r="5" fill="#f0b35a" stroke="currentColor" stroke-opacity="0.6"/>
+  <circle cx="133.6" cy="100" r="5" fill="currentColor"/>
+  <circle cx="138.9" cy="100" r="5" fill="none" stroke="currentColor" stroke-width="2"/>
+  <circle cx="678.7" cy="100" r="5" fill="#006a90"/>
+  <g fill="currentColor">
+    <text x="126" y="146" text-anchor="end">1929 · $690k</text>
+    <text x="146" y="146">2000 · $740k</text>
+    <text x="678.7" y="146" text-anchor="middle" fill="#006a90" font-weight="600">1982 · $5.8M</text>
+    <text x="60" y="168" font-weight="600">1966 · $0 — one of five start years (1964–68) that run out</text>
+  </g>
+</svg>

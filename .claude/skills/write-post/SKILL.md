@@ -19,7 +19,29 @@ Invariants are in `CLAUDE.md`; component API is in `src/components/blog/README.m
    - Use primitives from `src/components/blog/README.md` (import at the top) only where the writing calls for them; no per-post styling.
    - Images: put files in the post directory, use `![meaningful alt](./file.png)` (raster) or `<img>` with width/height/alt for SVG; `Figure` for captions/wide.
    - Internal links are root-relative (`/other-post/`, `/series/`); the build prefixes the base and fails on broken links.
-   - Diagrams: `mermaid` fences with `accTitle`/`accDescr`; math: `$…$` / `$$…$$`.
+   - Diagrams: `mermaid` fences with `accTitle`/`accDescr` (`TB` by default, short `<br/>`-broken labels, no long text in diamonds, native width ≤ 640px — sizing rules in `create-visual`); math: `$…---
+     name: write-post
+     description: Use when asked to write, draft, or add a post/article. Produces the complete draft — prose, its own diagrams/charts/schematics, hero, validated build — with no further prompting.
+
+---
+
+# write-post
+
+Invariants are in `CLAUDE.md`; component API is in `src/components/blog/README.md`. This skill is the procedure.
+
+## Inputs to settle first
+
+- **slug** (kebab-case; becomes `/<slug>/`), **title**, **description** (40–160 chars: a good search snippet), **tags** (ids from `src/config/tags.ts`), optional **series** (id from `src/config/series.ts`; the scaffold assigns `seriesOrder = max(existing published) + 1`). Need a new tag/series? Add it to the registry first (`create-series` for a series).
+
+## Steps
+
+1. Scaffold: `npm run new-post -- <slug> --title "…" [--series <id>] [--tags a,b]`. It refuses reserved/duplicate slugs and unknown series/tags with a fix message. The post starts as `draft: true`; leave it that way.
+2. Write `src/content/posts/<slug>/index.mdx`:
+   - Real prose for a technical reader; open with why it matters; body headings start at `##` and never skip levels.
+   - Use primitives from `src/components/blog/README.md` (import at the top) only where the writing calls for them; no per-post styling.
+   - Images: put files in the post directory, use `![meaningful alt](./file.png)` (raster) or `<img>` with width/height/alt for SVG; `Figure` for captions/wide.
+   - Internal links are root-relative (`/other-post/`, `/series/`); the build prefixes the base and fails on broken links.
+     / `$…$`.
 3. **Visual pass — mandatory, no sign-off needed.** Re-read the finished prose and add every visual that earns its place; build each with `create-visual` (its ladder picks the medium — Mermaid → SVG → HTML/CSS → island; do not default to React). Do this even when the author only asked for text.
    - Candidates, by what the prose is doing:
      | The paragraph…                                                                                                 | Visual                                                                |
@@ -31,7 +53,7 @@ Invariants are in `CLAUDE.md`; component API is in `src/components/blog/README.m
      | compares two approaches side by side                                                                           | two-panel SVG or `Comparison`                                         |
    - Reject candidates that restate an adjacent screenshot, list, or stat line ("8 files, 1 dep" is a sentence, not a chart).
    - When the post describes code, check every diagram against the source (states, thresholds, order of operations) before drawing it — a plausible-looking wrong diagram is worse than none.
-   - Placement: after the paragraph it illustrates; never inside a list item (put it after the list). Fix overlapping labels before moving on (view at 1280 and 360, both themes).
+   - Placement: after the paragraph it illustrates; never inside a list item (put it after the list). Every visual scales to fit — no `overflow-x-auto` wrapper, no `min-w-*`, no horizontal scrollbar at 360px (redraw narrower/taller instead). Fix overlapping labels before moving on (view at 1280 and 360, both themes).
    - Typical yield for a technical post is 2–4 visuals; zero means the pass was skipped, not that nothing qualified.
 4. Fix the frontmatter description placeholder; `title` ≤ 90 chars.
    Hero: unless the author handed you an image, use `create-hero` (draw `hero.svg`, `npm run render-hero -- <slug>`, real alt). Never leave the grey placeholder.

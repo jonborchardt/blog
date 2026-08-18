@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="270" viewBox="0 0 640 270" font-family="system-ui, sans-serif" font-size="13">
+  <defs>
+    <marker id="gcArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#f0b35a"/>
+    </marker>
+    <!-- 6x6 grid lines, cell 28px -->
+    <g id="gcGrid" fill="none" stroke="currentColor" stroke-opacity="0.25" stroke-width="1">
+      <path d="M0 0h168M0 28h168M0 56h168M0 84h168M0 112h168M0 140h168M0 168h168M0 0v168M28 0v168M56 0v168M84 0v168M112 0v168M140 0v168M168 0v168"/>
+    </g>
+    <!-- fill region: cells above the diagonal (col > row) -->
+    <g id="gcFill" fill="#deeef5">
+      <rect x="28" y="0" width="140" height="28"/>
+      <rect x="56" y="28" width="112" height="28"/>
+      <rect x="84" y="56" width="84" height="28"/>
+      <rect x="112" y="84" width="56" height="28"/>
+      <rect x="140" y="112" width="28" height="28"/>
+    </g>
+    <!-- boundary pixels on the diagonal, (2,2) left empty -->
+    <g id="gcBoundary" fill="currentColor">
+      <rect x="0" y="0" width="28" height="28"/>
+      <rect x="28" y="28" width="28" height="28"/>
+      <rect x="84" y="84" width="28" height="28"/>
+      <rect x="112" y="112" width="28" height="28"/>
+      <rect x="140" y="140" width="28" height="28"/>
+    </g>
+  </defs>
+
+  <text x="164" y="22" fill="currentColor" text-anchor="middle" font-weight="600">Scaled junction: one-pixel diagonal gap</text>
+  <g transform="translate(80 40)">
+    <use href="#gcFill"/>
+    <!-- leaked fill below the diagonal -->
+    <g fill="#deeef5">
+      <rect x="0" y="28" width="28" height="140"/>
+      <rect x="28" y="56" width="28" height="112"/>
+      <rect x="56" y="84" width="28" height="84"/>
+      <rect x="84" y="112" width="28" height="56"/>
+      <rect x="112" y="140" width="28" height="28"/>
+    </g>
+    <use href="#gcBoundary"/>
+    <use href="#gcGrid"/>
+    <!-- gap marker and leak arrow -->
+    <rect x="56" y="56" width="28" height="28" fill="none" stroke="#f0b35a" stroke-width="2.5"/>
+    <path d="M118 44 L44 118" fill="none" stroke="#f0b35a" stroke-width="2.5" marker-end="url(#gcArrow)"/>
+  </g>
+  <text x="164" y="232" fill="currentColor" text-anchor="middle">flood fill escapes through (x, y)</text>
+  <text x="164" y="252" fill="currentColor" fill-opacity="0.7" text-anchor="middle">boundary at (x-1, y-1) and (x+1, y+1)</text>
+
+  <!-- arrow between panels -->
+  <path d="M290 124 H350" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#gcArrow)"/>
+  <text x="320" y="112" fill="currentColor" text-anchor="middle" font-size="12">closeGaps</text>
+
+  <text x="476" y="22" fill="currentColor" text-anchor="middle" font-weight="600">After micro-gap closure</text>
+  <g transform="translate(392 40)">
+    <use href="#gcFill"/>
+    <use href="#gcBoundary"/>
+    <!-- the closed pixel -->
+    <rect x="56" y="56" width="28" height="28" fill="#006a90"/>
+    <use href="#gcGrid"/>
+  </g>
+  <text x="476" y="232" fill="currentColor" text-anchor="middle">one pixel added, boundary is watertight</text>
+  <text x="476" y="252" fill="currentColor" fill-opacity="0.7" text-anchor="middle">fill stays on its own side</text>
+</svg>

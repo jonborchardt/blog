@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="230" viewBox="0 0 640 230" font-family="system-ui, sans-serif" font-size="13">
+  <defs>
+    <marker id="dbArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
+    </marker>
+    <!-- one 2x2 dither block: colour A on the main diagonal, colour B on the other -->
+    <g id="dbBlock">
+      <rect x="0" y="0" width="30" height="30" fill="#006a90"/>
+      <rect x="30" y="30" width="30" height="30" fill="#006a90"/>
+      <rect x="30" y="0" width="30" height="30" fill="#006a90" fill-opacity="0.3"/>
+      <rect x="0" y="30" width="30" height="30" fill="#006a90" fill-opacity="0.3"/>
+    </g>
+  </defs>
+
+  <text x="140" y="24" fill="currentColor" text-anchor="middle" font-weight="600">EGA dither (2 colours, checkerboard)</text>
+  <g transform="translate(80 40)">
+    <use href="#dbBlock"/>
+    <use href="#dbBlock" x="60"/>
+    <use href="#dbBlock" y="60"/>
+    <use href="#dbBlock" x="60" y="60"/>
+    <g fill="none" stroke="currentColor" stroke-opacity="0.35">
+      <path d="M0 0h120v120h-120zM30 0v120M60 0v120M90 0v120M0 30h120M0 60h120M0 90h120"/>
+    </g>
+    <!-- highlight one 2x2 block -->
+    <rect x="0" y="0" width="60" height="60" fill="none" stroke="#f0b35a" stroke-width="2.5"/>
+  </g>
+  <text x="140" y="184" fill="currentColor" text-anchor="middle">4 pixels, 2 palette entries</text>
+  <text x="140" y="204" fill="currentColor" fill-opacity="0.7" text-anchor="middle">a 2x2 block that alternates A/B</text>
+
+  <path d="M240 100 H300" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#dbArrow)"/>
+  <text x="270" y="88" fill="currentColor" text-anchor="middle" font-size="12">blend</text>
+
+  <text x="420" y="24" fill="currentColor" text-anchor="middle" font-weight="600">RGBA output</text>
+  <g transform="translate(360 40)">
+    <rect x="0" y="0" width="120" height="120" fill="#006a90" fill-opacity="0.65"/>
+    <rect x="0" y="0" width="120" height="120" fill="none" stroke="currentColor" stroke-opacity="0.35"/>
+  </g>
+  <text x="420" y="184" fill="currentColor" text-anchor="middle">every pixel = avg(A, B)</text>
+  <text x="420" y="204" fill="currentColor" fill-opacity="0.7" text-anchor="middle">same region shape, no checkerboard</text>
+
+  <!-- legend -->
+  <g transform="translate(498 60)" font-size="12">
+    <rect x="0" y="0" width="16" height="16" fill="#006a90"/>
+    <text x="22" y="13" fill="currentColor">colour A (0x03)</text>
+    <rect x="0" y="26" width="16" height="16" fill="#006a90" fill-opacity="0.3"/>
+    <text x="22" y="39" fill="currentColor">colour B (0x0B)</text>
+    <rect x="0" y="52" width="16" height="16" fill="#006a90" fill-opacity="0.65"/>
+    <text x="22" y="65" fill="currentColor">blended</text>
+  </g>
+</svg>

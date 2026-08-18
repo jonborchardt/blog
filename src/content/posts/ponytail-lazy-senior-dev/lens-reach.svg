@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360" font-family="system-ui, sans-serif" font-size="13">
+  <defs>
+    <marker id="aFg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="currentColor" fill-opacity="0.6"/></marker>
+    <marker id="aPri" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#006a90"/></marker>
+    <marker id="aHi" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#f0b35a"/></marker>
+  </defs>
+
+  <!-- codebase -->
+  <rect x="20" y="70" width="450" height="270" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.5"/>
+  <text x="32" y="92" fill="currentColor" fill-opacity="0.75" font-weight="600">Codebase</text>
+
+  <!-- PR diff -->
+  <rect x="40" y="110" width="200" height="120" rx="6" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <text x="52" y="132" fill="#11171d" font-weight="600">PR diff</text>
+  <rect x="52" y="146" width="176" height="66" rx="4" fill="#fafcfe" stroke="#006a90" stroke-width="1"/>
+  <text x="140" y="170" fill="#11171d" text-anchor="middle">new drag-state hook</text>
+  <text x="140" y="190" fill="#11171d" fill-opacity="0.75" text-anchor="middle" font-size="12">imports an existing hook</text>
+
+  <!-- unchanged hook outside the diff -->
+  <rect x="52" y="262" width="176" height="60" rx="4" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="140" y="284" fill="currentColor" text-anchor="middle">unchanged hook</text>
+  <text x="140" y="304" fill="currentColor" fill-opacity="0.75" text-anchor="middle" font-size="12">Map set in useEffect</text>
+
+  <!-- dependency -->
+  <rect x="490" y="150" width="130" height="60" rx="6" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5"/>
+  <text x="555" y="174" fill="currentColor" text-anchor="middle">react-dropzone</text>
+  <text x="555" y="194" fill="currentColor" fill-opacity="0.75" text-anchor="middle" font-size="12">installed dependency</text>
+
+  <!-- generic reviewer: looks at the diff only -->
+  <line x1="140" y1="30" x2="140" y2="106" stroke="currentColor" stroke-opacity="0.6" stroke-width="2" marker-end="url(#aFg)"/>
+  <text x="140" y="22" fill="currentColor" text-anchor="middle" font-weight="600">Generic review</text>
+  <text x="152" y="66" fill="currentColor" fill-opacity="0.75" font-size="12">stays in the diff:</text>
+  <text x="152" y="82" fill="currentColor" fill-opacity="0.75" font-size="12">"looks sensible"</text>
+
+  <!-- ponytail: hook -> dependency -->
+  <path d="M228 170 L486 176" fill="none" stroke="#006a90" stroke-width="2.5" marker-end="url(#aPri)"/>
+  <text x="355" y="140" fill="currentColor" text-anchor="middle" font-weight="600">Ponytail</text>
+  <text x="355" y="158" fill="currentColor" fill-opacity="0.8" text-anchor="middle" font-size="12">rung 5: already provided?</text>
+  <text x="355" y="200" fill="currentColor" fill-opacity="0.8" text-anchor="middle" font-size="12">yes, delete the hook</text>
+
+  <!-- superpowers: diff -> unchanged hook via import -->
+  <path d="M100 212 L100 258" fill="none" stroke="#f0b35a" stroke-width="2.5" marker-end="url(#aHi)"/>
+  <text x="252" y="252" fill="currentColor" font-weight="600">Superpowers</text>
+  <text x="252" y="270" fill="currentColor" fill-opacity="0.8" font-size="12">follows the import out of the diff,</text>
+  <text x="252" y="286" fill="currentColor" fill-opacity="0.8" font-size="12">traces the first render before effects:</text>
+  <text x="252" y="302" fill="currentColor" fill-opacity="0.8" font-size="12">Map is null on first render</text>
+</svg>

@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="300" viewBox="0 0 640 300" font-family="system-ui, sans-serif" font-size="13">
+  <title>Failed start years for the baseline and for the cash-bucket row, grouped by cohort family</title>
+  <!-- column headers -->
+  <g fill="currentColor" font-weight="600" text-anchor="middle">
+    <text x="250" y="40">extended-inflation starts</text>
+    <text x="440" y="40">slow-growth starts</text>
+    <text x="580" y="40">crash starts</text>
+  </g>
+  <!-- row labels -->
+  <g fill="currentColor" text-anchor="end">
+    <text x="150" y="98" font-weight="600">baseline</text>
+    <text x="150" y="116" fill-opacity="0.7" font-size="12">failed start years</text>
+    <text x="150" y="188" font-weight="600">cash-bucket row</text>
+    <text x="150" y="206" fill-opacity="0.7" font-size="12">failed start years</text>
+  </g>
+  <!-- row separators -->
+  <g stroke="currentColor" stroke-opacity="0.25">
+    <line x1="20" y1="140" x2="620" y2="140"/>
+    <line x1="20" y1="230" x2="620" y2="230"/>
+  </g>
+  <!-- inflation tiles, baseline row -->
+  <g fill="#f0b35a" stroke="currentColor" stroke-opacity="0.5">
+    <rect x="180" y="86" width="24" height="24" rx="3"/>
+    <rect x="210" y="86" width="24" height="24" rx="3"/>
+    <rect x="240" y="86" width="24" height="24" rx="3"/>
+    <rect x="270" y="86" width="24" height="24" rx="3"/>
+    <rect x="300" y="86" width="24" height="24" rx="3"/>
+  </g>
+  <!-- inflation tiles, bucket row (kept) -->
+  <g fill="#f0b35a" stroke="currentColor" stroke-opacity="0.5">
+    <rect x="180" y="176" width="24" height="24" rx="3"/>
+    <rect x="210" y="176" width="24" height="24" rx="3"/>
+    <rect x="240" y="176" width="24" height="24" rx="3"/>
+    <rect x="270" y="176" width="24" height="24" rx="3"/>
+    <rect x="300" y="176" width="24" height="24" rx="3"/>
+  </g>
+  <!-- slow-growth tiles: none in baseline, added in bucket row -->
+  <g fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-dasharray="3 3">
+    <rect x="395" y="86" width="24" height="24" rx="3"/>
+    <rect x="425" y="86" width="24" height="24" rx="3"/>
+    <rect x="455" y="86" width="24" height="24" rx="3"/>
+  </g>
+  <g fill="#006a90" stroke="currentColor" stroke-opacity="0.5">
+    <rect x="395" y="176" width="24" height="24" rx="3"/>
+    <rect x="425" y="176" width="24" height="24" rx="3"/>
+    <rect x="455" y="176" width="24" height="24" rx="3"/>
+  </g>
+  <!-- crash starts: survive in both rows -->
+  <g fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-dasharray="3 3">
+    <rect x="550" y="86" width="24" height="24" rx="3"/>
+    <rect x="580" y="86" width="24" height="24" rx="3"/>
+    <rect x="550" y="176" width="24" height="24" rx="3"/>
+    <rect x="580" y="176" width="24" height="24" rx="3"/>
+  </g>
+  <!-- annotations -->
+  <g fill="currentColor" font-size="12" text-anchor="middle">
+    <text x="250" y="130" fill-opacity="0.7">(none rescued)</text>
+    <text x="440" y="130" fill-opacity="0.7">(none)</text>
+    <text x="580" y="130" fill-opacity="0.7">(none)</text>
+    <text x="250" y="220" fill-opacity="0.7">kept</text>
+    <text x="440" y="220" fill-opacity="0.7">re-broken: cash was the casualty</text>
+    <text x="580" y="220" fill-opacity="0.7">the video's story</text>
+  </g>
+  <!-- legend -->
+  <g font-size="12" fill="currentColor">
+    <rect x="20" y="255" width="14" height="14" rx="2" fill="#f0b35a" stroke="currentColor" stroke-opacity="0.5"/>
+    <text x="40" y="267">failed start year, already in baseline</text>
+    <rect x="270" y="255" width="14" height="14" rx="2" fill="#006a90" stroke="currentColor" stroke-opacity="0.5"/>
+    <text x="290" y="267">failed start year, new</text>
+    <rect x="440" y="255" width="14" height="14" rx="2" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-dasharray="3 3"/>
+    <text x="460" y="267">survives (schematic counts)</text>
+  </g>
+</svg>
