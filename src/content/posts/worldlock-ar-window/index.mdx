@@ -13,9 +13,12 @@ draft: false
 
 import { Image } from "astro:assets";
 import Figure from "@/components/blog/Figure.astro";
+import VizFigure from "@/components/blog/VizFigure.astro";
 import globe from "./globe-spokane-missoula-nyc.jpg";
 import towers from "./tacoma-seattle-towers.jpg";
 import pillar from "./data-pillar-collar-rings.jpg";
+import GlobeRaycast from "./globe-raycast.svg";
+import FloatUlp from "./float-ulp.svg";
 
 Point your phone west from Seattle and there's a glowing tower rising out of Tacoma, labeled `Tacoma 42.4 km`. Pan up and the night side of the Earth curves away from you, city lights and all, with NYC's tower readable 3,815 km over the horizon. A white dash crosses the sky where the ISS actually is, right now.
 
@@ -49,11 +52,79 @@ That's WorldLock: a native Android AR app that georegisters content to the real 
 - **The whole Earth.** The globe isn't a mesh — it's a per-fragment ray-cast against the WGS84 ellipsoid, drawn as one fullscreen quad. Blue Marble day and night textures, blended at the real solar terminator computed from the current time. Tessellating a planet-sized sphere near the camera is a precision disaster; a ray that solves the quadratic in the fragment shader is exact at every distance.
 - **The live ISS.** Position fetched every 3 seconds from wheretheiss.at, linearly extrapolated between fixes, drawn as a little truss-and-solar-wings model that scales with distance so it stays visible at 400+ km.
 
+<Figure caption="Why the globe is a ray-cast, not a mesh. Left: a tessellated sphere seen from its own surface — huge flat facets, and every vertex is 6.4 million metres from the origin, so it snaps to a metre-wide float grid. Right: one fullscreen quad; each fragment intersects its own ray with the analytic ellipsoid.">
+  <VizFigure
+    name="Tessellated sphere versus per-fragment ellipsoid ray-cast"
+    summary="Side-by-side schematic. On the left a coarse triangle mesh approximates the curve under a camera standing on the surface, with vertices marked as jittering. On the right the same camera looks through a single quad and one ray per pixel hits a smooth analytic ellipsoid, so there are no vertices to jitter."
+  >
+    <div class="overflow-x-auto"><GlobeRaycast class="h-auto w-full min-w-2xl max-w-2xl" /></div>
+  </VizFigure>
+</Figure>
+
 ## The one hard rule
 
 Everything interesting in this app is a coordinate-precision problem wearing a trench coat. Earth-centered coordinates are ~6.4 million meters from the origin; 32-bit floats have ~7 significant digits; do the math and your geometry jitters by meters. So the rule is: authoritative positions are ECEF in **doubles**, converted to camera-relative ENU in doubles, and only the final origin-relative meters ever touch a GL float. The render origin stays pinned near you, where float precision is millimeters.
 
+The pipeline, with the one place a double becomes a float:
+
+```mermaid
+flowchart TB
+  accTitle: Coordinate pipeline from ECEF doubles to GL floats
+  accDescr: Geospatial pose and city coordinates are held as ECEF doubles, then converted to ENU metres relative to a render origin near the phone; only those small origin-relative values are cast to 32-bit floats and handed to OpenGL.
+  subgraph D[64-bit doubles]
+    A[lat / lon / alt from Geospatial pose and city list] --> B[ECEF — about 6.4 million m from centre]
+    B --> E[ENU relative to the render origin — metres to a few thousand km]
+  end
+  subgraph F[32-bit floats]
+    direction TB
+    G[GL vertices and uniforms — the one cast] --> H[shaders]
+  end
+  E --> F
+```
+
+How bad is it if you skip that? A 32-bit float has 24 bits of mantissa, so the gap between one representable value and the next grows with the magnitude of the number:
+
+<Figure caption="Float32 step size against distance from the render origin, log–log. Keep the origin near the phone and every coordinate the GPU sees is small; put it at the Earth's centre and each coordinate can only move in half-metre steps.">
+  <VizFigure
+    name="32-bit float step size versus distance from the render origin"
+    summary="On a log–log chart the step size climbs in a straight line from about 0.1 micrometres at 1 metre to about 0.5 metres at 6,371 kilometres, the Earth's radius. Near the origin precision is effectively free; at Earth-centre magnitudes a coordinate can only move in half-metre steps, and a few arithmetic operations turn that into metre-scale jitter."
+    data={{
+      caption: "Float32 step size (unit in the last place) at increasing magnitudes",
+      columns: ["Distance from origin", "Float32 step"],
+      rows: [
+        ["1 m", "1.2e-7 m"],
+        ["10 m", "9.5e-7 m"],
+        ["100 m", "7.6e-6 m"],
+        ["1 km", "6.1e-5 m"],
+        ["10 km", "9.8e-4 m"],
+        ["100 km", "7.8e-3 m"],
+        ["1,000 km", "0.0625 m"],
+        ["6,371 km (Earth radius)", "0.5 m"],
+      ],
+    }}
+  >
+    <div class="overflow-x-auto"><FloatUlp class="h-auto w-full min-w-2xl max-w-2xl" /></div>
+  </VizFigure>
+</Figure>
+
 The other quiet trick is the reference anchor: the first time the Geospatial pose is accurate enough (position < 15 m, yaw < 15°), the app plants a SLAM anchor and rides it from then on. Georegistration survives pause/resume and works indoors after the first good fix, instead of waiting for VPS to re-converge every time.
+
+There's a looser render gate in front of that (yaw < 25°, with 2× hysteresis so it doesn't flicker), so towers appear early and swing into place while the anchor waits for the tight fix:
+
+```mermaid
+stateDiagram-v2
+  accTitle: Georegistration states, from first fix to reference anchor
+  accDescr: The app starts hidden. When Geospatial position accuracy is under 15 metres and yaw under 25 degrees it renders using the camera pose as origin, dropping back to hidden if accuracy degrades past twice those bounds. The first time yaw accuracy is also under 15 degrees it plants a SLAM anchor and becomes anchored; that state survives pause and resume and indoor use, and is left only if ARCore stops tracking the anchor.
+  [*] --> Hidden
+  Hidden --> CameraOrigin: pos < 15 m, yaw < 25°
+  CameraOrigin --> Hidden: worse than 2× the gate
+  CameraOrigin --> Anchored: pos < 15 m, yaw < 15°<br/>plant SLAM anchor
+  Anchored --> Anchored: pause / resume, indoors
+  Anchored --> Hidden: anchor STOPPED
+  state "Hidden (waiting for fix)" as Hidden
+  state "Rendering from camera pose" as CameraOrigin
+  state "Anchored (riding SLAM anchor)" as Anchored
+```
 
 ## The stats that matter
 

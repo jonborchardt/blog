@@ -16,7 +16,7 @@ export const series = {
   worldlock: {
     title: "WorldLock",
     description:
-      "Building WorldLock in the open: the design decisions, the tooling, and what shipped along the way.",
+      "Point your phone west from Seattle and there's a glowing tower rising out of Tacoma, labeled Tacoma 42.4 km. Pan up and the night side of the Earth curves away from you, city lights and all, with NYC's tower readable 3,815 km over the horizon. A white dash crosses the sky where the ISS actually is, right now.",
   },
   "sierra-games": {
     title: "Sierra Games",
