@@ -17,6 +17,8 @@ test("every sitemap page renders and has no axe violations", async ({ page, requ
     await expect(page.locator("h1"), url).toBeVisible();
     const { violations } = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
+      // Third-party embeds (YouTube) own their iframe DOM; only our markup is under test.
+      .exclude("iframe")
       .analyze();
     expect(violations, url).toEqual([]);
   }

@@ -1,51 +1,25 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { series, SERIES_IDS } from "@/config/series";
-import { Image } from "astro:assets";
-import { getSeriesHero, getSeriesPosts, seriesPath } from "@/lib/posts";
-import { href } from "@/lib/url";
-
-const entries = await Promise.all(
-  SERIES_IDS.map(async (id) => ({
-    id,
-    ...series[id],
-    count: (await getSeriesPosts(id)).length,
-    hero: await getSeriesHero(id),
-  })),
-);
+import SeriesCard from "@/components/SeriesCard.astro";
+import { SERIES_IDS } from "@/config/series";
 ---
 
-<BaseLayout meta={{ title: "Series", description: "Multi-part series.", path: "/series/" }}>
+<BaseLayout
+  meta={{
+    title: "Series",
+    description:
+      "Longer topics broken into ordered parts: start at part one and each new part picks up where the last left off.",
+    path: "/series/",
+  }}
+>
   <div class="max-w-wide mx-auto">
     <h1 class="text-display font-semibold">Series</h1>
-    <p class="text-muted-foreground mt-3">Multi-part explorations, meant to be read in order.</p>
-    <ul class="mt-10 divide-y border-t">
-      {
-        entries.map((s) => (
-          <li class="grid-cols-thumb grid gap-x-4 py-6">
-            <a href={href(seriesPath(s.id))} tabindex="-1" aria-hidden="true">
-              <Image
-                src={s.hero.src}
-                alt={s.hero.alt}
-                width={320}
-                height={168}
-                class="aspect-card w-full rounded-md border object-cover"
-              />
-            </a>
-            <div>
-              <h2 class="text-title font-semibold">
-                <a href={href(seriesPath(s.id))} class="hover:text-primary no-underline">
-                  {s.title}
-                </a>
-              </h2>
-              <p class="text-muted-foreground mt-1">{s.description}</p>
-              <p class="text-muted-foreground mt-2 text-sm">
-                {s.count} {s.count === 1 ? "part" : "parts"}
-              </p>
-            </div>
-          </li>
-        ))
-      }
+    <p class="text-muted-foreground mt-3">
+      Longer topics broken into parts. Each series builds on the one before it, so start at part one
+      and read in order; new parts pick up where the last left off.
+    </p>
+    <ul class="mt-10 divide-y border-t pt-8">
+      {SERIES_IDS.map((id) => <SeriesCard id={id} />)}
     </ul>
   </div>
 </BaseLayout>

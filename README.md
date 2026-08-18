@@ -2,7 +2,7 @@
 
 Thoughts on building always shippable systems, moving fast without breaking things, and making complex work simple and enjoyable.
 
-Personal technical blog by Jonathan Borchardt. Static site built with Astro, published to GitHub Pages at <https://jonborchardt.github.io/blog/>.
+Personal site of Jonathan Borchardt: technical blog, portfolio and resume (the latter two are stubs for now). Static site built with Astro, published to GitHub Pages at <https://jonborchardt.github.io/blog/>.
 
 ## Requirements
 
@@ -40,10 +40,10 @@ Every post without a bespoke `ogImage` gets a generated 1200×630 card at `/og/<
 
 - **Astro 7** (static output) owns routing, layouts, content collections, metadata, RSS, sitemap.
 - **React 19** is used only for interactive islands (`client:*` directives), including components embedded in MDX.
-- **MDX** for posts and the about page. **Tailwind 4 + shadcn/ui (Radix)** for styling; light/dark/system theme with a persisted override.
+- **MDX** for posts. **Tailwind 4 + shadcn/ui (Radix)** for styling; light/dark/system theme with a persisted override.
 - **Content**: `src/content/posts/<slug>/index.mdx` with colocated assets and components. Frontmatter is validated by the schema in `src/content.config.ts` against typed registries in `src/config/series.ts` and `src/config/tags.ts`. Cross-post checks (duplicate/reserved slugs, duplicate series order) fail the build.
 - **Drafts** (`draft: true`) render only in `npm run dev`.
-- **Routes**: `/`, `/all-posts/`, `/<slug>/`, `/series/`, `/series/<id>/`, `/about/`, `/rss.xml`, `/robots.txt`, `/sitemap-index.xml`, `/search-index.json`, `/og/<slug>.png`, custom 404; `/admin/` exists in dev only.
+- **Routes**: `/`, `/all-posts/`, `/<slug>/`, `/series/`, `/series/<id>/`, `/portfolio/`, `/resume/`, `/rss.xml`, `/robots.txt`, `/sitemap-index.xml`, `/search-index.json`, `/og/<slug>.png`, custom 404; `/admin/` exists in dev only.
 - **Base path**: `astro.config.mjs` sets `site` and `base: "/blog"`; links are built with `href()` from `src/lib/url.ts` so nothing hardcodes `/blog/`.
 
 ```

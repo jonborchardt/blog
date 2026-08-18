@@ -2,7 +2,7 @@
 /** Featured-post card for the homepage: title, description, date, series/tags, hero. */
 import { Image } from "astro:assets";
 import type { Post } from "@/lib/posts";
-import { postPath } from "@/lib/posts";
+import { postPath, seriesPath } from "@/lib/posts";
 import { series as seriesRegistry } from "@/config/series";
 import { tags as tagRegistry } from "@/config/tags";
 import { href } from "@/lib/url";
@@ -32,7 +32,9 @@ const { hero, series, seriesOrder, tags, title, description, publishedAt, draft 
     {
       series && (
         <p class="text-primary eyebrow mb-2">
-          {seriesRegistry[series].title}
+          <a href={href(seriesPath(series))} class="no-underline hover:underline">
+            {seriesRegistry[series].title}
+          </a>
           {seriesOrder && ` · Part ${seriesOrder}`}
         </p>
       )

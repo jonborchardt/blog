@@ -1,0 +1,38 @@
+---
+/** List row for a series: hero thumb, title, description, part count. Used on / and /series/. */
+import { Image } from "astro:assets";
+import { series, type SeriesId } from "@/config/series";
+import { getSeriesHero, getSeriesPosts, seriesPath } from "@/lib/posts";
+import { href } from "@/lib/url";
+
+interface Props {
+  id: SeriesId;
+  /** Heading level for the series title; keep the page's heading hierarchy in order. */
+  heading?: "h2" | "h3";
+}
+const { id, heading: Heading = "h2" } = Astro.props;
+const info = series[id];
+const count = (await getSeriesPosts(id)).length;
+const hero = await getSeriesHero(id);
+---
+
+<li class="grid-cols-thumb grid gap-x-4 py-5 first:pt-0 last:pb-0">
+  <a href={href(seriesPath(id))} tabindex="-1" aria-hidden="true">
+    <Image
+      src={hero.src}
+      alt={hero.alt}
+      width={320}
+      height={168}
+      class="aspect-card w-full rounded-md border object-cover"
+    />
+  </a>
+  <div>
+    <Heading class="text-title font-semibold">
+      <a href={href(seriesPath(id))} class="hover:text-primary no-underline">
+        {info.title}
+      </a>
+    </Heading>
+    <p class="text-muted-foreground mt-1">{info.description}</p>
+    <p class="text-muted-foreground mt-2 text-sm">{`${count} ${count === 1 ? "part" : "parts"}`}</p>
+  </div>
+</li>

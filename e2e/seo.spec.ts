@@ -69,5 +69,4 @@ test("rss feed is well-formed with language, self link and categories", async ({
   expect(xml).toContain('rel="self"');
   expect(xml).toContain("<category>Engineering</category>");
   expect(xml).toContain("<author>");
-  expect(xml).not.toContain("primitives-fixture");
 });

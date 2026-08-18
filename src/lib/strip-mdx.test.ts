@@ -12,7 +12,7 @@ import { Image } from "astro:assets";
 
 # Heading one
 
-Some **bold** text with a [link](/about/) and \`code\`.
+Some **bold** text with a [link](/all-posts/) and \`code\`.
 
 <Callout variant="tip" title="Tip">
   Inside the callout with {expression}.

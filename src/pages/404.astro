@@ -10,7 +10,7 @@ const recent = (await getPosts()).slice(0, 5);
 <BaseLayout
   meta={{
     title: "Page not found",
-    description: "That page does not exist. Try the archive, series, or about pages.",
+    description: "That page does not exist. Try the archive, series, or portfolio pages.",
     path: "/404/",
     noindex: true,
   }}
@@ -26,7 +26,7 @@ const recent = (await getPosts()).slice(0, 5);
         <li><a href={href("/")}>Home</a></li>
         <li><a href={href("/all-posts/")}>All Posts</a></li>
         <li><a href={href("/series/")}>Series</a></li>
-        <li><a href={href("/about/")}>About</a></li>
+        <li><a href={href("/portfolio/")}>Portfolio</a></li>
       </ul>
     </nav>
     {

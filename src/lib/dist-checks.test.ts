@@ -21,9 +21,9 @@ describe("checkDist", () => {
   it("passes a clean site and reports stats", () => {
     const r = run(
       [
-        page("index.html", `<a href="/blog/about/">About</a><a href="/blog/rss.xml">RSS</a>`),
+        page("index.html", `<a href="/blog/resume/">Resume</a><a href="/blog/rss.xml">RSS</a>`),
         page(
-          "about/index.html",
+          "resume/index.html",
           `<h2 id="bio">Bio</h2><a href="/blog/#top">home</a><a href="#bio">bio</a>`,
         ),
         page("404.html", `<img src="/blog/x.png" alt="An x" width="1" height="1">`, {
@@ -34,7 +34,7 @@ describe("checkDist", () => {
     );
     // 404 canonical rule is skipped; "#top" on index is missing → one error expected
     expect(r.errors).toEqual([
-      expect.stringContaining('about/index.html: link "/blog/#top" points to #top'),
+      expect.stringContaining('resume/index.html: link "/blog/#top" points to #top'),
     ]);
     expect(r.stats).toEqual({ pages: 3, links: 4, images: 1 });
   });

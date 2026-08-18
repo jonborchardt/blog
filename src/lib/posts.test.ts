@@ -33,6 +33,6 @@ describe("validatePosts", () => {
   });
 
   it("reports every problem at once", () => {
-    expect(() => validatePosts([post("about"), post("admin")])).toThrow(/about[\s\S]*admin/);
+    expect(() => validatePosts([post("resume"), post("admin")])).toThrow(/resume[\s\S]*admin/);
   });
 });

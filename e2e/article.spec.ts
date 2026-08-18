@@ -14,7 +14,7 @@ test("article structure: one h1, landmarks, series nav, TOC, anchors", async ({ 
   expect(await anchors.count()).toBeGreaterThanOrEqual(3);
   await expect(anchors.first()).toHaveAttribute("aria-label", /^Link to section: /);
   await expect(page.getByText(/\d+ min read/)).toBeVisible();
-  await expect(page.getByText("Part 1 of 2").first()).toBeVisible();
+  await expect(page.getByText("Part 1 of 3").first()).toBeVisible();
 });
 
 test("images are lazy, sized and responsive; tables scroll", async ({ page }) => {
@@ -35,7 +35,7 @@ test("no horizontal overflow at 360px with a wide table and code block", async (
 });
 
 test("prose pages ship no islands", async ({ page }) => {
-  await page.goto("about/");
+  await page.goto("resume/");
   await expect(page.locator("astro-island")).toHaveCount(0);
 });
 

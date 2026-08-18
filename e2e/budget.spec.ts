@@ -17,7 +17,7 @@ async function jsRequests(page: Page, path: string) {
 test("static pages ship zero JavaScript files", async ({ page }) => {
   for (const p of [
     "",
-    "about/",
+    "resume/",
     "building-blocks-of-this-blog/",
     "series/",
     "series/worldlock/",

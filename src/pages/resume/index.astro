@@ -1,0 +1,23 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import AuthorLinks from "@/components/AuthorLinks.astro";
+---
+
+<BaseLayout
+  meta={{ title: "Resume", description: "Resume of Jonathan Borchardt.", path: "/resume/" }}
+>
+  <div class="mx-auto max-w-prose">
+    <p class="text-muted-foreground eyebrow">Coming soon</p>
+    <h1 class="text-display mt-2 font-semibold">Resume</h1>
+    <p class="mt-4 text-lg leading-relaxed">
+      I've spent 25 years turning complex data into things people can actually use and understand,
+      from large-scale search at Microsoft to interactive research demos at Allen Institute for AI.
+      These days I lead engineering teams focused on making cutting-edge AI work accessible, not
+      just impressive.
+    </p>
+    <p class="text-muted-foreground mt-4">
+      A full resume is on its way. In the meantime, the links below cover the essentials.
+    </p>
+    <div class="mt-6"><AuthorLinks /></div>
+  </div>
+</BaseLayout>

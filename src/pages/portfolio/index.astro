@@ -1,0 +1,19 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import AuthorLinks from "@/components/AuthorLinks.astro";
+---
+
+<BaseLayout
+  meta={{ title: "Portfolio", description: "Selected projects and work.", path: "/portfolio/" }}
+>
+  <div class="mx-auto max-w-prose">
+    <p class="text-muted-foreground eyebrow">Coming soon</p>
+    <h1 class="text-display mt-2 font-semibold">Portfolio</h1>
+    <p class="mt-4 text-lg leading-relaxed">
+      I've built UI platforms, visualization systems, and front-end architecture that help teams
+      ship continuously without chaos.
+    </p>
+    <p class="text-muted-foreground mt-4">Selected projects and case studies are on their way.</p>
+    <div class="mt-6"><AuthorLinks /></div>
+  </div>
+</BaseLayout>

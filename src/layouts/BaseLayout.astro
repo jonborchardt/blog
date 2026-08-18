@@ -62,7 +62,7 @@ const imageHeight = meta.imageHeight ?? 630;
     {
       meta.type === "article" && (
         <>
-          <meta property="article:author" content={absoluteUrl("/about/", siteUrl)} />
+          <meta property="article:author" content={absoluteUrl("/", siteUrl)} />
           {meta.section && <meta property="article:section" content={meta.section} />}
           {meta.tags?.map((t) => (
             <meta property="article:tag" content={t} />

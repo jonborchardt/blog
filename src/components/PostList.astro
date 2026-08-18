@@ -1,7 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import type { Post } from "@/lib/posts";
-import { postPath } from "@/lib/posts";
+import { postPath, seriesPath } from "@/lib/posts";
 import { series as seriesRegistry } from "@/config/series";
 import { tags as tagRegistry } from "@/config/tags";
 import { href } from "@/lib/url";
@@ -33,7 +33,9 @@ const { posts, heading: Heading = "h2" } = Astro.props;
         <div>
           {post.data.series && (
             <p class="text-primary eyebrow mb-1">
-              {seriesRegistry[post.data.series].title}
+              <a href={href(seriesPath(post.data.series))} class="no-underline hover:underline">
+                {seriesRegistry[post.data.series].title}
+              </a>
               {post.data.seriesOrder && ` · Part ${post.data.seriesOrder}`}
             </p>
           )}

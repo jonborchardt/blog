@@ -11,7 +11,7 @@ export const site: SiteConfig = {
   featuredPost: "interactive-islands-in-mdx",
   nav: [
     { label: "All Posts", href: "/all-posts/" },
-    { label: "Series", href: "/series/" },
-    { label: "About", href: "/about/" },
+    { label: "Portfolio", href: "/portfolio/" },
+    { label: "Resume", href: "/resume/" },
   ],
 };

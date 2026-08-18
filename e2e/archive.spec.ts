@@ -75,15 +75,15 @@ test("archive is usable at 360px and axe-clean; only the archive loads React", a
   expect(violations).toEqual([]);
   expect(js.length).toBeGreaterThan(0);
   js.length = 0;
-  await page.goto("about/");
+  await page.goto("resume/");
   expect(js).toEqual([]);
 });
 
-test("search index excludes drafts and carries body text", async ({ request }) => {
+test("search index lists published posts and carries body text", async ({ request }) => {
   const res = await request.get("search-index.json");
   expect(res.ok()).toBe(true);
   const docs = (await res.json()) as { slug: string; body: string; headings: string[] }[];
-  expect(docs.map((d) => d.slug)).not.toContain("primitives-fixture");
+  expect(docs.map((d) => d.slug)).toContain("primitives-fixture");
   const post = docs.find((d) => d.slug === "building-blocks-of-this-blog")!;
   expect(post.body).toContain("Mermaid");
   expect(post.headings).toContain("Diagrams and math");

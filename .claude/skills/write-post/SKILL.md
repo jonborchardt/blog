@@ -18,7 +18,7 @@ Invariants are in `CLAUDE.md`; component API is in `src/components/blog/README.m
    - Real prose for a technical reader; open with why it matters; body headings start at `##` and never skip levels.
    - Use primitives from `src/components/blog/README.md` (import at the top) only where the writing calls for them; no per-post styling.
    - Images: put files in the post directory, use `![meaningful alt](./file.png)` (raster) or `<img>` with width/height/alt for SVG; `Figure` for captions/wide.
-   - Internal links are root-relative (`/other-post/`, `/about/`); the build prefixes the base and fails on broken links.
+   - Internal links are root-relative (`/other-post/`, `/series/`); the build prefixes the base and fails on broken links.
    - Diagrams: `mermaid` fences with `accTitle`/`accDescr`; math: `$…$` / `$$…$$`.
    - Interactive bits: `create-visual` (SVG first; a React island only when it must respond to the reader).
 3. Fix the frontmatter description placeholder; `title` ≤ 90 chars.

@@ -32,7 +32,7 @@ export const personJsonLd = (siteUrl: URL) => ({
   name: author.name,
   description: author.tagline,
   address: author.location,
-  url: absoluteUrl("/about/", siteUrl),
+  url: absoluteUrl("/", siteUrl),
   sameAs: Object.values(author.links),
 });
 
@@ -42,7 +42,7 @@ export const websiteJsonLd = (siteUrl: URL) => ({
   name: site.name,
   description: site.description,
   url: absoluteUrl("/", siteUrl),
-  publisher: { "@type": "Person", name: author.name, url: absoluteUrl("/about/", siteUrl) },
+  publisher: { "@type": "Person", name: author.name, url: absoluteUrl("/", siteUrl) },
 });
 
 export interface ArticleExtras {
@@ -69,7 +69,7 @@ export const articleJsonLd = (
   description: post.data.description,
   datePublished: post.data.publishedAt.toISOString(),
   ...(post.data.updatedAt && { dateModified: post.data.updatedAt.toISOString() }),
-  author: { "@type": "Person", name: author.name, url: absoluteUrl("/about/", siteUrl) },
+  author: { "@type": "Person", name: author.name, url: absoluteUrl("/", siteUrl) },
   publisher: { "@type": "Person", name: author.name },
   mainEntityOfPage: absoluteUrl(path, siteUrl),
   keywords: post.data.tags,
