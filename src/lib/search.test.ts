@@ -20,7 +20,7 @@ const docs = [
     title: "Astro islands",
     publishedAt: "2026-08-18",
     tags: [{ id: "meta", label: "Meta" }],
-    series: { id: "s", title: "Building", part: 2, total: 2 },
+    series: { id: "s", title: "Building", url: "/blog/series/s/", part: 2, total: 2 },
     body: "Hydration happens only for the island. Everything else is static HTML.",
   }),
   doc({
@@ -31,7 +31,7 @@ const docs = [
       { id: "meta", label: "Meta" },
       { id: "engineering", label: "Engineering" },
     ],
-    series: { id: "s", title: "Building", part: 1, total: 2 },
+    series: { id: "s", title: "Building", url: "/blog/series/s/", part: 1, total: 2 },
     headings: ["Diagrams and math"],
     body: "Callouts and figures. Mermaid renders at build time.",
   }),

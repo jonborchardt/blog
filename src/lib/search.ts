@@ -12,7 +12,7 @@ export interface SearchDocMeta {
   /** ISO calendar date, e.g. "2026-08-17". */
   publishedAt: string;
   updatedAt?: string;
-  series?: { id: string; title: string; part: number; total: number };
+  series?: { id: string; title: string; url: string; part: number; total: number };
   tags: { id: string; label: string }[];
   readingTime: number;
   /** Optimized thumbnail URL for list rows. */

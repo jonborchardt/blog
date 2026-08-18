@@ -78,7 +78,10 @@ function PostRow({ doc, snippet }: { doc: SearchDocMeta; snippet: string }) {
       <div>
         {doc.series && (
           <p className="text-primary eyebrow mb-1">
-            {doc.series.title} · Part {doc.series.part}
+            <a href={doc.series.url} className="no-underline hover:underline">
+              {doc.series.title}
+            </a>
+            {` · Part ${doc.series.part}`}
           </p>
         )}
         <h2 className="text-title font-semibold">

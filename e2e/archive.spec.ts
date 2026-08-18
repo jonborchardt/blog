@@ -5,6 +5,10 @@ const rows = (page: import("@playwright/test").Page) => page.locator(".archive-e
 // Tag chips and the series select live inside the "Filter" disclosure; open it before touching them.
 const openFilters = (page: import("@playwright/test").Page) =>
   page.locator(".archive-explorer summary", { hasText: /^Filter/ }).click();
+// Astro drops the `ssr` attribute once the island hydrates; input sent before that is lost when
+// React mounts and re-renders the controlled fields from its own (empty) state.
+const hydrated = (page: import("@playwright/test").Page) =>
+  page.locator("astro-island:not([ssr])").waitFor();
 
 test("SSR renders every published post before JavaScript runs", async ({ browser }) => {
   const ctx = await browser.newContext({ javaScriptEnabled: false });
@@ -20,12 +24,13 @@ test("typing a body-only phrase narrows results via the lazy index and updates t
   page,
 }) => {
   await page.goto("all-posts/");
+  await hydrated(page);
   const input = page.getByRole("searchbox", { name: "Search posts" });
-  await input.fill("mermaid");
+  await input.fill("frontmatter");
   await expect(rows(page)).toHaveCount(1);
   await expect(rows(page).first()).toContainText("The Building Blocks of This Blog");
   await expect(page.getByRole("status")).toContainText("1 of");
-  await expect.poll(() => page.evaluate(() => location.search)).toContain("q=mermaid");
+  await expect.poll(() => page.evaluate(() => location.search)).toContain("q=frontmatter");
   await input.fill("qzxvbnm");
   await expect(page.getByText("No posts match.")).toBeVisible();
   await page.getByRole("button", { name: "Clear filters" }).first().click();
@@ -45,6 +50,7 @@ test("URL state pre-filters and back button restores", async ({ page }) => {
 
 test("keyboard-only: chips toggle with Enter/Space, selects work", async ({ page }) => {
   await page.goto("all-posts/");
+  await hydrated(page);
   await page.setViewportSize({ width: 1280, height: 900 });
   await openFilters(page);
   const chip = page.getByRole("button", { name: "Engineering", exact: true });
@@ -65,6 +71,7 @@ test("archive is usable at 360px and axe-clean; only the archive loads React", a
   });
   await page.setViewportSize({ width: 360, height: 740 });
   await page.goto("all-posts/");
+  await hydrated(page);
   await expect(page.getByLabel("Series")).toBeHidden();
   await openFilters(page);
   await expect(page.getByLabel("Series")).toBeVisible();

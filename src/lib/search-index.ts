@@ -6,7 +6,7 @@ import { render } from "astro:content";
 import { getImage } from "astro:assets";
 import { series as seriesRegistry } from "@/config/series";
 import { tags as tagRegistry } from "@/config/tags";
-import { getSeriesContext, postPath, postSlug, type Post } from "@/lib/posts";
+import { getSeriesContext, postPath, postSlug, seriesPath, type Post } from "@/lib/posts";
 import { readingTime } from "@/lib/reading-time";
 import { isoDate } from "@/lib/dates";
 import { href } from "@/lib/url";
@@ -26,6 +26,7 @@ export async function toSearchDocMeta(post: Post): Promise<SearchDocMeta> {
       series: {
         id: ctx.series.id,
         title: seriesRegistry[ctx.series.id].title,
+        url: href(seriesPath(ctx.series.id)),
         part: ctx.index,
         total: ctx.total,
       },

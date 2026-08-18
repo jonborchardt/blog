@@ -9,6 +9,8 @@ async function sitemapUrls(request: APIRequestContext): Promise<string[]> {
 }
 
 test("every sitemap page renders and has no axe violations", async ({ page, request }) => {
+  // One axe run per sitemap page: the whole site in one test, so it outgrows the default timeout.
+  test.setTimeout(120_000);
   const urls = await sitemapUrls(request);
   expect(urls.length).toBeGreaterThan(0);
   for (const url of urls) {

@@ -13,9 +13,10 @@ A series is `id → { title, description }` in `src/config/series.ts` (generated
 2. Add it either
    - in `npm run dev` at `http://localhost:4321/blog/admin/` → Series → new id → fill title/description → Save (rewrites the file, formatted), or
    - by hand: add the entry to the object in `src/config/series.ts`, then `npm run format`.
-3. `npm run validate` (types: `SERIES_IDS` must stay a literal union — it does if you only added a key).
-4. Optionally scaffold part 1: `npm run new-post -- <slug> --series <id> …` (order is computed), then continue with `write-post`.
-5. The series page `/series/<id>/` appears automatically; the article header shows "Title · Part n of m" positionally, and prev/next navigation is generated.
+3. **Do not set `hero`.** Leave it unset so the series shows its first post's hero (the fallback in `getSeriesHero`). Never point `hero` at a copy of `hero-placeholder.png` — a grey placeholder card is worse than the first post's real image. Set `hero` only when a bespoke series image already exists under `src/assets/series/`.
+4. `npm run validate` (types: `SERIES_IDS` must stay a literal union — it does if you only added a key).
+5. Optionally scaffold part 1: `npm run new-post -- <slug> --series <id> …` (order is computed), then continue with `write-post`.
+6. The series page `/series/<id>/` appears automatically; the article header shows "Title · Part n of m" positionally, and prev/next navigation is generated.
 
 ## Deleting
 
