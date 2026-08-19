@@ -8,7 +8,7 @@ All published posts outside the `agent-built` series, grouped by authority repo.
 | --------------------------------------- | --------- |
 | agi-up-as-a-reference-renderer          | validated |
 | omyac-upscaler-anchor-graph             | validated |
-| sci0-pic-upscaling-native-render-oracle | built     |
+| sci0-pic-upscaling-native-render-oracle | validated |
 
 ## F:\github\retire-sim
 
