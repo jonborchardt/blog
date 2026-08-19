@@ -137,8 +137,6 @@ Fill (and background) anchors connect to same-colour neighbours, with one struct
 
 ### Hybrid render
 
-![The hybrid render of the spacecraft PIC with dither preserved: every dithered region is a fine checkerboard, lines are thin and crisp, and solid regions are flat colour](./hybrid-render-dither-preserved.png)
-
 At the upscaled resolution, draw a Bresenham line between each pair of connected anchors. The stroke uses a half-A / half-B colour scheme: the first half is the source cell's colour, the second half is the destination cell's. Two same-colour cells produce a uniform line; two different-colour cells produce a half-and-half transition at the midpoint.
 
 After all anchor-to-anchor connections, run a pass for connections that leave the canvas (so lines trail off cleanly at the boundary). Finally plant anchor dots — single-pixel writes at each anchor position — so they appear on top of any Bresenham line that crossed through them.
