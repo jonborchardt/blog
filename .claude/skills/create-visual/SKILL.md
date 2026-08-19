@@ -44,7 +44,7 @@ Ladder — stop at the first rung that holds (`CLAUDE.md`: static first, no char
 
    - Tokens/utility classes only (no raw colours), `not-prose` wrapper, keyboard operable, visible focus, `prefers-reduced-motion` respected for any animation, live region for dynamic text.
 
-   - Add `<Name>.test.tsx` next to it (React Testing Library; see `interactive-islands-in-mdx/components/Counter.test.tsx`).
+   - Add `<Name>.test.tsx` next to it (React Testing Library; see `the-authoring-surface/components/Counter.test.tsx`).
 
    - Keep props serialisable and small — never pass whole post bodies as props.
 

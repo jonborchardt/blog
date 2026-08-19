@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <title>A page outline of stacked authoring blocks — callout, tabs, code — with one small island widget marked by a lightning bolt</title>
+  <rect width="1200" height="630" fill="#fafcfe" />
+
+  <!-- page outline -->
+  <rect x="350" y="80" width="500" height="470" rx="18" fill="#fafcfe" stroke="#d9dfe3" stroke-width="4" />
+
+  <!-- heading + text bars -->
+  <rect x="390" y="116" width="220" height="18" rx="9" fill="#555f69" />
+  <rect x="390" y="152" width="420" height="10" rx="5" fill="#d9dfe3" />
+  <rect x="390" y="172" width="380" height="10" rx="5" fill="#d9dfe3" />
+
+  <!-- callout block -->
+  <rect x="390" y="204" width="420" height="58" rx="10" fill="#deeef5" />
+  <rect x="390" y="204" width="8" height="58" rx="4" fill="#006a90" />
+  <text x="414" y="240" font-family="IBM Plex Sans" font-size="26" font-weight="600" fill="#006a90">Callout</text>
+
+  <!-- tabs block -->
+  <g>
+    <rect x="390" y="286" width="96" height="34" rx="8" fill="#006a90" />
+    <rect x="494" y="286" width="96" height="34" rx="8" fill="#deeef5" />
+    <rect x="598" y="286" width="96" height="34" rx="8" fill="#deeef5" />
+    <text x="438" y="310" font-family="IBM Plex Sans" font-size="22" fill="#fafcfe" text-anchor="middle">Tabs</text>
+    <rect x="390" y="324" width="420" height="44" rx="8" fill="none" stroke="#d9dfe3" stroke-width="3" />
+    <rect x="406" y="340" width="300" height="10" rx="5" fill="#d9dfe3" />
+  </g>
+
+  <!-- code block -->
+  <rect x="390" y="392" width="420" height="72" rx="10" fill="#11171d" />
+  <rect x="410" y="410" width="180" height="10" rx="5" fill="#deeef5" />
+  <rect x="410" y="430" width="260" height="10" rx="5" fill="#555f69" />
+  <rect x="430" y="450" width="140" height="10" rx="5" fill="#555f69" />
+
+  <!-- island widget -->
+  <rect x="390" y="488" width="230" height="50" rx="10" fill="#fafcfe" stroke="#f0b35a" stroke-width="5" />
+  <path d="M430 496 l-16 26 h12 l-8 20 22 -28 h-12 l10 -18 z" fill="#f0b35a" />
+  <text x="454" y="521" font-family="IBM Plex Sans" font-size="24" font-weight="600" fill="#555f69">island</text>
+
+</svg>

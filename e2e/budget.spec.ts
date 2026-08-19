@@ -18,7 +18,7 @@ test("static pages ship zero JavaScript files", async ({ page }) => {
   for (const p of [
     "",
     "resume/",
-    "building-blocks-of-this-blog/",
+    "an-agent-built-this-blog/",
     "series/",
     "series/worldlock/",
     "does-not-exist/",
@@ -38,7 +38,7 @@ test("archive loads a small React bundle only", async ({ page }) => {
 });
 
 test("interactive post loads only React chunks for its island", async ({ page }) => {
-  const js = await jsRequests(page, "interactive-islands-in-mdx/");
+  const js = await jsRequests(page, "the-authoring-surface/");
   await page.getByTestId("island").scrollIntoViewIfNeeded(); // client:visible
   await expect.poll(() => js.length).toBeGreaterThan(0);
   await expect(page.locator("astro-island[ssr]")).toHaveCount(0);

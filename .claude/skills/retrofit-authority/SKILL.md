@@ -9,7 +9,7 @@ Backfills the Authority lifecycle (`write-post` → Authority) onto already-publ
 
 ## Worklist
 
-`worklist.md` next to this file: every published post not in the `blog-features` series, grouped by authority repo, with a status column (`pending → briefed → built → validated → shipped`, or `no-change`). Update it and commit as each post advances. If a post's authority mapping looks wrong (one is flagged), confirm with the author before spending an expert call on it.
+`worklist.md` next to this file: every published post not in the `agent-built` series, grouped by authority repo, with a status column (`pending → briefed → built → validated → shipped`, or `no-change`). Update it and commit as each post advances. If a post's authority mapping looks wrong (one is flagged), confirm with the author before spending an expert call on it.
 
 ## Procedure — one repo group at a time
 
@@ -26,4 +26,4 @@ Per post:
 
 - One investigation + one validation call per post, on the shared per-repo agent; extra calls only per the `write-post` Authority exceptions.
 - Never send the expert presentation concerns (see `write-post` → Authority).
-- Don't touch `blog-features` posts: the blog repo is its own authority and the permanent skills already govern it.
+- Don't touch `agent-built` posts: the blog repo is its own authority and the permanent skills already govern it.

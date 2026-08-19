@@ -8,7 +8,7 @@ export const site: SiteConfig = {
   disclaimer: "Views are my own and do not represent my employer.",
   url: "https://jonborchardt.github.io",
   locale: "en-US",
-  featuredPost: "interactive-islands-in-mdx",
+  featuredPost: "an-agent-built-this-blog",
   nav: [
     { label: "All Posts", href: "/all-posts/" },
     { label: "Portfolio", href: "/portfolio/" },

@@ -16,7 +16,7 @@ test("SSR renders every published post before JavaScript runs", async ({ browser
   await page.goto("all-posts/");
   await expect(page.locator("h1")).toHaveText("All Posts");
   expect(await rows(page).count()).toBeGreaterThanOrEqual(2);
-  await expect(page.getByRole("link", { name: "The Building Blocks of This Blog" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "The Authoring Surface" })).toBeVisible();
   await ctx.close();
 });
 
@@ -26,11 +26,12 @@ test("typing a body-only phrase narrows results via the lazy index and updates t
   await page.goto("all-posts/");
   await hydrated(page);
   const input = page.getByRole("searchbox", { name: "Search posts" });
-  await input.fill("frontmatter");
-  // Don't pin the count: any future post using the word would fail this as if search broke.
-  await expect(rows(page).first()).toContainText("The Building Blocks of This Blog");
+  // A phrase that appears only in one post's body, never in a title, description or tag.
+  await input.fill("cliff path in fog");
+  // Don't pin the count: any future post using the phrase would fail this as if search broke.
+  await expect(rows(page).first()).toContainText("An Agent Built This Blog");
   await expect(page.getByRole("status")).toContainText(/\d+ of/);
-  await expect.poll(() => page.evaluate(() => location.search)).toContain("q=frontmatter");
+  await expect.poll(() => page.evaluate(() => location.search)).toContain("q=cliff");
   await input.fill("qzxvbnm");
   await expect(page.getByText("No posts match.")).toBeVisible();
   await page.getByRole("button", { name: "Clear filters" }).first().click();
@@ -109,8 +110,8 @@ test("search index lists published posts and carries body text", async ({ reques
   const res = await request.get("search-index.json");
   expect(res.ok()).toBe(true);
   const docs = (await res.json()) as { slug: string; body: string; headings: string[] }[];
-  expect(docs.map((d) => d.slug)).toContain("interactive-islands-in-mdx");
-  const post = docs.find((d) => d.slug === "building-blocks-of-this-blog")!;
+  expect(docs.map((d) => d.slug)).toContain("an-agent-built-this-blog");
+  const post = docs.find((d) => d.slug === "the-authoring-surface")!;
   expect(post.body).toContain("Mermaid");
   expect(post.headings).toContain("Diagrams and math");
 });

@@ -39,7 +39,7 @@ test("every sitemap page has complete, consistent SEO metadata", async ({ page, 
 });
 
 test("generated OG cards are 1200x630 PNGs", async ({ request }) => {
-  for (const p of ["og/building-blocks-of-this-blog.png", "og/interactive-islands-in-mdx.png"]) {
+  for (const p of ["og/an-agent-built-this-blog.png", "og/the-authoring-surface.png"]) {
     const res = await request.get(p);
     expect(res.ok(), p).toBe(true);
     expect(res.headers()["content-type"]).toBe("image/png");
@@ -50,16 +50,16 @@ test("generated OG cards are 1200x630 PNGs", async ({ request }) => {
 });
 
 test("article pages carry article:* tags and BlogPosting JSON-LD", async ({ page }) => {
-  await page.goto("building-blocks-of-this-blog/");
+  await page.goto("the-authoring-surface/");
   expect(await page.locator("meta[property='article:tag']").count()).toBeGreaterThan(0);
   await expect(page.locator("meta[property='article:section']")).toHaveAttribute(
     "content",
-    "Blog Features",
+    "Agent-Built",
   );
   const lds = await page.locator("script[type='application/ld+json']").allTextContents();
   const obj = lds.map((t) => JSON.parse(t)).find((o) => o["@type"] === "BlogPosting");
   expect(obj).toBeDefined();
-  expect(obj.image).toMatch(/\/blog\/og\/building-blocks-of-this-blog\.png$/);
+  expect(obj.image).toMatch(/\/blog\/og\/the-authoring-surface\.png$/);
   expect(obj.wordCount).toBeGreaterThan(100);
 });
 

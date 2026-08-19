@@ -2,10 +2,10 @@
 import type { SeriesRegistry } from "./types";
 
 export const series = {
-  "blog-features": {
-    title: "Blog Features",
+  "agent-built": {
+    title: "Agent-Built",
     description:
-      "How this blog is built: the authoring primitives, the few places React actually earns hydration, and the one page that renders all of it as a live fixture.",
+      "How a coding agent built this site in an afternoon — and the contracts, authoring primitives, and repo-as-expert system that let it keep publishing.",
   },
   finances: {
     title: "Finances",

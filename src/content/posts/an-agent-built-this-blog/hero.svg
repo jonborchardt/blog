@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <title>A commit timeline compressed into one afternoon: eleven dense ticks at the start, sparse ticks after, and a rocket lifting off the final one</title>
+  <rect width="1200" height="630" fill="#fafcfe" />
+
+  <!-- axis -->
+  <line x1="140" y1="400" x2="1060" y2="400" stroke="#d9dfe3" stroke-width="5" stroke-linecap="round" />
+
+  <!-- eleven dense plan ticks -->
+  <g stroke="#006a90" stroke-width="8" stroke-linecap="round">
+    <line x1="160" y1="345" x2="160" y2="400" />
+    <line x1="182" y1="345" x2="182" y2="400" />
+    <line x1="204" y1="345" x2="204" y2="400" />
+    <line x1="226" y1="345" x2="226" y2="400" />
+    <line x1="248" y1="345" x2="248" y2="400" />
+    <line x1="270" y1="345" x2="270" y2="400" />
+    <line x1="292" y1="345" x2="292" y2="400" />
+    <line x1="314" y1="345" x2="314" y2="400" />
+    <line x1="336" y1="345" x2="336" y2="400" />
+    <line x1="358" y1="345" x2="358" y2="400" />
+    <line x1="380" y1="345" x2="380" y2="400" />
+  </g>
+
+  <!-- bracket over the sprint -->
+  <path d="M156 318 v-14 h228 v14" fill="none" stroke="#11171d" stroke-width="4" stroke-linecap="round" />
+  <text x="270" y="272" font-family="IBM Plex Sans" font-size="36" font-weight="600" fill="#11171d" text-anchor="middle">11 plans · 79 min</text>
+
+  <!-- sparse afternoon ticks -->
+  <g stroke="#555f69" stroke-width="6" stroke-linecap="round">
+    <line x1="540" y1="368" x2="540" y2="400" />
+    <line x1="660" y1="368" x2="660" y2="400" />
+    <line x1="790" y1="368" x2="790" y2="400" />
+    <line x1="880" y1="368" x2="880" y2="400" />
+  </g>
+
+  <!-- time labels -->
+  <text x="160" y="448" font-family="IBM Plex Sans" font-size="26" fill="#555f69" text-anchor="middle">12:35</text>
+  <text x="1000" y="448" font-family="IBM Plex Sans" font-size="26" fill="#555f69" text-anchor="middle">20:49</text>
+
+  <!-- rocket lifting off the final tick -->
+  <g>
+    <!-- final tick -->
+    <line x1="1000" y1="376" x2="1000" y2="400" stroke="#f0b35a" stroke-width="8" stroke-linecap="round" />
+    <!-- flame -->
+    <path d="M1000 358 c-12 -22 -8 -38 0 -52 c8 14 12 30 0 52 z" fill="#f0b35a" />
+    <!-- body -->
+    <path d="M1000 160 c26 30 34 74 34 108 v22 h-68 v-22 c0 -34 8 -78 34 -108 z" fill="#006a90" />
+    <!-- window -->
+    <circle cx="1000" cy="240" r="16" fill="#deeef5" />
+    <!-- fins -->
+    <path d="M966 262 l-26 34 v-46 z" fill="#11171d" />
+    <path d="M1034 262 l26 34 v-46 z" fill="#11171d" />
+    <!-- motion dashes -->
+    <line x1="960" y1="330" x2="960" y2="356" stroke="#d9dfe3" stroke-width="6" stroke-linecap="round" />
+    <line x1="1040" y1="330" x2="1040" y2="356" stroke="#d9dfe3" stroke-width="6" stroke-linecap="round" />
+  </g>
+</svg>

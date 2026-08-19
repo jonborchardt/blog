@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
 // Reference fixture: a post in a series with ≥3 headings, a raster image, a table and a code block.
-const POST = "building-blocks-of-this-blog/";
+const POST = "the-authoring-surface/";
 
 test("article structure: one h1, landmarks, series nav, TOC, anchors", async ({ page }) => {
   await page.goto(POST);
@@ -15,7 +15,7 @@ test("article structure: one h1, landmarks, series nav, TOC, anchors", async ({ 
   await expect(anchors.first()).toHaveAttribute("aria-label", /^Link to section: /);
   await expect(page.getByText(/\d+ min read/)).toBeVisible();
   // Part count tracks how many posts in the series are published, so don't pin it.
-  await expect(page.getByText(/Part 1 of \d+/).first()).toBeVisible();
+  await expect(page.getByText(/Part 2 of \d+/).first()).toBeVisible();
 });
 
 test("images are lazy, sized and responsive; tables scroll", async ({ page }) => {

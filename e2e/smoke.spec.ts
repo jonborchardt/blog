@@ -30,13 +30,13 @@ test("dates render as UTC calendar dates", async ({ page }) => {
   await page.goto("");
   // Format, not value: the newest post's date changes every time one is published.
   await expect(page.locator("time").first()).toHaveText(/^[A-Z][a-z]{2} \d{1,2}, \d{4}$/);
-  await page.goto("building-blocks-of-this-blog/");
-  await expect(page.locator("article time").first()).toHaveText("August 17, 2026");
+  await page.goto("the-authoring-surface/");
+  await expect(page.locator("article time").first()).toHaveText("August 19, 2026");
 });
 
 test("code blocks switch to the dark Shiki theme", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "dark" });
-  await page.goto("building-blocks-of-this-blog/");
+  await page.goto("the-authoring-surface/");
   await page.evaluate(() => localStorage.clear());
   await page.reload();
   const bg = await page
@@ -56,7 +56,7 @@ test("internal links and assets use the /blog/ base", async ({ page }) => {
 });
 
 test("MDX post hydrates its React island", async ({ page }) => {
-  await page.goto("interactive-islands-in-mdx/");
+  await page.goto("the-authoring-surface/");
   const button = page.getByTestId("island").getByRole("button");
   await expect(button).toHaveText(/Clicked 0 times/);
   // client:visible — scroll it into view and wait for hydration (Astro drops `ssr` once hydrated).

@@ -4,11 +4,11 @@ All published posts outside the `agent-built` series, grouped by authority repo.
 
 ## F:\github\sci.js
 
-| Post                                    | Status    |
-| --------------------------------------- | --------- |
-| agi-up-as-a-reference-renderer          | validated |
-| omyac-upscaler-anchor-graph             | validated |
-| sci0-pic-upscaling-native-render-oracle | validated |
+| Post                                    | Status  |
+| --------------------------------------- | ------- |
+| agi-up-as-a-reference-renderer          | shipped |
+| omyac-upscaler-anchor-graph             | shipped |
+| sci0-pic-upscaling-native-render-oracle | shipped |
 
 ## F:\github\retire-sim
 

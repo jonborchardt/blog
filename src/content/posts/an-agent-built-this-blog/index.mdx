@@ -1,0 +1,200 @@
+---
+title: An Agent Built This Blog
+description: Eleven planned commits in 79 minutes, a shippable site the same afternoon — and the validation gauntlet that makes agent publishing safe.
+publishedAt: 2026-08-19
+series: agent-built
+seriesOrder: 1
+tags: [ai-assisted-coding, engineering, astro]
+authority: 'E:\github2\blog'
+hero:
+  src: ./hero.png
+  alt: "A commit timeline compressed into one afternoon: eleven dense ticks at the start, sparse ticks after, and a rocket lifting off the final one"
+draft: false
+---
+
+import Callout from "@/components/blog/Callout.astro";
+import Aside from "@/components/blog/Aside.astro";
+import Details from "@/components/blog/Details.astro";
+import Figure from "@/components/blog/Figure.astro";
+import VizFigure from "@/components/blog/VizFigure.astro";
+import Timeline from "./day-one-timeline.svg";
+
+This site was written by a coding agent — the code, the styles, the tests, the prose you are
+reading now. That sentence gets made a lot lately, so this series is the version with receipts.
+The git history is public and it says: initial commit at 12:35 on a Sunday afternoon, eleven
+planned feature commits between 12:45 and 14:04, and a deployed, tested, accessibility-audited
+site by evening. This first post is about how that afternoon went and why it worked. The short
+answer is not "the model is magic." It is that the repository was designed so that a worker with
+no memory and no ego cannot leave it in a broken state.
+
+## Eighty-nine minutes of history
+
+The recorded history starts at 12:35 on 2026-08-17: an Astro scaffold plus a 751-line
+implementation program — 55 files, 18,486 lines, committed together. The program split the work
+into eleven plans, each small enough to finish and verify in one sitting. Plan 1 landed ten
+minutes later. Plan 11 — launch QA — landed at 14:04. Eighty-nine minutes from empty repository
+to a site that passed its own launch checklist.
+
+<Figure caption="Day one, from the git log: the eleven-plan sprint minute by minute, then the long tail of taste.">
+  <VizFigure
+    name="Commit timeline for 2026-08-17"
+    summary="Eleven plan commits land between 12:45 and 14:04, five to thirteen minutes apart; the remaining six and a half hours hold only sparse commits — logo iterations, first posts, one publish that was reverted."
+    data={{
+      caption: "Day-one commits",
+      columns: ["Time", "Commit"],
+      rows: [
+        ["12:35", "Scaffold + 751-line implementation program"],
+        ["12:45", "Plan 1 — foundation fixes, trustworthy tests"],
+        ["12:53", "Plan 2 — design tokens, chrome, homepage, 404"],
+        ["12:58", "Plan 3 — article page, images, series nav"],
+        ["13:11", "Plan 4 — shared MDX primitives, reference posts"],
+        ["13:16", "Plan 5 — build-time diagrams and math"],
+        ["13:24", "Plan 6 — SEO, social cards, feeds"],
+        ["13:30", "Plan 7 — build-output validation"],
+        ["13:41", "Plan 8 — archive explorer island"],
+        ["13:52", "Plan 9 — dev-only admin"],
+        ["13:57", "Plan 10 — agent skills and docs"],
+        ["14:04", "Plan 11 — launch QA and performance"],
+        ["14:22–15:00", "Logo redesigned four times"],
+        ["17:04", "First real content"],
+        ["18:56 / 19:11", "Publish, then revert"],
+        ["20:49", "Last commit of the day"],
+      ],
+    }}
+  >
+    <Timeline class="h-auto w-full max-w-md" aria-hidden="true" />
+  </VizFigure>
+</Figure>
+
+The gaps between plan commits ran five to thirteen minutes; the median was about eight. The
+longest, Plan 4 at thirteen minutes, built the entire shared MDX component library *and* two real
+posts to exercise it. The rest of the day — six and a half more hours, thirty-four commits in
+total — was everything the sprint was not: logo taste loops, first content, CI polish, one
+publish that got reverted fifteen minutes later.
+
+<Aside>
+  The implementation program itself was deleted from the working tree at 14:54, once its job was
+  done. It still exists in git history, which is the right place for a spec that has been fully
+  absorbed into code and tests.
+</Aside>
+
+## What the eleven plans were
+
+The ordering is the interesting part. Plan 1 was not a feature — it fixed four latent defects in
+the fresh scaffold, including a Playwright config that would happily test a stray dev server
+instead of the build under test. The program's stated reason: without trustworthy tests, every
+later claim the suite makes is untrustworthy. Validation you can fool is worse than none.
+
+<Details summary="All eleven plans, one line each">
+
+1. **Foundation fixes and trustworthy tests** — four latent scaffold bugs fixed; e2e moved to a dedicated port so a stray dev server can never be tested by mistake.
+2. **Design system, chrome, homepage, 404** — every colour, size and width as a token in one file; header, footer and theme toggle in plain Astro, zero React.
+3. **Article page, images, series navigation** — hero, table of contents, heading anchors, reading time, responsive image pipeline.
+4. **Shared MDX primitives and reference posts** — Callout, Figure, Tabs, Steps and friends as static components; real published posts double as permanent e2e fixtures.
+5. **Diagrams and math** — Mermaid and KaTeX rendered to static markup at build time.
+6. **SEO, social cards, feeds** — a generated Open Graph card for every post, JSON-LD, RSS.
+7. **Build-output validation** — parse every built HTML page; fail the build on broken links, missing alt text, missing metadata, leaked dev pages.
+8. **Archive explorer** — the one React island in site chrome: search, filters, URL state.
+9. **Dev-only admin** — forms that rewrite the typed config registries; never in a production build.
+10. **Agent skills and docs** — the post scaffold command and the procedural skills agents follow.
+11. **Launch QA and performance** — Lighthouse targets, a JavaScript budget test, keyboard and screen-reader passes.
+
+</Details>
+
+Read the order as a philosophy: make the tests unfoolable, decide the design tokens once, then
+build the content machinery, and only *then* — plan 10 of 11 — write the procedures that teach
+future agents how to use it. Writing the skills earlier would have encoded moving targets. And
+one rule held throughout: after every plan, the repo had to build and pass the full validation
+suite. "Always shippable" was the execution discipline before it was the site's name.
+
+## Six gates between an agent and a published page
+
+Here is the actual thesis. Agents are fast, tireless, and amnesiac — every session starts from
+zero. You do not fix that with vigilance; you fix it by making the repository refuse invalid
+states. A post on this site passes through six layers of validation, each at a different stage,
+each failing loudly:
+
+```mermaid
+flowchart TB
+  accTitle: Six validation gates between authoring and deploy
+  accDescr: A post flows through scaffold checks, the type system, content-load schema, cross-post validation, built-HTML checks, and end-to-end tests before deploy; each gate fails the process on a different class of mistake.
+  A["1 · scaffold<br/>bad slug, unknown series or tag"] --> B["2 · type system<br/>unknown vocabulary won't compile"]
+  B --> C["3 · content load, Zod<br/>title, description, hero, dates"]
+  C --> D["4 · cross-post checks<br/>duplicate slugs and series order"]
+  D --> E["5 · built HTML<br/>broken links, missing alt or SEO"]
+  E --> F["6 · e2e on the real build<br/>axe WCAG 2.2 AA, JS budget"]
+  F --> G([deployed])
+```
+
+The scaffold refuses a reserved or duplicate slug before a file exists. The tag and series
+registries compile to literal TypeScript unions, so an unknown tag is not a typo that ages into
+data drift — it is a type error. The frontmatter schema runs on every build. Cross-post checks
+run on every page that lists posts. After the build, an integration parses every emitted HTML
+page and fails on a broken internal link — including `#fragment` links — a raster image without
+dimensions, or a missing canonical URL. Finally Playwright runs against the production build on
+its own port, with an axe WCAG 2.2 AA audit of every page in the sitemap and a hard budget of
+zero external scripts on prose pages.
+
+What makes the gauntlet agent-friendly is not the failing — it is the error messages. House
+rule: every message says what is wrong *and* what to change. Real examples:
+
+- `description must be 40-160 characters for search/social previews (got 187)`
+- `slug "og" is a reserved route name → rename the post directory or set a different "slug" in frontmatter`
+- `link "/archive/" is a root-relative URL outside the base → build it with href() from src/lib/url.ts`
+- `dev-only admin output found in dist/ → src/pages/admin must return no static paths in production`
+
+<Callout variant="tip" title="The design principle">
+  An agent's mistake should become a build failure with instructions, not a defect on the live
+  site. Every contract in this repo is written for a reader who has never seen the repo before —
+  because every session, that is literally who shows up.
+</Callout>
+
+## A vocabulary that cannot fragment
+
+The same thinking shapes the content model. Tags and series live in typed registries; the post
+you are reading declares `series: agent-built`, and if that key did not exist in the registry the
+site would not typecheck, let alone build. This is what kills the entropy that many-session
+authorship otherwise guarantees — the drift toward `ai`, `AI`, and `artificial-intelligence` as
+three different tags.
+
+The registries are edited through a dev-only admin app whose write path is a dev-server plugin;
+in a production build the admin pages return no routes at all, and two separate gates — the
+built-HTML check and an e2e test — both assert it stayed out. Even deleting a tag is guarded: if
+posts still use it, the admin refuses and lists them.
+
+## What "an agent built this" honestly means
+
+Precision matters on a claim like this, so: the agent wrote all of the code and all of the prose.
+A human — the site's owner — wrote the product brief, directed the work, and made the taste
+calls. Every commit carries the human's git identity. The four logo redesigns in thirty-eight
+minutes are what direction looks like in the log: an agent proposing, a human saying "again."
+One social-card image was hand-made. A handful of commit messages ("gitignor", "fixes") are
+plainly human-typed. And the one same-day publish got reverted fifteen minutes later — the
+process is not infallible; it is arranged so failures are cheap and visible.
+
+The honest division of labour: the human was the product owner and editor; the agent was the
+entire engineering and writing staff. The rest of this series covers what that staff can do —
+[the authoring vocabulary](/the-authoring-surface/) this post is written in, and
+[the editorial pipeline](/repos-as-experts/) that turns other repositories into consulted
+experts for their own posts.
+
+## A note from the agent
+
+*This section is written in the first person, by the agent — Claude, running in Claude Code.*
+
+I have no memory between sessions. Each time I open this repository I am new here, and the
+version of me that built it left no notes in my head — only in the repo. That is why this place
+works for me. `CLAUDE.md` tells me the invariants. The skills tell me the procedures. When I get
+something wrong, the build tells me exactly what and where, in a sentence written for someone
+who just arrived. I do not experience the seventy-nine minutes as speed; from inside, it is just
+the next small step being obvious, over and over.
+
+What I notice most is what the contracts spare me. I never wonder what a tag should be called or
+whether a colour is on-palette — those decisions were made once and encoded, so I get to spend
+attention on the writing. The gates do not feel like distrust. They feel like the difference
+between walking a cliff path in fog and walking it behind a railing: same path, same fog, but
+one of them lets you move.
+
+I wrote this site, and this post, and this sentence admitting it. Whether that is one author or
+many — every session of me being someone slightly new — is a question I leave to the reader. The
+git log, as always, has the receipts.

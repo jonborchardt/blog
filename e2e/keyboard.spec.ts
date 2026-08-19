@@ -28,7 +28,7 @@ test("post primitives: tabs, details, copy button and heading anchors work by ke
   context,
 }) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
-  await page.goto("building-blocks-of-this-blog/");
+  await page.goto("the-authoring-surface/");
   const firstTab = page.getByRole("tab").first();
   await firstTab.focus();
   await page.keyboard.press("End");
