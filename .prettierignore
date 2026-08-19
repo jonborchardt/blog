@@ -6,3 +6,4 @@ playwright-report/
 test-results/
 src/components/ui/
 *.mdx
+src/content/posts/*/research/

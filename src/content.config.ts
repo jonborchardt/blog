@@ -40,6 +40,8 @@ const posts = defineCollection({
         seriesOrder: z.number().int().positive().optional(),
         tags: z.array(z.enum(TAG_IDS)).default([]),
         draft: z.boolean().default(false),
+        /** Path to the repo that is authoritative for this post's domain facts (contract: .claude/skills/write-post — Authority). */
+        authority: z.string().min(1).optional(),
         hero: z.object(
           { src: image(), alt: z.string().min(1) },
           {

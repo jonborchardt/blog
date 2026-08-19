@@ -9,9 +9,9 @@ Output: a short findings list (blocking / should-fix / nits), each with file:lin
 
 ## Authority review
 
-If the post frontmatter has `authority`, delegate factual/domain review to an agent operating in that repository before judging the post's technical correctness. That agent should inspect its repo-local `CLAUDE.md`, relevant code, docs, tests, data, and memory/context as available, and make the domain judgments rather than merely returning files. Treat that repo as authoritative for technical facts, terminology, behavior, data meaning, caveats, and whether a visualization creates a misleading mental model. The blog repo remains authoritative for presentation, MDX/React implementation, accessibility, styling, and editorial structure.
+If the post frontmatter has `authority`, this is the **validation pass** of the contract in `write-post` → Authority — one substantive call on the finished draft, not another discovery round.
 
-Ask the authority agent to review the post's factual claims and every meaningful visualization, identify concrete corrections and important omissions, and cite the repo evidence it used. Do not substitute your own interpretation when the authority agent can investigate it.
+Send the expert the artifact to judge directly — the post's factual claims, terminology, quantitative values, and each meaningful visualization's semantics (data, labels, relationships, states/thresholds, and its `name`/`summary` takeaway) — and point it at the domain brief (`src/content/posts/<slug>/research/brief.md`) so it can check the draft against what it previously asserted. No brief (a post written before this workflow): the expert validates the post directly against repo evidence in that same single call; save its corrected facts/data/semantics as the brief for future edits. Ask it to confirm or correct against repo evidence (citing it), flag anything that creates a wrong mental model, and name important omissions or caveats. Do not send it presentation concerns — styling, spacing, responsive layout, typography, theme, accessibility mechanics, MDX conventions are blog-side. Do not substitute your own interpretation for what the expert can verify.
 
 ## Automated (run these; they catch most contract issues)
 

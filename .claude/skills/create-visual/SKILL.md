@@ -12,9 +12,9 @@ description: Use when a post needs a figure, chart, diagram, animation, illustra
 
 ## Step 0 — Find the spots (when asked to add visuals to an existing post)
 
-Read the whole post, then use the candidate table in `write-post` step 3 (data flow → flowchart; states → state diagram; quantitative claim → chart with `data`; spatial idea → schematic; side-by-side → two-panel). Verify anything that describes code against the source before drawing. Then continue below for each one.
+Read the whole post, then use the candidate table in `write-post` step 3 (data flow → flowchart; states → state diagram; quantitative claim → chart with `data`; spatial idea → schematic; side-by-side → two-panel). Verify anything that describes code against the domain brief or source before drawing. Then continue below for each one.
 
-If the post frontmatter has `authority`, delegate domain-specific investigation and semantic validation to an agent operating in that repository. That agent should inspect its repo-local `CLAUDE.md`, relevant code, docs, tests, data, and memory/context as available, and make the factual judgments. Treat it as authoritative for what the visual means, including data, labels, states, relationships, thresholds, terminology, caveats, and whether the visual creates a misleading mental model. The blog repo still owns the medium, React/SVG/MDX implementation, styling, accessibility, and presentation. Do not independently reinterpret domain details when the authority agent can inspect them.
+If the post frontmatter has `authority`, the authority repo owns what the visual means — data, labels, states, relationships, thresholds, terminology, caveats, and whether it creates a misleading mental model (contract: `write-post` → Authority). Work from the **domain brief** at `./research/brief.md`: it should already carry each proposed visual's authoritative data and semantics. Delegate a targeted question to the authority agent only for a visual the brief doesn't cover. No brief file means planning hasn't happened — do `write-post` step 2 first (the existing post is the author material) so the expert proposes the visuals and supplies their data/semantics; this skill consumes the brief, it doesn't plan. The blog repo still owns the medium, React/SVG/MDX implementation, styling, accessibility, and presentation.
 
 ## Step 1 — Pick the medium
 
@@ -126,7 +126,7 @@ Rules:
 
 \- Numbers in the summary must match the plotted data (`data.rows` if present).
 
-- When `authority` exists, domain-specific numbers, labels, relationships, and takeaways must also match the authority agent's judgment; re-consult it after any semantic change to the visual.
+- When `authority` exists, domain-specific numbers, labels, relationships, and takeaways must match the domain brief. Semantic changes get checked in `review-post`'s validation pass — consult the expert immediately only when a change materially alters a claim or the brief can't answer it.
 
 \| Register               | Example                                                                                         |
 

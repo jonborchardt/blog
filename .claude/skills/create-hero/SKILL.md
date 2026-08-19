@@ -10,7 +10,7 @@ The default way a post gets its hero: no hero was handed over → draw one. Auth
 ## Steps
 
 1. **Read the post** (title, description, first section). Pick ONE concrete visual metaphor for its main idea — a mechanism, not decoration (a post about islands → small hydrated blocks in a sea of static; a post about pipelines → stages joined by arrows). Write it down as the alt text first: one sentence describing what the picture shows. If you can't write that sentence, the idea is not concrete enough.
-   - If the post has an `authority` repo and the hero encodes domain-specific facts, labels, data, behavior, or conclusions rather than being purely metaphorical, delegate those semantic claims to an agent operating in that repo and use its judgment as authoritative before drawing.
+   - If the post has an `authority` repo and the hero encodes domain-specific facts, labels, data, behavior, or conclusions rather than being purely metaphorical, take those semantics from the domain brief (`./research/brief.md`; contract in `write-post` → Authority); ask the expert only if the brief doesn't cover them.
 2. **Write `src/content/posts/<slug>/hero.svg`** by hand:
    - `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">`; add `<title>` matching the alt.
    - Palette: only the hex values in `src/styles/theme.ts` (raster twins of the site theme — a PNG cannot read CSS variables): `bg` background, `fg` ink, `primary`, `accent` fills, `border`, `highlight`. Read that file; do not invent or eyeball colours, so listings look like one site. Invert (ink background) only when the subject is literally dark (night sky, terminal); a series may pick its own highlight.
