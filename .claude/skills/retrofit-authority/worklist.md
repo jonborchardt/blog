@@ -7,7 +7,7 @@ All published posts outside the `blog-features` series, grouped by authority rep
 | Post                                    | Status  |
 | --------------------------------------- | ------- |
 | agi-up-as-a-reference-renderer          | built   |
-| omyac-upscaler-anchor-graph             | pending |
+| omyac-upscaler-anchor-graph             | built   |
 | sci0-pic-upscaling-native-render-oracle | pending |
 
 ## F:\github\retire-sim

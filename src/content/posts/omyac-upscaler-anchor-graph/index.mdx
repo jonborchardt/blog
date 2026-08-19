@@ -1,7 +1,8 @@
 ---
 title: "omyac-upscaler: all the way into the anchor graph"
-description: Porting agi-up's anchor-graph upscaler to SCI0 PICs — five colour-model fixes at the encoding boundary, and why snap-blend is retiring.
+description: Porting agi-up's anchor-graph upscaler to SCI0 PICs — four colour-model fixes, one convention fix, and why snap-blend is leaving the PIC path.
 publishedAt: 2026-08-18
+updatedAt: 2026-08-19
 series: sierra-games
 seriesOrder: 3
 tags: [engineering, graphics, gamedev, retrocomputing, typescript]
@@ -27,7 +28,7 @@ import sweep5 from "./sweep-original-vs-omyac-5.svg";
 import sweep6 from "./sweep-original-vs-omyac-6.svg";
 import sweep7 from "./sweep-original-vs-omyac-7.svg";
 
-For the past few months, the SCI0 PIC pipeline has mostly been a story of incremental refinement. [`snap-blend`](/sci0-pic-upscaling-native-render-oracle/) improved pixel-space scaling with leak-detection heuristics, dither-aware resolution, and dual-layer compositing. Each iteration fixed a real class of artefacts. Each iteration also hit the same ceiling: pixels alone only carry so much information.
+For the past few months, the SCI0 PIC pipeline has mostly been a story of incremental refinement. [`snap-blend`](/sci0-pic-upscaling-native-render-oracle/) improved pixel-space scaling with leak-detection heuristics, dither-aware resolution, and a dual-resolution adaptive guard (the native render supervising the upscaled one, with rollback and fallback). Each iteration fixed a real class of artefacts. Each iteration also hit the same ceiling: pixels alone only carry so much information.
 
 When [OldManYellsAtCode1](https://github.com/OldManYellsAtCode1/agi-up) published [`agi-up`'s `hybrid.h`](https://github.com/OldManYellsAtCode1/agi-up) ([walkthrough video](https://www.youtube.com/watch?v=z9Yp9S23ICo)), it reframed the problem completely. Instead of asking "what colour should this pixel become?", the algorithm asks "which command created this pixel in the first place?"
 
@@ -35,7 +36,7 @@ That distinction changes everything.
 
 Lines become geometric entities instead of stair-stepped pixel masks. Fills become topological regions instead of colour blobs inferred heuristically. Anchors sit on projected line segments at sub-cell precision rather than at the centre of integer grid cells.
 
-This post documents the SCI0 port, the five engine-specific fixes that made it viable, and why the project is moving away from `snap-blend` entirely. (A [sibling post](/agi-up-as-a-reference-renderer/) covers using `agi-up` as a reference renderer; this one is about making its algorithm native.)
+This post documents the SCI0 port, the five engine-specific fixes that made it viable, and why the project is moving its PIC visual path away from `snap-blend`. (A [sibling post](/agi-up-as-a-reference-renderer/) covers using `agi-up` as a reference renderer; this one is about making its algorithm native.)
 
 ## Why port at all
 
@@ -48,7 +49,9 @@ This post documents the SCI0 port, the five engine-specific fixes that made it v
   />
 </Figure>
 
-`snap-v5-blend` already ships and renders. The omyac upscaler was initially registered alongside it as a separate strategy so the pic-dev sweep page could compare them side-by-side on the same PICs — a hedge in case omyac didn't pan out. The hedge wasn't needed. Once the five fixes below were in, omyac was decisively better on every PIC we've put it against. The project is moving to it as the default upscaler and snap-blend is on its way out.
+`snap-v5-blend` already ships and renders. The omyac upscaler was initially registered alongside it as a separate strategy so the pic-dev sweep page could compare them side-by-side on the same PICs — a hedge in case omyac didn't pan out. The hedge wasn't needed. Once the five fixes below were in, omyac was decisively better on every PIC we've put it against. The project is moving to it as the default PIC upscaler and snap-blend is on its way out of that path.
+
+Two scope caveats before the enthusiasm: omyac renders the **visible layer only**, at a fixed 320×190 → 6×. Game runtime also needs the priority and control layers — collision and depth sorting — which the snap lineage still provides. "Default upscaler" here means the PIC visual path, not the whole renderer.
 
 What omyac-upscaler buys at the algorithmic level — and what every snap-v\* iteration was trying to recover heuristically from a pixel-only representation:
 
@@ -74,12 +77,12 @@ The whole pipeline, with the places where the SCI0 fixes attach, looks like this
 ```mermaid
 flowchart TB
   accTitle: The omyac-upscaler pipeline and where the five SCI0 fixes attach
-  accDescr: PIC commands are replayed into a 320 by 190 native pre-render that records colour byte, command index and command type per cell. Fix 1 keeps the full doubled-nibble byte there and fix 5 promotes untouched cells to white fills at its end. The anchor graph projects line anchors and connects them; fix 2 makes its sameColor check use cmdType. The hybrid render draws Bresenham strokes at 6x, then the enhance kernel votes neighbourhoods; fixes 3 and 4 widen its vote buckets to 256 and break ties with the perceptual blend table. The result is RGBA output.
+  accDescr: PIC commands are replayed into a 320 by 190 native pre-render that records colour byte, command index and command type per cell. Fix 1 keeps the full doubled-nibble byte there and fix 5 promotes untouched cells to white fills at its end. The anchor graph projects line anchors and connects them; fix 2 makes its sameColor check use cmdType. The hybrid render draws Bresenham strokes at 6x, then the enhance kernel votes neighbourhoods; fixes 3 and 4 widen its vote buckets to 256 and break ties with the perceptual blend table. After enhance, a final null-pixel mode fill runs and the doubled-nibble output is resolved to RGBA through the blend table.
   P[PIC commands] --> N[Native pre-render 320×190<br/>colour byte · cmdIndex · cmdType · segments]
   N --> A[Anchor graph<br/>project line anchors, connect neighbours]
   A --> H[Hybrid render at 6×<br/>Bresenham anchor-to-anchor, anchor dots]
   H --> E[Enhance<br/>8-neighbour vote: fill×3 line×1 fill×2 all×4]
-  E --> O[RGBA output]
+  E --> O[Final null-pixel mode fill<br/>blend-table resolve to RGBA]
   F1[Fix 1: keep the full byte<br/>Fix 5: CMD_NONE → white CMD_FILL]:::fix -.- N
   F2[Fix 2: sameColor via cmdType]:::fix -.- A
   F3[Fix 3: 256 vote buckets<br/>Fix 4: blend-table tie-break]:::fix -.- E
@@ -88,7 +91,7 @@ flowchart TB
 
 ### Native pre-render
 
-Replay every PIC command into a 320×190 buffer using the project's existing rasterisers. Wrap the per-pixel plot callback so it also records the current command's index and type (line vs fill) into parallel buffers. For polyline commands, store the segment endpoints so the anchor pass can reproject onto them later.
+Replay every PIC command into a 320×190 buffer using the project's existing rasterisers. Wrap the per-pixel plot callback so it also records the current command's index and type (line vs fill; brush and cel plots are typed as fills) into parallel buffers. For polyline commands, store the segment endpoints so the anchor pass can reproject onto them later.
 
 The output of this pass is what the rest of the algorithm reasons over: for every native cell, what command rasterised it, what colour byte resulted, whether the command was a line or a fill, and (for line commands) what segments the line consists of.
 
@@ -142,6 +145,11 @@ After all anchor-to-anchor connections, run a pass for connections that leave th
 
 The output at this point is a sparse wireframe: anchors connected by Bresenham strokes against a mostly-empty background.
 
+<Figure caption="The wireframe stage on the spacecraft PIC, before any enhance pass. The hot pink is every pixel not yet written — expected here, mid-pipeline, unlike pink in final output.">
+  ![The pre-enhance hybrid render of the spacecraft PIC: thin anchor-to-anchor strokes and per-cell anchor dots trace the scene's geometry, with all unwritten pixels rendered hot pink so the image reads as line art over a pink field](./wireframe-pre-enhance.png)
+
+</Figure>
+
 ### Enhance: neighbourhood-vote expansion
 
 The wireframe is sparse — at 6× upscale, each native cell becomes a 36-pixel region, of which only a handful are written by the wireframe. The enhance kernel fills the rest by neighbourhood voting: for each empty pixel, look at its 8 neighbours, count colour votes, pick the winner.
@@ -149,6 +157,11 @@ The wireframe is sparse — at 6× upscale, each native cell becomes a 36-pixel 
 The kernel takes a mode parameter that controls which neighbour types vote: `fill` mode counts fill neighbours and ignores lines; `line` mode counts line neighbours and treats fill pixels as overwriteable; `all` mode counts both. A `suppressFill` rule kicks in when 3+ line-type neighbours are present, blocking fill votes so lines aren't overrun at junctions.
 
 Running the kernel several times with a sequence of modes (the C reference's default is `fill × 3, line × 1, fill × 2, all × 4`) propagates fill regions first, then reclaims line junctions, then converges the remainder.
+
+<Figure caption="The same PIC after the default enhance sequence and the final null-pixel sweep: the pink gaps are gone and every fill region has converged to solid colour.">
+  ![The spacecraft PIC after the enhance passes: the wireframe's pink gaps are fully replaced by solid fill regions, leaving a complete scene with crisp line geometry and no hot pink remaining](./wireframe-enhanced.png)
+
+</Figure>
 
 ## What the first port looked like
 
@@ -308,7 +321,7 @@ With all five fixes applied the upscaler produces output that:
 - doesn't confuse legitimate solid white with unfilled gaps anywhere downstream (fixes 2 + 5),
 - and keeps SCI0's "white background" convention intact across the upscale (fix 5).
 
-Diagonals are clean. Dithered regions are smooth. Background whites are white. Junctions where multiple polylines meet produce continuous geometry rather than stair-stepped block expansions. Solid-fill regions match the existing perceptual dither rendering for the same input bytes, with cleaner line geometry layered on top. The difference compared to snap-blend is not subtle — on every PIC the sweep page can show, the omyac output looks like it was rendered by an engine that _understood_ the picture rather than one that was trying its best with the pixels it got. We're committing to it as the default.
+Diagonals are clean. Dithered regions are smooth. Background whites are white. Junctions where multiple polylines meet produce continuous geometry rather than stair-stepped block expansions. Solid-fill regions match the existing perceptual dither rendering for the same input bytes, with cleaner line geometry layered on top. The difference compared to snap-blend is not subtle — on every PIC the sweep page can show, the omyac output looks like it was rendered by an engine that _understood_ the picture rather than one that was trying its best with the pixels it got. We're committing to it as the default for the PIC visual path.
 
 ## Still to validate: line weight against animated views
 
@@ -365,7 +378,7 @@ The port stayed shippable from the first compile. Each fix was a few lines in a 
 
 That worked because the algorithm's structure (provenance + anchors + topology + voting) is decoupled from its encoding (how a colour fits in a byte). Encoding fixes only touched the encoding boundary. Algorithm fidelity was never up for negotiation — the C reference passes intact, with adapter logic at the surface layer.
 
-The strategies coexisted deliberately during the port. The pic-dev sweep page compared omyac and snap-blend at the same time on the same PICs because both registered through the same strategy interface, consumed the same SCI0 PIC bytestream, and produced the same RGBA output shape. Adding the port was a strict superset of existing functionality — nothing was replaced and nothing was torn out _while the port was in flight_. The verdict on PIC rendering is in: omyac wins, and it becomes the default. snap-blend stays registered through the views-against-line-weight eval as a fallback comparison; once that lands and any stroke-width tuning is settled, snap-blend retires.
+The strategies coexisted deliberately during the port. The pic-dev sweep page compared omyac and snap-blend at the same time on the same PICs because both registered through the same strategy interface, consumed the same SCI0 PIC bytestream, and produced the same RGBA output shape. Adding the port was a strict superset of existing functionality — nothing was replaced and nothing was torn out _while the port was in flight_. The verdict on PIC rendering is in: omyac wins, and it becomes the default. snap-blend stays registered through the views-against-line-weight eval as a fallback comparison; once that lands and any stroke-width tuning is settled, snap-blend retires from the visible-layer PIC path (game runtime keeps snap for the priority and control layers omyac doesn't render).
 
 There's a tempting alternative path where you treat the port as a big-bang rewrite, branch the renderer pipeline, and merge it back when "everything works." Every issue from fixes 1–5 in this post would have been discovered during the merge instead of during incremental development, which means they would have been argued about in aggregate rather than understood individually. A small, registered, side-by-side strategy makes it impossible to confuse "the algorithm is broken" with "this specific encoding boundary is broken" — they're separable because the artefact is visible against a known-good comparison every time.
 
