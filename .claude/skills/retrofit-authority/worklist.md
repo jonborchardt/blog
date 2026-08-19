@@ -1,14 +1,14 @@
 # Retrofit worklist
 
-All published posts outside the `blog-features` series, grouped by authority repo. Statuses: `pending → briefed → built → validated → shipped`, or `no-change`. Delete the skill directory when every row is `shipped` or `no-change`.
+All published posts outside the `agent-built` series, grouped by authority repo. Statuses: `pending → briefed → built → validated → shipped`, or `no-change`. Delete the skill directory when every row is `shipped` or `no-change`.
 
 ## F:\github\sci.js
 
-| Post                                    | Status  |
-| --------------------------------------- | ------- |
-| agi-up-as-a-reference-renderer          | built   |
-| omyac-upscaler-anchor-graph             | built   |
-| sci0-pic-upscaling-native-render-oracle | pending |
+| Post                                    | Status    |
+| --------------------------------------- | --------- |
+| agi-up-as-a-reference-renderer          | validated |
+| omyac-upscaler-anchor-graph             | validated |
+| sci0-pic-upscaling-native-render-oracle | built     |
 
 ## F:\github\retire-sim
 

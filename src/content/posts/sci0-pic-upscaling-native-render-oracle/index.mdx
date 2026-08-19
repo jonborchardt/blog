@@ -2,6 +2,7 @@
 title: "Upscaling Sierra SCI0 PIC: the native render oracle"
 description: How snap-blend upscales Sierra SCI0 vector backgrounds without leaking flood fills, using a native-resolution render as the oracle for every scaled fill.
 publishedAt: 2026-08-18
+updatedAt: 2026-08-19
 series: sierra-games
 seriesOrder: 1
 tags: [engineering, graphics, gamedev, retrocomputing, typescript]
@@ -95,33 +96,37 @@ Snap-blend fixes this by altering the rendering directly.
 ```mermaid
 flowchart TB
   accTitle: The snap-blend rendering pipeline
-  accDescr: The PIC command stream is rendered once at native resolution to record how many pixels each FILL touches. The same commands are then rendered at the target scale; lines get snapped endpoints, and before each fill a micro-gap pass closes diagonal gaps. Each scaled fill's pixel count is compared with the native count times scale squared; within 15 percent it is kept, otherwise the canvas is restored and the native fill region is nearest-neighbour scaled in. A final dither-to-RGBA blend runs over the whole canvas.
+  accDescr: The PIC command stream is rendered once at native resolution to record how many pixels each FILL touches. The same commands are then rendered at the target scale; lines get snapped endpoints, and before each fill a micro-gap pass closes diagonal gaps. Each fill runs under a guard: if it exceeds five times its native count times scale squared, or forty percent of the screen, it is rolled back mid-fill. A fill that ends with zero pixels while its native count is non-zero is recovered by blitting the nearest-neighbour scaled native mask. Undershoots pass through untouched. A final dither-to-RGBA blend runs over the whole canvas.
   P[PIC command stream] --> N[Phase 1: render at 1x]
-  N --> E[expected pixel count per FILL]
+  N --> E[expected pixel count + fill mask per FILL]
   P --> S
   subgraph S[Phase 2: render at Nx]
     direction TB
     L[DRAW_LINE: snap endpoints, draw]
-    F[FILL: close diagonal micro-gaps, snapshot, flood fill]
-    C{oracle check}
+    F[FILL: close diagonal micro-gaps,<br/>guarded flood fill]
+    C{fill exceeds native x N^2 x 5<br/>or 40% of screen?}
     L -. commands in stream order .-> F
     F --> C
-    C -- "within 0.85 to 1.15<br/>of expected x N^2" --> K[keep the fill]
-    C -- outside --> R[restore snapshot, blit native mask scaled]
+    C -- no --> K[keep the fill<br/>undershoots pass through]
+    C -- yes --> R[roll back mid-fill]
+    R --> M[zero pixels, native count non-zero<br/>→ blit native mask scaled]
   end
   E --> C
   S --> B[dither-to-RGBA blend]
 ```
 
-### 1. Endpoint snapping
+### 1. Endpoint snapping and seed nudging
 
-Line endpoints are snapped to the nearest scaled grid intersection, keeping boundaries aligned with the pixel grid at the target resolution.
+Line endpoints snap to nearby **already-drawn boundary pixels**: a scan around the scaled endpoint, under a small distance budget and a directional cone, finds an existing pixel to land on, so scaled lines actually touch the boundaries they were drawn to meet.
 
 ```plaintext
-function snapEndpoint(x, y, scale):
-    return (round(x * scale) / scale,
-            round(y * scale) / scale)
+function snapEndpoint(x, y):
+    // scan a small radius around the scaled endpoint for an
+    // already-drawn pixel, within a distance budget and a
+    // directional cone; snap to the closest hit, else keep (x, y)
 ```
+
+Fill seeds get the mirror treatment. At scale, boundary lines are thick enough to cover a seed's coordinates, and a fill seeded on a boundary paints zero pixels — the single biggest failure class the oracle exposed. Seeds are nudged off boundaries before the fill runs.
 
 ### 2. Diagonal micro-gap closure
 
@@ -167,23 +172,22 @@ for each command in picCommands:
         drawSnappedLine(scaledCanvas, command, scale)
     if command is FILL:
         closeGaps(scaledCanvas)  // micro-gap closure pass
-        snapshot = save(scaledCanvas)
-        actual = floodFill(scaledCanvas, command.x * scale, command.y * scale)
-        limit = expected[i] * scale * scale
+        limit = expected[i] * scale * scale * MAX_OVERSHOOT  // 5.0
+        actual = guardedFloodFill(scaledCanvas, command, limit)
+        // the guard aborts and unwinds the fill mid-flood if it
+        // passes the limit, or 40% of the whole screen
 
-        if actual > limit * 1.15:          // overshoot — leaked
-            restore(scaledCanvas, snapshot)
+        if actual == 0 AND expected[i] > 0:
+            // rolled back, or the seed never produced a pixel
             blitNativeMask(scaledCanvas, nativeCanvas, command, scale)
-        else if actual < limit * 0.85:     // undershoot — partial fill
-            restore(scaledCanvas, snapshot)
-            blitNativeMask(scaledCanvas, nativeCanvas, command, scale)
+        // undershoots are kept as-is
 ```
 
-If a fill at 3x overshoots its expected area (scaled appropriately), it's a leak. The native render acts as an oracle supervising the upscaled render.
+If a fill blows far past its native-predicted area, it's a leak — the guard unwinds it mid-flood rather than letting it flood the canvas. The native render acts as an oracle supervising the upscaled render. Undershoots are tolerated: thicker upscaled lines eat fill area by construction, so a somewhat-small fill is expected physics at scale, not a leak.
 
 ### 4. Native-mask fallback
 
-When a fill is flagged as leaked and can't be salvaged, the corresponding region from the native render is nearest-neighbor-scaled and composited in. Correctness is preserved at the cost of sharpness in that region — but in practice, fallback fires rarely.
+When a fill ends with zero pixels — rolled back by the guard, or its seed never produced one — while the native render says the region should have some, the corresponding region from the native render is nearest-neighbor-scaled and composited in. Correctness is preserved at the cost of sharpness in that region — but in practice, fallback fires rarely.
 
 ```plaintext
 function blitNativeMask(scaledCanvas, nativeCanvas, fillCmd, scale):
@@ -200,25 +204,24 @@ function blitNativeMask(scaledCanvas, nativeCanvas, fillCmd, scale):
 A cosmetic post-process. SCI0 uses dithered patterns to simulate colors beyond the 16-color EGA palette. The blend pass resolves these into smooth RGBA values for the browser renderer.
 
 ```plaintext
-// SCI0 dither: alternating pixels of two EGA colors in a checkerboard
-// e.g. color 0x03 (cyan) + color 0x0B (light cyan) = dither pair
+// SCI0 stores each pixel's dither pair in its byte: (high << 4) | low
+// e.g. 0x3b = cyan (0x3) + light cyan (0xb), drawn as an
+// alternating checkerboard at native resolution
 //
 //   C L C L        blended:
-//   L C L C   →    all pixels become avg(cyan, lightCyan)
-//   C L C L        = smooth teal in RGBA
+//   L C L C   →    every 0x3b pixel becomes the same
+//   C L C L        perceptual mix of the pair
 //   L C L C
 
-for each 2x2 block in output:
-    colors = unique EGA colors in block
-    if len(colors) == 2 AND isDitherPattern(block):
-        rgba = blend(egaToRGB(colors[0]), egaToRGB(colors[1]))
-        fill block with rgba
+// No pattern detection needed — the byte itself names both colours.
+for each pixel byte in output:
+    rgba = BLEND_TABLE[byte]   // precomputed okLab mix of the pair
 ```
 
-<Figure caption="The blend pass in one block: a 2x2 checkerboard of two EGA palette entries becomes four pixels of their average colour. Region shapes are untouched.">
+<Figure caption="The blend pass in one block: a checkerboard of two EGA palette entries becomes pixels of their perceptual mix. Region shapes are untouched.">
   <VizFigure
     name="Dither checkerboard blended to a single RGBA colour"
-    summary="Left, a 4 by 4 pixel checkerboard alternating two colours, with one 2 by 2 block outlined; right, a solid square of the average of the two colours. The output keeps the same footprint and loses only the checkerboard."
+    summary="Left, a 4 by 4 pixel checkerboard alternating two colours, with one 2 by 2 block outlined; right, a solid square of the perceptual mix of the two colours. The output keeps the same footprint and loses only the checkerboard."
   >
     <DitherBlend class="h-auto w-full max-w-xl" aria-hidden="true" />
   </VizFigure>
@@ -234,9 +237,9 @@ I haven't seen this approach used in retro vector renderers before. The problem 
 
 ## Results
 
-Across tested rooms, snap-blend produced zero leaked fills while preserving native region boundaries at 3x scale. The blend pass is purely cosmetic — same correctness, nicer pixels.
+Across the test corpus at 6x, snap-blend produced no catastrophic fill floods: escapes are caught mid-fill, rolled back, and recovered from the native mask. The flagged fills that remain are small boundary-thickness deviations, not leaks. The blend pass is purely cosmetic — same correctness, nicer pixels.
 
-It's the production strategy for [SCI.js](https://github.com/32bitkid/sci.js), a TypeScript reimplementation of the SCI0 engine focused on making Space Quest 3 playable in the browser with upscaled visuals.
+It's the production strategy — registered as `snap-v5-blend` — for my sci.js project, a TypeScript reimplementation of the SCI0 engine focused on making Space Quest 3 playable in the browser with upscaled visuals, built on [32bitkid's `@4bitlabs` decoding libraries](https://github.com/32bitkid/sci.js).
 
 Each comparison below sweeps between the two renders of one Space Quest 3 room; the labels in the bottom corners say which is which.
 
@@ -394,7 +397,7 @@ Different colors tell the engine if the avatar should be seen in front or behind
 
 ![The priority map for the hangar room: flat regions in cyan, blue, magenta and red on black, one colour per depth band, marking which parts of the scene draw in front of or behind the player](./priority-map.png)
 
-Non white areas are walkable by the avatar, while non black areas will trigger event when walked over.
+White areas block the avatar. Black areas are walkable with no trigger. Any other colour is walkable _and_ triggers an event when walked over.
 
 ![The control map for the same room: mostly white, with black bands marking the walkable floor and green patches marking areas that trigger events when walked over](./control-map.png)
 
@@ -404,7 +407,7 @@ AI upscaling works well for screenshots, but renderers require deterministic str
 
 ## The road here
 
-This was strategy v5 out of ten attempts. Strategies v1 through v4 each solved part of the problem — better line expansion, smarter gap detection — but none handled the full space of edge cases. The native render oracle was the breakthrough: instead of trying to predict where gaps would form, just render at native res first and let the result tell you what's correct. v6 through v10 explored alternatives but didn't improve on v5's approach. Two of those detours have their own write-ups: [borrowing agi-up as a reference renderer](/agi-up-as-a-reference-renderer/) and [the anchor-graph upscaler](/omyac-upscaler-anchor-graph/).
+This was strategy v5 out of ten attempts. Strategies v1 through v4 each solved part of the problem — better line expansion, smarter gap detection — but none handled the full space of edge cases. The native render oracle was the breakthrough: instead of trying to predict where gaps would form, just render at native res first and let the result tell you what's correct. v6 through v10 explored alternatives; v10 even improved the metric slightly, but not visibly enough to earn a switch — that detour has [its own write-up](/agi-up-as-a-reference-renderer/). And one successor isn't a snap variant at all: [the anchor-graph upscaler](/omyac-upscaler-anchor-graph/), a separate paradigm that has since won the PIC visual path. `snap-v5-blend` remains the game-runtime strategy, because the anchor-graph renderer doesn't produce the priority and control layers the engine needs.
 
 Sometimes the best algorithm is "do it twice (or ten times) and compare."
 
