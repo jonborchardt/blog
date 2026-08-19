@@ -237,7 +237,7 @@ I haven't seen this approach used in retro vector renderers before. The problem 
 
 ## Results
 
-Across the test corpus at 6x, snap-blend produced no catastrophic fill floods: escapes are caught mid-fill, rolled back, and recovered from the native mask. The flagged fills that remain are small boundary-thickness deviations, not leaks. The blend pass is purely cosmetic — same correctness, nicer pixels.
+Across the test corpus at 6x, snap-blend produced no catastrophic fill floods: escapes are caught mid-fill, rolled back, and recovered from the native mask. The flagged fills that remain are overwhelmingly small boundary-thickness undershoots, plus a handful of guarded micro-gap escapes the rollback contains. The blend pass is purely cosmetic — same correctness, nicer pixels.
 
 It's the production strategy — registered as `snap-v5-blend` — for my sci.js project, a TypeScript reimplementation of the SCI0 engine focused on making Space Quest 3 playable in the browser with upscaled visuals, built on [32bitkid's `@4bitlabs` decoding libraries](https://github.com/32bitkid/sci.js).
 
