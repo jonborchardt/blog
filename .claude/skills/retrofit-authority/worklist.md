@@ -6,7 +6,7 @@ All published posts outside the `blog-features` series, grouped by authority rep
 
 | Post                                    | Status  |
 | --------------------------------------- | ------- |
-| agi-up-as-a-reference-renderer          | pending |
+| agi-up-as-a-reference-renderer          | built   |
 | omyac-upscaler-anchor-graph             | pending |
 | sci0-pic-upscaling-native-render-oracle | pending |
 
