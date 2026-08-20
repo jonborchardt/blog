@@ -8,7 +8,8 @@ import { readdir, readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { join, relative } from "node:path";
 import type { AstroIntegration } from "astro";
-import { checkDist as runChecks } from "../lib/dist-checks";
+import { checkDist as runChecks, collectExternalLinks } from "../lib/dist-checks";
+import { checkExternalLinks } from "../lib/external-links";
 
 export function checkDist(): AstroIntegration {
   let base = "";
@@ -37,6 +38,27 @@ export function checkDist(): AstroIntegration {
           throw new Error(`check-dist: ${errors.length} problem(s) — see the list above.`);
         }
         logger.info(`${stats.pages} pages, ${stats.links} links, ${stats.images} images OK`);
+
+        if (process.env.SKIP_EXTERNAL_LINKS) {
+          logger.info("external links: skipped (SKIP_EXTERNAL_LINKS is set)");
+        } else {
+          const external = collectExternalLinks(pages);
+          const report = await checkExternalLinks([...external.keys()]);
+          for (const w of report.warnings) {
+            logger.warn(
+              `external link ${w.url} (${w.detail}) in ${external.get(w.url)!.join(", ")} — not failing the build (transient/ambiguous); fix it if it stays broken`,
+            );
+          }
+          if (report.dead.length) {
+            const list = report.dead.map(
+              (d) => `${d.url} (${d.detail}) in ${external.get(d.url)!.join(", ")}`,
+            );
+            throw new Error(
+              `check-dist: ${list.length} dead external link(s):\n- ${list.join("\n- ")}\n→ fix or remove the link, or point at an archived copy (web.archive.org)`,
+            );
+          }
+          logger.info(`external links: ${external.size} OK (${report.warnings.length} warning(s))`);
+        }
       },
     },
   };

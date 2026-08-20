@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { describe, expect, it } from "vitest";
-import { checkDist } from "./dist-checks";
+import { checkDist, collectExternalLinks } from "./dist-checks";
 
 const BASE = "/blog";
 const SITE = "https://example.test";
@@ -99,5 +99,20 @@ describe("checkDist", () => {
   it("flags admin output", () => {
     const r = run([page("index.html", "")], ["admin/index.html"]);
     expect(r.errors[0]).toMatch(/admin\/index\.html: dev-only admin output/);
+  });
+});
+
+describe("collectExternalLinks", () => {
+  it("collects http(s) hrefs with the files using them, skipping internal links", () => {
+    const pages = [
+      {
+        file: "a/index.html",
+        html: '<a href="https://x.example/p">x</a><a href="/blog/b/">in</a>',
+      },
+      { file: "b/index.html", html: '<a href="https://x.example/p">x again</a>' },
+    ];
+    const map = collectExternalLinks(pages);
+    expect(map.get("https://x.example/p")).toEqual(["a/index.html", "b/index.html"]);
+    expect(map.size).toBe(1);
   });
 });

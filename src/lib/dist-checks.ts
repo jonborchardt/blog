@@ -165,3 +165,18 @@ export function checkDist({ pages, files, base, site }: DistCheckInput): DistChe
 
   return { errors, stats: { pages: pages.length, links, images } };
 }
+
+/** http(s) link → dist files using it. Network policy lives in src/lib/external-links.ts. */
+export function collectExternalLinks(pages: DistPage[]): Map<string, string[]> {
+  const byUrl = new Map<string, string[]>();
+  for (const { file, html } of pages) {
+    for (const a of parse(html).querySelectorAll("a[href]")) {
+      const raw = a.getAttribute("href") ?? "";
+      if (!/^https?:\/\//.test(raw)) continue;
+      const files = byUrl.get(raw) ?? [];
+      if (!files.includes(file)) files.push(file);
+      byUrl.set(raw, files);
+    }
+  }
+  return byUrl;
+}
