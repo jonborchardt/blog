@@ -2,6 +2,7 @@
 title: "Ponytail: making the AI a lazy senior dev (is it any good?)"
 description: WorldLock was built with Claude Code in ponytail mode, an AI playing a lazy senior dev. What it did to the code, and how it fared replaying a real PR review.
 publishedAt: 2026-08-18
+updatedAt: 2026-08-19
 series: worldlock
 seriesOrder: 3
 tags: [ai-assisted-coding, code-quality, developer-tools]
@@ -52,10 +53,19 @@ flowchart TB
 
 You can see the fingerprints everywhere:
 
-- **8 files, ~1,900 lines, 1 dependency.** No androidx, no DI framework, no ViewModel, no coroutines library. The ISS fetcher is a plain `Thread` and `java.net.URL`. Geocoding is the platform `Geocoder`. Settings persistence is `SharedPreferences`. Every one of those is a rung-3/rung-4 answer where a typical Android codebase reaches for a library.
+- **8 files, ~1,900 lines, one AR dependency** (plus the Play Services location library ARCore's Geospatial mode requires). No androidx, no DI framework, no ViewModel, no coroutines library. The ISS fetcher is a plain `Thread` and `java.net.URL`. Geocoding is the platform `Geocoder`. Settings persistence is `SharedPreferences`. Every one of those is a rung-3/rung-4 answer where a typical Android codebase reaches for a library.
 - **The UI is built in code.** No XML layouts, no resource inflation — the settings sheet is a `LinearLayout` assembled in one function, because that was shorter than the "proper" way and there's exactly one screen.
 - **Seven tower styles, one renderer.** Instead of a class per style, there's a `Style` data table (strand count, twist, blend mode, a radius-profile lambda) and one shader with a mode switch. Adding a style is adding a table row.
-- **The debt is labeled.** Search the repo for `ponytail:` and you get the honest list: the tower-width clamp heuristic, the accuracy-gate constants marked as tuning knobs. That's the whole backlog of deferred work, in-place, greppable.
+- **The debt is labeled.** Search the repo for `ponytail:` and you get the honest list — four comments, in-place, greppable. That's the whole backlog of deferred work.
+
+Here is that ledger, in full:
+
+| Where               | What was deferred                                                                                          | The comment's own upgrade path                              |
+| ------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| `GlobeRenderer.kt`  | The globe ray-cast hits a sphere through local sea level, not the true WGS84 ellipsoid                     | "Upgrade to an ellipsoid ray cast if either ever matters"   |
+| `Geo.kt`            | Sea level is a hand-set constant (the EGM96 geoid offset at Seattle)                                        | "nudge if the horizon still reads high or low in the field" |
+| `MainActivity.kt`   | Tower width is a heuristic: an angular floor so distant cities stay visible, a distance cap so near ones don't engulf you | tune in the field                                           |
+| `MainActivity.kt`   | The first-fix accuracy-gate constants                                                                       | "tighten if towers look mis-aimed in the first seconds"     |
 
 ## A harder test: replaying a real PR
 
