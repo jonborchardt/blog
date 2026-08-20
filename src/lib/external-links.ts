@@ -44,16 +44,16 @@ export async function checkExternalLinks(
   const report: ExternalLinkReport = { dead: [], warnings: [] };
   const queue = urls.filter((u) => !(cache[u] && now - cache[u]! < TTL_MS));
   const check = async (url: string) => {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), TIMEOUT_MS).unref();
     try {
       const res = await fetchFn(url, {
         redirect: "follow",
-        signal: controller.signal,
+        signal: AbortSignal.timeout(TIMEOUT_MS),
         headers: {
           "User-Agent": "always-shippable-link-check (+https://jonborchardt.github.io/blog/)",
         },
       });
+      // undici keeps the connection open until the body is drained/canceled; we only need the
+      // status, so cancel it explicitly rather than leaving it to be reclaimed later.
       await res.body?.cancel();
       const verdict = classifyStatus(res.status);
       if (verdict === "ok") cache[url] = now;
@@ -64,8 +64,6 @@ export async function checkExternalLinks(
         });
     } catch (e) {
       report.warnings.push({ url, detail: e instanceof Error ? e.message : String(e) });
-    } finally {
-      clearTimeout(timer);
     }
   };
   // ponytail: fixed-size worker pool; fine for a blog's worth of links
@@ -78,9 +76,11 @@ export async function checkExternalLinks(
   await mkdir(dirname(cachePath), { recursive: true });
   await writeFile(cachePath, JSON.stringify(cache));
   // ponytail: a live fetch this late in astro's build lifecycle races a Windows-only libuv
-  // handle-close bug (network calls only, cache-hit builds are unaffected) — a beat lets the
-  // undici connection teardown finish before the process moves on. Drop this if a future Node
-  // fixes the race; only fired when the queue actually made a network request.
+  // handle-close bug (verified: forcing zero live fetches never crashes; forcing one does,
+  // intermittently) — a beat lets undici's connection teardown finish before the process moves
+  // on. Only fires when the queue made a network request, but note that's *every* build in
+  // practice as long as any URL keeps returning a warn/dead status (never cached, so always
+  // requeued) — this isn't a one-time cold-cache cost. Drop this if a future Node fixes the race.
   if (queue.length) await new Promise((r) => setTimeout(r, 200));
   return report;
 }
