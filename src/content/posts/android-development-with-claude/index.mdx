@@ -2,6 +2,7 @@
 title: Android development with Claude, no IDE, no cable
 description: How WorldLock is built, deployed and debugged with three CLI commands, wireless adb and a coding agent that reads logcat and screenshots — no Android Studio.
 publishedAt: 2026-08-18
+updatedAt: 2026-08-19
 series: worldlock
 seriesOrder: 2
 tags: [engineering, ai-assisted-coding, android, kotlin, developer-tools]
@@ -31,9 +32,9 @@ The quiet realization of this project is that Android development is _extremely_
 - **Build errors are just text.** Claude runs `gradlew assembleDebug`, reads the Kotlin compiler output, fixes the code, runs it again. The compile-fix loop that eats an afternoon of clicking happens unattended.
 - **Logcat is just text too.** The app logs everything interesting — geospatial accuracy, anchor state, a periodic cross-check of our coordinate math against ARCore's own anchors — under one tag. Claude greps it, spots `delta=0.4m` or `heading accuracy insufficient`, and reasons about what to change. Debugging a georegistration bug from a log line beats stepping through a debugger you can't attach to a phone that's outside.
 - **Screenshots close the loop.** Phone screenshots land in a temp folder; Claude reads the pixels, notices the tower is leaning or the label is mispositioned, and edits the shader. It even cropped and placed the README gallery itself.
-- **No toolchain install, even.** The build borrows the JDK 17 and Android SDK already bundled inside a Unity install on this machine — two paths in `gradle.properties` and `local.properties`. Zero downloads.
+- **No toolchain install, even.** The build borrows the JDK 17 and Android SDK already bundled inside a Unity install on this machine — two paths in `gradle.properties` and `local.properties`. No JDK or SDK download; the only thing fetched is the Gradle distribution the wrapper pulls on first run.
 
-Put together, the loop is a text pipeline with a phone in the middle of it. The only two arrows a human touches are the ones on the far right:
+Put together, the loop is a text pipeline with a phone in the middle of it. The only arrows a human touches are the ones on the far right:
 
 ```mermaid
 flowchart TB
@@ -49,17 +50,18 @@ flowchart TB
   P -- does it look right? --> H
 ```
 
-The human's job shrinks to the two things an agent genuinely can't do: physically pointing the phone at the sky, and judging whether the ember particles _look_ right.
+The human's job shrinks to the three things an agent genuinely can't do: physically pointing the phone at the sky, judging whether the ember particles _look_ right, and occasionally re-running `adb connect` when the wireless link drops (`pair` and `connect` are deliberately not pre-approved).
 
-One guardrail worth copying: the phone is reachable only through a wrapper script (`.\adb.cmd`), and the project's permission rules pre-approve only app-scoped operations — install, launch, stop, and logcat for this one package. The agent can iterate freely on the app without ever holding a blank check to the device.
+One guardrail worth copying: the phone is reachable only through a wrapper script (`.\adb.cmd`) — plain `adb` isn't on PATH, and the permission rules key off the wrapper's name. The rules are three tiers, not two. Pre-approved: install, launch, stop, and uninstall of this one package, plus device listing and logcat (the `-s Earth` tag filter is convention, not enforcement). Anything unlisted — shell access, pulling files, other packages — waits for a human. And a hard deny list is refused outright even with a human present: reboot, root, sideload, push, `shell rm`, disabling packages, changing device settings — and reading `local.properties`, the file holding the ARCore API key. The agent can iterate freely on the app without ever holding a blank check to the device.
 
 ```mermaid
 flowchart TB
-  accTitle: The adb wrapper as a permission boundary
-  accDescr: Claude never calls adb directly. Every device command goes through the adb.cmd wrapper, whose permission rules pre-approve install, launch, stop and logcat scoped to the WorldLock package; anything else, such as shell access, uninstalling other apps or pulling files, needs a human to approve it.
+  accTitle: The adb wrapper as a three-tier permission boundary
+  accDescr: Claude never calls adb directly. Every device command goes through the adb.cmd wrapper. Pre-approved commands, install, launch, stop and uninstall of the WorldLock package plus device listing and logcat, run unattended. Anything unlisted, such as shell access, pulling files or other packages, waits for a human to approve it. A deny list, reboot, root, sideload, push, shell rm, disabling packages, changing settings, and reading the file with the API key, is refused outright even with a human present.
   C[Claude] --> W[.\adb.cmd wrapper]
-  W -- "install / launch / stop / logcat<br/>for this one package" --> OK[Runs unattended]
-  W -- "shell, pull, other packages, ..." --> ASK[Waits for a human]
+  W -- "install / launch / stop / uninstall of this package<br/>+ devices, logcat" --> OK[Runs unattended]
+  W -- "shell, pull, other packages, pair/connect, ..." --> ASK[Waits for a human]
+  W -- "reboot, root, sideload, push, shell rm,<br/>settings, reading the API-key file" --> DENY[Refused outright]
   OK --> P[Phone]
   ASK -. only if approved .-> P
 ```

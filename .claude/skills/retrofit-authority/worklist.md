@@ -12,17 +12,17 @@ All published posts outside the `agent-built` series, grouped by authority repo.
 
 ## F:\github\retire-sim
 
-| Post                                 | Status    |
-| ------------------------------------ | --------- |
-| retirement-simulator-ai-lab          | validated |
-| same-plan-broke-or-5-8-million       | validated |
-| simulator-watches-retirement-youtube | validated |
+| Post                                 | Status  |
+| ------------------------------------ | ------- |
+| retirement-simulator-ai-lab          | shipped |
+| same-plan-broke-or-5-8-million       | shipped |
+| simulator-watches-retirement-youtube | shipped |
 
 ## E:\github2\earth
 
 | Post                            | Status  |
 | ------------------------------- | ------- |
-| android-development-with-claude | pending |
+| android-development-with-claude | built   |
 | worldlock-ar-window             | pending |
 | ponytail-lazy-senior-dev        | pending |
 
