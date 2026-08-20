@@ -12,7 +12,7 @@ type PostLike = Pick<Post, "id" | "body" | "data">;
 
 /** The post's raw MDX body under a small header (title, description, date, canonical URL). */
 export function postMarkdown(post: PostLike): string {
-  const canonical = absoluteUrl(postPath(post as Post), site.url);
+  const canonical = absoluteUrl(postPath(post), site.url);
   return [
     `# ${post.data.title}`,
     "",
@@ -29,7 +29,7 @@ export function postMarkdown(post: PostLike): string {
 export function llmsTxt(posts: PostLike[]): string {
   const lines = posts.map(
     (p) =>
-      `- [${p.data.title}](${absoluteUrl(`${postPath(p as Post)}index.md`, site.url)}): ${p.data.description}`,
+      `- [${p.data.title}](${absoluteUrl(`${postPath(p)}index.md`, site.url)}): ${p.data.description}`,
   );
   return `# ${site.name}\n\n> ${site.description}\n\n## Posts\n\n${lines.join("\n")}\n`;
 }

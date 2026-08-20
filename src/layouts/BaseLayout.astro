@@ -94,22 +94,22 @@ const imageHeight = meta.imageHeight ?? 630;
     <!-- Theme: applied before paint to avoid a flash. Order: user override → system preference. -->
     <script is:inline>
       (() => {
-        const prefersDark = () => {
-          const stored = localStorage.getItem("theme");
-          return (
-            stored === "dark" ||
-            (stored !== "light" && matchMedia("(prefers-color-scheme: dark)").matches)
-          );
-        };
-        document.documentElement.classList.toggle("dark", prefersDark());
+        const root = document.documentElement;
         const stored = localStorage.getItem("theme");
-        document.documentElement.dataset.theme =
-          stored === "light" || stored === "dark" ? stored : "system";
-        // Print in light theme: the dark palette is unreadable on paper.
-        addEventListener("beforeprint", () => document.documentElement.classList.remove("dark"));
-        addEventListener("afterprint", () =>
-          document.documentElement.classList.toggle("dark", prefersDark()),
+        root.classList.toggle(
+          "dark",
+          stored === "dark" ||
+            (stored !== "light" && matchMedia("(prefers-color-scheme: dark)").matches),
         );
+        root.dataset.theme = stored === "light" || stored === "dark" ? stored : "system";
+        // Print in light theme: the dark palette is unreadable on paper. Restore whatever the
+        // class was at print time (the toggle keeps it current), not the load-time preference.
+        let wasDark;
+        addEventListener("beforeprint", () => {
+          wasDark = root.classList.contains("dark");
+          root.classList.remove("dark");
+        });
+        addEventListener("afterprint", () => root.classList.toggle("dark", wasDark));
       })();
     </script>
   </head>

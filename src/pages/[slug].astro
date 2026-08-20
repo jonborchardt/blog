@@ -6,6 +6,7 @@ import { Image } from "astro:assets";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import DraftBadge from "@/components/DraftBadge.astro";
 import TableWrapper from "@/components/blog/TableWrapper.astro";
+import PostTeaser from "@/components/PostTeaser.astro";
 import PostToc from "@/components/PostToc.astro";
 import TagList from "@/components/TagList.astro";
 import { tags as tagRegistry } from "@/config/tags";
@@ -191,26 +192,7 @@ const image = ogImage ? new URL(ogImage.src, Astro.site).toString() : `/og/${pos
                 </div>
                 <div class="p-5">
                   {ctx.next ? (
-                    <div class="grid-cols-thumb grid gap-x-4">
-                      <a href={href(postPath(ctx.next))} tabindex="-1" aria-hidden="true">
-                        <Image
-                          src={ctx.next.data.hero.src}
-                          alt={ctx.next.data.hero.alt}
-                          width={540}
-                          height={216}
-                          class="aspect-card w-full rounded-md border object-cover"
-                        />
-                      </a>
-                      <a href={href(postPath(ctx.next))} class="block no-underline">
-                        <span class="text-muted-foreground block text-sm">Up next</span>
-                        <span class="hover:text-primary mt-1 block text-lg font-semibold">
-                          {ctx.next.data.title}
-                        </span>
-                        <span class="text-muted-foreground mt-1 line-clamp-2 block text-sm">
-                          {ctx.next.data.description}
-                        </span>
-                      </a>
-                    </div>
+                    <PostTeaser post={ctx.next} label="Up next" />
                   ) : (
                     <p class="text-muted-foreground text-sm">
                       You've reached the end of this series.
@@ -233,26 +215,7 @@ const image = ogImage ? new URL(ogImage.src, Astro.site).toString() : `/og/${pos
           {
             related && (
               <aside aria-label="Related post" class="bg-card mb-8 rounded-xl border p-5">
-                <div class="grid-cols-thumb grid gap-x-4">
-                  <a href={href(postPath(related))} tabindex="-1" aria-hidden="true">
-                    <Image
-                      src={related.data.hero.src}
-                      alt={related.data.hero.alt}
-                      width={540}
-                      height={216}
-                      class="aspect-card w-full rounded-md border object-cover"
-                    />
-                  </a>
-                  <a href={href(postPath(related))} class="block no-underline">
-                    <span class="text-muted-foreground block text-sm">You might also like</span>
-                    <span class="hover:text-primary mt-1 block text-lg font-semibold">
-                      {related.data.title}
-                    </span>
-                    <span class="text-muted-foreground mt-1 line-clamp-2 block text-sm">
-                      {related.data.description}
-                    </span>
-                  </a>
-                </div>
+                <PostTeaser post={related} label="You might also like" />
               </aside>
             )
           }

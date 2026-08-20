@@ -62,14 +62,6 @@ describe("getRelatedPost", () => {
     expect(getRelatedPost(me, [me, sibling])).toBeUndefined();
   });
 
-  it("weights rare shared tags above ubiquitous ones", () => {
-    // Tag "a" appears everywhere; tag "b" only twice. One rare match beats one common match.
-    const rare = post("rare", { tags: ["b"] });
-    const common = post("common", { tags: ["a"] });
-    const filler = [post("f1", { tags: ["a"] }), post("f2", { tags: ["a"] })];
-    expect(getRelatedPost(me, [me, rare, common, ...filler])).toBe(rare);
-  });
-
   it("falls back to the newest eligible post when nothing shares a tag", () => {
     const older = post("older", { publishedAt: new Date("2025-01-01") });
     const newer = post("newer", { publishedAt: new Date("2026-02-01") });

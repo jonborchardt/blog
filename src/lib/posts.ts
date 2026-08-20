@@ -10,8 +10,8 @@ export type Post = CollectionEntry<"posts">;
 /** Route names posts may not collide with (list lives in reserved-slugs.ts so Node scripts can read it). */
 export const RESERVED_SLUGS = new Set(RESERVED_SLUGS_LIST);
 
-export const postSlug = (post: Post): string => post.data.slug ?? post.id;
-export const postPath = (post: Post): string => `/${postSlug(post)}/`;
+export const postSlug = (post: Pick<Post, "id" | "data">): string => post.data.slug ?? post.id;
+export const postPath = (post: Pick<Post, "id" | "data">): string => `/${postSlug(post)}/`;
 export const seriesPath = (id: SeriesId): string => `/series/${id}/`;
 
 const byNewest = (a: Post, b: Post) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime();
@@ -86,17 +86,14 @@ export async function getSeriesContext(post: Post): Promise<SeriesContext | unde
 }
 
 /**
- * Best "read next" candidate: highest shared-tag score, tie-broken by newest then slug
- * (deterministic builds). Each shared tag is weighted by inverse frequency across all posts, so
- * a rare shared tag signals a stronger relationship than a ubiquitous one. Never the post itself
- * and never a post from the same series — the series nav owns those. With no tag overlap it
- * degrades to the newest eligible post, so a pick always exists when any eligible post does.
+ * Best "read next" candidate: most shared tags, tie-broken by newest then slug (deterministic
+ * builds). Never the post itself and never a post from the same series — the series nav owns
+ * those. With no tag overlap it degrades to the newest eligible post, so a pick always exists
+ * when any eligible post does.
  */
 export function getRelatedPost(post: Post, posts: Post[]): Post | undefined {
-  const freq = new Map<string, number>();
-  for (const p of posts) for (const t of p.data.tags) freq.set(t, (freq.get(t) ?? 0) + 1);
-  const score = (p: Post) =>
-    p.data.tags.reduce((s, t) => s + (post.data.tags.includes(t) ? 1 / freq.get(t)! : 0), 0);
+  // ponytail: plain shared-tag count; weight tags by rarity if a ubiquitous tag makes bad picks
+  const score = (p: Post) => p.data.tags.filter((t) => post.data.tags.includes(t)).length;
   return posts
     .filter((p) => p.id !== post.id && (!post.data.series || p.data.series !== post.data.series))
     .sort(

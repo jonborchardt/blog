@@ -1,0 +1,35 @@
+---
+/**
+ * One-post teaser: hero thumbnail + eyebrow label + title + description.
+ * Used by the post footer ("Up next" in the series nav, "You might also like").
+ */
+import { Image } from "astro:assets";
+import type { Post } from "@/lib/posts";
+import { postPath } from "@/lib/posts";
+import { href } from "@/lib/url";
+
+interface Props {
+  post: Post;
+  label: string;
+}
+const { post, label } = Astro.props;
+---
+
+<div class="grid-cols-thumb grid gap-x-4">
+  <a href={href(postPath(post))} tabindex="-1" aria-hidden="true">
+    <Image
+      src={post.data.hero.src}
+      alt={post.data.hero.alt}
+      width={540}
+      height={216}
+      class="aspect-card w-full rounded-md border object-cover"
+    />
+  </a>
+  <a href={href(postPath(post))} class="block no-underline">
+    <span class="text-muted-foreground block text-sm">{label}</span>
+    <span class="hover:text-primary mt-1 block text-lg font-semibold">{post.data.title}</span>
+    <span class="text-muted-foreground mt-1 line-clamp-2 block text-sm">
+      {post.data.description}
+    </span>
+  </a>
+</div>
