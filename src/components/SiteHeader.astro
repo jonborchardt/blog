@@ -9,7 +9,7 @@ const current = Astro.url.pathname;
 const isActive = (path: string) => current.startsWith(href(path));
 ---
 
-<header class="border-b">
+<header class="border-b print:hidden">
   <div
     class="max-w-page mx-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-3 sm:px-6"
   >

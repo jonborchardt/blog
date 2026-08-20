@@ -132,7 +132,10 @@ const image = ogImage ? new URL(ogImage.src, Astro.site).toString() : `/og/${pos
       <div class="mx-auto mt-10 max-w-prose">
         {
           showToc && (
-            <details open class="bg-muted/50 mb-8 rounded-md border px-4 py-3 text-sm lg:hidden">
+            <details
+              open
+              class="bg-muted/50 mb-8 rounded-md border px-4 py-3 text-sm lg:hidden print:hidden"
+            >
               <summary class="cursor-pointer font-medium">On this page</summary>
               <nav aria-label="On this page" class="mt-2">
                 <ul class="space-y-1">
@@ -153,7 +156,7 @@ const image = ogImage ? new URL(ogImage.src, Astro.site).toString() : `/og/${pos
           <Content components={{ table: TableWrapper }} />
         </div>
 
-        <footer class="mt-14 border-t pt-8">
+        <footer class="mt-14 border-t pt-8 print:hidden">
           {
             ctx && (
               <nav

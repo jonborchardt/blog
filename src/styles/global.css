@@ -382,3 +382,26 @@ svg[id^="mermaid"] {
   color: var(--muted-foreground);
   cursor: pointer;
 }
+
+/* Print: content only. Chrome is hidden per-element with print:hidden; these are the global rules. */
+@media print {
+  .prose a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    color: var(--muted-foreground);
+  }
+  pre,
+  figure,
+  table,
+  img,
+  blockquote {
+    break-inside: avoid;
+  }
+  pre.astro-code {
+    white-space: pre-wrap;
+  }
+  .figure-dialog,
+  .heading-anchor {
+    display: none;
+  }
+}

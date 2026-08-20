@@ -40,6 +40,15 @@ test("prose pages ship no islands", async ({ page }) => {
   await expect(page.locator("astro-island")).toHaveCount(0);
 });
 
+test("print media hides chrome and keeps the article", async ({ page }) => {
+  await page.goto("repos-as-experts/");
+  await page.emulateMedia({ media: "print" });
+  await expect(page.locator("body > header")).toBeHidden();
+  await expect(page.locator("body > footer")).toBeHidden();
+  await expect(page.locator("article footer")).toBeHidden();
+  await expect(page.locator("article h1")).toBeVisible();
+});
+
 for (const scheme of ["light", "dark"] as const) {
   test(`article is axe-clean in ${scheme} mode`, async ({ page }) => {
     await page.emulateMedia({ colorScheme: scheme });

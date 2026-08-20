@@ -94,20 +94,29 @@ const imageHeight = meta.imageHeight ?? 630;
     <!-- Theme: applied before paint to avoid a flash. Order: user override → system preference. -->
     <script is:inline>
       (() => {
+        const prefersDark = () => {
+          const stored = localStorage.getItem("theme");
+          return (
+            stored === "dark" ||
+            (stored !== "light" && matchMedia("(prefers-color-scheme: dark)").matches)
+          );
+        };
+        document.documentElement.classList.toggle("dark", prefersDark());
         const stored = localStorage.getItem("theme");
-        const dark =
-          stored === "dark" ||
-          (stored !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
-        document.documentElement.classList.toggle("dark", dark);
         document.documentElement.dataset.theme =
           stored === "light" || stored === "dark" ? stored : "system";
+        // Print in light theme: the dark palette is unreadable on paper.
+        addEventListener("beforeprint", () => document.documentElement.classList.remove("dark"));
+        addEventListener("afterprint", () =>
+          document.documentElement.classList.toggle("dark", prefersDark()),
+        );
       })();
     </script>
   </head>
   <body class="flex min-h-svh flex-col">
     <a
       href="#main"
-      class="focus:bg-background focus:text-foreground sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:border focus:px-3 focus:py-2"
+      class="focus:bg-background focus:text-foreground sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:border focus:px-3 focus:py-2 print:hidden"
     >
       Skip to content
     </a>
