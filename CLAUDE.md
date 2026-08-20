@@ -46,7 +46,7 @@ A statically generated technical blog (Astro 7 + React islands + MDX + Tailwind/
 
 - Frontmatter (content loader): Zod schema, unknown series/tags, `seriesOrder` without series, title ≤ 60, description 40–160.
 - Cross-post (`validatePosts` in `src/lib/posts.ts`, run by every page that lists posts): duplicate/reserved slugs, duplicate `seriesOrder` within a series.
-- Built output (`src/integrations/check-dist.ts` → `src/lib/dist-checks.ts`, after `astro build`): internal links and `#fragments` resolve, no root-relative links outside the base, every `<img>` has alt + width/height, every page has title/description/canonical/og:image, no `admin/` output.
+- Built output (`src/integrations/check-dist.ts` → `src/lib/dist-checks.ts`, after `astro build`): internal links and `#fragments` resolve, no root-relative links outside the base, every `<img>` has alt + width/height, every page has title/description/canonical/og:image, no `admin/` output. External links checked after HTML checks: HTTP 404/410 fail the build, other failures warn; successes cached 7 days in node_modules/.cache. Set `SKIP_EXTERNAL_LINKS=1` to skip (offline builds).
 - Also: TypeScript (`astro check`), ESLint, Prettier, unit + e2e (axe WCAG 2.2 AA on every page).
 
 Add new checks to `src/lib/dist-checks.ts` (post-build, HTML) or `validatePosts` (frontmatter) — not a new system. Messages must say what is wrong _and_ what to change.

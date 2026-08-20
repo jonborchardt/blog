@@ -41,7 +41,7 @@ test("prose pages ship no islands", async ({ page }) => {
 });
 
 test("print media hides chrome and keeps the article", async ({ page }) => {
-  await page.goto("repos-as-experts/");
+  await page.goto(POST);
   await page.emulateMedia({ media: "print" });
   await expect(page.locator("body > header")).toBeHidden();
   await expect(page.locator("body > footer")).toBeHidden();

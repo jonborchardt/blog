@@ -4,9 +4,11 @@
  *
  * Props: `caption?` (rendered as <figcaption>), `width` = "prose" | "wide" | "full" (default
  * "prose"), `zoom?` (default false) — wraps the content in a button that opens a full-size
- * <dialog> lightbox. Use `zoom` ONLY when the direct child is a plain <img> (sweep comparisons,
- * screenshots); never around VizFigure (its ids would duplicate) or interactive islands.
- * "wide"/"full" break out of the prose measure on ≥lg screens; on narrow screens nothing breaks out.
+ * <dialog> lightbox. `zoom` works on post pages — the click handler is an inline script in
+ * `src/pages/[slug].astro`; a Figure with `zoom` on any other page renders a button that does nothing.
+ * Use `zoom` ONLY when the direct child is a plain <img> (sweep comparisons, screenshots); never
+ * around VizFigure (its ids would duplicate) or interactive islands. "wide"/"full" break out of
+ * the prose measure on ≥lg screens; on narrow screens nothing breaks out.
  *
  * ```mdx
  * import Figure from "@/components/blog/Figure.astro";

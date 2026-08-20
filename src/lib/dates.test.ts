@@ -20,6 +20,8 @@ describe("effectiveUpdatedAt", () => {
   });
   it("git date shows only when at least 7 days after publish", () => {
     expect(effectiveUpdatedAt(pub, undefined, new Date("2026-01-05"))).toBeUndefined();
+    const boundary = new Date("2026-01-08");
+    expect(effectiveUpdatedAt(pub, undefined, boundary)).toBe(boundary);
     const later = new Date("2026-01-09");
     expect(effectiveUpdatedAt(pub, undefined, later)).toBe(later);
   });

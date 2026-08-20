@@ -47,7 +47,7 @@ import shot from "./shot.png";
 
 Plain Markdown images (`![alt](./file.png)`) also work and get responsive `srcset` automatically; use `Figure` when you need a caption or a wider measure.
 
-`Figure` also takes `zoom` (default `false`): wraps the content in a button that opens a full-size `<dialog>` lightbox. Use it ONLY when the direct child is a plain `<img>` (sweep comparisons, screenshots) — never around `VizFigure` (its ids would duplicate) or interactive islands.
+`Figure` also takes `zoom` (default `false`): wraps the content in a button that opens a full-size `<dialog>` lightbox. `zoom` works on post pages — the click handler is an inline script in `src/pages/[slug].astro`; a Figure with `zoom` on any other page renders a button that does nothing. Use it ONLY when the direct child is a plain `<img>` (sweep comparisons, screenshots) — never around `VizFigure` (its ids would duplicate) or interactive islands.
 
 ```mdx
 <Figure caption="Original versus upscale." zoom>
