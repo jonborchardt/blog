@@ -23,7 +23,7 @@ A statically generated technical blog (Astro 7 + React islands + MDX + Tailwind/
 
 - `astro.config.mjs` sets `site` + `base: "/blog"` + `trailingSlash: "always"`.
 - **Never hardcode `/blog/`.** Build links with `href("/path/")` / `absoluteUrl()` from `src/lib/url.ts`. Never create `src/pages/blog/`.
-- Post URLs are flat: `/<slug>/`. Reserved route names live in `src/lib/reserved-slugs.ts` (`all-posts`, `series`, `about`, `admin`, `404`, `og`, `search-index.json`, `rss.xml`, `robots.txt`, `sitemap-index.xml`); add there whenever a new top-level route is created.
+- Post URLs are flat: `/<slug>/`. Reserved route names live in `src/lib/reserved-slugs.ts` (`all-posts`, `series`, `about`, `admin`, `404`, `og`, `llms.txt`, `search-index.json`, `rss.xml`, `robots.txt`, `sitemap-index.xml`); add there whenever a new top-level route is created.
 
 ## Content contract
 

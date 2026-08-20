@@ -12,6 +12,7 @@ export const RESERVED_SLUGS_LIST = [
   "admin",
   "404",
   "og",
+  "llms.txt",
   "search-index.json",
   "rss.xml",
   "robots.txt",
