@@ -20,7 +20,8 @@ import {
 import { readingTime, wordCount } from "@/lib/reading-time";
 import { articleJsonLd } from "@/lib/seo";
 import { href } from "@/lib/url";
-import { formatDate, isoDate } from "@/lib/dates";
+import { effectiveUpdatedAt, formatDate, isoDate } from "@/lib/dates";
+import { gitLastModified } from "@/lib/git-dates";
 
 export async function getStaticPaths() {
   // getPosts() excludes drafts in production, so draft pages are never generated.
@@ -33,6 +34,11 @@ const path = postPath(post);
 const ctx = await getSeriesContext(post);
 const related = getRelatedPost(post, await getPosts());
 const minutes = readingTime(post.body ?? "");
+const updatedAt = effectiveUpdatedAt(
+  post.data.publishedAt,
+  post.data.updatedAt,
+  post.filePath ? gitLastModified(post.filePath) : undefined,
+);
 const toc = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
 const showToc = toc.length >= 3;
 const { hero, ogImage } = post.data;
@@ -57,13 +63,14 @@ const image = ogImage ? new URL(ogImage.src, Astro.site).toString() : `/og/${pos
     tags: post.data.tags.map((t) => tagRegistry[t].label),
     section: ctx?.series.title,
     publishedAt: post.data.publishedAt,
-    updatedAt: post.data.updatedAt,
+    updatedAt,
     noindex: post.data.draft,
     jsonLd: [
       articleJsonLd(post, path, Astro.site!, {
         image,
         section: ctx?.series.title,
         wordCount: wordCount(post.body ?? ""),
+        updatedAt,
       }),
     ],
   }}
@@ -90,12 +97,9 @@ const image = ogImage ? new URL(ogImage.src, Astro.site).toString() : `/og/${pos
           {formatDate(post.data.publishedAt, "long")}
         </time>
         {
-          post.data.updatedAt && (
+          updatedAt && (
             <span>
-              Updated{" "}
-              <time datetime={isoDate(post.data.updatedAt)}>
-                {formatDate(post.data.updatedAt, "long")}
-              </time>
+              Updated <time datetime={isoDate(updatedAt)}>{formatDate(updatedAt, "long")}</time>
             </span>
           )
         }

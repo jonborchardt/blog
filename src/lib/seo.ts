@@ -49,6 +49,7 @@ export interface ArticleExtras {
   image?: string;
   section?: string;
   wordCount?: number;
+  updatedAt?: Date;
 }
 
 export const articleJsonLd = (
@@ -56,22 +57,25 @@ export const articleJsonLd = (
   path: string,
   siteUrl: URL,
   extras: ArticleExtras = {},
-) => ({
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  headline: post.data.title,
-  url: absoluteUrl(path, siteUrl),
-  ...(extras.image && {
-    image: extras.image.startsWith("http") ? extras.image : absoluteUrl(extras.image, siteUrl),
-  }),
-  ...(extras.section && { articleSection: extras.section }),
-  ...(extras.wordCount && { wordCount: extras.wordCount }),
-  description: post.data.description,
-  datePublished: post.data.publishedAt.toISOString(),
-  ...(post.data.updatedAt && { dateModified: post.data.updatedAt.toISOString() }),
-  author: { "@type": "Person", name: author.name, url: absoluteUrl("/", siteUrl) },
-  publisher: { "@type": "Person", name: author.name },
-  mainEntityOfPage: absoluteUrl(path, siteUrl),
-  keywords: post.data.tags,
-  isPartOf: { "@type": "Blog", name: site.name },
-});
+) => {
+  const updated = extras.updatedAt ?? post.data.updatedAt;
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.data.title,
+    url: absoluteUrl(path, siteUrl),
+    ...(extras.image && {
+      image: extras.image.startsWith("http") ? extras.image : absoluteUrl(extras.image, siteUrl),
+    }),
+    ...(extras.section && { articleSection: extras.section }),
+    ...(extras.wordCount && { wordCount: extras.wordCount }),
+    description: post.data.description,
+    datePublished: post.data.publishedAt.toISOString(),
+    ...(updated && { dateModified: updated.toISOString() }),
+    author: { "@type": "Person", name: author.name, url: absoluteUrl("/", siteUrl) },
+    publisher: { "@type": "Person", name: author.name },
+    mainEntityOfPage: absoluteUrl(path, siteUrl),
+    keywords: post.data.tags,
+    isPartOf: { "@type": "Blog", name: site.name },
+  };
+};
