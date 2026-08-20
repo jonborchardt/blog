@@ -2,6 +2,7 @@
 title: "WorldLock: an AR window onto the actual planet"
 description: A native Android AR app that georegisters city towers, the whole Earth and the live ISS to the real world with ARCore's Geospatial API.
 publishedAt: 2026-08-18
+updatedAt: 2026-08-19
 series: worldlock
 seriesOrder: 1
 tags: [engineering, android, kotlin, augmented-reality, geospatial, graphics]
@@ -50,13 +51,13 @@ That's WorldLock: a native Android AR app that georegisters content to the real 
 ## What's in it
 
 - **City towers.** A default set (Seattle, Tacoma, Spokane, Missoula, NYC, Tokyo, …) plus any city you add by name — it geocodes and drops a tower. Seven render styles, from a Tron-shell prism to a shrine beam to a "data pillar" with scrolling bands and rotating collar rings, all done in one shader with a style table. Bases sit on real terrain via ARCore terrain anchors.
-- **The whole Earth.** The globe isn't a mesh — it's a per-fragment ray-cast against the WGS84 ellipsoid, drawn as one fullscreen quad. Blue Marble day and night textures, blended at the real solar terminator computed from the current time. Tessellating a planet-sized sphere near the camera is a precision disaster; a ray that solves the quadratic in the fragment shader is exact at every distance.
+- **The whole Earth.** The globe isn't a mesh — it's a per-fragment ray-cast against a sphere through local sea level (deliberately not the true ellipsoid; the upgrade path lives in a `ponytail:` comment), drawn as one fullscreen triangle. Blue Marble day and night textures, blended at the real solar terminator computed from the current time. Tessellating a planet-sized sphere near the camera is a precision disaster; a ray that solves the quadratic in the fragment shader is analytic at every distance — the constant term is precomputed in doubles on the CPU, leaving only a possible float shimmer right at the horizon.
 - **The live ISS.** Position fetched every 3 seconds from wheretheiss.at, linearly extrapolated between fixes, drawn as a little truss-and-solar-wings model that scales with distance so it stays visible at 400+ km.
 
-<Figure caption="Why the globe is a ray-cast, not a mesh. Left: a tessellated sphere seen from its own surface — huge flat facets, and every vertex is 6.4 million metres from the origin, so it snaps to a metre-wide float grid. Right: one fullscreen quad; each fragment intersects its own ray with the analytic ellipsoid.">
+<Figure caption="Why the globe is a ray-cast, not a mesh. Left: a tessellated sphere seen from its own surface — huge flat facets, and every vertex is 6.4 million metres from the origin, so it snaps to a half-metre float grid. Right: one fullscreen triangle; each fragment intersects its own ray with the analytic sphere.">
   <VizFigure
-    name="Tessellated sphere versus per-fragment ellipsoid ray-cast"
-    summary="Side-by-side schematic. On the left a coarse triangle mesh approximates the curve under a camera standing on the surface, with vertices marked as jittering. On the right the same camera looks through a single quad and one ray per pixel hits a smooth analytic ellipsoid, so there are no vertices to jitter."
+    name="Tessellated sphere versus per-fragment sphere ray-cast"
+    summary="Side-by-side schematic. On the left a coarse triangle mesh approximates the curve under a camera standing on the surface, with vertices marked as jittering. On the right the same camera looks through a single fullscreen triangle and one ray per pixel hits a smooth analytic sphere, so there are no vertices to jitter."
   >
     <GlobeRaycast class="h-auto w-full max-w-2xl" />
   </VizFigure>
@@ -64,7 +65,7 @@ That's WorldLock: a native Android AR app that georegisters content to the real 
 
 ## The one hard rule
 
-Everything interesting in this app is a coordinate-precision problem wearing a trench coat. Earth-centered coordinates are ~6.4 million meters from the origin; 32-bit floats have ~7 significant digits; do the math and your geometry jitters by meters. So the rule is: authoritative positions are ECEF in **doubles**, converted to camera-relative ENU in doubles, and only the final origin-relative meters ever touch a GL float. The render origin stays pinned near you, where float precision is millimeters.
+Everything interesting in this app is a coordinate-precision problem wearing a trench coat. Earth-centered coordinates are ~6.4 million meters from the origin; 32-bit floats have ~7 significant digits; do the math and your geometry jitters by meters. So the rule is: authoritative positions are ECEF in **doubles**, converted to camera-relative ENU in doubles, and only the final origin-relative meters ever touch a GL float. The render origin stays pinned near you, where float precision is millimeters. The geodetic math even polices itself: a startup self-check verifies the conversions against exact WGS84 reference points and crashes the app at launch if they ever break.
 
 The pipeline, with the one place a double becomes a float:
 
@@ -108,25 +109,25 @@ How bad is it if you skip that? A 32-bit float has 24 bits of mantissa, so the g
   </VizFigure>
 </Figure>
 
-The other quiet trick is the reference anchor: the first time the Geospatial pose is accurate enough (position < 15 m, yaw < 15°), the app plants a SLAM anchor and rides it from then on. Georegistration survives pause/resume and works indoors after the first good fix, instead of waiting for VPS to re-converge every time.
+The other quiet trick is the reference anchor: the first time the Geospatial pose is accurate enough (position < 15 m, yaw < 15°), the app plants an ARCore geospatial anchor at that pose and rides it from then on. Georegistration survives pause/resume and works indoors after the first good fix, instead of waiting for VPS to re-converge every time.
 
 There's a looser render gate in front of that (yaw < 25°, with 2× hysteresis so it doesn't flicker), so towers appear early and swing into place while the anchor waits for the tight fix:
 
 ```mermaid
 stateDiagram-v2
   accTitle: Georegistration states, from first fix to reference anchor
-  accDescr: The app starts hidden. When Geospatial position accuracy is under 15 metres and yaw under 25 degrees it renders using the camera pose as origin, dropping back to hidden if accuracy degrades past twice those bounds. The first time yaw accuracy is also under 15 degrees it plants a SLAM anchor and becomes anchored; that state survives pause and resume and indoor use, and is left only if ARCore stops tracking the anchor.
+  accDescr: The app starts hidden. When Geospatial position accuracy is under 15 metres and yaw under 25 degrees it renders using the camera pose as origin, dropping back to hidden if accuracy degrades past twice those bounds. The first time yaw accuracy is also under 15 degrees it plants a reference anchor, an ARCore geospatial anchor, and becomes anchored; that state survives pause and resume and indoor use. If ARCore stops tracking the anchor the app falls back to the accuracy gate, rendering from the camera pose or hiding, and re-plants the anchor when the tight fix returns.
   [*] --> Hidden
   Hidden --> CameraOrigin: pos < 15 m, yaw < 25°
   CameraOrigin --> Hidden: worse than 2× the gate
-  CameraOrigin --> Anchored: pos < 15 m, yaw < 15°<br/>plant SLAM anchor
+  CameraOrigin --> Anchored: pos < 15 m, yaw < 15°<br/>plant reference anchor
   Anchored --> Anchored: pause / resume, indoors
-  Anchored --> Hidden: anchor STOPPED
+  Anchored --> CameraOrigin: anchor STOPPED<br/>back to the gate
   state "Hidden (waiting for fix)" as Hidden
   state "Rendering from camera pose" as CameraOrigin
-  state "Anchored (riding SLAM anchor)" as Anchored
+  state "Anchored (riding the reference anchor)" as Anchored
 ```
 
 ## The stats that matter
 
-The entire app is **8 Kotlin files, about 1,900 lines**, with exactly **one dependency** (`com.google.ar:core`). No Android Studio was involved at any point — it's built, deployed, and debugged entirely from the command line. How that works, and why the codebase stayed that small, are the next two posts.
+The entire app is **8 Kotlin files, about 1,900 lines**, with **one AR dependency** (`com.google.ar:core`) plus the Play Services location library that ARCore's Geospatial mode requires. No Android Studio was involved at any point — it's built, deployed, and debugged entirely from the command line. How that works, and why the codebase stayed that small, are the next two posts.

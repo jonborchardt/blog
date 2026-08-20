@@ -20,11 +20,11 @@ All published posts outside the `agent-built` series, grouped by authority repo.
 
 ## E:\github2\earth
 
-| Post                            | Status  |
-| ------------------------------- | ------- |
-| android-development-with-claude | built   |
-| worldlock-ar-window             | pending |
-| ponytail-lazy-senior-dev        | pending |
+| Post                            | Status    |
+| ------------------------------- | --------- |
+| android-development-with-claude | validated |
+| worldlock-ar-window             | built     |
+| ponytail-lazy-senior-dev        | pending   |
 
 ⚠ `ponytail-lazy-senior-dev` → `E:\github2\earth` looks like an odd mapping (a post about the ponytail skill pointing at the earth repo). Confirm with the author before its expert call.
 
