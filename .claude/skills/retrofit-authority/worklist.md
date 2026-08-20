@@ -14,7 +14,7 @@ All published posts outside the `agent-built` series, grouped by authority repo.
 
 | Post                                 | Status  |
 | ------------------------------------ | ------- |
-| retirement-simulator-ai-lab          | built   |
+| retirement-simulator-ai-lab          | validated |
 | same-plan-broke-or-5-8-million       | pending |
 | simulator-watches-retirement-youtube | pending |
 
