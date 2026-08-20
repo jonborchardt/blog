@@ -47,6 +47,12 @@ const { headings } = Astro.props;
   .toc-label {
     display: none;
   }
+  /* Long TOCs: cap to the viewport (minus the sticky top-4 offset and a matching
+     bottom gap) and scroll inside the panel instead of running off-screen. */
+  .toc-panel {
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+  }
   .toc-bar {
     display: block;
     width: var(--bar);
