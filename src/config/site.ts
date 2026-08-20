@@ -11,7 +11,7 @@ export const site: SiteConfig = {
   featuredPost: "an-agent-built-this-blog",
   nav: [
     { label: "All Posts", href: "/all-posts/" },
-    { label: "Portfolio", href: "/portfolio/" },
-    { label: "Resume", href: "/resume/" },
+    { label: "Series", href: "/series/" },
+    { label: "About", href: "/about/" },
   ],
 };

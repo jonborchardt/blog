@@ -2,11 +2,7 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import PostList from "@/components/PostList.astro";
 import PostCard from "@/components/PostCard.astro";
-import SeriesCard from "@/components/SeriesCard.astro";
-import AuthorLinks from "@/components/AuthorLinks.astro";
-import { author } from "@/config/author";
 import { site } from "@/config/site";
-import { SERIES_IDS } from "@/config/series";
 import { getFeaturedPost, getPosts } from "@/lib/posts";
 import { personJsonLd } from "@/lib/seo";
 import { href } from "@/lib/url";
@@ -14,8 +10,6 @@ import { href } from "@/lib/url";
 const posts = await getPosts();
 const featured = await getFeaturedPost();
 const recent = posts.filter((p) => p.id !== featured?.id).slice(0, 6);
-// Only series that have at least one published post; empty registry entries stay on /series/.
-const series = SERIES_IDS.filter((id) => posts.some((p) => p.data.series === id)).slice(0, 3);
 ---
 
 <BaseLayout
@@ -27,44 +21,25 @@ const series = SERIES_IDS.filter((id) => posts.some((p) => p.data.series === id)
   }}
 >
   <div class="max-w-wide mx-auto">
-    <header>
-      <h1 class="text-display font-semibold">{author.name}</h1>
-      <p class="text-muted-foreground mt-2 text-lg">
-        <em>{author.tagline}</em> · {author.location}
-      </p>
-      <p class="mt-6 leading-relaxed">
-        I lead engineering teams focused on making cutting-edge AI work accessible, not just
-        impressive. My bias is speed with structure: move fast, but in a way that holds up. I care
-        about clean systems, good design, and making work something people actually enjoy. People do
-        better work when they like what they're building.
-      </p>
-      <div class="mt-6"><AuthorLinks /></div>
+    <header class="max-w-prose">
+      <h1 class="text-display font-semibold">{site.name}</h1>
+      <p class="text-muted-foreground mt-4 text-lg leading-relaxed">{site.description}</p>
     </header>
 
     {
       featured && (
         <section class="mt-14 border-t pt-8" aria-labelledby="featured">
           <h2 id="featured" class="text-muted-foreground eyebrow mb-5">
-            Featured post
+            Featured
           </h2>
           <PostCard post={featured} />
         </section>
       )
     }
 
-    <section class="mt-14 border-t pt-8" aria-labelledby="series">
-      <div class="mb-5 flex items-baseline justify-between gap-4">
-        <h2 id="series" class="text-muted-foreground eyebrow">Series</h2>
-        <a href={href("/series/")} class="text-sm">All series →</a>
-      </div>
-      <ul class="divide-y">
-        {series.map((id) => <SeriesCard id={id} heading="h3" />)}
-      </ul>
-    </section>
-
     <section class="mt-14 border-t pt-8" aria-labelledby="recent">
       <div class="mb-5 flex items-baseline justify-between gap-4">
-        <h2 id="recent" class="text-muted-foreground eyebrow">Recent posts</h2>
+        <h2 id="recent" class="text-muted-foreground eyebrow">Recent</h2>
         <a href={href("/all-posts/")} class="text-sm">All posts →</a>
       </div>
       {

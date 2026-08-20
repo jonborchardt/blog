@@ -36,7 +36,7 @@ test("no horizontal overflow at 360px with a wide table and code block", async (
 });
 
 test("prose pages ship no islands", async ({ page }) => {
-  await page.goto("resume/");
+  await page.goto("about/");
   await expect(page.locator("astro-island")).toHaveCount(0);
 });
 

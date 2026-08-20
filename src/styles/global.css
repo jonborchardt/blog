@@ -207,6 +207,13 @@
   font-size: 1rem;
   line-height: 1.7;
 }
+/* Match the site's text-display/font-semibold h1 (posts render theirs outside .prose). */
+.prose :where(h1):not(:where(.not-prose *)) {
+  font-size: var(--text-display);
+  line-height: var(--text-display--line-height);
+  letter-spacing: var(--text-display--letter-spacing);
+  font-weight: 600;
+}
 .prose :where(h2):not(:where(.not-prose *)) {
   font-size: 1.5em;
   letter-spacing: -0.015em;

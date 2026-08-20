@@ -102,7 +102,7 @@ test("archive is usable at 360px and axe-clean; only the archive loads React", a
   expect(violations).toEqual([]);
   expect(js.length).toBeGreaterThan(0);
   js.length = 0;
-  await page.goto("resume/");
+  await page.goto("about/");
   expect(js).toEqual([]);
 });
 
