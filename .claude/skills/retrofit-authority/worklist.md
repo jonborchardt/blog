@@ -12,8 +12,8 @@ All published posts outside the `agent-built` series, grouped by authority repo.
 
 ## F:\github\retire-sim
 
-| Post                                 | Status  |
-| ------------------------------------ | ------- |
+| Post                                 | Status    |
+| ------------------------------------ | --------- |
 | retirement-simulator-ai-lab          | validated |
 | same-plan-broke-or-5-8-million       | validated |
 | simulator-watches-retirement-youtube | validated |
