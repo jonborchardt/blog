@@ -14,8 +14,8 @@
   <line x1="80" y1="152" x2="620" y2="152" stroke="currentColor" stroke-opacity="0.55" stroke-width="1.5" stroke-dasharray="6 4"/>
   <text x="614" y="147" fill="currentColor" fill-opacity="0.8" text-anchor="end">85% target</text>
   <!-- taper-alone marker -->
-  <line x1="490" y1="92.6" x2="620" y2="92.6" stroke="#f0b35a" stroke-width="1.5" stroke-dasharray="3 3"/>
-  <text x="484" y="96" fill="currentColor" fill-opacity="0.75" text-anchor="end" font-size="11">taper alone: 94.9%</text>
+  <line x1="80" y1="92.6" x2="150" y2="92.6" stroke="#f0b35a" stroke-width="2" stroke-dasharray="3 3"/>
+  <text x="156" y="96" fill="currentColor" fill-opacity="0.75" text-anchor="start" font-size="11">taper alone: 94.9%</text>
   <!-- connectors between steps -->
   <g stroke="currentColor" stroke-opacity="0.35" stroke-width="1" stroke-dasharray="2 3">
     <line x1="175" y1="203" x2="210" y2="203"/>
