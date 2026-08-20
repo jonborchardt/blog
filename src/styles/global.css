@@ -359,8 +359,10 @@ svg[id^="mermaid"] {
   /* ponytail: a definite `width` (not auto + max-width) so sizing never depends on the dialog's
      own fit-content box — sweep SVGs carry only a viewBox (no root width/height), and inside a
      shrink-to-fit <dialog> an auto-sized replaced element with only an intrinsic ratio collapses
-     to 0x0 in Chromium. `height: auto` still preserves the aspect ratio; `max-height` still caps
-     tall images (and backs the width off proportionally when it triggers, per CSS2.1 10.4).
+     to 0x0 in Chromium. `height: auto` still preserves the aspect ratio for every image zoomed so
+     far (all landscape, well under 88vh at 92vw wide). Because `width` is fixed rather than auto,
+     `max-height` alone won't back the width off proportionally if a future image is tall enough to
+     hit it — add `object-fit: contain` + a fixed height then, if a portrait image needs zoom.
      Upgrade to width:auto/max-width if every zoomed image is later guaranteed a real intrinsic size. */
   width: 92vw;
   height: auto;
