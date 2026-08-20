@@ -2,6 +2,7 @@
 title: Teaching an AI to run retirement experiments
 description: retire-sim replays every historical start year since 1928, grades strategies on earliest safe retirement age, and lets Claude Code run the experiments.
 publishedAt: 2026-08-18
+updatedAt: 2026-08-19
 series: finances
 seriesOrder: 1
 tags: [engineering, ai-assisted-coding, personal-finance, simulation]
@@ -15,10 +16,14 @@ draft: false
 import Figure from "@/components/blog/Figure.astro";
 import VizFigure from "@/components/blog/VizFigure.astro";
 import GoldWindow from "./gold-window.svg";
+import PiecesLadder from "./pieces-ladder.svg";
 
 Every year I sit down and answer one question: **what's the earliest age I can stop working without ever running out of money?** Instead of a spreadsheet, I have [retire-sim](https://github.com/jonborchardt/retire-sim), a small deterministic historical-replay simulator that's become something more interesting: a lab, with a lab protocol, and an AI lab assistant that follows it.
 
-![Results grid from retire-sim on the synthetic national-average dataset: strategies as rows, four candidate retirement ages (62, 65, 67, 70) as columns at Social Security claim age 62, each cell showing survival percentage then median and worst-case terminal wealth in today's dollars, with cells clearing the 85 percent survival bar in bold](./strategy-grid.png)
+<Figure caption="An earlier season's results grid. The 'deep guardrail 10y/25%' row beating the honest guardrail is exactly the dishonest-guardrail trap described below — that row, the micro-cap tilt, and the golden-butterfly rows have since been deleted from the committed catalog (the bans are now enforced by the validator), so a fresh clone shows a smaller grid.">
+  ![Results grid from retire-sim on the synthetic national-average dataset: strategies as rows, four candidate retirement ages (62, 65, 67, 70) as columns at Social Security claim age 62, each cell showing survival percentage then median and worst-case terminal wealth in today's dollars, with cells clearing the 85 percent survival bar in bold](./strategy-grid.png)
+
+</Figure>
 
 ## Real history, not random dice
 
@@ -62,12 +67,15 @@ flowchart TB
   C["dataset: gitignored personal config<br/>or committed synthetic one"]
   E --> V
   C --> V
-  V["validate: no personal numbers,<br/>no micro-caps, livable guardrails"] --> S
+  V["validate: no micro-caps, livable guardrails,<br/>no personal numbers in committed rows"] --> S
   H --> S
   S["replay every start year<br/>x retire age x claim age"] --> R["cell: survival %,<br/>median and worst-case terminal wealth"]
 ```
 
-![Fan chart of household wealth in today's dollars from 2026 to 2071: 98 faint paths, one per historical start year from 1928 to 2025, with a shaded 10th to 90th percentile band and a median line, and a hover readout for 2032 showing 10th to 90th percentile 117,332 to 329,437 and median 231,387](./wealth-fan-chart.png)
+<Figure caption="The wealth fan chart on the synthetic dataset. Screenshot from an earlier dataset revision with a longer horizon; the committed dataset has since shortened the horizon and added a two-person survivor model, so a fresh run ends in 2067.">
+  ![Fan chart of household wealth in today's dollars from 2026 to 2071: 98 faint paths, one per historical start year from 1928 to 2025, with a shaded 10th to 90th percentile band and a median line, and a hover readout for 2032 showing 10th to 90th percentile 117,332 to 329,437 and median 231,387](./wealth-fan-chart.png)
+
+</Figure>
 
 ## What twenty-seven rounds of experiments found
 
@@ -77,6 +85,30 @@ The single most useful move was diagnosing the **failure mode** before picking s
 - Spending guardrails helped, but only honest ones: a "guardrail" tuned to trigger immediately is just a permanent budget cut wearing a costume.
 - The "enough" ratchet was free (same survival, way less pointless terminal wealth), but only when buffered; set the threshold too low and paths latch into a mix that can't carry the remaining decades.
 - The final winning shape moved my earliest acceptable-risk retirement age about **two years earlier** than the static baseline.
+
+What each piece buys, measured one at a time on the way to the final plan:
+
+<Figure caption="The pieces ladder: what each decision adds, in success percentage across all 98 historical start years at the frontier retirement age. The spending guardrail is worth about 2 points, holding gold at all is worth 12, timing it into the window is worth another 8, and the enough ratchet is free. The taper alone clears the 85% bar — no piece is load-bearing for the frontier except the gold window itself.">
+  <VizFigure
+    name="Success rate gained by each piece of the plan"
+    summary="A waterfall from a 76.5% baseline of 100% stock, up 2 points for the spending guardrail, 12 points for gold as a static asset, and 8 points for the window timing, ending at 99.0% for the full plan; the enough ratchet adds zero. A dashed line marks the 85% target and a marker shows the taper alone reaches 94.9%."
+    data={{
+      caption: "Success % gained by each piece, 98 start years at the frontier age",
+      columns: ["Piece", "Effect"],
+      rows: [
+        ["baseline: 100% stock", "76.5%"],
+        ["+ spending guardrail (12y / 15%)", "+2 pts"],
+        ["+ gold as a static asset", "+12 pts"],
+        ["+ window timing (22% from ret−6 to ret+9)", "+8 pts"],
+        ["+ enough ratchet (40x)", "+0 (free)"],
+        ["the plan", "99.0%"],
+        ["taper alone, for reference", "94.9%"],
+      ],
+    }}
+  >
+    <PiecesLadder class="h-auto w-full max-w-2xl" />
+  </VizFigure>
+</Figure>
 
 ## Fuck. Gold. Really?
 
@@ -90,6 +122,8 @@ I did not want this result. But the failing cohorts were inflation cohorts, and 
     <GoldWindow class="h-auto w-full max-w-2xl" />
   </VizFigure>
 </Figure>
+
+The obvious objection is that gold's backtest is a peg artifact: the dataset holds gold at $35/oz before 1971 because there is no meaningful market history before then. That's what the silver column is for. Mirroring the plan with silver — which had a real market price through the years gold was pegged — reproduces the window's effect and even beats the gold plan at face value. But silver's frontier collapses under a −2%/yr return drag while gold's survives its own, so asymmetry of error keeps gold.
 
 The bigger lesson: **diversification is not the edge, cohort-matching is.** An "own every asset class" basket beat the two-asset baseline but lost badly to the targeted hedge, because it omitted the one asset that cures the specific years that break _this_ plan. And the sim keeps you honest in the other direction too: a bottom-decile micro-cap tilt dominated everything on paper, until we noticed its edge came from pre-1981 data with unbuyable spreads and a size premium that faded the moment it was published. Backtests you can't actually purchase don't count.
 
@@ -127,7 +161,7 @@ The verdicts live in a running scoreboard ([theories.md](https://github.com/jonb
 | ------- | --------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | 2026-08 | [How to Retire Early at 50 With $2M (And Safely Spend $120K/Year)](https://www.youtube.com/watch?v=y62H0GFWLqM) | A cash/bond bucket covering the first retirement years protects against sequence-of-returns risk, letting equities recover before you sell them.       | Lost to both baseline and champion. The cash bucket kept the inflation-cohort failures (cash/bonds are what dies there) and added new insufficient-growth failures; even a bucket+gold hybrid lost. Sequence protection here came from an uncorrelated growth-adjacent hedge, not de-risking.                                                                                                                |
 | 2026-08 | [How To Retire At Age 50 (EXPLAINED in 5 Minutes)](https://www.youtube.com/watch?v=X7pGnVryx3k)                 | Own every asset class and add spending guardrails, and a ~5.2–5.5% withdrawal rate is safe (Root Financial).                                          | Beat the two-asset baseline but lost to the targeted champion. The broad basket rescued crash-era and dot-com cohorts yet omitted the one asset (gold) that cures the dominant inflation cohorts, and equity dilution added growth-starvation failures; swapping half the gold hedge for real estate at identical dose re-broke saved cohorts. "Any uncorrelated asset" is false.                          |
-| …       | 31 more                                                                                                         |                                                                                                                                                       |                                                                                                                                                                                                                                                                                                                                                                                                              |
+| …       | dozens more                                                                                                     |                                                                                                                                                       |                                                                                                                                                                                                                                                                                                                                                                                                              |
 
 ## The experiment-round skill: a lab protocol the AI follows
 
@@ -167,4 +201,4 @@ The whole thing is built to be picked up once a year: open the config tab (every
 
 ## Takeaway
 
-None of this tells you to buy gold. It tells you the method: find which historical regimes break _your_ plan, test remedies against those exact years, distrust anything your instruments can't reproduce, know your noise floor, and write down what you learned next to the data you learned it on. And it turns out that method is exactly the kind of thing you can teach an AI to run.
+None of this tells you to buy gold. It tells you the method: find which historical regimes break _your_ plan, test remedies against those exact years, distrust anything your instruments can't reproduce, know your noise floor, and write down what you learned next to the data you learned it on. In the final rounds even the sim's own flattering assumptions got that treatment: each caveat — ignored taxes, rich equity valuations, gold mean-reversion, the joint model — was made runnable as a permanent return drag and priced in working years (roughly one to two each), and the plan's edge over the baseline _widens_ under identical pessimism. The honest insurance against unmodeled tails turned out to be one more working year, not a different portfolio. And it turns out this whole method is exactly the kind of thing you can teach an AI to run.
