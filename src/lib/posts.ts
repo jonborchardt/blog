@@ -85,6 +85,25 @@ export async function getSeriesContext(post: Post): Promise<SeriesContext | unde
   };
 }
 
+/**
+ * Best "read next" candidate: highest shared-tag score, tie-broken by newest then slug
+ * (deterministic builds). Each shared tag is weighted by inverse frequency across all posts, so
+ * a rare shared tag signals a stronger relationship than a ubiquitous one. Never the post itself
+ * and never a post from the same series — the series nav owns those. With no tag overlap it
+ * degrades to the newest eligible post, so a pick always exists when any eligible post does.
+ */
+export function getRelatedPost(post: Post, posts: Post[]): Post | undefined {
+  const freq = new Map<string, number>();
+  for (const p of posts) for (const t of p.data.tags) freq.set(t, (freq.get(t) ?? 0) + 1);
+  const score = (p: Post) =>
+    p.data.tags.reduce((s, t) => s + (post.data.tags.includes(t) ? 1 / freq.get(t)! : 0), 0);
+  return posts
+    .filter((p) => p.id !== post.id && (!post.data.series || p.data.series !== post.data.series))
+    .sort(
+      (a, b) => score(b) - score(a) || byNewest(a, b) || postSlug(a).localeCompare(postSlug(b)),
+    )[0];
+}
+
 /** Pure validation over post metadata. Throws listing every problem found. */
 export function validatePosts(posts: Pick<Post, "id" | "data">[]): void {
   const errors: string[] = [];

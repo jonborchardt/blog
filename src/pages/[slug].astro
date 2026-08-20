@@ -9,7 +9,14 @@ import TableWrapper from "@/components/blog/TableWrapper.astro";
 import PostToc from "@/components/PostToc.astro";
 import TagList from "@/components/TagList.astro";
 import { tags as tagRegistry } from "@/config/tags";
-import { getPosts, getSeriesContext, postPath, postSlug, seriesPath } from "@/lib/posts";
+import {
+  getPosts,
+  getRelatedPost,
+  getSeriesContext,
+  postPath,
+  postSlug,
+  seriesPath,
+} from "@/lib/posts";
 import { readingTime, wordCount } from "@/lib/reading-time";
 import { articleJsonLd } from "@/lib/seo";
 import { href } from "@/lib/url";
@@ -24,6 +31,7 @@ const { post } = Astro.props;
 const { Content, headings } = await render(post);
 const path = postPath(post);
 const ctx = await getSeriesContext(post);
+const related = getRelatedPost(post, await getPosts());
 const minutes = readingTime(post.body ?? "");
 const toc = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
 const showToc = toc.length >= 3;
@@ -176,15 +184,26 @@ const image = ogImage ? new URL(ogImage.src, Astro.site).toString() : `/og/${pos
                 </div>
                 <div class="p-5">
                   {ctx.next ? (
-                    <a href={href(postPath(ctx.next))} class="block no-underline">
-                      <span class="text-muted-foreground block text-sm">Up next</span>
-                      <span class="hover:text-primary mt-1 block text-lg font-semibold">
-                        {ctx.next.data.title}
-                      </span>
-                      <span class="text-muted-foreground mt-1 line-clamp-2 block text-sm">
-                        {ctx.next.data.description}
-                      </span>
-                    </a>
+                    <div class="grid-cols-thumb grid gap-x-4">
+                      <a href={href(postPath(ctx.next))} tabindex="-1" aria-hidden="true">
+                        <Image
+                          src={ctx.next.data.hero.src}
+                          alt={ctx.next.data.hero.alt}
+                          width={540}
+                          height={216}
+                          class="aspect-card w-full rounded-md border object-cover"
+                        />
+                      </a>
+                      <a href={href(postPath(ctx.next))} class="block no-underline">
+                        <span class="text-muted-foreground block text-sm">Up next</span>
+                        <span class="hover:text-primary mt-1 block text-lg font-semibold">
+                          {ctx.next.data.title}
+                        </span>
+                        <span class="text-muted-foreground mt-1 line-clamp-2 block text-sm">
+                          {ctx.next.data.description}
+                        </span>
+                      </a>
+                    </div>
                   ) : (
                     <p class="text-muted-foreground text-sm">
                       You've reached the end of this series.
@@ -202,6 +221,32 @@ const image = ogImage ? new URL(ogImage.src, Astro.site).toString() : `/og/${pos
                   </p>
                 </div>
               </nav>
+            )
+          }
+          {
+            related && (
+              <aside aria-label="Related post" class="bg-card mb-8 rounded-xl border p-5">
+                <div class="grid-cols-thumb grid gap-x-4">
+                  <a href={href(postPath(related))} tabindex="-1" aria-hidden="true">
+                    <Image
+                      src={related.data.hero.src}
+                      alt={related.data.hero.alt}
+                      width={540}
+                      height={216}
+                      class="aspect-card w-full rounded-md border object-cover"
+                    />
+                  </a>
+                  <a href={href(postPath(related))} class="block no-underline">
+                    <span class="text-muted-foreground block text-sm">You might also like</span>
+                    <span class="hover:text-primary mt-1 block text-lg font-semibold">
+                      {related.data.title}
+                    </span>
+                    <span class="text-muted-foreground mt-1 line-clamp-2 block text-sm">
+                      {related.data.description}
+                    </span>
+                  </a>
+                </div>
+              </aside>
             )
           }
           <p class="text-sm"><a href={href("/all-posts/")}>← All posts</a></p>

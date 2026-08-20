@@ -1,9 +1,12 @@
 // @vitest-environment node
 import { describe, expect, it } from "vitest";
-import { validatePosts } from "./posts";
+import { getRelatedPost, validatePosts } from "./posts";
 
 const post = (id: string, data: Record<string, unknown> = {}) =>
-  ({ id, data: { title: id, tags: [], draft: false, ...data } }) as never;
+  ({
+    id,
+    data: { title: id, tags: [], draft: false, publishedAt: new Date("2026-01-01"), ...data },
+  }) as never;
 
 describe("validatePosts", () => {
   it("accepts distinct slugs and series orders", () => {
@@ -40,5 +43,41 @@ describe("validatePosts", () => {
 
   it("reports every problem at once", () => {
     expect(() => validatePosts([post("about"), post("admin")])).toThrow(/about[\s\S]*admin/);
+  });
+});
+
+describe("getRelatedPost", () => {
+  const me = post("me", { tags: ["a", "b"], series: "worldlock" });
+
+  it("picks the post with the most shared tags", () => {
+    const best = post("best", { tags: ["a", "b"] });
+    const posts = [me, post("weak", { tags: ["a"] }), best, post("none")];
+    expect(getRelatedPost(me, posts)).toBe(best);
+  });
+
+  it("never recommends the post itself or a post from the same series", () => {
+    const sibling = post("sibling", { tags: ["a", "b"], series: "worldlock" });
+    const other = post("other", { tags: ["a"] });
+    expect(getRelatedPost(me, [me, sibling, other])).toBe(other);
+    expect(getRelatedPost(me, [me, sibling])).toBeUndefined();
+  });
+
+  it("weights rare shared tags above ubiquitous ones", () => {
+    // Tag "a" appears everywhere; tag "b" only twice. One rare match beats one common match.
+    const rare = post("rare", { tags: ["b"] });
+    const common = post("common", { tags: ["a"] });
+    const filler = [post("f1", { tags: ["a"] }), post("f2", { tags: ["a"] })];
+    expect(getRelatedPost(me, [me, rare, common, ...filler])).toBe(rare);
+  });
+
+  it("falls back to the newest eligible post when nothing shares a tag", () => {
+    const older = post("older", { publishedAt: new Date("2025-01-01") });
+    const newer = post("newer", { publishedAt: new Date("2026-02-01") });
+    expect(getRelatedPost(me, [me, older, newer])).toBe(newer);
+  });
+
+  it("breaks full ties by slug for deterministic builds", () => {
+    const posts = [me, post("zzz", { tags: ["a"] }), post("aaa", { tags: ["a"] })];
+    expect(getRelatedPost(me, posts)).toBe(posts[2]);
   });
 });
