@@ -9,4 +9,3 @@ Procedural workflows for agents, one directory per skill (`<name>/SKILL.md`). In
 - `review-post` — automated gates + read-through + visual pass; outputs a findings list.
 - `publish-post` — `draft: false`, dates, full checks, commit, push `main`, verify live.
 - `wrapup` — whole-site audit before shipping: gates, grep sweeps for contract drift, a11y/motion/theme/responsive checklist, docs sync.
-- `retrofit-authority` — **temporary**: backfill the authority pass (brief + expert-validated visuals) onto pre-workflow posts; tracks progress in its `worklist.md`; delete when done.
