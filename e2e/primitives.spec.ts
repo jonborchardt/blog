@@ -59,6 +59,18 @@ for (const scheme of ["light", "dark"] as const) {
   });
 }
 
+test("figure zoom opens and closes a dialog lightbox", async ({ page }) => {
+  await page.goto("sci0-pic-upscaling-native-render-oracle/");
+  const btn = page.locator(".figure-zoom").first();
+  await btn.scrollIntoViewIfNeeded();
+  await btn.click();
+  const dialog = page.locator("dialog.figure-dialog[open]");
+  await expect(dialog).toBeVisible();
+  await expect(dialog.locator("img")).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.locator("dialog.figure-dialog[open]")).toHaveCount(0);
+});
+
 test("Mermaid diagrams and math render at build time", async ({ page }) => {
   await page.goto(POST);
   await expect(page.locator("svg[id^='mermaid']").first()).toBeVisible();

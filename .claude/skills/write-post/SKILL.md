@@ -36,6 +36,7 @@ An additional call is justified only when genuinely needed: the expert flagged a
    - The authority repo keeps moving after publication. Avoid phrasing that a routine repo change falsifies: exact counts of growing things, "the most recent X", predictions of the repo's next step. Hedge ("at last count", "one of the later") or state the target/mechanism instead of the tally; caption screenshots of a living app as dated snapshots.
    - Use primitives from `src/components/blog/README.md` (import at the top) only where the writing calls for them; no per-post styling.
    - Images: put files in the post directory, use `![meaningful alt](./file.png)` (raster) or `<img>` with width/height/alt for SVG; `Figure` for captions/wide.
+     Large rasters and sweep/side-by-side comparisons go in `<Figure zoom>` with a direct `<img>` child so readers can open them full-size; never `zoom` around `VizFigure` or islands.
    - Internal links are root-relative (`/other-post/`, `/series/`); the build prefixes the base and fails on broken links.
    - Diagrams: `mermaid` fences with `accTitle`/`accDescr` (`TB` by default, short `<br/>`-broken labels, no long text in diamonds, native width ≤ 640px — sizing rules in `create-visual`); math: `$…$`.
 3. **Visual pass — mandatory, no sign-off needed.** Re-read the finished prose and add every visual that earns its place; build each with `create-visual` (its ladder picks the medium — Mermaid → SVG → HTML/CSS → island; do not default to React). Do this even when the author only asked for text.

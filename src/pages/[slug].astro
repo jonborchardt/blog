@@ -255,3 +255,18 @@ const image = ogImage ? new URL(ogImage.src, Astro.site).toString() : `/og/${pos
     </div>
   </article>
 </BaseLayout>
+
+<!-- Figure lightbox (Figure.astro `zoom`): open on button click, any click inside closes. Inline
+     to keep prose pages at zero external scripts (e2e/budget.spec.ts). -->
+<script is:inline>
+  document.addEventListener("click", (e) => {
+    const openBtn = e.target.closest(".figure-zoom");
+    if (openBtn) {
+      const dialog = openBtn.parentElement.querySelector("dialog.figure-dialog");
+      if (dialog) dialog.showModal();
+      return;
+    }
+    const dialog = e.target.closest("dialog.figure-dialog");
+    if (dialog) dialog.close();
+  });
+</script>

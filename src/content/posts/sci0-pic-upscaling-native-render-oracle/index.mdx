@@ -69,7 +69,7 @@ Existing solutions don't help. ScummVM and SCI Companion render at native res. P
 
 Upscaling after rasterization preserves correctness, but introduces uneven line thickness and edge wobble.
 
-<Figure caption="Original 320x190 render versus a Scale6x post-raster upscale of the same Space Quest 3 room; the sweep moves back and forth between the two.">
+<Figure caption="Original 320x190 render versus a Scale6x post-raster upscale of the same Space Quest 3 room; the sweep moves back and forth between the two." zoom>
   <img
     src={sweepOriginalScale6x.src}
     width="1920"
@@ -80,7 +80,7 @@ Upscaling after rasterization preserves correctness, but introduces uneven line 
 
 Snap-blend fixes this by altering the rendering directly.
 
-<Figure caption="Scale6x versus snap-blend on the same room: straight, evenly weighted lines and the same regions.">
+<Figure caption="Scale6x versus snap-blend on the same room: straight, evenly weighted lines and the same regions." zoom>
   <img
     src={sweepScale6xSnap.src}
     width="1920"
@@ -243,7 +243,7 @@ It's the production strategy — registered as `snap-v5-blend` — for my sci.js
 
 Each comparison below sweeps between the two renders of one Space Quest 3 room; the labels in the bottom corners say which is which.
 
-<Figure caption="Native 320x190 render versus snap-blend at 6x: identical regions, cleaner lines.">
+<Figure caption="Native 320x190 render versus snap-blend at 6x: identical regions, cleaner lines." zoom>
   <img
     src={sweepNativeSnap.src}
     width="1920"
@@ -252,7 +252,7 @@ Each comparison below sweeps between the two renders of one Space Quest 3 room; 
   />
 </Figure>
 
-<Figure caption="Original versus snap-blend: junk pile with a magenta hull section and cyan arch.">
+<Figure caption="Original versus snap-blend: junk pile with a magenta hull section and cyan arch." zoom>
   <img
     src={roomJunkPile.src}
     width="1920"
@@ -261,7 +261,7 @@ Each comparison below sweeps between the two renders of one Space Quest 3 room; 
   />
 </Figure>
 
-<Figure caption="Original versus snap-blend: sewer tunnels under a blue-lit ceiling.">
+<Figure caption="Original versus snap-blend: sewer tunnels under a blue-lit ceiling." zoom>
   <img
     src={roomTunnels.src}
     width="1920"
@@ -270,7 +270,7 @@ Each comparison below sweeps between the two renders of one Space Quest 3 room; 
   />
 </Figure>
 
-<Figure caption="Original versus snap-blend: giant robot head among the wreckage.">
+<Figure caption="Original versus snap-blend: giant robot head among the wreckage." zoom>
   <img
     src={roomRobotHead.src}
     width="1920"
@@ -279,7 +279,7 @@ Each comparison below sweeps between the two renders of one Space Quest 3 room; 
   />
 </Figure>
 
-<Figure caption="Original versus snap-blend: ship in a blue hangar bay.">
+<Figure caption="Original versus snap-blend: ship in a blue hangar bay." zoom>
   <img
     src={roomHangar.src}
     width="1920"
@@ -288,7 +288,7 @@ Each comparison below sweeps between the two renders of one Space Quest 3 room; 
   />
 </Figure>
 
-<Figure caption="Original versus snap-blend: scrapyard with a wrecked pod and yellow tubes.">
+<Figure caption="Original versus snap-blend: scrapyard with a wrecked pod and yellow tubes." zoom>
   <img
     src={roomScrapyard.src}
     width="1920"
@@ -297,7 +297,7 @@ Each comparison below sweeps between the two renders of one Space Quest 3 room; 
   />
 </Figure>
 
-<Figure caption="Original versus snap-blend: ship cockpit interior.">
+<Figure caption="Original versus snap-blend: ship cockpit interior." zoom>
   <img
     src={roomCockpit.src}
     width="1920"
@@ -306,7 +306,7 @@ Each comparison below sweeps between the two renders of one Space Quest 3 room; 
   />
 </Figure>
 
-<Figure caption="Original versus snap-blend: the Astro Chicken arcade cabinet.">
+<Figure caption="Original versus snap-blend: the Astro Chicken arcade cabinet." zoom>
   <img
     src={roomAstroChicken.src}
     width="1920"
@@ -315,7 +315,7 @@ Each comparison below sweeps between the two renders of one Space Quest 3 room; 
   />
 </Figure>
 
-<Figure caption="Original versus snap-blend: inside Monolith Burger.">
+<Figure caption="Original versus snap-blend: inside Monolith Burger." zoom>
   <img
     src={roomBurgerInterior.src}
     width="1920"
@@ -324,7 +324,7 @@ Each comparison below sweeps between the two renders of one Space Quest 3 room; 
   />
 </Figure>
 
-<Figure caption="Original versus snap-blend: Monolith Burger from outside.">
+<Figure caption="Original versus snap-blend: Monolith Burger from outside." zoom>
   <img
     src={roomBurgerExterior.src}
     width="1920"
@@ -333,7 +333,7 @@ Each comparison below sweeps between the two renders of one Space Quest 3 room; 
   />
 </Figure>
 
-<Figure caption="Original versus snap-blend: magenta desert dunes.">
+<Figure caption="Original versus snap-blend: magenta desert dunes." zoom>
   <img
     src={roomDesert.src}
     width="1920"
@@ -380,7 +380,7 @@ Once the renderer became structurally reliable, the next question was how far vi
 
 AI upscaling looks like an obvious shortcut. Take the original 320x190 output, run it through a modern image model, and get something that looks like a painted remake.
 
-<Figure caption="Original render versus an AI-upscaled painting of the same hangar room.">
+<Figure caption="Original render versus an AI-upscaled painting of the same hangar room." zoom>
   <img
     src={sweepAi.src}
     width="1920"

@@ -2,28 +2,51 @@
 /**
  * Figure — wraps an image/SVG/anything with an optional caption and a width.
  *
- * Props: `caption?` (rendered as <figcaption>), `width` = "prose" | "wide" | "full" (default "prose").
+ * Props: `caption?` (rendered as <figcaption>), `width` = "prose" | "wide" | "full" (default
+ * "prose"), `zoom?` (default false) — wraps the content in a button that opens a full-size
+ * <dialog> lightbox. Use `zoom` ONLY when the direct child is a plain <img> (sweep comparisons,
+ * screenshots); never around VizFigure (its ids would duplicate) or interactive islands.
  * "wide"/"full" break out of the prose measure on ≥lg screens; on narrow screens nothing breaks out.
  *
  * ```mdx
- * import { Image } from "astro:assets";
  * import Figure from "@/components/blog/Figure.astro";
- * import shot from "./shot.png";
  *
- * <Figure caption="The build pipeline, end to end." width="wide">
- *   <Image src={shot} alt="Flow from MDX source to static HTML" />
+ * <Figure caption="Original versus upscale." zoom>
+ *   <img src={sweep.src} width="1920" height="1140" alt="Sweep comparison…" />
  * </Figure>
  * ```
  */
 interface Props {
   caption?: string;
   width?: "prose" | "wide" | "full";
+  zoom?: boolean;
 }
-const { caption, width = "prose" } = Astro.props;
+const { caption, width = "prose", zoom = false } = Astro.props;
+const zoomHtml = zoom ? await Astro.slots.render("default") : "";
 ---
 
 <figure class:list={["figure my-8", `figure-${width}`]}>
-  <slot />
+  {
+    zoom ? (
+      <>
+        <button
+          type="button"
+          class="figure-zoom"
+          aria-haspopup="dialog"
+          aria-label={`Zoom: ${caption ?? "image"}`}
+          set:html={zoomHtml}
+        />
+        <dialog class="figure-dialog" aria-label={caption ?? "Enlarged image"}>
+          <button type="button" class="figure-dialog-close" aria-label="Close">
+            &times;
+          </button>
+          <div set:html={zoomHtml} />
+        </dialog>
+      </>
+    ) : (
+      <slot />
+    )
+  }
   {
     caption && (
       <figcaption class="text-muted-foreground mt-3 text-center text-sm">{caption}</figcaption>
@@ -32,13 +55,16 @@ const { caption, width = "prose" } = Astro.props;
 </figure>
 
 <style is:global>
-  .figure > :not(figcaption) {
+  .figure > :not(figcaption),
+  .figure-zoom > * {
     margin: 0 auto;
   }
   .figure > img,
   .figure > picture,
   .figure > svg,
-  .figure > video {
+  .figure > video,
+  .figure-zoom img,
+  .figure-zoom svg {
     display: block;
     max-width: 100%;
     height: auto;

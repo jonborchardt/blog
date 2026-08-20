@@ -9,7 +9,7 @@ import Callout from "@/components/blog/Callout.astro";
 | Primitive      | Props                                                               | Use it for                                                                                                          |
 | -------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | `Callout`      | `variant?: note\|tip\|warning\|danger\|info`, `title?`              | short highlighted notes the reader must not miss                                                                    |
-| `Figure`       | `caption?`, `width?: prose\|wide\|full`                             | an image/SVG with a caption; wide diagrams that need breakout                                                       |
+| `Figure`       | `caption?`, `width?: prose\|wide\|full`, `zoom?`                    | an image/SVG with a caption; wide diagrams that need breakout                                                       |
 | `VizFigure`    | `name`, `summary?`, `interactive?`, `data?: {caption,columns,rows}` | any meaningful chart/diagram/demo: gives it an accessible name, summary and (optionally) a screen-reader data table |
 | `Quote`        | `cite?`, `href?`                                                    | pull quotes with attribution                                                                                        |
 | `Aside`        | —                                                                   | short side notes (margin note on wide screens)                                                                      |
@@ -46,6 +46,14 @@ import shot from "./shot.png";
 ```
 
 Plain Markdown images (`![alt](./file.png)`) also work and get responsive `srcset` automatically; use `Figure` when you need a caption or a wider measure.
+
+`Figure` also takes `zoom` (default `false`): wraps the content in a button that opens a full-size `<dialog>` lightbox. Use it ONLY when the direct child is a plain `<img>` (sweep comparisons, screenshots) — never around `VizFigure` (its ids would duplicate) or interactive islands.
+
+```mdx
+<Figure caption="Original versus upscale." zoom>
+  <img src={sweep.src} width="1920" height="1140" alt="Sweep comparison…" />
+</Figure>
+```
 
 ### VizFigure (accessible chart / diagram / demo)
 

@@ -68,6 +68,8 @@ Auditing: read every visual in the post, not just the ones the build complained 
 
 `VizFigure` (`src/components/blog/VizFigure.astro`, docs in `src/components/blog/README.md`) owns the ARIA wiring: `aria-labelledby`/`aria-describedby` from `name`/`summary`, hides static internals from the a11y tree, keeps `interactive` internals exposed, renders `data` as a visually-hidden table. Wrap it in `Figure` for a visible caption or wide measure.
 
+`Figure` also takes `zoom` (a `<dialog>` lightbox) — only for a direct plain `<img>` child, never around `VizFigure` (duplicated `viz-*` ids fail axe).
+
 ```mdx
 
 import VizFigure from "@/components/blog/VizFigure.astro";
