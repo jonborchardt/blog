@@ -1,6 +1,0 @@
-- human to read and edit all posts
-- llms.txt + raw markdown endpoint per post (/<slug>/index.md)
-- external link checker in dist-checks.ts (cache + warn-vs-fail policy for CI flakiness)
-- image lightbox/zoom for figures and SVG sweep comparisons (near-zero-JS via <dialog>)
-- "last updated" dates derived from git, shown when meaningfully after publish
-- print stylesheet (@media print rules in global.css)
