@@ -30,6 +30,6 @@ All published posts outside the `agent-built` series, grouped by authority repo.
 
 ## E:\github2\captions
 
-| Post                          | Status |
-| ----------------------------- | ------ |
-| why-files-contradiction-index | built  |
+| Post                          | Status    |
+| ----------------------------- | --------- |
+| why-files-contradiction-index | validated |

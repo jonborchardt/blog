@@ -125,7 +125,7 @@ The fix is a sectioned aliases file (`data/aliases.json`) holding corpus merges,
 
 ### 4. Per-video AI claim extraction
 
-Entities and relations are low-level facts. They tell you "Tesla `worked_at` Westinghouse" but not "the host believes Tesla's wireless power demonstrations were suppressed by financial interests." That second thing is a **claim** — a thesis-level proposition, the kind of proposition that could anchor a Wikipedia section, debatable, with stance and evidence.
+Entities and relations are low-level facts. They tell you "Tesla `works_for` Westinghouse" but not "the host believes Tesla's wireless power demonstrations were suppressed by financial interests." That second thing is a **claim** — a thesis-level proposition, the kind of proposition that could anchor a Wikipedia section, debatable, with stance and evidence.
 
 For each video, an AI session reads the transcript plus the extracted entities and relations and writes claims to `data/claims/<id>.json` — the prompt targets 8–15 per video; in practice the corpus runs 8–24, averaging about 14. Each claim has:
 
@@ -212,21 +212,21 @@ A few things that were not at all obvious when I started:
 
 **Cross-video contradictions need a verification pass.** Embedding-cosine similarity is _good_ at finding "two claims that talk about Tesla" and _bad_ at finding "two claims that disagree about Tesla." The first version of the contradictions page was mostly noise. Adding an AI verification step that verdicts every candidate pair as one of seven kinds before anything surfaces took the false-positive rate from "embarrassing" to "low single digits." The verdicts themselves make the point: of 141 candidate pairs the embeddings proposed, the single biggest bucket was two episodes _agreeing_.
 
-<Figure caption="What 141 embedding-proposed candidate pairs actually turned out to be. Only the four gold classes — one strict logical contradiction, 7 debunks, 18 undercuts, 8 alternatives — surface as contradictions; the biggest bucket, same-claim, is agreement and feeds the consonance page; complementary and irrelevant are dropped.">
+<Figure caption="What 141 embedding-proposed candidate pairs actually turned out to be. Only the four contradiction classes — one strict logical contradiction, 7 debunks, 18 undercuts, 8 alternatives — are allowed to surface as contradictions; the biggest bucket, same-claim, is agreement and feeds the consonance page; complementary and irrelevant are dropped. A verdict only takes effect while its pair is still in the current candidate pool, so the live site shows fewer: 17 cross-video contradictions and 50 agreements today.">
   <VizFigure
     name="AI verdicts on 141 cross-video candidate pairs"
     summary="A bar chart of the seven verdict classes: same-claim 63, complementary 34, undercuts 18, irrelevant 10, alternative 8, debunks 7, and just one strict logical contradiction. Only 34 of the 141 pairs are contradiction-class; embeddings find topical overlap, and most overlap is agreement or noise."
     data={{
       caption: "Verdicts on 141 cross-video candidate pairs",
-      columns: ["Verdict", "Pairs", "Where it goes"],
+      columns: ["Verdict", "Pairs", "Eligible to surface as"],
       rows: [
         ["SAME-CLAIM", "63", "agreements page"],
         ["COMPLEMENTARY", "34", "dropped"],
-        ["UNDERCUTS", "18", "contradictions page"],
+        ["UNDERCUTS", "18", "contradiction"],
         ["IRRELEVANT", "10", "dropped"],
-        ["ALTERNATIVE", "8", "contradictions page"],
-        ["DEBUNKS", "7", "contradictions page"],
-        ["LOGICAL-CONTRADICTION", "1", "contradictions page"],
+        ["ALTERNATIVE", "8", "contradiction"],
+        ["DEBUNKS", "7", "contradiction"],
+        ["LOGICAL-CONTRADICTION", "1", "contradiction"],
       ],
     }}
   >
