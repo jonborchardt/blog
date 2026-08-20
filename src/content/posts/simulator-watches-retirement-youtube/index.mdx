@@ -2,6 +2,7 @@
 title: My simulator watches retirement YouTube for me
 description: A text-file queue, a transcript script and two Claude Code skills turn retirement videos into three experiment rows, a verdict and a channel scoreboard.
 publishedAt: 2026-08-18
+updatedAt: 2026-08-19
 series: finances
 seriesOrder: 2
 tags: [ai-assisted-coding, llm, personal-finance]
@@ -20,7 +21,10 @@ Here's the problem. YouTube knows I'm interested in finances and retirement, so 
 
 I used to watch them. Now I paste the URL into a text file in [my simulator](/retirement-simulator-ai-lab/) and walk away. Dozens of videos later, I've watched none of them, and I know more about what's in them than I would have if I had.
 
-![The Vetted Videos insights panel: 31 videos across 23 channels, a score mix of 15 useful, 8 mixed, 6 harmful and 2 correct, the topics they talk about, and the claims most often right (spending guardrails, tax coordination pre-RMD) and most often wrong (bonds as the sequence-risk hedge, cash buckets protecting sequence risk)](./vetted-videos-insights.png)
+<Figure caption="The Vetted Videos insights panel — a snapshot from an earlier queue run; the counts grow with every batch.">
+  ![The Vetted Videos insights panel: 31 videos across 23 channels, a score mix of 15 useful, 8 mixed, 6 harmful and 2 correct, the topics they talk about, and the claims most often right (spending guardrails, tax coordination pre-RMD) and most often wrong (bonds as the sequence-risk hedge, cash buckets protecting sequence risk)](./vetted-videos-insights.png)
+
+</Figure>
 
 The whole thing is a short pipeline from a text file to a scoreboard, and the scoreboard feeds back into the front of the queue:
 
@@ -94,7 +98,10 @@ For anything testable, three experiment rows go into the committed `experiments.
 
 Then the normal experiment machinery runs: every row against every historical start year at every candidate retirement age. Same resolution discipline as everything else in the lab — one percentage point of success is one flipped cohort, under two points is a tie, not a finding.
 
-![Strategy comparison table at Social Security 62, retire at 65: baseline 94.9% success; the 2026 plan 100% with 2.8M median terminal wealth; bucket faithful, mild and bucket-plus-gold hybrid rows all 100% but with lower minimum wealth; CFP cash-bridge faithful, mild and hybrid rows at 100% with 3.6M to 3.8M median](./strategy-comparison-rows.png)
+<Figure caption="Theory rows beside the baseline and champion, on the synthetic textbook dataset. On this well-funded household at 65 everything clears the success bar, so the bucket rows' losses show up in the worst-case column instead — the verdicts against buckets come from tighter runs where those rows failed real cohorts. Strategies tuned on a well-funded dataset don't transfer.">
+  ![Strategy comparison table at Social Security 62, retire at 65: baseline 94.9% success; the 2026 plan 100% with 2.8M median terminal wealth; bucket faithful, mild and bucket-plus-gold hybrid rows all 100% but with lower minimum wealth; CFP cash-bridge faithful, mild and hybrid rows at 100% with 3.6M to 3.8M median](./strategy-comparison-rows.png)
+
+</Figure>
 
 ## The verdict is set arithmetic
 
@@ -134,7 +141,7 @@ The channel-skip rule reads from the same file it writes to. The system's own pa
 
 ## What dozens of videos actually said
 
-The distribution surprised me: two were _correct_ (beat or confirmed the champion), fifteen _useful_, eight _mixed_, six _harmful_ — six videos whose advice, taken faithfully, would have made a plain two-asset baseline _worse_. Not one was gibberish; the harmful ones were the polished ones recommending a big bond or cash sleeve as sequence-risk protection, which for a plan whose failure cohorts are the inflation years is exactly backwards.
+The distribution surprised me: at last count, two were _correct_ (beat or confirmed the champion), nineteen _useful_, ten _mixed_, six _harmful_ — six videos whose advice, taken faithfully, would have made a plain two-asset baseline _worse_. Not one was gibberish; the harmful ones were mostly the polished ones recommending a big bond or cash sleeve as sequence-risk protection, which for a plan whose failure cohorts are the inflation years is exactly backwards.
 
 The most-repeated mechanism across all of them — spending guardrails — turned out to be real, already in my plan, and worth about a couple of points. The thing that mattered most for me — _which asset fills the retirement window_ — is said by essentially nobody. The one outside idea that genuinely beat the champion (tax coordination in the pre-RMD window) came from the CFP videos.
 
@@ -142,7 +149,7 @@ And the pattern I did not expect: the first ten or so videos each added experime
 
 ## The one I'd have watched
 
-The most recent video through the pipeline was Rob Berger's [_Can the Bucket Strategy Eliminate Sequence of Returns Risk?_](https://www.youtube.com/watch?v=gVYThVn5gQA) — a channel I actually like, and a topic where he's arguing against the room. It's a good example of why I'm glad I didn't just watch it: I would have nodded along with all of it.
+One of the later videos through the pipeline was Rob Berger's [_Can the Bucket Strategy Eliminate Sequence of Returns Risk?_](https://www.youtube.com/watch?v=gVYThVn5gQA) — a channel I actually like, and a topic where he's arguing against the room. It's a good example of why I'm glad I didn't just watch it: I would have nodded along with all of it.
 
 The pipeline agreed with most of it. Buckets vs. plain rebalancing is settled in his favor — every bucket row lost to a rebalanced baseline, keeping the inflation-cohort failures (his own worked example, the 1966 retiree, is the head of that family) and adding growth-starvation ones. His withdrawal-policy content matched the guardrail and variable-withdrawal verdicts already on the board. His "one cash bucket if it helps you sleep" concession matched the measured drag numbers.
 
