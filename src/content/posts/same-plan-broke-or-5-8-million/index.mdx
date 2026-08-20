@@ -2,6 +2,7 @@
 title: "Same plan, same spending. Broke, or $5.8 million."
 description: One textbook retirement plan replayed across 98 historical start years, from 1928 on. Four of those lives, and what sequence-of-returns risk really means.
 publishedAt: 2026-08-18
+updatedAt: 2026-08-19
 series: finances
 seriesOrder: 3
 tags: [personal-finance, investing, simulation, data-viz]
@@ -16,6 +17,7 @@ import Figure from "@/components/blog/Figure.astro";
 import VizFigure from "@/components/blog/VizFigure.astro";
 import FourLives from "./four-lives.svg";
 import EndingBalances from "./ending-balances.svg";
+import FailureBands from "./failure-bands.svg";
 
 Here is a household. It has \$1,000,000. It retires at 65, spends \$40,000 a year — the textbook 4% — adjusted for inflation every year, holds a 60/40 stock/bond index portfolio, rebalances annually, and needs the money to last thirty years. No Social Security, no pension, no house, no kids, no taxes, no fees. The most boring retirement plan it is possible to write down.
 
@@ -97,7 +99,7 @@ The household did nothing differently in any of these. It didn't panic-sell, it 
 
 Every retirement calculator mentions sequence-of-returns risk. Most of them then model it as _volatility_ — random good and bad years — which quietly turns it into something averages can tame. That's not it. The point is that returns arrive in an _order_, you can't choose the order, and the order in the first decade of withdrawals matters more than the average over all thirty.
 
-Look at the failures. The 1929 retiree — who ate a 90% stock crash in year one — is fine, because the crash came with _deflation_: \$40k of spending got cheaper, bonds held their real value, and the portfolio only had to survive a few terrible years before a long recovery. The 1966 retiree ate no crash at all. What they got instead was fourteen years of stocks going nowhere while inflation ran 5, 7, 11, 13 percent — so the "\$40k" they were withdrawing was \$100k in nominal terms by the end, from a portfolio that hadn't grown. There was no year in which anything dramatic happened. There was just a slow, unremarkable, unrecoverable grind, and by the time it stopped (1982 — the year the _luckiest_ retiree in the dataset was just getting started) the money that would have compounded through the greatest bull market in history had already been spent on groceries.
+Look at the failures. The 1929 retiree — who ate a 90% stock crash across the first three years — is fine, because the crash came with _deflation_: \$40k of spending got cheaper, bonds held their real value, and the portfolio only had to survive a few terrible years before a long recovery. The 1966 retiree ate no crash at all. What they got instead was fourteen years of stocks going nowhere while inflation ran 5, 7, 11, 13 percent — so the "\$40k" they were withdrawing was \$100k in nominal terms by the end, from a portfolio that hadn't grown. There was no year in which anything dramatic happened. There was just a slow, unremarkable, unrecoverable grind, and by the time it stopped (1982 — the year the _luckiest_ retiree in the dataset was just getting started) the money that would have compounded through the greatest bull market in history had already been spent on groceries.
 
 Two retirees, sixteen years apart, identical in every decision, one broke and one rich. Nothing either of them did in retirement could have swapped their outcomes. That's the risk. Not "markets go down." _Your retirement date is a lottery ticket and you draw it once._
 
@@ -107,7 +109,25 @@ Two retirees, sixteen years apart, identical in every decision, one broke and on
 
 **Ruin is mostly luck too — but which years ruin _you_ is not.** The textbook household fails in 1964–68. A more aggressive household (earlier retirement, higher spending) fails in a wider band around the same years plus a few others; a bond-heavier one fails the same inflation years harder. The identity of the killer cohorts is a property of _your_ plan, and it's discoverable — the simulator lists the failing start years for every plan it runs. Once you know your failure family, you know what you're actually insuring against, and it's very often not the thing the advice industry is selling insurance for. (Cash buckets and bond tents insure against 1929. That was never the problem.)
 
-**"Average return" is a number nobody experiences.** The 7%-real-per-year projection every planner uses is the mean across exactly this fan. It's a fine description of the 1943 retiree — the median line — and a lie for everyone else. The failing cohorts are precisely the ones where the average doesn't show up on time. A plan is not "does the average work"; it's "how many of the ninety-eight lines stay above zero," and the answer changes with every input you touch.
+<Figure caption="Which start years ruin you is a property of your plan. The textbook household fails only 1964–68. Making it bond-heavier widens that same inflation band — it never adds a crash-era failure. Overspending widens the band and admits new failure families: the Depression era and the dot-com top.">
+  <VizFigure
+    name="Failing start years for three variants of the same plan"
+    summary="Three rows on a shared 1928-to-2025 axis of retirement start years, failing years marked as filled blocks. The textbook 60/40 plan at 4% spending fails 1964 through 1968, five of 98. The bond-heavier 40/60 variant fails 1961 through 1968, eight of 98. The 5%-spending variant fails 1928, 1929, 1936, 1956, 1959 through 1973, 1999 and 2000 — twenty-one of 98."
+    data={{
+      caption: "Failing start years by plan variant (98 start years each)",
+      columns: ["Plan variant", "Failing start years", "Count", "Success"],
+      rows: [
+        ["textbook: 60/40, 4% spending", "1964–68", "5 of 98", "94.9%"],
+        ["bond-heavier: 40/60, 4% spending", "1961–68", "8 of 98", "91.8%"],
+        ["higher spending: 60/40, 5%", "1928–29, 1936, 1956, 1959–73, 1999–2000", "21 of 98", "78.6%"],
+      ],
+    }}
+  >
+    <FailureBands class="h-auto w-full max-w-2xl" />
+  </VizFigure>
+</Figure>
+
+**"Average return" is a number nobody experiences.** The average-return projection every planner uses is the mean across exactly this fan. It's a fine description of the 1943 retiree — the median line — and a lie for everyone else. The failing cohorts are precisely the ones where the average doesn't show up on time. A plan is not "does the average work"; it's "how many of the ninety-eight lines stay above zero," and the answer changes with every input you touch.
 
 **Success rate is a count of years, not a probability.** 95% here means five start years out of ninety-eight, all adjacent, all the same story. That's the resolution of the instrument: one percentage point is one flipped cohort. Nobody should optimize a retirement plan to a decimal, and anyone reporting 94.6% vs 95.1% as a difference is reporting noise.
 
@@ -115,7 +135,7 @@ Two retirees, sixteen years apart, identical in every decision, one broke and on
 
 You can't pick the ticket. You can change the fan.
 
-Every experiment I've run on my own plan was, in retrospect, this: find the cohorts that break the plan, and shift the shape of the distribution so those lines stay above zero — even at the cost of the top of the fan, which was never spendable anyway. For my plan the failing family was the inflation cohorts, so the fix was an asset that holds real value through a decade of inflation, held only in the window around the retirement date where the sequence matters. It didn't raise the median. It cut off the zero tail. That's the trade you want.
+Every experiment I've run on my own plan was, in retrospect, this: find the cohorts that break the plan, and shift the shape of the distribution so those lines stay above zero — even at the cost of the top of the fan, which was never spendable anyway. For my plan the failing family was the inflation cohorts, so the fix was an asset that holds real value through a decade of inflation, held only in the window around the retirement date where the sequence matters. It happened to raise the median too, but that's not why it won: it cut off the zero tail. That's the trade you want, even when it isn't free.
 
 The other lever is spending flexibility, and it's real but smaller than the [many YouTube videos](/simulator-watches-retirement-youtube/) suggest: a livable guardrail — cut spending modestly when the portfolio falls behind — rescues a cohort or two at the edge of the failure family. What it can't do is rescue a plan whose allocation is wrong for its failure years; no depth of belt-tightening turns 1966 into 1982.
 
@@ -127,4 +147,4 @@ If you take one thing from this series, make it the fan chart: your plan, run on
 
 ---
 
-_The textbook household above is synthetic — the point is the shape, not the dollars. Runs that outlive the historical dataset continue on the long-run average year, so the most recent cohorts are partly projection; the older ones are entirely history._
+_The textbook household above is synthetic — the point is the shape, not the dollars. The dataset ships with the simulator repo (`datasets/textbook-4pct.json`), so anyone can rerun this exact fan. Runs that outlive the historical dataset continue on the long-run average year, so the most recent cohorts are partly projection; the older ones are entirely history._
