@@ -26,10 +26,10 @@ All published posts outside the `agent-built` series, grouped by authority repo.
 | worldlock-ar-window             | shipped |
 | ponytail-lazy-senior-dev        | shipped |
 
-⚠ `ponytail-lazy-senior-dev` → `E:\github2\earth` looks like an odd mapping (a post about the ponytail skill pointing at the earth repo). Confirm with the author before its expert call.
+Resolved: `ponytail-lazy-senior-dev` → `E:\github2\earth` is correct — the post's verifiable claims are about the WorldLock codebase (file/dep counts, `ponytail:` ledger); the ponytail skill itself and the PR replay are author-vouched and live outside the repo, which the post's framing reflects.
 
 ## E:\github2\captions
 
-| Post                          | Status    |
-| ----------------------------- | --------- |
-| why-files-contradiction-index | validated |
+| Post                          | Status  |
+| ----------------------------- | ------- |
+| why-files-contradiction-index | shipped |
