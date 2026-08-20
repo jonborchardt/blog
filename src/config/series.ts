@@ -6,21 +6,37 @@ export const series = {
     title: "Agent-Built",
     description:
       "How a coding agent built this site in an afternoon — and the contracts, authoring primitives, and repo-as-expert system that let it keep publishing.",
+    hero: {
+      src: "series/agent-built.png",
+      alt: "A tall cursor caret on a baseline between solid built structures behind it and dashed blueprint outlines of the same structures ahead of it on a drafting grid",
+    },
   },
   finances: {
     title: "Finances",
     description:
       "Replaying one retirement plan across every start year since 1928: the simulator, the agent pipeline behind it, and 98 lives ending broke or on $5.8 million.",
+    hero: {
+      src: "series/finances.png",
+      alt: "A grid of small tiles, one per retirement start year from 1928 to 2025, most pale blue with rising strokes and one warm streak of falling tiles where the same plan went broke",
+    },
   },
   worldlock: {
     title: "WorldLock",
     description:
       "A native Android AR app pinning city towers, the Earth and the live ISS to where they actually are — built by an agent-driven workflow, no IDE and no cable.",
+    hero: {
+      src: "series/worldlock.png",
+      alt: "A gridded globe with padlock markers pinned to three coordinates, two of them projecting glowing towers into the sky, while the ISS rides a dashed orbital ring",
+    },
   },
   "sierra-games": {
     title: "Sierra Games",
     description:
       "Upscaling Sierra's SCI0 vector backgrounds 6× without breaking them: flood fills that leak, a native-resolution render as the oracle, an anchor-graph rewrite.",
+    hero: {
+      src: "series/sierra-games.png",
+      alt: "A blocky Sierra-style vector landscape of mountains, sun and water at native resolution, with a magnifier loupe over one slope revealing the same edge redrawn smooth on a fine 6x grid",
+    },
   },
 } as const satisfies SeriesRegistry;
 

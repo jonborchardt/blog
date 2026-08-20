@@ -32,6 +32,12 @@ describe("validatePosts", () => {
     ).toThrow(/duplicate seriesOrder/);
   });
 
+  it("rejects heroes that are not 2.5:1", () => {
+    const hero = (width: number, height: number) => ({ src: { width, height }, alt: "x" });
+    expect(() => validatePosts([post("a", { hero: hero(1200, 630) })])).toThrow(/2\.5:1/);
+    expect(() => validatePosts([post("a", { hero: hero(1500, 600) })])).not.toThrow();
+  });
+
   it("reports every problem at once", () => {
     expect(() => validatePosts([post("resume"), post("admin")])).toThrow(/resume[\s\S]*admin/);
   });

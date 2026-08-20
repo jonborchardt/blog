@@ -1,54 +1,69 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
-  <title>A phone screen framing a dusk skyline: a glowing AR tower labelled Tacoma 42.4 km rises over the horizon, the night side of the Earth curves overhead with city lights, and a white dash marks the ISS</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 600" width="1500" height="600">
+  <title>A phone held up against the Seattle skyline at dusk, its screen showing an AR tower labelled Tacoma 42.4 km, the night side of the Earth curving overhead with city lights, and a white dash marking the ISS</title>
   <defs>
     <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#0d1320"/>
-      <stop offset="0.7" stop-color="#1c2a45"/>
-      <stop offset="1" stop-color="#5a3f4a"/>
+      <stop offset="0" stop-color="#11171d"/>
+      <stop offset="0.55" stop-color="#006a90"/>
+      <stop offset="0.95" stop-color="#f0b35a"/>
     </linearGradient>
     <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#2f6f9f" stop-opacity="0"/>
-      <stop offset="1" stop-color="#7fc4f5"/>
+      <stop offset="0" stop-color="#006a90" stop-opacity="0"/>
+      <stop offset="1" stop-color="#deeef5"/>
     </linearGradient>
-    <clipPath id="screen"><rect x="330" y="40" width="540" height="550" rx="36"/></clipPath>
+    <clipPath id="screen"><rect x="496" y="40" width="508" height="528" rx="30"/></clipPath>
   </defs>
-  <rect width="1200" height="630" fill="#2b3340"/>
-  <!-- faint outside-the-phone horizon so the phone reads as a window -->
-  <g opacity="0.25">
-    <path d="M0 470 L1200 470 L1200 630 L0 630 z" fill="#0d1320"/>
-    <path d="M0 470 L60 470 L60 430 L110 430 L110 470 L180 470 L180 400 L230 400 L230 470 L300 470 L300 445 L330 445 M870 470 L900 440 L940 440 L940 470 L1010 470 L1010 410 L1050 410 L1050 470 L1120 470 L1120 435 L1160 435 L1160 470 L1200 470" fill="none" stroke="#f7f8fa" stroke-width="3"/>
+  <!-- the real world at dusk, full canvas -->
+  <rect width="1500" height="600" fill="#11171d"/>
+  <rect width="1500" height="600" fill="url(#sky)" opacity="0.3"/>
+  <!-- stars in the flanks -->
+  <g fill="#fafcfe" opacity="0.5">
+    <circle cx="120" cy="80" r="1.8"/><circle cx="250" cy="150" r="1.4"/><circle cx="380" cy="70" r="1.6"/>
+    <circle cx="60" cy="290" r="1.4"/><circle cx="320" cy="220" r="1.2"/>
+    <circle cx="1120" cy="110" r="1.6"/><circle cx="1260" cy="190" r="1.4"/><circle cx="1380" cy="80" r="1.8"/>
+    <circle cx="1450" cy="260" r="1.2"/><circle cx="1200" cy="40" r="1.2"/>
   </g>
-  <!-- phone -->
-  <rect x="316" y="26" width="568" height="578" rx="48" fill="#0d1320" stroke="#f7f8fa" stroke-width="4"/>
+  <!-- faint ISS trail crossing the whole sky, continuing behind the phone -->
+  <g stroke="#fafcfe" stroke-width="3" stroke-dasharray="14 10" opacity="0.28">
+    <path d="M60 355 L470 269"/>
+    <path d="M1030 151 L1440 65"/>
+  </g>
+  <!-- real skyline silhouette, full width, same baseline as inside the screen -->
+  <path d="M0 520 L50 520 L50 460 L90 460 L90 520 L150 520 L150 430 L195 430 L195 520 L260 520 L260 480 L300 480 L300 520 L350 520 L350 445 L390 445 L390 520 L440 520 L440 475 L480 475 L480 520 L1020 520 L1020 470 L1060 470 L1060 520 L1120 520 L1120 435 L1165 435 L1165 520 L1230 520 L1230 480 L1270 480 L1270 520 L1330 520 L1330 450 L1375 450 L1375 520 L1440 520 L1440 490 L1500 490 L1500 600 L0 600 z" fill="#11171d"/>
+  <g fill="#f0b35a" opacity="0.4">
+    <rect x="160" y="450" width="4" height="6"/><rect x="360" y="465" width="4" height="6"/><rect x="70" y="480" width="4" height="6"/>
+    <rect x="1135" y="455" width="4" height="6"/><rect x="1345" y="470" width="4" height="6"/><rect x="1245" y="495" width="4" height="6"/>
+  </g>
+  <!-- the phone: an AR window on the same scene -->
+  <rect x="480" y="24" width="540" height="560" rx="46" fill="#11171d" stroke="#d9dfe3" stroke-width="4"/>
   <g clip-path="url(#screen)">
-    <rect x="330" y="40" width="540" height="550" fill="url(#sky)"/>
-    <!-- Earth's night side curving overhead -->
-    <path d="M330 40 L330 165 A780 780 0 0 1 870 165 L870 40 z" fill="#0b1a2b"/>
-    <path d="M330 165 A780 780 0 0 1 870 165" fill="none" stroke="#2f6f9f" stroke-width="3"/>
+    <rect x="496" y="40" width="508" height="528" fill="url(#sky)"/>
+    <!-- the night side of the Earth curving overhead -->
+    <path d="M496 40 L496 170 A760 760 0 0 1 1004 170 L1004 40 z" fill="#11171d"/>
+    <path d="M496 170 A760 760 0 0 1 1004 170" fill="none" stroke="#deeef5" stroke-width="2.5"/>
     <g fill="#f0b35a">
-      <circle cx="450" cy="120" r="2.5"/><circle cx="470" cy="128" r="2"/><circle cx="520" cy="110" r="3"/><circle cx="560" cy="140" r="2"/>
-      <circle cx="640" cy="118" r="2.5"/><circle cx="700" cy="132" r="2"/><circle cx="740" cy="112" r="3"/><circle cx="780" cy="140" r="2"/>
-      <circle cx="600" cy="150" r="2"/><circle cx="500" cy="145" r="2"/><circle cx="820" cy="128" r="2"/>
+      <circle cx="560" cy="140" r="2.5"/><circle cx="600" cy="126" r="2"/><circle cx="650" cy="112" r="3"/><circle cx="700" cy="130" r="2"/>
+      <circle cx="760" cy="108" r="2.5"/><circle cx="820" cy="122" r="2"/><circle cx="870" cy="134" r="3"/><circle cx="920" cy="146" r="2"/>
+      <circle cx="740" cy="145" r="2"/><circle cx="630" cy="150" r="2"/><circle cx="960" cy="158" r="2"/>
     </g>
-    <!-- ISS dash + trail -->
-    <path d="M400 235 L470 220" stroke="#f7f8fa" stroke-width="3" stroke-dasharray="14 8" opacity="0.5"/>
-    <rect x="470" y="212" width="34" height="8" rx="2" transform="rotate(-12 487 216)" fill="#f7f8fa"/>
-    <text x="512" y="204" font-family="IBM Plex Sans" font-size="16" fill="#f7f8fa">ISS</text>
-    <!-- Tacoma tower -->
-    <rect x="590" y="240" width="20" height="270" fill="url(#beam)"/>
-    <rect x="596" y="240" width="8" height="270" fill="#bfe3ff"/>
-    <rect x="524" y="250" width="152" height="34" rx="6" fill="#0d1320" stroke="#7fc4f5" stroke-width="2"/>
-    <text x="600" y="274" font-family="IBM Plex Sans" font-size="18" font-weight="700" fill="#f7f8fa" text-anchor="middle">Tacoma 42.4 km</text>
-    <!-- Seattle skyline silhouette + ground -->
-    <path d="M330 510 L370 510 L370 470 L400 470 L400 510 L430 510 L430 440 L450 440 L450 510 L480 510 L480 480 L500 480 L500 430 L510 430 L510 510 L560 510 L560 460 L580 460 L580 510 L640 510 L640 455 L665 455 L665 400 L672 400 L672 455 L690 455 L690 510 L730 510 L730 470 L760 470 L760 510 L790 510 L790 445 L815 445 L815 510 L870 510 L870 590 L330 590 z" fill="#0d1320"/>
-    <!-- a few lit windows -->
+    <!-- the ISS, bright inside the window -->
+    <path d="M512 260 L636 234" stroke="#fafcfe" stroke-width="3" stroke-dasharray="14 8" opacity="0.55"/>
+    <rect x="638" y="226" width="36" height="8" rx="2" transform="rotate(-12 656 230)" fill="#fafcfe"/>
+    <text x="684" y="222" font-family="IBM Plex Sans" font-size="16" fill="#fafcfe">ISS</text>
+    <!-- the Tacoma tower -->
+    <rect x="840" y="250" width="20" height="270" fill="url(#beam)"/>
+    <rect x="846" y="250" width="8" height="270" fill="#deeef5"/>
+    <rect x="768" y="262" width="164" height="36" rx="6" fill="#11171d" stroke="#deeef5" stroke-width="2"/>
+    <text x="850" y="287" font-family="IBM Plex Sans" font-size="18" font-weight="700" fill="#fafcfe" text-anchor="middle">Tacoma 42.4 km</text>
+    <!-- the same skyline, seen through the screen -->
+    <path d="M496 520 L530 520 L530 470 L560 470 L560 520 L590 520 L590 440 L612 440 L612 520 L640 520 L640 480 L658 480 L658 430 L668 430 L668 520 L700 520 L700 460 L720 460 L720 520 L742 520 L742 455 L760 455 L760 400 L767 400 L767 455 L784 455 L784 520 L816 520 L816 470 L846 470 L846 520 L880 520 L880 445 L905 445 L905 520 L940 520 L940 485 L965 485 L965 520 L1004 520 L1004 568 L496 568 z" fill="#11171d"/>
     <g fill="#f0b35a" opacity="0.8">
-      <rect x="436" y="455" width="4" height="6"/><rect x="503" y="445" width="4" height="6"/><rect x="565" y="470" width="4" height="6"/><rect x="795" y="460" width="4" height="6"/><rect x="740" y="480" width="4" height="6"/>
+      <rect x="596" y="455" width="4" height="6"/><rect x="661" y="445" width="4" height="6"/><rect x="726" y="472" width="4" height="6"/>
+      <rect x="886" y="460" width="4" height="6"/><rect x="820" y="480" width="4" height="6"/><rect x="945" y="495" width="4" height="6"/>
     </g>
     <!-- HUD corners -->
-    <g stroke="#7fc4f5" stroke-width="3" fill="none" opacity="0.7">
-      <path d="M350 80 L350 60 L370 60"/><path d="M850 80 L850 60 L830 60"/>
-      <path d="M350 550 L350 570 L370 570"/><path d="M850 550 L850 570 L830 570"/>
+    <g stroke="#deeef5" stroke-width="3" fill="none" opacity="0.7">
+      <path d="M516 96 L516 76 L536 76"/><path d="M984 96 L984 76 L964 76"/>
+      <path d="M516 512 L516 532 L536 532"/><path d="M984 512 L984 532 L964 532"/>
     </g>
   </g>
 </svg>

@@ -42,11 +42,12 @@ const posts = defineCollection({
         draft: z.boolean().default(false),
         /** Path to the repo that is authoritative for this post's domain facts (contract: .claude/skills/write-post — Authority). */
         authority: z.string().min(1).optional(),
+        // The 2.5:1 ratio is checked in validatePosts (image() is still a path here, not metadata).
         hero: z.object(
           { src: image(), alt: z.string().min(1) },
           {
             error:
-              "hero is required (1200x630 image next to index.mdx + meaningful alt); copy src/assets/hero-placeholder.png until you have one",
+              "hero is required (1500x600 image next to index.mdx + meaningful alt); copy src/assets/hero-placeholder.png until you have one",
           },
         ),
         ogImage: image().optional(),

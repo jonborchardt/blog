@@ -1,56 +1,64 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 600" width="1500" height="600">
   <title>A commit timeline compressed into one afternoon: eleven dense ticks at the start, sparse ticks after, and a rocket lifting off the final one</title>
-  <rect width="1200" height="630" fill="#fafcfe" />
+  <rect width="1500" height="600" fill="#fafcfe" />
 
-  <!-- axis -->
-  <line x1="140" y1="400" x2="1060" y2="400" stroke="#d9dfe3" stroke-width="5" stroke-linecap="round" />
+  <!-- axis: dashed before the repo existed, solid after, running the full width -->
+  <line x1="60" y1="420" x2="330" y2="420" stroke="#d9dfe3" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 26" />
+  <line x1="330" y1="420" x2="1440" y2="420" stroke="#d9dfe3" stroke-width="5" stroke-linecap="round" />
 
   <!-- eleven dense plan ticks -->
   <g stroke="#006a90" stroke-width="8" stroke-linecap="round">
-    <line x1="160" y1="345" x2="160" y2="400" />
-    <line x1="182" y1="345" x2="182" y2="400" />
-    <line x1="204" y1="345" x2="204" y2="400" />
-    <line x1="226" y1="345" x2="226" y2="400" />
-    <line x1="248" y1="345" x2="248" y2="400" />
-    <line x1="270" y1="345" x2="270" y2="400" />
-    <line x1="292" y1="345" x2="292" y2="400" />
-    <line x1="314" y1="345" x2="314" y2="400" />
-    <line x1="336" y1="345" x2="336" y2="400" />
-    <line x1="358" y1="345" x2="358" y2="400" />
-    <line x1="380" y1="345" x2="380" y2="400" />
+    <line x1="360" y1="365" x2="360" y2="420" />
+    <line x1="382" y1="365" x2="382" y2="420" />
+    <line x1="404" y1="365" x2="404" y2="420" />
+    <line x1="426" y1="365" x2="426" y2="420" />
+    <line x1="448" y1="365" x2="448" y2="420" />
+    <line x1="470" y1="365" x2="470" y2="420" />
+    <line x1="492" y1="365" x2="492" y2="420" />
+    <line x1="514" y1="365" x2="514" y2="420" />
+    <line x1="536" y1="365" x2="536" y2="420" />
+    <line x1="558" y1="365" x2="558" y2="420" />
+    <line x1="580" y1="365" x2="580" y2="420" />
   </g>
 
   <!-- bracket over the sprint -->
-  <path d="M156 318 v-14 h228 v14" fill="none" stroke="#11171d" stroke-width="4" stroke-linecap="round" />
-  <text x="270" y="272" font-family="IBM Plex Sans" font-size="36" font-weight="600" fill="#11171d" text-anchor="middle">11 plans · 79 min</text>
+  <path d="M356 338 v-14 h228 v14" fill="none" stroke="#11171d" stroke-width="4" stroke-linecap="round" />
+  <text x="470" y="292" font-family="IBM Plex Sans" font-size="36" font-weight="600" fill="#11171d" text-anchor="middle">11 plans · 79 min</text>
 
   <!-- sparse afternoon ticks -->
   <g stroke="#555f69" stroke-width="6" stroke-linecap="round">
-    <line x1="540" y1="368" x2="540" y2="400" />
-    <line x1="660" y1="368" x2="660" y2="400" />
-    <line x1="790" y1="368" x2="790" y2="400" />
-    <line x1="880" y1="368" x2="880" y2="400" />
+    <line x1="680" y1="388" x2="680" y2="420" />
+    <line x1="780" y1="388" x2="780" y2="420" />
+    <line x1="880" y1="388" x2="880" y2="420" />
+    <line x1="955" y1="388" x2="955" y2="420" />
   </g>
 
   <!-- time labels -->
-  <text x="160" y="448" font-family="IBM Plex Sans" font-size="26" fill="#555f69" text-anchor="middle">12:35</text>
-  <text x="1000" y="448" font-family="IBM Plex Sans" font-size="26" fill="#555f69" text-anchor="middle">20:49</text>
+  <text x="360" y="468" font-family="IBM Plex Sans" font-size="26" fill="#555f69" text-anchor="middle">12:35</text>
+  <text x="1090" y="468" font-family="IBM Plex Sans" font-size="26" fill="#555f69" text-anchor="middle">20:49</text>
 
   <!-- rocket lifting off the final tick -->
   <g>
     <!-- final tick -->
-    <line x1="1000" y1="376" x2="1000" y2="400" stroke="#f0b35a" stroke-width="8" stroke-linecap="round" />
+    <line x1="1090" y1="396" x2="1090" y2="420" stroke="#f0b35a" stroke-width="8" stroke-linecap="round" />
     <!-- flame -->
-    <path d="M1000 358 c-12 -22 -8 -38 0 -52 c8 14 12 30 0 52 z" fill="#f0b35a" />
+    <path d="M1090 378 c-12 -22 -8 -38 0 -52 c8 14 12 30 0 52 z" fill="#f0b35a" />
     <!-- body -->
-    <path d="M1000 160 c26 30 34 74 34 108 v22 h-68 v-22 c0 -34 8 -78 34 -108 z" fill="#006a90" />
+    <path d="M1090 180 c26 30 34 74 34 108 v22 h-68 v-22 c0 -34 8 -78 34 -108 z" fill="#006a90" />
     <!-- window -->
-    <circle cx="1000" cy="240" r="16" fill="#deeef5" />
+    <circle cx="1090" cy="260" r="16" fill="#deeef5" />
     <!-- fins -->
-    <path d="M966 262 l-26 34 v-46 z" fill="#11171d" />
-    <path d="M1034 262 l26 34 v-46 z" fill="#11171d" />
+    <path d="M1056 282 l-26 34 v-46 z" fill="#11171d" />
+    <path d="M1124 282 l26 34 v-46 z" fill="#11171d" />
     <!-- motion dashes -->
-    <line x1="960" y1="330" x2="960" y2="356" stroke="#d9dfe3" stroke-width="6" stroke-linecap="round" />
-    <line x1="1040" y1="330" x2="1040" y2="356" stroke="#d9dfe3" stroke-width="6" stroke-linecap="round" />
+    <line x1="1050" y1="350" x2="1050" y2="376" stroke="#d9dfe3" stroke-width="6" stroke-linecap="round" />
+    <line x1="1130" y1="350" x2="1130" y2="376" stroke="#d9dfe3" stroke-width="6" stroke-linecap="round" />
+  </g>
+
+  <!-- right flank: exhaust puffs drifting past the crop, non-essential -->
+  <g fill="#deeef5">
+    <circle cx="1240" cy="392" r="20" />
+    <circle cx="1310" cy="376" r="14" />
+    <circle cx="1372" cy="386" r="9" />
   </g>
 </svg>

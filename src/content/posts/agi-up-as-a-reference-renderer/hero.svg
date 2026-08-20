@@ -1,8 +1,52 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 600" width="1500" height="600">
   <title>Two pixel-art staircase lines from different draw commands meeting at a corner over a fill region, with a single dark seal pixel planted at the junction and a 6-by-6 grid showing the upscale</title>
-  <rect width="1200" height="630" fill="#fafcfe"/>
-  <!-- native 2x2 inset, top-left: the condition -->
-  <g transform="translate(120 100)">
+  <defs>
+    <pattern id="g" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M30 0H0V30" fill="none" stroke="#d9dfe3" stroke-width="1.5"/>
+    </pattern>
+    <pattern id="G" width="180" height="180" patternUnits="userSpaceOnUse">
+      <path d="M180 0H0V180" fill="none" stroke="#11171d" stroke-opacity="0.18" stroke-width="2"/>
+    </pattern>
+  </defs>
+  <!-- the whole canvas is the 6x upscaled fill region -->
+  <rect width="1500" height="600" fill="#deeef5"/>
+  <!-- line A: thick staircase band from the top-left flank descending to the junction (primary) -->
+  <g fill="#006a90">
+    <rect x="-60" y="0" width="90" height="60"/>
+    <rect x="30" y="30" width="90" height="60"/>
+    <rect x="120" y="60" width="90" height="60"/>
+    <rect x="210" y="90" width="90" height="60"/>
+    <rect x="300" y="120" width="90" height="60"/>
+    <rect x="390" y="150" width="90" height="60"/>
+    <rect x="480" y="180" width="90" height="60"/>
+    <rect x="570" y="210" width="90" height="60"/>
+    <rect x="660" y="240" width="90" height="60"/>
+  </g>
+  <!-- line B: thick staircase band from the junction going down-right (highlight) -->
+  <g fill="#f0b35a">
+    <rect x="780" y="330" width="60" height="60"/>
+    <rect x="840" y="390" width="60" height="60"/>
+    <rect x="900" y="450" width="60" height="60"/>
+    <rect x="960" y="510" width="60" height="60"/>
+    <rect x="1020" y="570" width="60" height="60"/>
+  </g>
+  <!-- right-flank echo: another line's staircase, faint, scene continuation -->
+  <g fill="#006a90" fill-opacity="0.18">
+    <rect x="1260" y="60" width="90" height="60"/>
+    <rect x="1350" y="90" width="90" height="60"/>
+    <rect x="1440" y="120" width="90" height="60"/>
+  </g>
+  <!-- 6x pixel grid over everything, heavier native-cell boundaries every 6 cells -->
+  <rect width="1500" height="600" fill="url(#g)"/>
+  <rect width="1500" height="600" fill="url(#G)"/>
+  <!-- the seal pixel at the junction corner -->
+  <rect x="750" y="300" width="30" height="30" fill="#11171d"/>
+  <!-- fill seeds on each side of the boundary -->
+  <circle cx="990" cy="150" r="10" fill="#555f69"/>
+  <circle cx="630" cy="480" r="10" fill="#555f69"/>
+  <!-- native 2x2 inset panel: the condition before the upscale -->
+  <g transform="translate(380 375)">
+    <rect x="-18" y="-18" width="176" height="176" fill="#fafcfe" stroke="#d9dfe3" stroke-width="2"/>
     <rect x="0" y="0" width="70" height="70" fill="#006a90"/>
     <rect x="70" y="70" width="70" height="70" fill="#f0b35a"/>
     <rect x="70" y="0" width="70" height="70" fill="#deeef5" stroke="#d9dfe3" stroke-width="2"/>
@@ -10,42 +54,7 @@
     <line x1="118" y1="22" x2="22" y2="118" stroke="#11171d" stroke-width="4" stroke-dasharray="10 8"/>
   </g>
   <!-- arrow: native -> 6x -->
-  <path d="M290 170 L360 170" stroke="#555f69" stroke-width="4" fill="none"/>
-  <path d="M352 158 L372 170 L352 182 Z" fill="#555f69"/>
-  <text x="330" y="150" font-family="IBM Plex Sans" font-size="26" fill="#555f69" text-anchor="middle">6×</text>
-
-  <!-- 6x canvas: 24 x 14 cells of 30px at (400,90) -> 720x420 -->
-  <g transform="translate(400 90)">
-    <!-- fill regions: above line A / right of B (accent) and below (accent) -->
-    <rect x="0" y="0" width="720" height="420" fill="#deeef5"/>
-    <!-- line A: thick staircase band from top-left descending to the junction (primary) -->
-    <g fill="#006a90">
-      <rect x="0" y="60" width="90" height="60"/>
-      <rect x="90" y="90" width="90" height="60"/>
-      <rect x="180" y="120" width="90" height="60"/>
-      <rect x="270" y="150" width="90" height="60"/>
-    </g>
-    <!-- line B: thick staircase band from the junction going down-right (highlight) -->
-    <g fill="#f0b35a">
-      <rect x="360" y="240" width="60" height="60"/>
-      <rect x="420" y="300" width="60" height="60"/>
-      <rect x="480" y="360" width="60" height="60"/>
-    </g>
-    <!-- fill seeds -->
-    <circle cx="540" cy="150" r="10" fill="#555f69"/>
-    <circle cx="180" cy="300" r="10" fill="#555f69"/>
-    <!-- 6x6 pixel grid -->
-    <g stroke="#d9dfe3" stroke-width="1.5" fill="none">
-      <path d="M30 0V420M60 0V420M90 0V420M120 0V420M150 0V420M180 0V420M210 0V420M240 0V420M270 0V420M300 0V420M330 0V420M360 0V420M390 0V420M420 0V420M450 0V420M480 0V420M510 0V420M540 0V420M570 0V420M600 0V420M630 0V420M660 0V420M690 0V420"/>
-      <path d="M0 30H720M0 60H720M0 90H720M0 120H720M0 150H720M0 180H720M0 210H720M0 240H720M0 270H720M0 300H720M0 330H720M0 360H720M0 390H720"/>
-    </g>
-    <!-- native cell boundaries, heavier every 6 cells -->
-    <g stroke="#11171d" stroke-opacity="0.18" stroke-width="2" fill="none">
-      <path d="M180 0V420M360 0V420M540 0V420"/>
-      <path d="M0 180H720M0 360H720"/>
-    </g>
-    <!-- the seal pixel at the junction corner -->
-    <rect x="360" y="210" width="30" height="30" fill="#11171d"/>
-    <rect x="0" y="0" width="720" height="420" fill="none" stroke="#11171d" stroke-width="3"/>
-  </g>
+  <path d="M572 445 L642 445" stroke="#555f69" stroke-width="4" fill="none"/>
+  <path d="M634 433 L654 445 L634 457 Z" fill="#555f69"/>
+  <text x="612" y="425" font-family="IBM Plex Sans" font-size="26" fill="#555f69" text-anchor="middle">6×</text>
 </svg>

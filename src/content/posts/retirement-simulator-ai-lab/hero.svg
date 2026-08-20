@@ -1,47 +1,45 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 600" width="1500" height="600">
   <title>A chart of many overlaid wealth-over-time lines, one per historical start year from 1928 onward, most rising and two sinking to zero after retirement, with a lab flask and a JSON experiment tag beside them</title>
-  <rect width="1200" height="630" fill="#fafcfe"/>
-  <!-- chart panel: x 130..820, baseline y=500, top y=120 -->
+  <rect width="1500" height="600" fill="#fafcfe"/>
+  <!-- gridlines and baseline span the full width; flanks are scene continuation -->
   <g stroke="#d9dfe3" stroke-width="2">
-    <line x1="130" y1="500" x2="820" y2="500"/>
-    <line x1="130" y1="120" x2="130" y2="500"/>
-    <line x1="130" y1="405" x2="820" y2="405" stroke-dasharray="6 8"/>
-    <line x1="130" y1="310" x2="820" y2="310" stroke-dasharray="6 8"/>
-    <line x1="130" y1="215" x2="820" y2="215" stroke-dasharray="6 8"/>
+    <line x1="60" y1="500" x2="1440" y2="500"/>
+    <line x1="60" y1="405" x2="1440" y2="405" stroke-dasharray="6 8"/>
+    <line x1="60" y1="310" x2="1440" y2="310" stroke-dasharray="6 8"/>
+    <line x1="60" y1="215" x2="1440" y2="215" stroke-dasharray="6 8"/>
   </g>
-  <!-- retirement marker -->
-  <line x1="360" y1="120" x2="360" y2="500" stroke="#11171d" stroke-width="3" stroke-dasharray="10 8"/>
-  <text x="372" y="145" font-family="IBM Plex Sans" font-size="26" fill="#11171d">retire</text>
-  <!-- surviving paths, one per start year -->
+  <!-- retirement marker (inside centre crop) -->
+  <line x1="560" y1="95" x2="560" y2="500" stroke="#11171d" stroke-width="3" stroke-dasharray="10 8"/>
+  <text x="572" y="122" font-family="IBM Plex Sans" font-size="26" fill="#11171d">retire</text>
+  <!-- surviving paths, one per start year, running edge to edge -->
   <g fill="none" stroke="#006a90" stroke-width="3" stroke-opacity="0.55" stroke-linejoin="round" stroke-linecap="round">
-    <polyline points="130,470 200,455 270,445 360,430 440,400 520,370 600,330 680,290 760,240 820,200"/>
-    <polyline points="130,470 200,462 270,458 360,450 440,445 520,420 600,405 680,380 760,350 820,330"/>
-    <polyline points="130,470 200,450 270,430 360,415 440,420 520,395 600,360 680,340 760,300 820,270"/>
-    <polyline points="130,470 200,465 270,452 360,440 440,455 520,440 600,425 680,405 760,395 820,380"/>
-    <polyline points="130,470 200,458 270,440 360,420 440,395 520,405 600,375 680,320 760,290 820,240"/>
-    <polyline points="130,470 200,463 270,461 360,455 440,447 520,449 600,430 680,410 760,385 820,360"/>
-    <polyline points="130,470 200,455 270,438 360,410 440,380 520,340 600,300 680,260 760,200 820,150"/>
-    <polyline points="130,470 200,468 270,455 360,445 440,438 520,415 600,398 680,375 760,340 820,300"/>
-    <polyline points="130,470 200,452 270,448 360,436 440,428 520,432 600,412 680,385 760,355 820,320"/>
-    <polyline points="130,470 200,460 270,443 360,425 440,410 520,385 600,350 680,330 760,280 820,230"/>
+    <polyline points="60,470 200,455 340,443 480,425 620,390 760,345 900,295 1040,250 1180,215 1320,192 1440,178"/>
+    <polyline points="60,470 200,463 340,458 480,451 620,446 760,422 900,406 1040,382 1180,352 1320,338 1440,325"/>
+    <polyline points="60,470 200,452 340,432 480,416 620,421 760,396 900,362 1040,340 1180,302 1320,282 1440,262"/>
+    <polyline points="60,470 200,466 340,453 480,441 620,455 760,441 900,426 1040,406 1180,395 1320,388 1440,378"/>
+    <polyline points="60,470 200,459 340,441 480,418 620,388 760,398 900,345 1040,295 1180,262 1320,240 1440,225"/>
+    <polyline points="60,470 200,464 340,461 480,456 620,448 760,450 900,431 1040,411 1180,386 1320,372 1440,358"/>
+    <polyline points="60,470 200,456 340,436 480,405 620,362 760,308 900,252 1040,205 1180,168 1320,148 1440,135"/>
+    <polyline points="60,470 200,468 340,456 480,446 620,438 760,416 900,398 1040,376 1180,341 1320,318 1440,298"/>
+    <polyline points="60,470 200,453 340,448 480,437 620,428 760,432 900,412 1040,386 1180,356 1320,336 1440,318"/>
+    <polyline points="60,470 200,461 340,444 480,426 620,411 760,386 900,351 1040,331 1180,282 1320,252 1440,228"/>
   </g>
-  <!-- the failing inflation cohorts -->
+  <!-- the failing inflation cohorts (hit zero inside the centre crop) -->
   <g fill="none" stroke="#f0b35a" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
-    <polyline points="130,470 200,462 270,458 360,450 440,462 520,472 600,485 680,494 720,500"/>
-    <polyline points="130,470 200,464 270,455 360,447 440,458 520,468 600,478 680,486 760,496 800,500"/>
+    <polyline points="60,470 200,462 340,458 480,451 600,463 680,475 750,486 810,494 860,500"/>
+    <polyline points="60,470 200,464 340,455 480,447 580,457 660,468 720,478 770,489 800,500"/>
   </g>
-  <text x="470" y="535" font-family="IBM Plex Sans" font-size="24" fill="#555f69">1966-79 cohorts hit zero</text>
-  <!-- median line -->
-  <text x="150" y="110" font-family="IBM Plex Sans" font-size="26" fill="#11171d">one line per start year, 1928 onward</text>
-  <!-- lab flask -->
-  <g transform="translate(900 150)">
+  <text x="690" y="540" font-family="IBM Plex Sans" font-size="24" fill="#555f69" text-anchor="middle">1966-79 cohorts hit zero</text>
+  <text x="330" y="80" font-family="IBM Plex Sans" font-size="26" fill="#11171d">one line per start year, 1928 onward</text>
+  <!-- lab flask + JSON tag, centre-right, over a soft halo -->
+  <rect x="880" y="78" width="310" height="452" rx="20" fill="#fafcfe" opacity="0.88"/>
+  <g transform="translate(935 100)">
     <path d="M70,0 H130 V90 L215,300 Q225,330 195,330 H5 Q-25,330 -15,300 L70,90 Z" fill="#deeef5" stroke="#11171d" stroke-width="5" stroke-linejoin="round"/>
     <path d="M40,190 L160,190 L206,306 Q210,318 198,318 H2 Q-10,318 -6,306 Z" fill="#f0b35a"/>
     <line x1="60" y1="0" x2="140" y2="0" stroke="#11171d" stroke-width="7" stroke-linecap="round"/>
     <circle cx="70" cy="240" r="9" fill="#fafcfe"/>
     <circle cx="120" cy="270" r="6" fill="#fafcfe"/>
     <circle cx="95" cy="215" r="5" fill="#fafcfe"/>
-    <!-- JSON tag -->
     <rect x="-40" y="360" width="280" height="54" rx="10" fill="#fafcfe" stroke="#006a90" stroke-width="3"/>
     <text x="100" y="396" font-family="IBM Plex Sans" font-size="26" fill="#006a90" text-anchor="middle">{ "id": "bond-tent" }</text>
   </g>

@@ -1,38 +1,51 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 600" width="1500" height="600">
   <title>A grid of native pixel cells split down the middle: on the left a stair-stepped block line, on the right the same cells with anchor dots projected onto a smooth diagonal stroke</title>
-  <rect width="1200" height="630" fill="#fafcfe"/>
-  <!-- cell grid, 60 px cells, 20 x ~10 -->
+  <rect width="1500" height="600" fill="#fafcfe"/>
+  <!-- cell grid, 60 px cells, 25 x 10 -->
   <g stroke="#d9dfe3" stroke-width="2">
-    <path d="M60 0V630M120 0V630M180 0V630M240 0V630M300 0V630M360 0V630M420 0V630M480 0V630M540 0V630M600 0V630M660 0V630M720 0V630M780 0V630M840 0V630M900 0V630M960 0V630M1020 0V630M1080 0V630M1140 0V630"/>
-    <path d="M0 15H1200M0 75H1200M0 135H1200M0 195H1200M0 255H1200M0 315H1200M0 375H1200M0 435H1200M0 495H1200M0 555H1200M0 615H1200"/>
+    <path d="M60 0V600M120 0V600M180 0V600M240 0V600M300 0V600M360 0V600M420 0V600M480 0V600M540 0V600M600 0V600M660 0V600M720 0V600M780 0V600M840 0V600M900 0V600M960 0V600M1020 0V600M1080 0V600M1140 0V600M1200 0V600M1260 0V600M1320 0V600M1380 0V600M1440 0V600"/>
+    <path d="M0 60H1500M0 120H1500M0 180H1500M0 240H1500M0 300H1500M0 360H1500M0 420H1500M0 480H1500M0 540H1500"/>
   </g>
-  <!-- the line command: from cell (2,7) to cell (17,2), y = 465 - 20*(x-2) in cell units of 60 -->
-  <!-- rasterised cells shaded on both halves -->
+  <!-- one line command spanning the canvas: true line through cell centres (30,510) -> (1470,30), slope -1/3 -->
+  <!-- cells the command rasterised, shaded on both halves (staircase: 1 row up every 3 cols) -->
   <g fill="#deeef5">
-    <rect x="120" y="435" width="60" height="60"/><rect x="180" y="435" width="60" height="60"/><rect x="240" y="375" width="60" height="60"/><rect x="300" y="375" width="60" height="60"/><rect x="360" y="375" width="60" height="60"/><rect x="420" y="315" width="60" height="60"/><rect x="480" y="315" width="60" height="60"/><rect x="540" y="315" width="60" height="60"/>
-    <rect x="600" y="255" width="60" height="60"/><rect x="660" y="255" width="60" height="60"/><rect x="720" y="255" width="60" height="60"/><rect x="780" y="195" width="60" height="60"/><rect x="840" y="195" width="60" height="60"/><rect x="900" y="195" width="60" height="60"/><rect x="960" y="135" width="60" height="60"/><rect x="1020" y="135" width="60" height="60"/>
+    <rect x="0" y="480" width="180" height="60"/>
+    <rect x="180" y="420" width="180" height="60"/>
+    <rect x="360" y="360" width="180" height="60"/>
+    <rect x="540" y="300" width="180" height="60"/>
+    <rect x="720" y="240" width="180" height="60"/>
+    <rect x="900" y="180" width="180" height="60"/>
+    <rect x="1080" y="120" width="180" height="60"/>
+    <rect x="1260" y="60" width="180" height="60"/>
+    <rect x="1440" y="0" width="60" height="60"/>
   </g>
   <!-- left half: block-expanded staircase, ink grey -->
   <g fill="#555f69">
-    <rect x="120" y="455" width="140" height="20"/><rect x="240" y="395" width="200" height="20"/><rect x="420" y="335" width="180" height="20"/>
-    <rect x="240" y="395" width="20" height="80"/><rect x="420" y="335" width="20" height="80"/>
+    <rect x="0" y="500" width="200" height="20"/>
+    <rect x="180" y="440" width="200" height="20"/>
+    <rect x="360" y="380" width="200" height="20"/>
+    <rect x="540" y="320" width="180" height="20"/>
+    <rect x="180" y="440" width="20" height="80"/>
+    <rect x="360" y="380" width="20" height="80"/>
+    <rect x="540" y="320" width="20" height="80"/>
   </g>
   <!-- divider -->
-  <rect x="596" y="0" width="8" height="630" fill="#11171d"/>
-  <!-- right half: anchors projected onto the true segment and joined by one clean stroke -->
-  <!-- segment through cell centres (150,465) -> (1050,165); slope -1/3 -->
-  <line x1="600" y1="315" x2="1050" y2="165" stroke="#006a90" stroke-width="20" stroke-linecap="round"/>
+  <rect x="716" y="0" width="8" height="600" fill="#11171d"/>
+  <!-- right half: anchors projected onto the true segment, joined by one clean stroke -->
+  <line x1="750" y1="270" x2="1470" y2="30" stroke="#006a90" stroke-width="20" stroke-linecap="round"/>
   <g fill="#f0b35a" stroke="#11171d" stroke-width="4">
-    <circle cx="630" cy="305" r="13"/><circle cx="690" cy="285" r="13"/><circle cx="750" cy="265" r="13"/><circle cx="810" cy="245" r="13"/><circle cx="870" cy="225" r="13"/><circle cx="930" cy="205" r="13"/><circle cx="990" cy="185" r="13"/><circle cx="1050" cy="165" r="13"/>
+    <circle cx="810" cy="250" r="13"/><circle cx="870" cy="230" r="13"/><circle cx="930" cy="210" r="13"/><circle cx="990" cy="190" r="13"/><circle cx="1050" cy="170" r="13"/><circle cx="1110" cy="150" r="13"/><circle cx="1170" cy="130" r="13"/>
+    <!-- flank continuation, non-essential -->
+    <circle cx="1230" cy="110" r="13"/><circle cx="1290" cy="90" r="13"/><circle cx="1350" cy="70" r="13"/>
   </g>
-  <!-- ghosted cell-centre anchors and their projection ticks on the right -->
+  <!-- ghosted cell-centre anchors and their sub-cell projection ticks -->
   <g stroke="#006a90" stroke-width="3" stroke-dasharray="6 6" fill="none">
-    <line x1="630" y1="285" x2="630" y2="305"/><line x1="750" y1="285" x2="750" y2="265"/><line x1="810" y1="225" x2="810" y2="245"/><line x1="930" y1="225" x2="930" y2="205"/><line x1="990" y1="165" x2="990" y2="185"/>
-    <circle cx="630" cy="285" r="7"/><circle cx="750" cy="285" r="7"/><circle cx="810" cy="225" r="7"/><circle cx="930" cy="225" r="7"/><circle cx="990" cy="165" r="7"/>
+    <line x1="810" y1="270" x2="810" y2="250"/><line x1="870" y1="270" x2="870" y2="230"/><line x1="990" y1="210" x2="990" y2="190"/><line x1="1050" y1="210" x2="1050" y2="170"/>
+    <circle cx="810" cy="270" r="7"/><circle cx="870" cy="270" r="7"/><circle cx="990" cy="210" r="7"/><circle cx="1050" cy="210" r="7"/>
   </g>
-  <!-- labels -->
+  <!-- labels, inside the centre-crop safe zone -->
   <g font-family="IBM Plex Sans" font-size="30" fill="#11171d">
-    <text x="130" y="560">pixels: which colour is this cell?</text>
-    <text x="640" y="560">commands: which line drew this cell?</text>
+    <text x="330" y="555">pixels: which colour?</text>
+    <text x="760" y="555">commands: which line?</text>
   </g>
 </svg>

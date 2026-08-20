@@ -8,8 +8,8 @@
  * - `site`: identity, canonical origin, locale, featured post, primary navigation.
  * - `author`: byline, tagline, personal links (used in footer, homepage intro, Person JSON-LD).
  * - `series`: id → { title, description, hero? }. Posts reference a series by key; unknown ids fail the build.
- *   `hero.src` is a path under src/assets/ (e.g. "series/finances.png"); without it a series shows its
- *   first post's hero.
+ *   `hero.src` is a path under src/assets/ (e.g. "series/finances.png"). Every series needs its own
+ *   fresh 1500x600 image (never a post's hero) — pages that show a series fail the build without one.
  * - `tags`: id → { label }. Posts may only use tags listed here; add here first.
  */
 import { z } from "astro/zod";

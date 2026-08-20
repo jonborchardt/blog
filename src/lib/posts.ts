@@ -46,23 +46,19 @@ const assetImages = import.meta.glob<ImageMetadata>(
   { eager: true, import: "default" },
 );
 
-/** Series image: configured in src/config/series.ts, else the first post's hero, else the placeholder. */
+/** Series image: every series must configure its own hero in src/config/series.ts (never a post's). */
 export async function getSeriesHero(id: SeriesId): Promise<Hero> {
   const cfg = (series as SeriesRegistry)[id]!.hero;
-  if (cfg) {
-    const src = assetImages[`/src/assets/${cfg.src}`];
-    if (!src)
-      throw new Error(
-        `series "${id}": hero.src "${cfg.src}" not found under src/assets/ → fix the path in src/config/series.ts`,
-      );
-    return { src, alt: cfg.alt };
-  }
-  return (
-    (await getSeriesPosts(id))[0]?.data.hero ?? {
-      src: assetImages["/src/assets/hero-placeholder.png"]!,
-      alt: "Placeholder series image",
-    }
-  );
+  if (!cfg)
+    throw new Error(
+      `series "${id}": no hero configured → draw one (create-hero skill), save it as src/assets/series/${id}.png (1500x600), and set hero in src/config/series.ts`,
+    );
+  const src = assetImages[`/src/assets/${cfg.src}`];
+  if (!src)
+    throw new Error(
+      `series "${id}": hero.src "${cfg.src}" not found under src/assets/ → fix the path in src/config/series.ts`,
+    );
+  return { src, alt: cfg.alt };
 }
 
 export interface SeriesContext {
@@ -120,6 +116,14 @@ export function validatePosts(posts: Pick<Post, "id" | "data">[]): void {
       );
     }
     seenSlugs.set(slug, p.id);
+
+    // Listings crop the hero to its centre 60% (aspect-card), so the 2.5:1 ratio is a hard contract.
+    // (Guarded: unit tests pass bare metadata without a hero; the frontmatter schema requires one.)
+    if (p.data.hero && Math.abs(p.data.hero.src.width / p.data.hero.src.height - 2.5) > 0.01) {
+      errors.push(
+        `${p.id}: hero is ${p.data.hero.src.width}x${p.data.hero.src.height}, not 2.5:1 (1500x600) → regenerate it with the create-hero skill (npm run render-hero -- <slug>)`,
+      );
+    }
 
     if (p.data.series) {
       if (!(p.data.series in series)) {

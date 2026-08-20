@@ -57,8 +57,9 @@
   --text-title: 1.125rem;
   --text-title--line-height: 1.375;
   --text-title--letter-spacing: -0.02em;
-  /* Listing thumbnail ratio → aspect-card (the 1200×630 hero cropped to ~16:9) */
-  --aspect-card: 40 / 21;
+  /* Listing thumbnail ratio → aspect-card. object-cover of the 2.5:1 hero in a 3:2 box
+     shows exactly its centre 60% — heroes keep their key content there. */
+  --aspect-card: 3 / 2;
 }
 
 /* Listing row: thumbnail column + text (PostList, series lists, archive). */
@@ -73,11 +74,6 @@
 /* Tag pill: a link/button to /all-posts/?tag=<id> (post meta rows, listings, archive results). */
 @utility tag-pill {
   @apply bg-muted hover:bg-accent rounded-sm px-1.5 py-0.5 text-xs no-underline;
-}
-
-/* Post hero image cap: never taller than half the viewport. */
-@utility max-h-hero {
-  max-height: 50vh;
 }
 
 /* Tailwind's built-in max-w-prose is a fixed 65ch; point it at our token instead. */

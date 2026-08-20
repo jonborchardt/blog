@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 600" width="1500" height="600">
+  <title>A gridded globe with padlock markers pinned to three coordinates, two of them projecting glowing towers into the sky, while the ISS rides a dashed orbital ring</title>
+  <defs>
+    <linearGradient id="tA" gradientUnits="userSpaceOnUse" x1="850" y1="250" x2="990" y2="153">
+      <stop offset="0" stop-color="#006a90"/>
+      <stop offset="1" stop-color="#deeef5"/>
+    </linearGradient>
+    <linearGradient id="tB" gradientUnits="userSpaceOnUse" x1="600" y1="155" x2="495" y2="39">
+      <stop offset="0" stop-color="#006a90"/>
+      <stop offset="1" stop-color="#deeef5"/>
+    </linearGradient>
+    <g id="lock">
+      <path d="M-7 -30 L-7 -36 A7 7 0 0 1 7 -36 L7 -30" fill="none" stroke="#11171d" stroke-width="4"/>
+      <rect x="-12" y="-30" width="24" height="20" rx="3" fill="#f0b35a" stroke="#11171d" stroke-width="2.5"/>
+      <circle cy="-20" r="3" fill="#11171d"/>
+      <path d="M-6 -10 L0 -1 L6 -10 z" fill="#f0b35a" stroke="#11171d" stroke-width="2"/>
+      <circle r="3.5" fill="#11171d"/>
+    </g>
+    <g id="reticle" fill="none" stroke="#006a90" stroke-width="2.5">
+      <path d="M0 -20 L0 -12"/><path d="M0 12 L0 20"/><path d="M-20 0 L-12 0"/><path d="M12 0 L20 0"/>
+    </g>
+  </defs>
+  <rect width="1500" height="600" fill="#fafcfe"/>
+
+  <!-- flanks: range rings and star specks continuing the scene (non-essential) -->
+  <circle cx="750" cy="320" r="480" fill="none" stroke="#d9dfe3" stroke-width="2.5"/>
+  <circle cx="750" cy="320" r="620" fill="none" stroke="#d9dfe3" stroke-width="3"/>
+  <g fill="#555f69" opacity="0.5">
+    <circle cx="80" cy="90" r="3"/><circle cx="160" cy="210" r="2.5"/><circle cx="60" cy="380" r="2.5"/>
+    <circle cx="220" cy="470" r="3"/><circle cx="120" cy="540" r="2"/><circle cx="260" cy="120" r="2"/>
+    <circle cx="1280" cy="100" r="3"/><circle cx="1360" cy="240" r="2.5"/><circle cx="1440" cy="420" r="3"/>
+    <circle cx="1300" cy="500" r="2"/><circle cx="1420" cy="90" r="2.5"/><circle cx="1250" cy="380" r="2"/>
+    <circle cx="400" cy="60" r="2"/><circle cx="1100" cy="545" r="2"/><circle cx="340" cy="520" r="2"/>
+  </g>
+
+  <!-- orbit (back half hidden by globe drawn after) -->
+  <ellipse cx="750" cy="320" rx="340" ry="130" transform="rotate(-16 750 320)" fill="none" stroke="#555f69" stroke-width="3" stroke-dasharray="10 12" opacity="0.7"/>
+
+  <!-- globe -->
+  <circle cx="750" cy="320" r="230" fill="#deeef5" stroke="#006a90" stroke-width="4"/>
+  <g fill="none" stroke="#006a90" stroke-width="2.5" opacity="0.35">
+    <ellipse cx="750" cy="320" rx="80" ry="230"/>
+    <ellipse cx="750" cy="320" rx="160" ry="230"/>
+    <path d="M520 320 Q750 380 980 320"/>
+    <path d="M554 200 Q750 250 946 200"/>
+    <path d="M554 440 Q750 490 946 440"/>
+    <path d="M595 150 Q750 190 905 150"/>
+  </g>
+
+  <!-- front of orbit passing before the globe -->
+  <path d="M423 414 A340 130 -16 0 0 1077 226" fill="none" stroke="#555f69" stroke-width="3" stroke-dasharray="10 12" opacity="0.7"/>
+
+  <!-- great-circle link between two anchors -->
+  <path d="M640 400 Q735 300 850 250" fill="none" stroke="#f0b35a" stroke-width="3.5" stroke-dasharray="2 12" stroke-linecap="round"/>
+
+  <!-- tower beams rising radially from anchored points -->
+  <line x1="850" y1="250" x2="990" y2="153" stroke="url(#tA)" stroke-width="14"/>
+  <line x1="600" y1="155" x2="495" y2="39" stroke="url(#tB)" stroke-width="14"/>
+
+  <!-- padlock anchors pinned to coordinates -->
+  <use href="#reticle" x="640" y="400"/>
+  <use href="#reticle" x="850" y="250"/>
+  <use href="#reticle" x="600" y="155"/>
+  <use href="#lock" transform="translate(640 400) scale(1.3)"/>
+  <use href="#lock" transform="translate(850 250) scale(1.3)"/>
+  <use href="#lock" transform="translate(600 155) scale(1.3)"/>
+
+  <!-- ISS on the orbit -->
+  <g transform="translate(1045 189) rotate(-24)">
+    <rect x="-22" y="-5" width="12" height="10" fill="#006a90"/>
+    <rect x="10" y="-5" width="12" height="10" fill="#006a90"/>
+    <rect x="-8" y="-4" width="16" height="8" fill="#11171d"/>
+  </g>
+  <text x="1045" y="150" font-family="IBM Plex Sans" font-size="20" fill="#555f69" text-anchor="middle">ISS</text>
+</svg>

@@ -1,76 +1,124 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 600" width="1500" height="600">
   <title>A play-button video card feeds a queue of URLs into a funnel that sorts claims into three experiment rows, ending in a scoreboard with one verdict per video</title>
-  <rect width="1200" height="630" fill="#fafcfe"/>
+  <rect width="1500" height="600" fill="#fafcfe"/>
 
-  <!-- video card stack (left) -->
-  <g transform="translate(110 150)">
-    <rect x="24" y="24" width="220" height="140" rx="12" fill="#deeef5" stroke="#d9dfe3" stroke-width="3"/>
-    <rect x="12" y="12" width="220" height="140" rx="12" fill="#deeef5" stroke="#d9dfe3" stroke-width="3"/>
-    <rect x="0" y="0" width="220" height="140" rx="12" fill="#11171d"/>
-    <path d="M90 40 L150 70 L90 100 Z" fill="#f0b35a"/>
-    <rect x="0" y="0" width="220" height="140" rx="12" fill="none" stroke="#006a90" stroke-width="3"/>
+  <!-- left flank (non-essential): the endless feed of incoming videos, fading in -->
+  <g opacity="0.3">
+    <g transform="translate(40 90)">
+      <rect width="180" height="112" rx="10" fill="#deeef5" stroke="#d9dfe3" stroke-width="3"/>
+      <path d="M72 32 L120 56 L72 80 Z" fill="#555f69"/>
+    </g>
+    <g transform="translate(95 250)">
+      <rect width="180" height="112" rx="10" fill="#deeef5" stroke="#d9dfe3" stroke-width="3"/>
+      <path d="M72 32 L120 56 L72 80 Z" fill="#555f69"/>
+    </g>
+    <g transform="translate(30 410)">
+      <rect width="180" height="112" rx="10" fill="#deeef5" stroke="#d9dfe3" stroke-width="3"/>
+      <path d="M72 32 L120 56 L72 80 Z" fill="#555f69"/>
+    </g>
+  </g>
+
+  <!-- video card stack (centre-left) -->
+  <g transform="translate(345 105)">
+    <rect x="22" y="22" width="210" height="132" rx="12" fill="#deeef5" stroke="#d9dfe3" stroke-width="3"/>
+    <rect x="11" y="11" width="210" height="132" rx="12" fill="#deeef5" stroke="#d9dfe3" stroke-width="3"/>
+    <rect x="0" y="0" width="210" height="132" rx="12" fill="#11171d"/>
+    <path d="M84 36 L142 66 L84 96 Z" fill="#f0b35a"/>
+    <rect x="0" y="0" width="210" height="132" rx="12" fill="none" stroke="#006a90" stroke-width="3"/>
   </g>
 
   <!-- queue: videos.md lines -->
-  <g transform="translate(110 340)" font-family="IBM Plex Sans" font-size="20" fill="#11171d">
+  <g transform="translate(345 320)" font-family="IBM Plex Sans" font-size="20" fill="#11171d">
     <text x="0" y="0" font-weight="600">videos.md</text>
     <g stroke="#555f69" stroke-width="4" stroke-linecap="round">
-      <line x1="0" y1="24" x2="200" y2="24"/>
-      <line x1="0" y1="52" x2="170" y2="52"/>
-      <line x1="0" y1="80" x2="220" y2="80"/>
-      <line x1="0" y1="108" x2="150" y2="108"/>
+      <line x1="0" y1="26" x2="190" y2="26"/>
+      <line x1="0" y1="56" x2="160" y2="56"/>
+      <line x1="0" y1="86" x2="210" y2="86"/>
+      <line x1="0" y1="116" x2="145" y2="116"/>
     </g>
-    <text x="214" y="30" font-size="16" fill="#006a90">DONE</text>
-    <text x="184" y="58" font-size="16" fill="#006a90">DONE</text>
+    <text x="204" y="32" font-size="16" fill="#006a90">DONE</text>
+    <text x="174" y="62" font-size="16" fill="#006a90">DONE</text>
   </g>
 
   <!-- arrow into funnel -->
   <g stroke="#555f69" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M370 300 H430"/>
-    <path d="M415 285 L432 300 L415 315"/>
+    <path d="M600 300 H655"/>
+    <path d="M640 285 L657 300 L640 315"/>
   </g>
 
   <!-- funnel (centre) -->
   <g>
-    <path d="M460 190 H740 L640 330 V440 H560 V330 Z" fill="#deeef5" stroke="#006a90" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M675 160 H935 L845 300 V410 H765 V300 Z" fill="#deeef5" stroke="#006a90" stroke-width="4" stroke-linejoin="round"/>
     <!-- claim dots falling in -->
-    <g fill="#006a90"><circle cx="520" cy="230" r="9"/><circle cx="600" cy="215" r="9"/><circle cx="680" cy="240" r="9"/></g>
-    <g fill="#f0b35a"><circle cx="560" cy="265" r="9"/><circle cx="640" cy="280" r="9"/></g>
-    <g fill="#555f69"><circle cx="600" cy="310" r="9"/></g>
-    <text x="600" y="475" font-family="IBM Plex Sans" font-size="20" fill="#11171d" text-anchor="middle">triage</text>
+    <g fill="#006a90"><circle cx="730" cy="200" r="9"/><circle cx="805" cy="185" r="9"/><circle cx="880" cy="210" r="9"/></g>
+    <g fill="#f0b35a"><circle cx="768" cy="238" r="9"/><circle cx="842" cy="252" r="9"/></g>
+    <g fill="#555f69"><circle cx="805" cy="285" r="9"/></g>
+    <text x="805" y="448" font-family="IBM Plex Sans" font-size="20" fill="#11171d" text-anchor="middle">triage</text>
   </g>
 
-  <g transform="translate(790 300)" font-family="IBM Plex Sans" font-size="18" fill="#11171d">
-    <rect x="0" y="0" width="300" height="46" rx="8" fill="#deeef5" stroke="#d9dfe3" stroke-width="3"/>
-    <rect x="0" y="60" width="300" height="46" rx="8" fill="#deeef5" stroke="#d9dfe3" stroke-width="3"/>
-    <rect x="0" y="120" width="300" height="46" rx="8" fill="#fafcfe" stroke="#006a90" stroke-width="4"/>
-    <text x="16" y="30">faithful</text>
-    <text x="16" y="90">half dose</text>
-    <text x="16" y="150" font-weight="600">hybrid</text>
-    <!-- success bars -->
-    <rect x="150" y="14" width="90" height="18" rx="4" fill="#f0b35a"/>
-    <rect x="150" y="74" width="110" height="18" rx="4" fill="#f0b35a"/>
-    <rect x="150" y="134" width="130" height="18" rx="4" fill="#006a90"/>
-  </g>
   <!-- arrow from funnel to rows -->
   <g stroke="#555f69" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M700 380 H770 V383"/>
-    <path d="M755 368 L772 383 L755 398"/>
+    <path d="M880 370 H935"/>
+    <path d="M920 355 L937 370 L920 385"/>
   </g>
 
-  <!-- scoreboard (top right) -->
-  <g transform="translate(790 120)" font-family="IBM Plex Sans" font-size="18" fill="#11171d">
-    <rect x="0" y="0" width="300" height="130" rx="10" fill="#fafcfe" stroke="#d9dfe3" stroke-width="3"/>
-    <text x="16" y="30" font-weight="600">scoreboard</text>
-    <g stroke="#d9dfe3" stroke-width="2"><line x1="0" y1="44" x2="300" y2="44"/><line x1="0" y1="86" x2="300" y2="86"/></g>
-    <rect x="16" y="56" width="120" height="16" rx="3" fill="#555f69"/>
-    <text x="250" y="72" font-weight="600" fill="#006a90">+2</text>
-    <rect x="16" y="100" width="90" height="16" rx="3" fill="#555f69"/>
-    <text x="250" y="116" font-weight="600" fill="#f0b35a">-1</text>
+  <!-- experiment rows (centre-right, lower) -->
+  <g transform="translate(955 300)" font-family="IBM Plex Sans" font-size="18" fill="#11171d">
+    <rect x="0" y="0" width="215" height="44" rx="8" fill="#deeef5" stroke="#d9dfe3" stroke-width="3"/>
+    <rect x="0" y="56" width="215" height="44" rx="8" fill="#deeef5" stroke="#d9dfe3" stroke-width="3"/>
+    <rect x="0" y="112" width="215" height="44" rx="8" fill="#fafcfe" stroke="#006a90" stroke-width="4"/>
+    <text x="14" y="29">faithful</text>
+    <text x="14" y="85">half dose</text>
+    <text x="14" y="141" font-weight="600">hybrid</text>
+    <!-- success bars -->
+    <rect x="118" y="13" width="60" height="18" rx="4" fill="#f0b35a"/>
+    <rect x="118" y="69" width="75" height="18" rx="4" fill="#f0b35a"/>
+    <rect x="118" y="125" width="88" height="18" rx="4" fill="#006a90"/>
   </g>
+
+  <!-- scoreboard (centre-right, upper) -->
+  <g transform="translate(955 110)" font-family="IBM Plex Sans" font-size="18" fill="#11171d">
+    <rect x="0" y="0" width="215" height="130" rx="10" fill="#fafcfe" stroke="#d9dfe3" stroke-width="3"/>
+    <text x="16" y="30" font-weight="600">scoreboard</text>
+    <g stroke="#d9dfe3" stroke-width="2"><line x1="0" y1="44" x2="215" y2="44"/><line x1="0" y1="86" x2="215" y2="86"/></g>
+    <rect x="16" y="56" width="100" height="16" rx="3" fill="#555f69"/>
+    <text x="168" y="72" font-weight="600" fill="#006a90">+2</text>
+    <rect x="16" y="100" width="76" height="16" rx="3" fill="#555f69"/>
+    <text x="168" y="116" font-weight="600" fill="#f0b35a">-1</text>
+  </g>
+
   <!-- feedback loop arrow: rows up to scoreboard -->
   <g stroke="#555f69" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 8">
-    <path d="M1110 320 H1140 V185 H1105"/>
-    <path d="M1120 170 L1103 185 L1120 200"/>
+    <path d="M1178 340 H1195 V175 H1185"/>
+    <path d="M1198 160 L1183 175 L1198 190"/>
+  </g>
+
+  <!-- right flank (non-essential): the scoreboard's growing verdict history, fading out -->
+  <g opacity="0.3">
+    <g transform="translate(1250 130)">
+      <rect x="0" y="0" width="200" height="40" rx="8" fill="#deeef5" stroke="#d9dfe3" stroke-width="3"/>
+      <rect x="14" y="12" width="90" height="16" rx="3" fill="#555f69"/>
+      <rect x="150" y="12" width="36" height="16" rx="3" fill="#006a90"/>
+    </g>
+    <g transform="translate(1280 210)">
+      <rect x="0" y="0" width="200" height="40" rx="8" fill="#deeef5" stroke="#d9dfe3" stroke-width="3"/>
+      <rect x="14" y="12" width="110" height="16" rx="3" fill="#555f69"/>
+      <rect x="150" y="12" width="36" height="16" rx="3" fill="#f0b35a"/>
+    </g>
+    <g transform="translate(1245 290)">
+      <rect x="0" y="0" width="200" height="40" rx="8" fill="#deeef5" stroke="#d9dfe3" stroke-width="3"/>
+      <rect x="14" y="12" width="70" height="16" rx="3" fill="#555f69"/>
+      <rect x="150" y="12" width="36" height="16" rx="3" fill="#006a90"/>
+    </g>
+    <g transform="translate(1285 370)">
+      <rect x="0" y="0" width="200" height="40" rx="8" fill="#deeef5" stroke="#d9dfe3" stroke-width="3"/>
+      <rect x="14" y="12" width="100" height="16" rx="3" fill="#555f69"/>
+      <rect x="150" y="12" width="36" height="16" rx="3" fill="#006a90"/>
+    </g>
+    <g transform="translate(1255 450)">
+      <rect x="0" y="0" width="200" height="40" rx="8" fill="#deeef5" stroke="#d9dfe3" stroke-width="3"/>
+      <rect x="14" y="12" width="84" height="16" rx="3" fill="#555f69"/>
+      <rect x="150" y="12" width="36" height="16" rx="3" fill="#f0b35a"/>
+    </g>
   </g>
 </svg>

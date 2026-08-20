@@ -29,7 +29,9 @@ const toc = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
 const showToc = toc.length >= 3;
 const { hero, ogImage } = post.data;
 // Social image: bespoke ogImage, else the card generated at /og/<slug>.png (see src/pages/og/).
-const image = ogImage?.src ?? `/og/${postSlug(post)}.png`;
+// ogImage.src is already base-prefixed, so absolutize it directly — absoluteUrl()/href() would
+// prefix the base a second time. The /og/ path is root-relative; BaseLayout absolutizes it.
+const image = ogImage ? new URL(ogImage.src, Astro.site).toString() : `/og/${postSlug(post)}.png`;
 ---
 
 <BaseLayout
@@ -101,15 +103,15 @@ const image = ogImage?.src ?? `/og/${postSlug(post)}.png`;
       }
     </header>
 
-    <figure class="relative left-1/2 mt-10 w-screen -translate-x-1/2">
+    <figure class="mt-10">
       <Image
         src={hero.src}
         alt={hero.alt}
-        widths={[640, 960, 1280, 1920]}
-        sizes="100vw"
+        widths={[640, 960, 1280]}
+        sizes="(min-width: 56rem) 56rem, 100vw"
         loading="eager"
         fetchpriority="high"
-        class="max-h-hero w-full object-cover"
+        class="w-full rounded-md border"
       />
     </figure>
 

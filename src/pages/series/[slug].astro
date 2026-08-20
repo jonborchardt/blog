@@ -3,7 +3,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import DraftBadge from "@/components/DraftBadge.astro";
 import { series, SERIES_IDS, type SeriesId } from "@/config/series";
 import { Image } from "astro:assets";
-import { getSeriesPosts, postPath, seriesPath } from "@/lib/posts";
+import { getSeriesHero, getSeriesPosts, postPath, seriesPath } from "@/lib/posts";
 import { formatDate, isoDate } from "@/lib/dates";
 import { readingTime } from "@/lib/reading-time";
 import { href } from "@/lib/url";
@@ -15,9 +15,22 @@ export function getStaticPaths() {
 const id = Astro.params.slug as SeriesId;
 const info = series[id];
 const posts = await getSeriesPosts(id);
+const hero = await getSeriesHero(id);
 ---
 
-<BaseLayout meta={{ title: info.title, description: info.description, path: seriesPath(id) }}>
+<BaseLayout
+  meta={{
+    title: info.title,
+    description: info.description,
+    path: seriesPath(id),
+    // hero.src.src is already base-prefixed, so absolutize it directly — absoluteUrl()/href()
+    // would prefix the base a second time.
+    image: new URL(hero.src.src, Astro.site).toString(),
+    imageAlt: hero.alt,
+    imageWidth: hero.src.width,
+    imageHeight: hero.src.height,
+  }}
+>
   <div class="max-w-wide mx-auto">
     <p class="text-primary eyebrow">
       <a href={href("/series/")} class="hover:underline">All series</a>
@@ -37,8 +50,8 @@ const posts = await getSeriesPosts(id);
                   <Image
                     src={post.data.hero.src}
                     alt={post.data.hero.alt}
-                    width={320}
-                    height={168}
+                    width={540}
+                    height={216}
                     class="aspect-card w-full rounded-md border object-cover"
                   />
                 </a>

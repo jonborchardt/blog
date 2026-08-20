@@ -77,8 +77,8 @@ function PostRow({
         <img
           src={doc.hero.src}
           alt={doc.hero.alt}
-          width={320}
-          height={168}
+          width={540}
+          height={216}
           loading="lazy"
           className="aspect-card w-full rounded-md border object-cover"
         />

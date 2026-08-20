@@ -1,8 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 600" width="1500" height="600">
   <title>A row of episode reels feeding a graph of claim nodes, two of which are joined by a highlighted contradiction edge, with every node tethered back down to a highlighted span on a transcript strip</title>
-  <rect width="1200" height="630" fill="#fafcfe"/>
+  <rect width="1500" height="600" fill="#fafcfe"/>
 
-  <!-- episode reels along the top -->
   <defs>
     <g id="reel">
       <rect x="0" y="0" width="120" height="70" rx="8" fill="#deeef5" stroke="#006a90" stroke-width="3"/>
@@ -16,76 +15,93 @@
       <circle r="18" fill="#deeef5" stroke="#006a90" stroke-width="4"/>
     </g>
   </defs>
-  <use href="#reel" x="200" y="70"/>
-  <use href="#reel" x="380" y="70"/>
-  <use href="#reel" x="560" y="70"/>
-  <use href="#reel" x="740" y="70"/>
-  <use href="#reel" x="920" y="70"/>
-  <text x="130" y="112" font-family="IBM Plex Sans" font-size="22" fill="#555f69" text-anchor="end">episodes</text>
+
+  <!-- flank continuation: faded reels and graph nodes beyond the centre crop -->
+  <g opacity="0.4">
+    <use href="#reel" x="140" y="55"/>
+    <use href="#reel" x="1290" y="55"/>
+    <use href="#node" x="235" y="300"/>
+    <use href="#node" x="1275" y="300"/>
+    <g stroke="#d9dfe3" stroke-width="3" fill="none">
+      <path d="M200 125 C200 200 225 240 235 282"/>
+      <path d="M1350 125 C1350 200 1290 240 1278 282"/>
+      <line x1="253" y1="300" x2="452" y2="262"/>
+      <line x1="1048" y1="262" x2="1257" y2="300"/>
+    </g>
+  </g>
+
+  <!-- episode reels along the top (essential row, centre zone) -->
+  <use href="#reel" x="460" y="55"/>
+  <use href="#reel" x="610" y="55"/>
+  <use href="#reel" x="760" y="55"/>
+  <use href="#reel" x="910" y="55"/>
+  <use href="#reel" x="1060" y="55"/>
+  <text x="430" y="97" font-family="IBM Plex Sans" font-size="22" fill="#555f69" text-anchor="end">episodes</text>
 
   <!-- reels feed down into the graph -->
   <g stroke="#d9dfe3" stroke-width="3" fill="none">
-    <path d="M260 140 C260 200 320 210 350 250"/>
-    <path d="M440 140 C440 200 470 220 470 250"/>
-    <path d="M620 140 C620 190 600 220 600 250"/>
-    <path d="M800 140 C800 200 760 210 740 250"/>
-    <path d="M980 140 C980 200 900 220 880 250"/>
+    <path d="M520 125 C520 185 480 210 470 242"/>
+    <path d="M670 125 C670 185 620 210 610 242"/>
+    <path d="M820 125 C820 185 760 210 750 242"/>
+    <path d="M970 125 C970 185 900 210 890 242"/>
+    <path d="M1120 125 C1120 185 1040 210 1030 242"/>
   </g>
 
   <!-- claim graph -->
   <g stroke="#006a90" stroke-width="3" fill="none">
-    <line x1="350" y1="270" x2="470" y2="270"/>
-    <line x1="470" y1="270" x2="600" y2="270"/>
-    <line x1="470" y1="270" x2="530" y2="350"/>
-    <line x1="600" y1="270" x2="740" y2="270"/>
-    <line x1="740" y1="270" x2="880" y2="270"/>
-    <line x1="740" y1="270" x2="680" y2="350"/>
-    <line x1="880" y1="270" x2="820" y2="350"/>
-    <line x1="350" y1="270" x2="410" y2="350"/>
+    <line x1="470" y1="260" x2="610" y2="260"/>
+    <line x1="610" y1="260" x2="750" y2="260"/>
+    <line x1="750" y1="260" x2="890" y2="260"/>
+    <line x1="890" y1="260" x2="1030" y2="260"/>
+    <line x1="470" y1="260" x2="540" y2="345"/>
+    <line x1="610" y1="260" x2="680" y2="345"/>
+    <line x1="750" y1="260" x2="830" y2="345"/>
+    <line x1="890" y1="260" x2="970" y2="345"/>
+    <line x1="1030" y1="260" x2="970" y2="345"/>
   </g>
-  <!-- contradiction edge: dashed red-ish highlight, drawn with the theme highlight -->
-  <path d="M530 350 C560 400 650 400 680 350" stroke="#f0b35a" stroke-width="6" stroke-dasharray="14 10" fill="none"/>
-  <text x="605" y="445" font-family="IBM Plex Sans" font-size="20" fill="#11171d" text-anchor="middle">contradicts</text>
+  <!-- contradiction edge -->
+  <path d="M680 358 C710 412 800 412 830 358" stroke="#f0b35a" stroke-width="6" stroke-dasharray="14 10" fill="none"/>
+  <text x="755" y="450" font-family="IBM Plex Sans" font-size="20" fill="#11171d" text-anchor="middle">contradicts</text>
 
-  <use href="#node" x="350" y="270"/>
-  <use href="#node" x="470" y="270"/>
-  <use href="#node" x="600" y="270"/>
-  <use href="#node" x="740" y="270"/>
-  <use href="#node" x="880" y="270"/>
-  <use href="#node" x="410" y="350"/>
-  <use href="#node" x="820" y="350"/>
-  <circle cx="530" cy="350" r="18" fill="#f0b35a" stroke="#11171d" stroke-width="4"/>
-  <circle cx="680" cy="350" r="18" fill="#f0b35a" stroke="#11171d" stroke-width="4"/>
-  <text x="130" y="278" font-family="IBM Plex Sans" font-size="22" fill="#555f69" text-anchor="end">claims</text>
+  <use href="#node" x="470" y="260"/>
+  <use href="#node" x="610" y="260"/>
+  <use href="#node" x="750" y="260"/>
+  <use href="#node" x="890" y="260"/>
+  <use href="#node" x="1030" y="260"/>
+  <use href="#node" x="540" y="345"/>
+  <use href="#node" x="970" y="345"/>
+  <circle cx="680" cy="345" r="18" fill="#f0b35a" stroke="#11171d" stroke-width="4"/>
+  <circle cx="830" cy="345" r="18" fill="#f0b35a" stroke="#11171d" stroke-width="4"/>
+  <text x="430" y="268" font-family="IBM Plex Sans" font-size="22" fill="#555f69" text-anchor="end">claims</text>
 
   <!-- tethers from every node down to a transcript span -->
   <g stroke="#006a90" stroke-width="2" stroke-dasharray="4 6" fill="none">
-    <line x1="350" y1="288" x2="300" y2="500"/>
-    <line x1="470" y1="288" x2="420" y2="500"/>
-    <line x1="600" y1="288" x2="600" y2="500"/>
-    <line x1="740" y1="288" x2="780" y2="500"/>
-    <line x1="880" y1="288" x2="930" y2="500"/>
-    <line x1="410" y1="368" x2="360" y2="500"/>
-    <line x1="820" y1="368" x2="860" y2="500"/>
+    <line x1="470" y1="278" x2="445" y2="494"/>
+    <line x1="610" y1="278" x2="582" y2="494"/>
+    <line x1="750" y1="278" x2="805" y2="494"/>
+    <line x1="890" y1="278" x2="935" y2="494"/>
+    <line x1="1030" y1="278" x2="1085" y2="494"/>
+    <line x1="540" y1="363" x2="522" y2="518"/>
+    <line x1="970" y1="363" x2="985" y2="518"/>
   </g>
   <g stroke="#11171d" stroke-width="2.5" stroke-dasharray="4 6" fill="none">
-    <line x1="530" y1="368" x2="510" y2="500"/>
-    <line x1="680" y1="368" x2="700" y2="500"/>
+    <line x1="680" y1="363" x2="685" y2="518"/>
+    <line x1="830" y1="363" x2="845" y2="518"/>
   </g>
 
-  <!-- transcript strip -->
-  <rect x="200" y="500" width="840" height="60" rx="8" fill="#fafcfe" stroke="#d9dfe3" stroke-width="3"/>
+  <!-- transcript strip: runs into both flanks as continuation -->
+  <rect x="80" y="478" width="1340" height="64" rx="8" fill="#fafcfe" stroke="#d9dfe3" stroke-width="3"/>
   <g fill="#d9dfe3">
-    <rect x="220" y="516" width="60" height="10" rx="5"/><rect x="290" y="516" width="30" height="10" rx="5"/><rect x="330" y="516" width="70" height="10" rx="5"/><rect x="410" y="516" width="40" height="10" rx="5"/><rect x="460" y="516" width="90" height="10" rx="5"/><rect x="560" y="516" width="50" height="10" rx="5"/><rect x="620" y="516" width="70" height="10" rx="5"/><rect x="700" y="516" width="40" height="10" rx="5"/><rect x="750" y="516" width="80" height="10" rx="5"/><rect x="840" y="516" width="60" height="10" rx="5"/><rect x="910" y="516" width="100" height="10" rx="5"/>
-    <rect x="220" y="536" width="90" height="10" rx="5"/><rect x="320" y="536" width="40" height="10" rx="5"/><rect x="370" y="536" width="60" height="10" rx="5"/><rect x="440" y="536" width="30" height="10" rx="5"/><rect x="480" y="536" width="80" height="10" rx="5"/><rect x="570" y="536" width="60" height="10" rx="5"/><rect x="640" y="536" width="40" height="10" rx="5"/><rect x="690" y="536" width="90" height="10" rx="5"/><rect x="790" y="536" width="50" height="10" rx="5"/><rect x="850" y="536" width="70" height="10" rx="5"/><rect x="930" y="536" width="80" height="10" rx="5"/>
+    <rect x="100" y="494" width="60" height="10" rx="5"/><rect x="170" y="494" width="35" height="10" rx="5"/><rect x="215" y="494" width="70" height="10" rx="5"/><rect x="295" y="494" width="40" height="10" rx="5"/><rect x="345" y="494" width="65" height="10" rx="5"/><rect x="480" y="494" width="70" height="10" rx="5"/><rect x="615" y="494" width="80" height="10" rx="5"/><rect x="705" y="494" width="55" height="10" rx="5"/><rect x="850" y="494" width="45" height="10" rx="5"/><rect x="975" y="494" width="75" height="10" rx="5"/><rect x="1120" y="494" width="65" height="10" rx="5"/><rect x="1195" y="494" width="40" height="10" rx="5"/><rect x="1245" y="494" width="70" height="10" rx="5"/><rect x="1325" y="494" width="60" height="10" rx="5"/>
+    <rect x="110" y="518" width="80" height="10" rx="5"/><rect x="200" y="518" width="45" height="10" rx="5"/><rect x="255" y="518" width="65" height="10" rx="5"/><rect x="330" y="518" width="90" height="10" rx="5"/><rect x="430" y="518" width="40" height="10" rx="5"/><rect x="575" y="518" width="55" height="10" rx="5"/><rect x="740" y="518" width="60" height="10" rx="5"/><rect x="890" y="518" width="50" height="10" rx="5"/><rect x="1030" y="518" width="45" height="10" rx="5"/><rect x="1085" y="518" width="80" height="10" rx="5"/><rect x="1175" y="518" width="55" height="10" rx="5"/><rect x="1240" y="518" width="75" height="10" rx="5"/><rect x="1325" y="518" width="70" height="10" rx="5"/>
   </g>
   <!-- highlighted spans where the tethers land -->
   <g fill="#006a90" fill-opacity="0.85">
-    <rect x="290" y="516" width="30" height="10" rx="5"/><rect x="410" y="516" width="40" height="10" rx="5"/><rect x="560" y="516" width="50" height="10" rx="5"/><rect x="750" y="516" width="80" height="10" rx="5"/><rect x="910" y="516" width="100" height="10" rx="5"/>
-    <rect x="320" y="536" width="40" height="10" rx="5"/><rect x="850" y="536" width="70" height="10" rx="5"/>
+    <rect x="420" y="494" width="50" height="10" rx="5"/><rect x="560" y="494" width="45" height="10" rx="5"/><rect x="770" y="494" width="70" height="10" rx="5"/><rect x="905" y="494" width="60" height="10" rx="5"/><rect x="1060" y="494" width="50" height="10" rx="5"/>
+    <rect x="480" y="518" width="85" height="10" rx="5"/><rect x="950" y="518" width="70" height="10" rx="5"/>
   </g>
   <g fill="#f0b35a">
-    <rect x="480" y="536" width="80" height="10" rx="5"/><rect x="690" y="536" width="90" height="10" rx="5"/>
+    <rect x="640" y="518" width="90" height="10" rx="5"/><rect x="810" y="518" width="70" height="10" rx="5"/>
   </g>
-  <text x="130" y="538" font-family="IBM Plex Sans" font-size="22" fill="#555f69" text-anchor="end">transcript</text>
+  <text x="430" y="470" font-family="IBM Plex Sans" font-size="22" fill="#555f69" text-anchor="end">transcript</text>
 </svg>

@@ -101,7 +101,7 @@ const fm = [
   `tags: [${tagIds.join(", ")}]`,
   "hero:",
   "  src: ./hero.png",
-  "  alt: REPLACE ME — describe the hero image (placeholder gray 1200x630 until you replace it)",
+  "  alt: REPLACE ME — describe the hero image (placeholder gray 1500x600 until you replace it)",
   "draft: true",
   "---",
 ].join("\n");
