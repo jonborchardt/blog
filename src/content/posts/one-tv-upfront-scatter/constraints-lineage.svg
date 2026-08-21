@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="622" viewBox="0 0 640 622" font-family="system-ui, sans-serif" font-size="13">
+  <line x1="56" y1="50" x2="56" y2="560" stroke="currentColor" stroke-opacity="0.35" stroke-width="2" stroke-dasharray="5 5" />
+
+  <!-- 2012 -->
+  <text x="46" y="76" text-anchor="end" fill="currentColor" fill-opacity="0.85">2012</text>
+  <circle cx="56" cy="72" r="6" fill="#006a90" />
+  <line x1="62" y1="72" x2="96" y2="72" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5" />
+  <rect x="96" y="60" width="524" height="146" rx="4" fill="#fafcfe" stroke="#006a90" />
+  <rect x="96" y="60" width="524" height="24" rx="4" fill="#deeef5" />
+  <rect x="96" y="76" width="524" height="8" fill="#deeef5" />
+  <line x1="96" y1="84" x2="620" y2="84" stroke="#006a90" stroke-opacity="0.6" />
+  <text x="110" y="77" font-size="12" fill="#11171d">Balsamiq wireframe — Edit Campaign, Constraints panel</text>
+  <text x="112" y="106" fill="#11171d">Min program cluster tRatio</text>
+  <rect x="516" y="94" width="90" height="17" rx="2" fill="#ffffff" stroke="#d9dfe3" />
+  <text x="598" y="107" font-size="12" text-anchor="end" fill="#555f69">0.30</text>
+  <text x="112" y="128" fill="#11171d">Min program blended tRatio</text>
+  <rect x="516" y="116" width="90" height="17" rx="2" fill="#ffffff" stroke="#d9dfe3" />
+  <text x="598" y="129" font-size="12" text-anchor="end" fill="#555f69">0.20</text>
+  <text x="112" y="150" fill="#11171d">Max single program buy %</text>
+  <rect x="516" y="138" width="90" height="17" rx="2" fill="#ffffff" stroke="#d9dfe3" />
+  <text x="598" y="151" font-size="12" text-anchor="end" fill="#555f69">0.05</text>
+  <text x="112" y="172" fill="#11171d">Max single program count</text>
+  <rect x="516" y="160" width="90" height="17" rx="2" fill="#ffffff" stroke="#d9dfe3" />
+  <text x="598" y="173" font-size="12" text-anchor="end" fill="#555f69">50</text>
+  <text x="112" y="194" fill="#11171d">Min program CPM</text>
+  <rect x="516" y="182" width="90" height="17" rx="2" fill="#ffffff" stroke="#d9dfe3" />
+  <text x="598" y="195" font-size="12" text-anchor="end" fill="#555f69">3.00</text>
+
+  <!-- 2013 -->
+  <text x="46" y="254" text-anchor="end" fill="currentColor" fill-opacity="0.85">2013</text>
+  <circle cx="56" cy="250" r="6" fill="#006a90" />
+  <line x1="62" y1="250" x2="96" y2="250" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5" />
+  <rect x="96" y="238" width="524" height="146" rx="4" fill="#fafcfe" stroke="#006a90" />
+  <rect x="96" y="238" width="524" height="24" rx="4" fill="#deeef5" />
+  <rect x="96" y="254" width="524" height="8" fill="#deeef5" />
+  <line x1="96" y1="262" x2="620" y2="262" stroke="#006a90" stroke-opacity="0.6" />
+  <text x="110" y="255" font-size="12" fill="#11171d">Silverlight dialog — Edit Campaign Constraints</text>
+  <text x="112" y="284" fill="#11171d">Min program cluster tRatio</text>
+  <rect x="516" y="272" width="90" height="17" rx="2" fill="#ffffff" stroke="#d9dfe3" />
+  <text x="598" y="285" font-size="12" text-anchor="end" fill="#555f69">0.50</text>
+  <text x="112" y="306" fill="#11171d">Min program blended tRatio</text>
+  <rect x="516" y="294" width="90" height="17" rx="2" fill="#ffffff" stroke="#d9dfe3" />
+  <text x="598" y="307" font-size="12" text-anchor="end" fill="#555f69">0.50</text>
+  <text x="112" y="328" fill="#11171d">Max single program buy %</text>
+  <rect x="516" y="316" width="90" height="17" rx="2" fill="#ffffff" stroke="#d9dfe3" />
+  <text x="598" y="329" font-size="12" text-anchor="end" fill="#555f69">40.00 %</text>
+  <text x="112" y="350" fill="#11171d">Max single program count</text>
+  <rect x="516" y="338" width="90" height="17" rx="2" fill="#ffffff" stroke="#d9dfe3" />
+  <text x="598" y="351" font-size="12" text-anchor="end" fill="#555f69">45</text>
+  <text x="112" y="372" fill="#11171d">Min program CPM</text>
+  <rect x="516" y="360" width="90" height="17" rx="2" fill="#ffffff" stroke="#d9dfe3" />
+  <text x="598" y="373" font-size="12" text-anchor="end" fill="#555f69">$1.00</text>
+
+  <!-- 2017 -->
+  <text x="46" y="432" text-anchor="end" fill="currentColor" fill-opacity="0.85">2017</text>
+  <circle cx="56" cy="428" r="6" fill="#006a90" />
+  <line x1="62" y1="428" x2="96" y2="428" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5" />
+  <rect x="96" y="416" width="524" height="146" rx="4" fill="#fafcfe" stroke="#006a90" />
+  <rect x="96" y="416" width="524" height="24" rx="4" fill="#deeef5" />
+  <rect x="96" y="432" width="524" height="8" fill="#deeef5" />
+  <line x1="96" y1="440" x2="620" y2="440" stroke="#006a90" stroke-opacity="0.6" />
+  <text x="110" y="433" font-size="12" fill="#11171d">Balsamiq wireframe — ONE TV Scenario Editor, Airings</text>
+  <text x="112" y="462" fill="#11171d">Min airing cluster tRatio</text>
+  <rect x="516" y="450" width="90" height="17" rx="2" fill="#ffffff" stroke="#d9dfe3" />
+  <text x="598" y="463" font-size="12" text-anchor="end" fill="#555f69">0.30</text>
+  <text x="112" y="484" fill="#11171d">Min airing blended tRatio</text>
+  <rect x="516" y="472" width="90" height="17" rx="2" fill="#ffffff" stroke="#d9dfe3" />
+  <text x="598" y="485" font-size="12" text-anchor="end" fill="#555f69">0.20</text>
+  <text x="112" y="506" fill="#11171d">Max single airing buy %</text>
+  <rect x="516" y="494" width="90" height="17" rx="2" fill="#ffffff" stroke="#d9dfe3" />
+  <text x="598" y="507" font-size="12" text-anchor="end" fill="#555f69">0.05</text>
+  <text x="112" y="528" fill="#11171d">Max single airing count</text>
+  <rect x="516" y="516" width="90" height="17" rx="2" fill="#ffffff" stroke="#d9dfe3" />
+  <text x="598" y="529" font-size="12" text-anchor="end" fill="#555f69">50</text>
+  <text x="112" y="550" fill="#11171d">Min airing CPM</text>
+  <rect x="516" y="538" width="90" height="17" rx="2" fill="#ffffff" stroke="#d9dfe3" />
+  <text x="598" y="551" font-size="12" text-anchor="end" fill="#555f69">3.00</text>
+
+  <rect x="96" y="580" width="330" height="26" rx="13" fill="#f0b35a" fill-opacity="0.2" stroke="#f0b35a" />
+  <text x="112" y="597" font-size="12" fill="currentColor">only rename in five years: program becomes airing</text>
+</svg>
