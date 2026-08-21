@@ -1,0 +1,284 @@
+---
+title: Buy Side, Sell Side, Same Ratio
+description: Two PrecisionDemand dashboards asked opposite questions of the same TV ad data. One of them turned a 20% time idea into a granted patent.
+publishedAt: 2026-08-21
+series: past-work
+seriesOrder: 8
+tags: [retrospective, adtech, data-viz, d3, patents]
+authority: 'E:\github2\Labs'
+hero:
+  src: ./hero.png
+  alt: A dense table of TV airings — station, day, hour, program, brand, CPM — with each row ending in a strip of industry icon cards shaded yellow through bright green by fit score, beside a column of industry filter bars
+draft: true
+---
+
+import Callout from "@/components/blog/Callout.astro";
+import Figure from "@/components/blog/Figure.astro";
+import VizFigure from "@/components/blog/VizFigure.astro";
+import InversionViz from "./inversion-viz.svg";
+import sellSideShot from "./sell-side.png";
+import beforeShot from "./industry-rankings-before.png";
+import sweptShot from "./industry-rankings-swept.png";
+
+When I built the [portfolio I froze in 2018](/labs-2018-snapshot/), two of the cards on it were
+almost the same picture. Both were dashboards full of bars and bubbles, built from the same pile of
+scripts, running on the same TV ad data. The card copy is what separated them. One asked how well
+an industry was buying its airtime. The other asked, of a single minute of airtime, which industry
+should be buying it.
+
+That second question is the one I am proudest of asking. It started as a 20% time idea, ended up in
+front of paying customers, and eventually became a granted patent with my name on it. But the first
+one is not the warm-up act, and I want to be careful about that, because for years I described it
+that way and it was not true. Industry Ratings was a real product with real customers and it is
+still, eight years later, the more interesting thing to sit down and _use_.
+
+## The transaction has two sides
+
+A TV ad buy is a transaction, and every transaction can be looked at from either end of it.
+
+The advertiser — or more usually its agency — is on the **buy side**. It has a product, a budget,
+and an idea of who should be watching. Its question is: across all the airtime I bought last year,
+how well did I actually reach those people, and did I overpay for the privilege?
+
+The network is on the **sell side**. It has inventory: a specific station, on a specific day, in a
+specific hour, running a specific program, with a specific audience sitting in front of it. Its
+question is the mirror image: given this one slot, which advertiser's audience does it fit best,
+and what should I be charging them for it?
+
+The data underneath is identical. Airings, audiences, prices. What flips is which side of the join
+you hold still.
+
+<VizFigure
+  name="The same data read from the buy side and from the sell side"
+  summary="On the buy side, every airing an industry ever bought collapses into one score for that industry, which is then ranked against the other industries. On the sell side, a single airing fans out into all 23 industries ranked by how well they fit that one slot. Same data, same tRatio, inverted question."
+>
+  <InversionViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
+
+Two dashboards came out of that, `IndustryRankings` and `sellSide`. They shared the same chart
+library — a folder of scripts all prefixed `pd`, for PrecisionDemand, the TV ad-tech startup where
+I was the sole UI developer from 2010 until AOL acquired us in 2014. Everything on either screen is
+mine, design and code, which is a sentence I get to write about exactly one period of my career.
+
+<Callout variant="note" title="Everything you are about to see is demo data">
+  Every advertiser, brand, campaign and rating number in these screenshots is fake — built for
+  demos, never a real client's media plan. The industry names are the real product's, including its
+  real typos.
+</Callout>
+
+## tRatio, the number both sides argued with
+
+Both dashboards are built on one metric, and it is worth understanding before looking at either,
+because every bar on both screens is some function of it.
+
+**tRatio** — targeting ratio — is a correlation coefficient between two vectors: the audience the
+advertiser wants, and the audience the media actually delivered. The product's own help text
+described it as measuring "how many sums of squares in the shape of the target vector are matched
+by the media vector", normalized onto an absolute scale from $-1$ to $+1$:
+
+- $+1$ means the media bought is a perfect match for the target.
+- $0$ means the buy is effectively random — under the normalization, a match for the average of the
+  US population.
+- $-1$ means the buy is the _opposite_ of what it should be. The example in our own help text was
+  senior life insurance advertised on Cartoon Network.
+
+The property we cared about was that it is comparable across industries. A tRatio of $+0.5$ in
+cosmetics means the same quality of match as $+0.5$ in power tools, even though the underlying
+audiences and buyer counts are nothing alike. That is what makes a leaderboard of unrelated
+industries a sane thing to draw at all.
+
+Around it sat two prices. **CPM** is cost per thousand impressions, standardized to a thirty-second
+spot — we found spot cost scaled roughly linearly with ad seconds, so a fifteen-second ad's CPM got
+doubled to compare fairly. And **tCPM** is simply
+
+$$
+\text{tCPM} = \frac{\text{CPM}}{\text{tRatio}}
+$$
+
+the price of a thousand impressions divided by how well they were targeted: cost per usefully
+targeted thousand. Lower is better. Cost estimates came from SQAD clearing rates, impressions from
+Nielsen, and the targeting from our own modelling.
+
+I do not know who coined tRatio, or why it was the one piece of vocabulary that survived every
+rewrite of the platform from 2011 to 2018. It was already there when I started drawing screens for
+it.
+
+## Buy side: how well is your industry buying?
+
+`IndustryRankings` shipped under the name **PD Industry Ratings**, and its headline was a question
+posed directly to whoever was looking at it: _How well do the top agencies reach their target
+audience?_
+
+<Figure
+  caption="PD Industry Ratings, full data range. Demo data; the industry list is the shipped one, misspellings included."
+  width="wide"
+  zoom
+>
+  <img
+    src={beforeShot.src}
+    width="1440"
+    height="900"
+    alt="A dashboard headed 'How well do the top agencies reach their target audience?' with three side-by-side horizontal bar charts labelled tRatio, tCPM and CPM sharing one column of industry names, two bubble charts below them titled tImps vs Spend and tRatio vs tCPM, a left rail of six small histograms, and a Time Period impressions strip across the footer"
+  />
+</Figure>
+
+The top band is three horizontal bar charts sharing a single column of labels — tRatio, tCPM, CPM,
+one row per industry. It reads like a leaderboard, but note the sort: the rows are ordered by
+**tCPM ascending**, cheapest useful impressions first, and the tRatio bars are left to fall where
+they may. That was deliberate. The industry with the best targeting is not the industry getting the
+best deal, and putting the two next to each other in tCPM order makes the mismatch impossible to
+miss. Senior Life Insurance sits at the top with a tRatio of 0.37 and a tCPM of $8.06. Music, three
+rows down, has almost as good a tRatio at 0.35 and pays more than twice as much for it.
+
+Below the bars, two bubble charts do the same job geometrically: targeted impressions against
+spend, and tRatio against tCPM, with bubble radius carrying a third variable. The help text told
+you where to look — bottom and to the right is most efficient — and the bubbles that sat away from
+the diagonal were the conversation.
+
+Down the left rail are six histograms — tRatio, tCPM, CPM, Spend, Impressions, tImps — and every
+one of them is a filter. Click a bar, or drag across a range of them, and the whole page recomputes.
+There is a dataset menu in the navbar with twenty industries in it plus a TV-overall set, so you
+could either compare everyone or go and live inside one vertical.
+
+And then across the bottom, the thing this whole post exists to show you.
+
+## The sweep
+
+Every dashboard I built in this era had a strip of impressions along the footer with a brush on it.
+Drag a window across the time axis and everything above refilters — instantly, no submit button, no
+page load. Internally we just called it the sweep, and it is the single interaction I would demo
+first if you gave me one minute.
+
+I dragged the brush across the window from 19 January to 10 November 2011. Here is the same page,
+same dataset, one gesture later.
+
+<Figure
+  caption="After sweeping the footer brush to 01/19/2011 through 11/10/2011. Same page, same dataset; the header now shows the range with a reset link."
+  width="wide"
+  zoom
+>
+  <img
+    src={sweptShot.src}
+    width="1440"
+    height="900"
+    alt="The same dashboard after the footer brush has been dragged to a highlighted window between January and November 2011: the industry rows have reordered, Term has moved to third place, two industries at the bottom have lost their bars entirely, the bubble charts have re-laid out on compressed axes, and the footer strip shows the selected range with a reset link"
+  />
+</Figure>
+
+Open both at full size and put them side by side, because the interesting part is what did _not_
+stay put:
+
+|                           | Full range (May 2010 to Feb 2013) | Swept (Jan to Nov 2011)         |
+| ------------------------- | --------------------------------- | ------------------------------- |
+| Top row                   | Senior Life Insurance, tCPM $8.06 | Senior Life Insurance, tCPM $7.40 |
+| Third row                 | Life Insurance Investment         | **Term**                        |
+| Term                      | 9th, tRatio 0.21, tCPM $25.25     | **3rd**, tRatio 0.25, tCPM $20.46 |
+| Life Insurance Investment | 3rd                               | 19th, and no bars at all        |
+| Music                     | tRatio 0.35                       | tRatio 0.29                     |
+| tCPM range                | $8.06 to $62.69                   | $7.40 to $38.74                 |
+| Spend axis                | $0 to $250MM                      | $0 to $70MM                     |
+
+Term insurance climbs from ninth to third, and its targeting _improves_ inside the window rather
+than merely getting cheaper. Two industries — Life Insurance Investment and Exercise Equipment —
+keep their labels but lose their bars entirely, because inside those ten months they have no
+qualifying airings at all. Both bubble charts rescale their axes and re-lay out completely. The
+left-rail histograms redraw. The header grows a range and a reset link.
+
+None of that is a page load. It is [crossfilter](https://github.com/crossfilter/crossfilter) doing
+the set arithmetic and [dc.js](https://dc-js.github.io/dc.js/) redrawing every chart that shares the
+dimension, in the browser, on a laptop from the early 2010s. If you have never used one of these,
+the dc.js homepage still has the canonical demo on it — click a bar or sweep the timeline and watch
+everything else move. That reactive feel is the entire pitch, and it is also the reason a static
+screenshot of any of this work undersells it so badly.
+
+<Callout variant="tip" title="Why an old chart library still deserves the credit">
+  Crossfilter keeps every record in memory and maintains incrementally-updated indexes per
+  dimension, so a filter change is a set intersection rather than a query. That is why the sweep
+  feels like dragging a physical object instead of like waiting. Adopting it — and dc.js on top of
+  it — was itself one of the 20% time bets that stuck.
+</Callout>
+
+## Sell side: one slot, twenty-three answers
+
+Now turn the question around.
+
+<Figure
+  caption="PD Sell Side: 15,502 airings, each one carrying its 23 ranked industry-fit cards. Demo data."
+  width="wide"
+  zoom
+>
+  <img
+    src={sellSideShot.src}
+    width="1440"
+    height="900"
+    alt="A dashboard headed 'PD Sell Side' showing 15,502 of 15,502 records selected above a dense table of TV airings; each row lists station, day, hour, program, current brand, current and optimal CPM, deltas and tRatio, then a strip of industry pictogram cards shaded yellow through green by fit score, with station, day and hour histograms down the left and a Sort Cards by toggle plus industry and metric filters down the right"
+  />
+</Figure>
+
+The header says `15,502 selected out of 15,502 records`, which is crossfilter's row count and the
+first thing that changes when you touch anything. Down the left are Station, Day and Hour. Down the
+right are the metrics: Industry, tRatio, tRatio Delta, tCPM, Optimal CPM, CPM Delta, CPM Delta %,
+Impressions — every one of them a filter, and a `Sort Cards by` toggle that flips the ranked cards
+between alphabetical and tRatio order.
+
+The middle is the actual invention. Each row is one airing, and it starts with the facts: station,
+day, hour, program, the brand currently in that slot and its industry. Then the money — current CPM,
+optimal CPM, the delta between them, the revenue delta, the tRatio delta. Then twenty-three columns
+headed `1st` through `23rd`.
+
+Those columns are the answer. For that one airing, all twenty-three industries in the model are
+scored on how well their target audience matches the people actually watching, and the columns hold
+them in ranked order — a pictogram for the industry, its fit score above it, and a background shaded
+from yellow up to bright green by how good the fit is. Reading one row left to right, you get: here
+is what is in this slot now, here is what it costs, here is what it _could_ cost, and here in order
+are the twenty-three industries who should be bidding for it.
+
+Take the row for _Ridiculousness_ on MTV, Monday 7am. It is currently running a mascara ad, and the
+`Cur Indy` cell scores that industry's fit at $-0.03$ — effectively worse than random for this
+audience. The two best-fitting industries score 0.39, the third and fourth drop off a cliff to 0.07,
+and the tRatio delta column puts the gap at 0.41. Meanwhile the slot clears at $6.80 CPM against a
+modelled optimum of $7.60.
+
+That row is a sales call. There are exactly two industries worth phoning about this slot, the
+mascara currently in it is not one of them, and the network is under-charging for it anyway.
+
+Fifteen thousand rows of that is not a report. It is a worklist. And because it is crossfilter
+underneath, a salesperson could click their own station, drag the tRatio Delta histogram to just the
+slots where the gap was largest, and be looking at their next twenty phone calls in about four
+seconds.
+
+## Twenty percent time, and then a patent
+
+Nobody asked for this. Every tool in this portfolio was something I dreamt up and built in the time
+the company let us spend on our own ideas, and this one had the most obvious commercial edge of any
+of them, because it was the only one aimed at the side of the transaction that actually owns the
+inventory.
+
+It got built, it got in front of customers, and then it got written up. The application was filed
+on 4 August 2015 as US 14/817,990, _Systems and Methods for Sell-Side TV Ad Optimization_. It
+granted on 18 February 2020 as **US10567820B2**, with me as a co-inventor — nearly two years after
+I had left the company, which is a very normal and very anticlimactic way for a patent to arrive.
+
+<Callout variant="note" title="What I can and cannot tell you about the outcome">
+  Both dashboards served real customers rather than being pure sales theatre — that much I am sure
+  of. I do not have numbers for what either of them did commercially, and I am not going to
+  reconstruct any. The patent is a matter of public record; the revenue is not something I ever saw.
+</Callout>
+
+## What still runs, eight years on
+
+Both pages are static files, and I can still open both of them today. There is no build step and
+never was — `sellSide` does not even have a project file. `IndustryRankings` is funnier: it ships
+with a `.csproj`, a `Web.config`, and a `bin/` folder full of .NET 4.5 DLLs, and needs precisely
+none of it. The page is plain HTML. Any static server will do.
+
+What has rotted is entirely at the edges. Both pages pull jQuery over plain `http://` from a CDN,
+which works on a local server and fails as mixed content on anything served over HTTPS. Both
+reference `../libs/`, `../scripts/` and `../content/` in lowercase against folders actually named
+`Libs`, `Scripts` and `Content` — invisible on Windows, a wall of 404s anywhere case-sensitive. And
+a handful of the interactions are subtly buggy now in ways I did not notice at the time and am not
+going to fix in 2026.
+
+The sweep still works, though. I dragged it to make the screenshot above and it felt exactly the
+way I remember it feeling, which after more than a decade and one acquisition is more than I
+expected from a folder of files I bulk-copied into a portfolio the month I quit.
