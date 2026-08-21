@@ -30,9 +30,9 @@ export const series = {
     },
   },
   "past-work": {
-    title: "Past Work",
+    title: "Seventeen Years of Side Projects",
     description:
-      "Twelve 2001–2018 side projects built in 20% time — flagships like Audience Planner and DocMapper — tracked by tRatio, in a 2018 job-hunt snapshot.",
+      "Nobody assigned any of these. Tools I dreamt up in 20% time at four employers, frozen into a static portfolio in 2018 and reopened in 2026.",
     hero: {
       src: "series/past-work.png",
       alt: "A timeline from 2001 to 2018 lined with small chart-icon tiles marking side projects, four of them highlighted as dial glyphs where the tRatio metric marks a flagship product",

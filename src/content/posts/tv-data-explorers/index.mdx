@@ -18,6 +18,7 @@ import adsplore from "./adsplore1.png";
 import comparer from "./comparer_WithCallouts.png";
 import personReporting from "./personReporting7.png";
 import proposal from "./proposal.gif";
+import proposalStill from "./proposal-still.png";
 
 Not everything I built at PrecisionDemand and AOL was a product. Some of it was just me, handed a
 new pile of data, building the smallest interface that would let me look at it. None of these four
@@ -105,16 +106,20 @@ where.
 
 The last of the four tracks delivery against a media plan while a campaign is running: weekly
 impressions stacked as confirmed, preliminary, and projected, against an expected line the plan
-committed to. The screenshot below is dated 5/5/2017, tracking a flight running into late July —
-squarely inside the ONE TV era at AOL.
+committed to. The capture below steps through the weekly reports from 5/5/2017 to 8/4/2017, so you
+can watch grey projected bars turn orange and then blue as the flight actually delivers — squarely
+inside the ONE TV era at AOL.
 
-<Figure caption="Campaign pacing, 5/5/2017: confirmed, preliminary and projected weekly impressions against the expected delivery line." zoom>
-  <img
-    src={proposal.src}
-    width="518"
-    height="276"
-    alt="Bar chart titled 5/5/2017 showing weekly impressions from May through late July 2017 as stacked confirmed, preliminary and projected bars, tracking closely against a yellow expected-delivery line"
-  />
+<Figure caption="Campaign pacing report by report, 5/5/2017 to 8/4/2017: weekly impressions stacked as confirmed, preliminary and projected against the expected delivery line. With reduced motion the final 8/4/2017 report is shown instead." zoom>
+  <picture>
+    <source srcset={proposalStill.src} media="(prefers-reduced-motion: reduce)" />
+    <img
+      src={proposal.src}
+      width="518"
+      height="276"
+      alt="Bar chart of weekly impressions from May through late July 2017, stacked as confirmed, preliminary and projected bars tracking closely against a yellow expected-delivery line; successive report dates from 5/5/2017 to 8/4/2017 convert the projected bars to confirmed"
+    />
+  </picture>
 </Figure>
 
 None of these four were pitched to anyone outside the building. They were how I answered my own
