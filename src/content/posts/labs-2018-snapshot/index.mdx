@@ -30,7 +30,7 @@ series where I go through it one project at a time.
 ## What the snapshot actually is
 
 A single folder of static files with a card grid on top of it — `default.htm`, split into
-Products, Demos, and Patents. No build step, no framework, no database. Each card is a thumbnail
+Products, Demos, and Patents. No build step, no bundler, nothing to deploy. Each card is a thumbnail
 and a one-line description pointing at a gallery of screenshots, a video, or — for a good number of
 them — the live thing itself.
 
@@ -43,7 +43,7 @@ them — the live thing itself.
     src={landing.src}
     width="1440"
     height="900"
-    alt="A portfolio landing page headed Jonathan Borchardt, with a Products section of cards for Audience Planner, Upfront Platform, Scatter Platform, MCN Demand Platform, Campaign Reporting, a verification and reconciliation tool, Microsoft Bing, Bunny Puddle Games and Attenex DocMapper, above a Demos section starting with a demos overview video and four D3 demos"
+    alt="A portfolio landing page headed Jonathan Borchardt, with a Products section of cards for Audience Planner, Upfront Platform, Scatter Platform, MCN Demand Platform, Campaign Reporting, a verification and reconciliation tool, Microsoft Bing, Bunny Puddle Games and Attenex DocMapper, above a Demos section starting with a demos overview video and three D3 demos"
   />
 </Figure>
 
@@ -59,13 +59,14 @@ for posterity. I was writing for a phone screen next Tuesday.
 
 ## Seventeen years, four employers
 
-Almost everything in the folder was made at work, so the folder has the shape of a career. Attenex
-out of school, then Bing, then a TV ad-tech startup that got acquired, then four years inside the
-acquirer while it was renamed around me.
+Almost everything in the folder was made at work, so the folder has the shape of a career: Attenex
+from 2001 to 2007, straight out of school; Microsoft Bing from 2008 to 2010; PrecisionDemand, a TV
+ad-tech startup, from 2010 to 2014; and then four years inside AOL, which acquired us in 2014 and
+was renamed Oath around me in 2017. I made Principal there in 2016.
 
 <VizFigure
   name="Where the portfolio came from, 2001 to 2018"
-  summary="Four employers back to back with only one real gap, in 2007. The 3D visualization work at Attenex sits at one end and the TV buying platforms at the other; tRatio spans the last seven years, appearing in every generation of the product."
+  summary="Four employers back to back with only one real gap, in 2007: Attenex 2001 to 2007, Microsoft Bing 2008 to 2010, PrecisionDemand 2010 to 2014, and AOL then Oath 2014 to 2018. The 3D visualization work at Attenex sits at one end and the TV buying platforms at the other; tRatio spans 2011 to 2018, appearing in every generation of the product."
 >
   <ArcViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
 </VizFigure>
@@ -90,15 +91,14 @@ happened often enough here that I no longer think it was luck.
 
 There is a number called **tRatio** — targeting ratio — on screen in nearly every product in this
 folder. It is in the 2011 Silverlight app, it is in the D3 rewrites, and it is still there in the
-2018 ONE TV interface, several rewrites and two employers later.
+2018 ONE TV interface, an acquisition and a rebrand later.
 
 A ratio compares two amounts: how much of one thing there is relative to another. tRatio was our
 way of doing that consistently, so that two very different pieces of media could be put next to
 each other and ranked on how well they hit the audience you were paying to reach.
 
 I do not know who coined it, and I never found out why it was the one piece of vocabulary that
-survived every rewrite. I have looked. It just kept getting carried forward, the way a load-bearing
-word does.
+survived every rewrite. It just kept getting carried forward, the way a load-bearing word does.
 
 ## Why it still runs in 2026
 
@@ -118,11 +118,13 @@ browser has Silverlight any more. An ASP.NET MVC explorer needs an API that was 
 ago, though a static equivalent of it survives in the D3 demo set. There is also a slow leak I did
 not design for: several pages load scripts over plain `http://` from CDNs, and one of them, Google's
 old `jsapi` charting library, has been retired outright, which kills two pages dead. Everything
-else — the galleries, the interactive dashboards, the videos — comes up exactly as it did.
+else — the galleries, the interactive dashboards, the videos — still comes up, mostly as it did:
+some of the dashboard interactions are buggy now, one of the early trackers is missing its data,
+and any link whose filename disagrees with itself about capitalization would 404 on a host stricter
+than Windows.
 
-The demos overview video sitting in there was recorded in 2018 for the same job hunt. It is me
-narrating my own work to an imagined interviewer, which makes it the closest thing this archive has
-to a time capsule.
+The demos overview video sitting in there was recorded in 2018 for the same job hunt, which makes
+it the closest thing this archive has to a time capsule.
 
 ## The map of the series
 
