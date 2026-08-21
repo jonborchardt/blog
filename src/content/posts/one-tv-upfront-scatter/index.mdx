@@ -28,9 +28,9 @@ as the senior engineer leading the migration off Silverlight and onto AngularJS,
 2016, as a Principal running a UI team of three and owning everything a user saw on the Linear TV
 advertising platform. The platform was called ONE TV.
 
-Two directories in my 2018 portfolio hold what is left of it: `upfront` and `scatter`. Between them
-they contain shipped screens, a hand-annotated wireframe, and — hiding in the scatter folder — the
-same dialog drawn three times across six years.
+Two directories in [my 2018 portfolio](/labs-2018-snapshot/) hold what is left of it: `upfront` and
+`scatter`. Between them they contain shipped screens, a hand-annotated wireframe, and — hiding in
+the scatter folder — the same dialog drawn three times across five years.
 
 <Callout variant="note" title="The campaigns are not real">
   Every advertiser, budget and rating number in these screenshots is demo data. Verizon, YSL's Black
@@ -54,7 +54,7 @@ group and a demographic, and then you make as many plans as you like against tha
 put them side by side.
 
 <Figure
-  caption="The shipped upfront optimizer, February 2018, with me logged in."
+  caption="The shipped upfront optimizer, early 2018, with me logged in."
   width="wide"
   zoom
 >
@@ -109,9 +109,13 @@ screen.
 
 ## Scatter: the same words, three generations deep
 
+Scatter is the other half of the year. The upfront market sells a quarter or a season in advance;
+scatter is the tactical buying that happens inside the quarter, once budgets have moved and there
+is inventory left over to place against.
+
 The scatter folder is the interesting one, because it did not get cleaned out either. It has the
-2018 product in it, and it also has the drawings and dialogs from six years earlier, sitting in the
-same directory listing as if no time had passed.
+2018 product in it, and it also has the drawings and dialogs it grew out of, sitting in the same
+directory listing as if no time had passed.
 
 <Figure caption="The shipped scatter screen, 2018." width="wide" zoom>
   <img
@@ -129,10 +133,10 @@ Same metric that had been on screen since 2011, still doing the same job — let
 completely different pieces of inventory on how efficiently they reach the people you are paying to
 reach.
 
-Now go back six years in the same folder.
+Now go back to the start of the same folder.
 
 <Figure
-  caption="Three campaign-planner dialogs from the PrecisionDemand era, wireframed in Balsamiq. Every date written into the mock is January 2012."
+  caption="Three campaign-planner dialogs from the PrecisionDemand era, wireframed in Balsamiq. The mock milestone log inside is dated January 2012."
   width="wide"
   zoom
 >
@@ -144,10 +148,9 @@ Now go back six years in the same folder.
   />
 </Figure>
 
-That is the PrecisionDemand campaign planner, and every date I put inside the mock is a January
-2012 date — including the completed-milestones box in the corner, which is a mock of our own
-workflow: "1/3/12 JonB Campaign Started", "1/13/12 Steph Buy Complete". The panel on the left,
-labelled Constraints, is the one to watch.
+That is the PrecisionDemand campaign planner. The completed-milestones box in the corner is a mock
+of our own workflow, and it is dated January 2012: "1/3/12 JonB Campaign Started", "1/13/12 Steph
+Buy Complete". The panel on the left, labelled Constraints, is the one to watch.
 
 Here is what it looked like a year later, after it had been built — as a Silverlight dialog, in the
 product, with a real edit timestamp on it:
@@ -167,16 +170,16 @@ in the same order, with the same default values.
 
 <VizFigure
   name="The constraints dialog across three generations, 2012 to 2017"
-  summary="The same five optimizer constraints appear in the same order in a 2012 Balsamiq wireframe, a 2013 shipped Silverlight dialog and a 2017 ONE TV wireframe. The 2012 and 2017 defaults are identical — 0.30, 0.20, 0.05, 50, 3.00 — while the 2013 build used looser ones. The only wording change in five years is program becoming airing."
+  summary="The same five optimizer constraints appear in the same order in a 2012 Balsamiq wireframe, a 2013 shipped Silverlight dialog and a 2017 ONE TV wireframe. The 2012 and 2017 defaults are identical — 0.30, 0.20, 0.05, 50, 3.00 — while the 2013 build shipped different ones: stricter tRatio floors and a much looser cap on any single buy. The only wording change in five years is program becoming airing."
   data={{
     caption: "Constraint fields and their default values in each generation",
     columns: ["Field", "2012 wireframe", "2013 Silverlight", "2017 wireframe"],
     rows: [
-      ["Min cluster tRatio", "0.30", "0.50", "0.30"],
-      ["Min blended tRatio", "0.20", "0.50", "0.20"],
-      ["Max single buy %", "0.05", "40.00 %", "0.05"],
-      ["Max single count", "50", "45", "50"],
-      ["Min CPM", "3.00", "$1.00", "3.00"],
+      ["Min program / airing cluster tRatio", "0.30", "0.50", "0.30"],
+      ["Min program / airing blended tRatio", "0.20", "0.50", "0.20"],
+      ["Max single program / airing buy %", "0.05", "40.00 %", "0.05"],
+      ["Max single program / airing count", "50", "45", "50"],
+      ["Min program / airing CPM", "3.00", "$1.00", "3.00"],
     ],
   }}
 >
@@ -185,9 +188,10 @@ in the same order, with the same default values.
 
 Minimum cluster tRatio, minimum blended tRatio, maximum single buy percentage, maximum single
 count, minimum CPM per unit. Five years, one rename: what had been a **program** became an
-**airing**, which is a more precise word for the same thing. The 2013 build shipped looser defaults
-than the drawing asked for, which is what happens when a thing meets real data. Otherwise the
-dialog is the dialog.
+**airing**, which is a more precise word for the same thing. The numbers in the boxes did move — the
+2013 build shipped stricter tRatio floors than the drawing asked for and a far looser cap on any
+single buy, which is what happens when a design meets real inventory. But the fields, and their
+order, are the fields.
 
 I do not think anyone decided this. Nobody wrote down a design language and made us follow it. The
 vocabulary was just load-bearing enough that every rewrite carried it forward rather than paying to
@@ -196,10 +200,10 @@ in 2012, mostly out of muscle memory.
 
 ## A detour, August 2014
 
-Right after the acquisition there was an Adap.tv hackathon, and we built a thing called Soda War:
-a D3 choropleth of Coke's and Pepsi's television ad spend across the country over twenty-four
-hours, with a play button that ran the day forward. I did the front end; Sawin Lee, Dyng Au and
-Brendan Kitts did the data. Whether we won it, I genuinely do not remember.
+Right after the acquisition there was an Adap.tv hackathon, and we built a thing called Soda War: a
+D3 map of the United States with a circle at every market, sized by spend, red for Coke and blue for
+Pepsi, and a slider that ran twenty-four hours of it forward. I did the front end; Sawin Lee, Dyng
+Au and Brendan Kitts did the data. Whether we won it, I genuinely do not remember.
 
 <Figure caption="Soda War, the August 2014 hackathon entry." width="wide" zoom>
   <img
