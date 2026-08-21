@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>MapHack (Soda War) — a 2014 hackathon demo</title>
+	<meta
+		name="description"
+		content="A 2014 Adap.TV hackathon demo: a D3 choropleth of Coke vs. Pepsi TV ad spend animating across a day, preserved as-is."
+	/>
+	<meta name="robots" content="noindex, nofollow" />
+	<meta
+		property="og:image"
+		content="https://jonborchardt.github.io/blog/og/google-charts-to-d3.png"
+	/>
+	<link rel="stylesheet" href="app.css" type="text/css" />
+	<link rel="stylesheet" href="libs/bootstrap.min.css" />
+
+	<script src="../d3demo/libs/d3.v3.min.js"></script>
+	<script src="../d3demo/libs/topojson.v1.min.js"></script>
+	<script src="libs/jquery-2.1.1.min.js"></script>
+	<script src="libs/bootstrap.min.js"></script>
+	<script src="libs/moment-2.7.0.min.js"></script>
+	<script src="app.js"></script>
+</head>
+
+<style>
+	body {
+		padding: 25px;
+		max-width: 1005px;
+	}
+
+	.states {
+		fill: rgb(233,229,220);
+	}
+
+	.states-boundary {
+		fill: none;
+		stroke: rgb(219,213,202);
+	}
+
+	svg {
+		background: rgb(178,208,254);
+	}
+</style>
+<body>
+	<h1>Hackathon Aug 2014 Adap.TV</h1>
+	Project: Dynamic spend map
+	<br />Front End: Jon Borchardt
+	<br />Data: Sawin Lee, Dyng Au, Brendan Kitts
+
+	<h1>Objective</h1>
+	Show a map of advertising spending over time between two companies.
+
+	<h1>Output</h1>
+	Using <a href="http://d3js.org/">D3.js</a> we are rendering a map of the united states and showing a circle at each market were we detect spend for Coke or Pepsi.
+	<br />Blue is Pepsi, red is Coke. The size of the circle represents how much money is being spent in that area.
+	<br />The solid circles represent local spend in a specific market. The transparent circles represent spend in a state for a national airing.
+	<br />The slider at the top specifies what time to display.
+
+	<h3>Coke vs Pepsi TV ad spend for 24 hours (4/28/2014)</h3>
+	<div class="span" id="sliderdiv">
+		<button class="btn" id="stop">Play&nbsp;<i class="icon-play"></i></button>
+		<span style="width:98px" id="date"></span>
+
+		<div style="width:1000px"><input type="range" value="0" min="0" max="1439" step="1" id="slider"></div>
+	</div>
+	<div id="map"></div>
+
+	<h1>
+		Next Steps/Ideas
+	</h1>
+	<ul>
+		<li>Fix the code. This is a hack.  All the code is hacky</li>
+		<li>Allow user to select companies and time periods</li>
+		<li>Add sound</li>
+		<li>Show aggregated data for day/week/month/etc.</li>
+		<li>Show impressions or targeted impressions optionally instead of spend</li>
+		<li>Show web traffic for same time period</li>
+		<li>Show non-TV ad spending over same period</li>
+		<li>Auto identify interesting time periods in the data and denote them</li>
+		<li>Show a chart comparing total spend of each company over the same period</li>
+		<li>Much more...</li>
+	</ul>
+
+	<h3>Question or Comments?</h3>
+	Please contact <a href="mailto:jon.borchardt@adap.tv?subject=hackathon814-maphack">jon.borchardt@adap.tv</a>
+</body>
+</html>
