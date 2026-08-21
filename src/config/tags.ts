@@ -28,6 +28,10 @@ export const tags = {
   simulation: { label: "Simulation" },
   "personal-finance": { label: "Personal Finance" },
   investing: { label: "Investing" },
+  d3: { label: "D3" },
+  adtech: { label: "AdTech" },
+  retrospective: { label: "Retrospective" },
+  patents: { label: "Patents" },
 } as const satisfies TagRegistry;
 
 export type TagId = keyof typeof tags;

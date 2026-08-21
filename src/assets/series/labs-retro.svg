@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 600" width="1500" height="600">
+  <title>A timeline from 2001 to 2018 lined with small chart-icon tiles marking side projects, four of them highlighted as dial glyphs where the tRatio metric marks a flagship product</title>
+  <defs>
+    <g id="bar">
+      <rect width="62" height="62" rx="10" fill="#deeef5"/>
+      <rect x="14" y="34" width="10" height="18" fill="#006a90"/>
+      <rect x="28" y="24" width="10" height="28" fill="#006a90"/>
+      <rect x="42" y="14" width="10" height="38" fill="#006a90"/>
+    </g>
+    <g id="flag">
+      <rect width="62" height="62" rx="10" fill="#f0b35a"/>
+      <circle cx="31" cy="31" r="16" fill="none" stroke="#11171d" stroke-width="6"/>
+      <circle cx="31" cy="31" r="5" fill="#11171d"/>
+    </g>
+    <linearGradient id="fadeL" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fafcfe" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#fafcfe" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="fadeR" x1="1" y1="0" x2="0" y2="0">
+      <stop offset="0" stop-color="#fafcfe" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#fafcfe" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1500" height="600" fill="#fafcfe"/>
+  <line x1="40" y1="390" x2="1460" y2="390" stroke="#d9dfe3" stroke-width="3"/>
+  <!-- stems from each tile down to the axis, evenly spaced left-to-right, 2001 -> 2018 -->
+  <line x1="345" y1="262" x2="345" y2="390" stroke="#d9dfe3" stroke-width="2"/>
+  <line x1="419" y1="262" x2="419" y2="390" stroke="#d9dfe3" stroke-width="2"/>
+  <line x1="492" y1="262" x2="492" y2="390" stroke="#d9dfe3" stroke-width="2"/>
+  <line x1="566" y1="262" x2="566" y2="390" stroke="#d9dfe3" stroke-width="2"/>
+  <line x1="640" y1="262" x2="640" y2="390" stroke="#d9dfe3" stroke-width="2"/>
+  <line x1="713" y1="262" x2="713" y2="390" stroke="#d9dfe3" stroke-width="2"/>
+  <line x1="787" y1="262" x2="787" y2="390" stroke="#d9dfe3" stroke-width="2"/>
+  <line x1="861" y1="262" x2="861" y2="390" stroke="#d9dfe3" stroke-width="2"/>
+  <line x1="934" y1="262" x2="934" y2="390" stroke="#d9dfe3" stroke-width="2"/>
+  <line x1="1008" y1="262" x2="1008" y2="390" stroke="#d9dfe3" stroke-width="2"/>
+  <line x1="1081" y1="262" x2="1081" y2="390" stroke="#d9dfe3" stroke-width="2"/>
+  <line x1="1155" y1="262" x2="1155" y2="390" stroke="#d9dfe3" stroke-width="2"/>
+  <!-- tiles, left-to-right 2001 -> 2018; flag = flagship product -->
+  <use href="#bar" x="314" y="200"/>
+  <use href="#bar" x="388" y="200"/>
+  <use href="#flag" x="461" y="200"/>
+  <use href="#bar" x="535" y="200"/>
+  <use href="#bar" x="609" y="200"/>
+  <use href="#flag" x="682" y="200"/>
+  <use href="#bar" x="756" y="200"/>
+  <use href="#bar" x="830" y="200"/>
+  <use href="#flag" x="903" y="200"/>
+  <use href="#bar" x="977" y="200"/>
+  <use href="#bar" x="1050" y="200"/>
+  <use href="#flag" x="1124" y="200"/>
+  <!-- flank fade: non-essential continuation of the axis -->
+  <rect x="0" y="30" width="320" height="540" fill="url(#fadeL)"/>
+  <rect x="1180" y="30" width="320" height="540" fill="url(#fadeR)"/>
+  <text x="345" y="432" font-family="IBM Plex Sans" font-size="26" fill="#555f69" text-anchor="middle">2001</text>
+  <text x="1155" y="432" font-family="IBM Plex Sans" font-size="26" fill="#555f69" text-anchor="middle">2018</text>
+  <text x="750" y="552" font-family="IBM Plex Sans" font-size="36" font-weight="600" fill="#11171d" text-anchor="middle">12 projects, one throughline metric</text>
+</svg>
