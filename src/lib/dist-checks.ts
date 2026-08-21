@@ -122,6 +122,31 @@ export function checkDist({ pages, files, base, site }: DistCheckInput): DistChe
           `${file}: ${desc} lacks width/height → use <Image> / Markdown images for raster files, or pass width and height for SVG <img>`,
         );
       }
+      const rawSrc = img.getAttribute("src") ?? "";
+      if (rawSrc && !/^(https?:)?\/\//.test(rawSrc) && !rawSrc.startsWith("data:")) {
+        let pathname = "";
+        if (rawSrc.startsWith("/")) {
+          const p = new URL(rawSrc, "http://x").pathname;
+          if (!p.startsWith(base + "/") && p !== base) {
+            errors.push(
+              `${file}: ${desc} is a root-relative URL outside the base → import the image so the asset pipeline emits it under the base`,
+            );
+          } else {
+            pathname = p;
+          }
+        } else {
+          const route = "/" + file.replace(/index\.html$/, "");
+          pathname = new URL(rawSrc, `http://x${base}${route}`).pathname;
+        }
+        if (pathname) {
+          const t = routeToFile(pathname, base);
+          if (!t || (!fileSet.has(t) && !docs.has(t))) {
+            errors.push(
+              `${file}: ${desc} does not resolve to a file in dist/ → import the image in MDX and use <Image> or src={img.src}; a literal "./file.png" string is not processed by the build`,
+            );
+          }
+        }
+      }
     }
 
     // --- SEO essentials ---------------------------------------------------------------------------

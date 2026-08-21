@@ -59,19 +59,41 @@ describe("checkDist", () => {
   });
 
   it("flags images without alt, with undeclared-empty alt, or without dimensions", () => {
-    const r = run([
-      page(
-        "index.html",
-        `<img src="a.png" width="1" height="1">
+    const r = run(
+      [
+        page(
+          "index.html",
+          `<img src="a.png" width="1" height="1">
          <img src="b.png" alt="" width="1" height="1">
          <img src="c.png" alt="ok">
          <img src="d.png" alt="" aria-hidden="true" width="1" height="1">`,
-      ),
-    ]);
+        ),
+      ],
+      ["a.png", "b.png", "c.png", "d.png"],
+    );
     expect(r.errors).toEqual([
       expect.stringMatching(/a\.png.*no alt attribute .* add meaningful alt/),
       expect.stringMatching(/b\.png.*empty alt but is not marked decorative/),
       expect.stringMatching(/c\.png.*lacks width\/height/),
+    ]);
+  });
+
+  it("flags img srcs that do not resolve to a dist file", () => {
+    const r = run(
+      [
+        page(
+          "post/index.html",
+          `<img src="./missing.png" alt="x" width="1" height="1">
+         <img src="/outside.png" alt="y" width="1" height="1">
+         <img src="ok.png" alt="z" width="1" height="1">`,
+          { path: "/post/" },
+        ),
+      ],
+      ["post/ok.png"],
+    );
+    expect(r.errors).toEqual([
+      expect.stringMatching(/missing\.png.*does not resolve to a file in dist\/ .* not processed/),
+      expect.stringMatching(/outside\.png.*outside the base/),
     ]);
   });
 

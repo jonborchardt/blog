@@ -15,6 +15,9 @@ draft: false
 import Figure from "@/components/blog/Figure.astro";
 import Comparison from "@/components/blog/Comparison.astro";
 
+import screena from "./screena.png";
+import screenb from "./screenb.png";
+
 The last project in this portfolio, chronologically, is also the smallest gallery in it: one HTML
 page, a video, and two screenshots. It is the ONE TV platform again — the one this series has been
 circling — but pointed at Australia instead of the United States, for **MCN, the Multi Channel
@@ -68,7 +71,7 @@ columns it inherited from the US version.
   zoom
 >
   <img
-    src="./screena.png"
+    src={screena.src}
     width="1311"
     height="1029"
     alt="A campaign builder for tactic group TV TEST, with sidebar fields for Inventory Source
@@ -94,7 +97,7 @@ running rather than being planned:
   zoom
 >
   <img
-    src="./screenb.png"
+    src={screenb.src}
     width="1278"
     height="780"
     alt="A pacing report for a completed campaign running 29/03/17 to 18/04/17, showing spend,

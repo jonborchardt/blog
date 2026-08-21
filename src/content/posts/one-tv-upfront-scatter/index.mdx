@@ -22,6 +22,7 @@ import scatterWireframe from "./scatter-wireframe-2012.png";
 import scatterSilverlight from "./scatter-silverlight-2013.png";
 import scatterShipped from "./scatter-shipped-2018.png";
 import sodaWar from "./soda-war.png";
+import sodaWarVideo from "./soda-war.webm";
 
 AOL bought PrecisionDemand in May 2014, and I spent the four years after that on one product. First
 as the senior engineer leading the migration off Silverlight and onto AngularJS, then, from June
@@ -202,16 +203,22 @@ in 2012, mostly out of muscle memory.
 Right after the acquisition there was an Adap.tv hackathon, and we built a thing called Soda War: a
 D3 map of the United States with a circle at every market, sized by spend, red for Coke and blue for
 Pepsi, and a slider that ran twenty-four hours of it forward. I did the front end; Sawin Lee, Dyng
-Au and Brendan Kitts did the data. Whether we won it, I genuinely do not remember. What survives of
-it is a video, so the frame below is a still, play button and all.
+Au and Brendan Kitts did the data. Whether we won it, I genuinely do not remember. The page still
+runs, so rather than a screenshot, here it is playing — recorded from the revived archive this
+month:
 
-<Figure caption="Soda War, the August 2014 hackathon entry — a still from the video that survives in the archive." width="wide" zoom>
-  <img
-    src={sodaWar.src}
-    width="1440"
-    height="900"
-    alt="A hackathon page headed Hackathon Aug 2014 Adap.TV, project Dynamic spend map, crediting Jon Borchardt on front end and Sawin Lee, Dyng Au and Brendan Kitts on data, above a play button, a time slider and a D3 map of the United States"
-  />
+<Figure caption="Soda War, the August 2014 hackathon entry, playing its twenty-four hours of Coke against Pepsi." width="wide">
+  <video
+    src={sodaWarVideo}
+    controls
+    muted
+    playsinline
+    preload="metadata"
+    poster={sodaWar.src}
+    width="1280"
+    height="800"
+    aria-label="Screen recording of the Soda War page: a time slider sweeps twenty-four hours of 28 April 2014 while red Coke and blue Pepsi circles grow and shrink at each market on a US map, solid for local spend and transparent for national airings"
+  ></video>
 </Figure>
 
 ## What happened to it
