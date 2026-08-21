@@ -1,0 +1,128 @@
+---
+title: ONE TV in Australia
+description: The last thing I shipped before I left Oath — the same TV ad-buying platform, rebuilt on OzTAM currency for an Australian sales house.
+publishedAt: 2026-08-21
+series: past-work
+seriesOrder: 12
+tags: [adtech, retrospective]
+authority: 'E:\github2\Labs'
+hero:
+  src: ./hero.png
+  alt: A campaign builder screen showing Inventory Source "MCN National Subscription TV UAT", DD/MM flight dates, a P18-54 Confectionery target, and a Forecasted Plan panel with OZTAM DEMO TARPS and OZTAM TOTAL PEOPLE TARPS fields
+draft: true
+---
+
+import Figure from "@/components/blog/Figure.astro";
+import Comparison from "@/components/blog/Comparison.astro";
+
+The last project in this portfolio, chronologically, is also the smallest gallery in it: one HTML
+page, a video, and two screenshots. It is the ONE TV platform again, the one I go through in
+[the previous post](/labs-2018-snapshot/) — but pointed at Australia instead of the United States,
+for **MCN, the Multi Channel Network**, an Australian TV ad-sales house. Same product, same UI
+skin, a different country's ratings system underneath it.
+
+## What shipped
+
+I led the UI team that built this during my last stretch at AOL, after it became Oath. MCN's
+deployment did go out the door — it launched. I don't have a rollout story or a launch-day anecdote
+to attach to it; what I have is my own answer to the one question that matters here, which is
+whether the thing actually worked: it did, and it worked the way the US platform worked, but the
+hard parts were different — **currency, time zones, and rating numbers**.
+
+"Currency" in TV ad sales is not money, it is the unit you buy and report against. The US platform
+ran on Nielsen impressions. Australia runs on **OzTAM**, the country's television ratings body, and
+the unit its buyers think in is **TARPs** — target audience rating points — not raw impressions.
+Re-platforming onto that meant the whole forecasting and pacing pipeline had to speak a different
+number for the same idea of "how much audience did this schedule reach."
+
+<Comparison labels={["US platform", "MCN Australia"]}>
+  <Fragment slot="a">
+
+  - Ratings body: **Nielsen**
+  - Unit: **impressions** (imps), priced in CPM
+  - Category taxonomy: US content verticals
+  - Dates: MM/DD
+
+  </Fragment>
+  <Fragment slot="b">
+
+  - Ratings body: **OzTAM**
+  - Unit: **TARPs**, priced in CPT
+  - Category taxonomy: community groups — Factual, Music, General, Movies, Lifestyle, Sport
+  - Dates: DD/MM
+
+  </Fragment>
+</Comparison>
+
+## The UI gives it away before the copy does
+
+Nothing in the screenshots announces "this is the Australian build." What gives it away is
+smaller: the dates read DD/MM, not MM/DD; the inventory source field says "MCN National
+Subscription TV UAT"; and the forecast panel has TARPs columns sitting right next to the impression
+columns it inherited from the US version.
+
+<Figure
+  caption="A tactic group ('TV TEST') being planned against MCN inventory: DD/MM flight dates in
+  late July and August 2017, a P18-54 Confectionery target, and a Forecasted Plan panel with both
+  OZTAM DEMO TARPS and OZTAM TOTAL PEOPLE TARPS columns — unpopulated here, because this is a
+  forecast, not a delivered campaign."
+  zoom
+>
+  <img
+    src="./screena.png"
+    width="1278"
+    height="780"
+    alt="A campaign builder for tactic group TV TEST, with sidebar fields for Inventory Source
+    reading MCN National Subscription TV UAT, Flight Dates 30/07/17 through 20/08/17, and Target
+    P18-54 Confectionery, next to a Forecasted Plan panel with Spend, Target Imps, OZTAM Demo Imps
+    and OZTAM Demo TARPs columns, and an Impression Distribution table broken out by community
+    group: Factual, Music, General, Movies, Lifestyle, Sport"
+  />
+</Figure>
+
+The community groups in that distribution table are worth pausing on: Factual, Music, General,
+Movies, Lifestyle, Sport. That is not the US platform's category list re-skinned — it is a
+different content taxonomy entirely, because Australian subscription TV inventory is organized
+differently than what the US version was built to categorize. Getting a forecast right meant
+mapping into that taxonomy, not just relabeling one that already existed.
+
+The pacing report tells the same story from the delivery side, once a campaign is actually
+running rather than being planned:
+
+<Figure
+  caption="A completed campaign's pacing report: dates in DD/MM again, an OzTAM Total People
+  target, and a weekly breakdown of expected versus delivered impressions."
+  zoom
+>
+  <img
+    src="./screenb.png"
+    width="1311"
+    height="1029"
+    alt="A pacing report for a completed campaign running 29/03/17 to 18/04/17, showing spend,
+    target impressions, and OZTAM total people impressions all tracked as a percentage of
+    expected, above a table of four weekly rows dated 26/03/17, 02/04/17, 09/04/17 and 16/04/17
+    with delivered-versus-expected impressions per week"
+  />
+</Figure>
+
+Same panel shape as the US pacing reports, same idea of tracking delivered against expected week
+by week — just built on OzTAM's numbers instead of Nielsen's, and dated the way Australia dates
+things.
+
+## What I don't have
+
+I don't have a clean one-paragraph description of what ONE TV was as a whole product, or how the
+upfront and scatter sides of it split the work — I've been honest throughout this series about
+where my memory has gaps, and that one is real. What I do have, for this project specifically, is
+enough: it launched, it worked the way the US version worked, and the difference was currency,
+time zones, and rating numbers. That's a smaller claim than a launch narrative, but it's the one I
+can actually stand behind.
+
+## Where this leaves things, in 2026
+
+This is the last project in the portfolio and the last post in this series. The thing I want to
+leave you with is not really about MCN — it's about the folder all twelve of these posts came
+from. In 2026, the entire portfolio [I wrote about reopening](/labs-2018-snapshot/), MCN included,
+came back to life with one command, because none of it was ever more than static files. Nothing in
+here needed a server to keep running. It just needed someone to point a directory listing at it
+again.
