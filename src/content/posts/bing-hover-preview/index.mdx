@@ -1,0 +1,75 @@
+---
+title: The Hover Preview Panel I Built at Bing
+description: In 2008 I joined Bing's UX team and shipped the hover preview panel, the quick-answer module, and results-list features seen by hundreds of millions daily.
+publishedAt: 2026-08-20
+series: past-work
+seriesOrder: 3
+tags: [retrospective, web-development]
+authority: 'E:\github2\Labs\older'
+hero:
+  src: ./hero.png
+  alt: A Bing search results page for the query "bing", showing the results list on the left and a Bing entity card in the right rail with a share icon, description and social links
+draft: true
+---
+
+import Callout from "@/components/blog/Callout.astro";
+import Figure from "@/components/blog/Figure.astro";
+import serpEntityCard from "./serp-entity-card.png";
+
+Attenex was six years on one product. Bing was two years inside a machine that already shipped
+to hundreds of millions of people a day, and it's where I learned what that scale actually does
+to frontend work.
+
+## What I built
+
+I joined Microsoft in March 2008 as an SDE2 on the Bing User Experience team and stayed until
+March 2010. Three things I built shipped to the live results page: the right-side hover preview
+panel, which gave people an instant content preview without leaving the results list; the
+quick-answer module at the top of results, which surfaced a direct answer before anyone needed
+to click through; and a run of core features on the results list itself, the part of the page
+nearly every query touches. All three sat in front of the primary traffic of one of the world's
+largest search engines, which was a different kind of pressure than anything at a startup —
+there was no slow ramp-up of users to catch a bad interaction before it mattered.
+
+The stack underneath was C++, JavaScript, AJAX, and CSS — the vocabulary of pre-framework
+frontend work, where you built and instrumented most of your own plumbing. Alongside the
+shipping work I did rapid prototyping of UX ideas that weren't committed to yet, sat in design
+and code reviews, and worked closely with designers and content producers to get a feature
+from mockup to something that survived contact with real query traffic.
+
+## The other first
+
+Bing was also where I mentored for the first time — three junior engineers, formally assigned
+to me. It wasn't something I'd done before and it wasn't something I was chasing; it came with
+the scale of the team. It stuck, though: a lasting habit of trying to develop the people around
+me followed from it, all the way through the teams I later led.
+
+<Callout variant="note" title="The screenshots below aren't from my tenure">
+  I don't have screenshots from 2008–2010 — nothing survived from the actual hover preview
+  panel or quick-answer module I shipped. The Bing capture in this post's job-hunt portfolio was
+  taken around 2017, seven years after I left the team, and shows a much later redesign of the
+  product: a different logo, a right-rail entity card that didn't exist yet when I was there.
+  It's included as a rough illustration of the product area — a results list next to a right-rail
+  module — not as a picture of the thing I actually built.
+</Callout>
+
+<Figure
+  caption="A Bing search results page, captured around 2017. Included to show the shape of the product — results list on the left, a right-rail module — not as a screenshot of the panel I shipped."
+  zoom
+>
+  <img
+    src={serpEntityCard.src}
+    width="1252"
+    height="828"
+    alt="A Bing search results page for the query bing, with a results list on the left including a site link block and image thumbnails, and a Bing entity card in the right rail with description, logo and social links"
+  />
+</Figure>
+
+## What I'd tell that version of me
+
+The hover preview panel is the one people bring up most when I describe this job, probably
+because it changed a physical habit — you stopped needing to click away from the results to see
+whether a page was worth opening. It's a small interaction by today's standards, but it was one
+of the first times I watched a UI decision play out across a userbase too large to picture.
+That scale is the throughline into everything else in this series: PrecisionDemand and AOL were
+smaller audiences, but I never stopped designing as if someone would find the edge case.
