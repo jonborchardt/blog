@@ -1,0 +1,87 @@
+---
+title: "Media Foundry: Did the Spot Actually Air?"
+description: Media Foundry checked purchased TV spots against ad-watermark detections, block by block, with a drag-to-fix grid for the leftovers.
+publishedAt: 2026-08-20
+series: past-work
+seriesOrder: 6
+tags: [retrospective, adtech]
+authority: 'E:\github2\Labs\verification'
+hero:
+  src: ./hero.png
+  alt: A Media Foundry screenshot for a Carfax campaign on A&E, showing four planned spot-block columns with dollar totals, a Detected but not in plan column, and the first watermark-detection row expanded beneath them
+draft: true
+---
+
+import Callout from "@/components/blog/Callout.astro";
+import Figure from "@/components/blog/Figure.astro";
+import VizFigure from "@/components/blog/VizFigure.astro";
+import ReconciliationViz from "./reconciliation-viz.svg";
+import grid from "./verification-grid.png";
+
+Buying a television spot and having it actually air are two different events, and PrecisionDemand's
+whole pitch — tell an advertiser what market their ad dollars would convert into real sales — falls
+apart if the second event doesn't happen. In 2013 I built the tool that checked whether it had:
+Media Foundry.
+
+## The problem: proof, not just a plan
+
+A media plan is a promise: this spot, on this station, in this week. Whether the station kept that
+promise is a separate question, and the only way to answer it is to watch television and see what
+actually ran. Media Foundry didn't do that watching itself — we paid outside companies to watch for
+an ad watermark embedded in the spot, all over the country, and report back every time and place
+they saw it. Media Foundry's job was to take that stream of detections and reconcile it against the
+plan.
+
+<Callout variant="note" title="The campaign on screen is demo data">
+  Carfax, the market, the dollar figures — none of it is a real client's media plan. Every screenshot
+  in this series uses fake campaign data built for demos, same as the rest of the portfolio.
+</Callout>
+
+## Reading the grid
+
+The one screenshot that survives from Media Foundry is a single week of a Carfax campaign, national,
+on A&E, for a run of :30 spots. It's dense, so here's how to read it.
+
+<Figure
+  caption="Media Foundry: a week of planned Carfax spot blocks (columns) against detected watermark hits (rows), with a Detected but not in plan column on the right."
+  zoom
+>
+  <img
+    src={grid.src}
+    width="731"
+    height="865"
+    alt="The Media Foundry grid for a Carfax campaign, National market, week of 10/13/2013, station A&E. Four column headers show planned spot blocks with time windows, day-of-week patterns and dollar totals such as 3 at $12,000 and 5 at $0. Below them, individual watermark-detection rows list a timestamp and a spot ID, each with a row of circles marking which planned block it matched, and a fifth Detected but not in plan column on the far right. A note at the bottom reads: drag Verification Event here to generate a new Airing."
+  />
+</Figure>
+
+Each column is a planned spot block — a time window, the days of the week it runs, and how many
+spots the plan called for and at what price. Each row is a detection: a timestamp and a spot ID that
+some outside spotter's watermark scan caught airing. The circles between them mark, block by block,
+whether that detection lines up with a block in the plan. The far right column, "Detected but not in
+plan," catches everything that aired without a plan to explain it.
+
+## Reconciling plan against reality
+
+Strip away the grid chrome and three things can happen to any given block or detection: a detection
+matches a planned block, a planned block never gets a matching detection, or a detection shows up
+with nowhere in the plan to put it.
+
+<VizFigure
+  name="How Media Foundry reconciled a media plan against watermark detections"
+  summary="Two planned spot blocks each get every detection they need and are fully matched. A third planned block gets none, staying empty. One leftover detection has no matching block at all and lands in a Detected but not in plan bucket — from there it can be dragged onto the empty block to create a new airing record by hand."
+>
+  <ReconciliationViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
+
+That third case — a detection with nowhere to go — is where the grid stopped being read-only. Drag
+a row out of "Detected but not in plan" and drop it onto a block, and Media Foundry created a new
+airing record on the spot: a way to correct the reconciliation by hand instead of leaving a mismatch
+sitting on the report. It's a small affordance, but it's the one that turns the grid from a status
+display into a tool someone actually used to close out a week.
+
+## Sole developer, one week at a time
+
+Media Foundry was PrecisionDemand-era work, built in 2013 while I was the company's sole UI developer
+— every screen in the product, this one included, was mine to design and build. Reconciliation tools
+are not glamorous; they exist because a claim ("your ad ran") is worth nothing without a way to check
+it, week after week, campaign after campaign. This was PrecisionDemand's way of checking.
