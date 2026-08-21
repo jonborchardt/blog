@@ -1,7 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="560" viewBox="0 0 640 560" font-family="system-ui, sans-serif" font-size="13">
   <defs>
     <marker id="dmap-fg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="currentColor" fill-opacity="0.6"/></marker>
-    <marker id="dmap-hi" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#f0b35a"/></marker>
   </defs>
 
   <!-- concept compass ring: a partial arc, as it appears on screen -->
@@ -83,8 +82,8 @@
   </g>
 
   <text x="34" y="404" fill="currentColor" font-weight="600">inside one cluster</text>
-  <text x="34" y="428" fill="currentColor" fill-opacity="0.85" font-size="12">every dot is a single document, and its</text>
-  <text x="34" y="443" fill="currentColor" fill-opacity="0.85" font-size="12">colour is the category it was marked with</text>
+  <text x="34" y="428" fill="currentColor" fill-opacity="0.85" font-size="12">every dot is a single document, and the dark</text>
+  <text x="34" y="443" fill="currentColor" fill-opacity="0.85" font-size="12">one is the cluster's centre document</text>
   <path d="M262 434 Q 322 438 378 448" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" marker-end="url(#dmap-fg)"/>
 
   <text x="34" y="490" fill="currentColor" fill-opacity="0.85" font-size="12">they spiral outward from the centre</text>

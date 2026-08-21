@@ -1,6 +1,6 @@
 ---
 title: "DocMapper: The Map I Spent Six Years Drawing"
-description: Attenex DocMapper drew a legal document review as a radial map of concept clusters. Six years, an OpenGL to DirectX rewrite, and five patents.
+description: My first job out of school was one screen — a radial map that drew a legal document review as clusters of concepts. Six years, five patents.
 publishedAt: 2026-08-21
 series: past-work
 seriesOrder: 2
@@ -8,7 +8,7 @@ tags: [retrospective, data-viz, graphics, patents]
 authority: 'E:\github2\Labs'
 hero:
   src: ./hero.png
-  alt: The DocMapper cluster view, rings of blue document dots strung along pale spokes inside a dark compass arc, with the concept labels ring, stone and a yellow carat set around the edge
+  alt: The DocMapper cluster view, rings of blue document dots strung along pale spokes inside a dark compass arc, with the concept label ring and a yellow carat set around the edge
 draft: true
 ---
 
@@ -146,9 +146,9 @@ The reviewer guide put this better than any of our marketing did, and I am quoti
 it is the clearest statement of the whole product I have ever found:
 
 <Quote cite="Attenex Patterns Document Mapper Reviewer Guide, version 3.5">
-  Reviewers who are wanting to eliminate large numbers of non-responsive documents from an
+  … reviewers who are wanting to eliminate large numbers of non-responsive documents from an
   assignment may decide to not look for the proverbial "needle in a haystack", but instead look for
-  entire "haystacks with no needles".
+  entire "haystacks with no needles" …
 </Quote>
 
 The guide goes on to say that if a reviewer cannot make a decision about a cluster within a few
@@ -173,12 +173,26 @@ knew the case got to turn it.
 
 ## Building it
 
-The first version was raw OpenGL. Not a scene graph, not a framework — an assignment is more
-primitives than an early-2000s middle layer wanted to hear about, and all of them had to hit the
-screen at an interactive frame rate on whatever workstation a law firm happened to own, which meant
-owning the pipeline myself. The client was C++ and MFC, with SQL underneath. Later I led the
-migration from OpenGL to DirectX, which bought us both performance and better-looking output, and
-the codebase drifted toward C# as the years went on.
+The first version was raw OpenGL. Not a scene graph, not a framework — every document in an
+assignment is its own primitive, and all of them had to hit the screen at an interactive frame rate
+on whatever workstation a law firm happened to own, which meant owning the pipeline myself. The
+client was C++ and MFC, with SQL underneath. Later I led the migration from OpenGL to DirectX, which
+bought us both performance and better-looking output, and the codebase drifted toward C# as the
+years went on.
+
+The hard part was never drawing the dots. It was that the same pixels had to carry several things
+at once. A cluster ring, the dots inside it, the spines running through it, the spine's label, the
+concept compass behind all of it, the hover label that appears over whatever is underneath, the red
+and yellow rings that mark selection and search hits — every one of those wants the same patch of
+screen, and a dense assignment puts thousands of them within a few pixels of each other. Draw them
+naively and the display turns to mud: labels sit on top of labels, a selection ring vanishes under a
+spine, and the reviewer cannot tell what they are pointing at.
+
+What we ended up with was a set of logical layers, each owning one kind of mark and stacked in a
+deliberate order, so that whichever mark matters most at that moment is the one you see. That is
+what makes hovering a cluster feel instant and unambiguous: the label draws above everything, the
+spine it belongs to thickens underneath, and nothing else moves. It is the least visible engineering
+in the whole product, and one of the five patents is exactly it.
 
 Most of the six years were performance work, honestly. Not the fun kind of graphics performance
 either — the kind where a reviewer opens an assignment of a size nobody tested and you spend a week
@@ -196,11 +210,20 @@ VP of engineering wrote a reference that I have kept ever since:
   engineer... I highly recommend Jon for senior software engineering positions.
 </Quote>
 
-## Three more ways to look at the same pile
+## More ways to look at the same pile
 
 The cluster view was the centrepiece, but a document collection has more than one shape, and the
 product eventually grew a view for each of them. All of them shared highlighting: search or select
 in one, and the matching documents lit up yellow in all the others at once.
+
+**Cluster Folders** is the panel filling the right half of the first screenshot, and it is the same
+map again as a folder tree. Each folder group is a spine, labelled with its spine concept and a
+document count; each folder inside it is one cluster, labelled with its top three concepts and a
+count — "ring, engagement ring, wedding band (4)". You can sort the tree alphabetically or in
+*layout* order, which walks the folders in roughly the order the spines sit on the map, so the list
+and the picture agree with each other. At the bottom sit the groups that are not spines: Other, for
+clusters that never landed on one; Not Clustered, which holds the three squares of unmappable
+documents and is where that 86 comes from; and Set-Aside Trays, for everything already decided.
 
 **Bird's Eye** was the small always-whole-map inset, with a rectangle marking your current
 viewport. Click anywhere in it to jump. Unglamorous, and the piece I would keep if I could only
@@ -254,9 +277,9 @@ user interface stays usable when the scene is far too dense for the screen it is
 | US 8,402,395  | System and method for providing a dynamic user interface for a dense three-dimensional scene with a plurality of compasses      |
 
 Read the titles in order and you can watch the product being invented. The dense scene comes first.
-Then the navigation assistance panel, which is Bird's Eye. Then logical layers, which is how labels,
-rings, spines and dots could all occupy the same pixels without turning into mud. Then a plurality
-of compasses, which is what happens when one ring of concepts is not enough.
+Then the navigation assistance panel, which is Bird's Eye. Then logical layers, which is the mud
+problem from "Building it". Then a plurality of compasses, which is what happens when one ring of
+concepts is not enough.
 
 <Callout variant="note" title="A caveat about the dates">
   My own patent records list "issued" dates for these that cannot be right — several are years
@@ -284,8 +307,8 @@ There is one more file in the folder, and it is the one I am least certain about
 It is a capture of an NBC Nightly News item from April 2007 about the Senate Judiciary Committee's
 investigation into missing White House emails, and the monitor in the thumbnail is showing a dark
 interface with a green arc and rings of dots that looks a great deal like ours. I saved it. The
-filename I gave it points at February 2008, which does not match the story's own date, so at least
-one of those two things is wrong.
+filename I gave it points at February 2008, which is most likely just when I saved the clipping
+rather than when the story ran.
 
 That is the whole of what I can establish. The honest version is: I worked on software for finding
 things in email archives, during years when finding things in email archives was on the news, and I

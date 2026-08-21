@@ -222,10 +222,12 @@ production mark governs export.
   of eight federal prosecutors, is questioning the White House about e-mails the Bush
   administration says are missing. NBC's Kelly O'Donnell reports. Nightly News". The thumbnail
   shows a monitor displaying a dark UI with a green arc and rings of blue dots.
-  **Caveat used in the post:** `older/CLAUDE.md` reads the filename as dating a build to Feb 2008,
-  but the story itself is dated April 2007, and nothing in the chain confirms that the software on
-  the monitor is DocMapper. The post presents it as a saved clipping and says plainly what is and
-  is not verifiable.
+  **Caveat used in the post:** `older/CLAUDE.md` reads the filename as dating a build to Feb 2008.
+  The story itself is dated April 2007. These are not in conflict — Feb 2008 is most plausibly when
+  the clipping was saved, not when the segment aired — so the post says exactly that and claims
+  nothing about a build date. Separately, nothing in the chain confirms that the software on the
+  monitor is DocMapper, so the post presents it as a saved clipping and says plainly what is and is
+  not verifiable.
 
 ## Terminology caveats for the writing
 
