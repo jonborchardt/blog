@@ -117,8 +117,9 @@ Two things are genuinely dead. The Silverlight client with its WCF backend canno
 browser has Silverlight any more. An ASP.NET MVC explorer needs an API that was switched off years
 ago, though a static equivalent of it survives in the D3 demo set. There is also a slow leak I did
 not design for: several pages load scripts over plain `http://` from CDNs, and one of them, Google's
-old `jsapi` charting library, has been retired outright, which kills two pages dead. Everything
-else — the galleries, the interactive dashboards, the videos — still comes up, mostly as it did:
+old `jsapi` charting library, has been retired outright — though when I checked while writing this
+series, Google's loader quietly forwards to a modern replacement and the pages still render.
+Everything else — the galleries, the interactive dashboards, the videos — still comes up, mostly as it did:
 some of the dashboard interactions are buggy now, one of the early trackers is missing its data,
 and any link whose filename disagrees with itself about capitalization would 404 on a host stricter
 than Windows.
