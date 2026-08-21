@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PD Industry Ratings — a 2013 crossfilter dashboard</title>
+    <meta
+        name="description"
+        content="The 2013 PrecisionDemand crossfilter dashboard, preserved and served as-is: drag the Time Period strip to filter agency rankings by tRatio, tCPM, CPM and spend."
+    />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta
+        property="og:image"
+        content="https://jonborchardt.github.io/blog/og/google-charts-to-d3.png"
+    />
+    <link href="./libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="./libs/nvd3/nv.d3.min.css" rel="stylesheet" />
+    <link href="./libs/dc/dc.min.css" rel="stylesheet" />
+    <link href="./content/industryRatingStyle.min.css" rel="stylesheet" />
+    <link href="./content/baseStyle.min.css" rel="stylesheet" />
+
+    <script type="text/javascript" src="../maphack/libs/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="./libs/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="./libs/d3/d3.v3.min.js"></script>
+    <script type="text/javascript" src="./libs/crossfilter/crossfilter.min.js"></script>
+    <script type="text/javascript" src="./scripts/pddc.min.js"></script>
+    <script type="text/javascript" src="./libs/nvd3/nv.d3.min.js"></script>
+    <script type="text/javascript" src="./scripts/pdThickLine.min.js"></script>
+    <script type="text/javascript" src="./scripts/pdSpacedMultiBarHorizontalChart.min.js"></script>
+    <script type="text/javascript" src="./scripts/pdBarlessMultiBarHorizontalChart.min.js"></script>
+    <script type="text/javascript" src="./scripts/pdLineChart.min.js"></script>
+    <script type="text/javascript" src="./scripts/baseScript.min.js"></script>
+    <script type="text/javascript" src="./scripts/industryRatingScript.min.js"></script>
+</head>
+
+<body>
+    <nav id="navbar" class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="bs-js-navbar-scrollspy">
+            <ul class="nav navbar-nav">
+                <li><a class="navbar-brand" href="#head">PD Industry Ranking</a></li>
+                <li><a href="#row0">Rankings</a></li>
+                <li><a href="#row1">Targeting</a></li>
+                <li><a href="#row2">Spending</a></li>
+                <li><a href="#row3">History</a></li>
+                <li><a href="#row4">When</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="leftCol">
+        <div id="tRatioChart" class="dc-chart">
+            <div class="filterArea">
+                <strong>tRatio</strong>
+                <span class="reset" style="display: none;">
+                    <span class="filter" style="display: none;"></span>
+                </span>
+                <a class="reset" style="display: none;" href="javascript:dc.filterAll(); dc.redrawAll();">reset</a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div id="tCpmChart" class="dc-chart">
+            <div class="filterArea">
+                <strong>tCPM</strong>
+                <span class="reset" style="display: none;">
+                    <span class="filter" style="display: none;"></span>
+                </span>
+                <a class="reset" style="display: none;" href="javascript:dc.filterAll(); dc.redrawAll();">reset</a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div id="cpmChart" class="dc-chart">
+            <div class="filterArea">
+                <strong>CPM</strong>
+                <span class="reset" style="display: none;">
+                    <span class="filter" style="display: none;"></span>
+                </span>
+                <a class="reset" style="display: none;" href="javascript:dc.filterAll(); dc.redrawAll();">reset</a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div id="costChart" class="dc-chart">
+            <div class="filterArea">
+                <strong>Spend</strong>
+                <span class="reset" style="display: none;">
+                    <span class="filter" style="display: none;"></span>
+                </span>
+                <a class="reset" style="display: none;" href="javascript:dc.filterAll(); dc.redrawAll();">reset</a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div id="impsChart" class="dc-chart">
+            <div class="filterArea">
+                <strong>Impressions</strong>
+                <span class="reset" style="display: none;">
+                    <span class="filter" style="display: none;"></span>
+                </span>
+                <a class="reset" style="display: none;" href="javascript:dc.filterAll(); dc.redrawAll();">reset</a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div id="tImpsChart" class="dc-chart">
+            <div class="filterArea">
+                <strong>tImps</strong>
+                <span class="reset" style="display: none;">
+                    <span class="filter" style="display: none;"></span>
+                </span>
+                <a class="reset" style="display: none;" href="javascript:dc.filterAll(); dc.redrawAll();">reset</a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+    </div>
+    <div id="content" data-spy="scroll" data-target="#navbar" data-offset="0" class="container">
+        <div id="progress"></div>
+        <div id="head" class="row">
+            <h2>How well do the top agencies reach their target audience? <a href="#moreInfo0" data-toggle="collapse"><span class="glyphicon glyphicon-info-sign"></span></a></h2>
+        </div>
+        <div class="copy row">
+            <div id="moreInfo0" class="collapse infoBox">
+                The graphs below show the relative performance of companies in reaching their buyer targets. Targeting quality is measured with tRatio, where higher tRatio means better targeting.
+                <br />
+                Targeting efficiency or value per dollar is measured with tCPM; lower tCPM is better. Learn more about tRatio and tCPM. <a href="#moreInfo0b" data-toggle="collapse"><span class="glyphicon glyphicon-info-sign"></span></a>
+                <div id="moreInfo0b" class="collapse infoBox">
+                    <p></p>
+                    <p></p>
+                    <b>tRatio</b>
+                    <br />
+                    The correlation coefficient measures how many sums of squares in the shape of the target vector, are matched by the media vector. The critical benefit of this metric is that it is UNIVERAL, GLOBAL, and COMPARABLE between advertisers, industries, and other factors. Under this scheme, a +0.5 in one industry means a certain amount of sums of squares accounted for between the target and media vector. In another industry, a +0.5 may be achieved with different variable values, but means the same thing in terms of how good is the match. It does not need to take into account the number of buyers, which vary from one product to another, and vary in terms of the potential universe of buyers, or the brand’s effectiveness in advertising to-date.
+                    <p></p>
+                    The tRatio is an absolute scale, normalized number from -1..1. Three cases are of special interest:
+                    <ol type="a">
+                        <li>+1 indicates that the media being purchased is a perfect match for the target.</li>
+                        <li>-1 indicates that the media being purchased is the opposite of what the advertiser should be purchasing. For example, say that the advertiser’s product is “senior life insurance”, which is life insurance that seniors purchase late in life to defray burial costs. A -1 could occur if the advertiser is targeting Cartoon network or MTV which are viewed by very young people, when in fact they should be targeting elderly people. </li>
+                        <li>0 Indicates that the media being purchased is effectively random. Because of the normalization regime, 0 means that the vector is effectively a match for the average of US population. </li>
+                    </ol>
+                    Because of the universality of the metric, we can use it to report on overall TV targetedness, and compare different industries to see how their natural levels of targeting vary.
+                    <p></p>
+                    <p></p>
+                    <b>CPM</b>
+                    <br />
+                    Cost per thousand impressions.
+                    <p></p>
+                    <b>CPM30</b>
+                    <br />
+                    Different advertisers use different lengths of advertisements. Some advertisers use 15 second, 30 second, 60 second and 120 second advertisements. We have found that generally the cost of these ads scales linearly with the number of ad seconds. In order to produce a measurement of CPMs, we have to standardize to a particular media length. We do that by setting 30 second ads as our standard. CPM30 = CPM / (medialength/30). Every airing in the United States is tracked, and an estimate of its clearing price is made. That estimate is often referred to as the “SQAD rate”. We surface these SQAD rates, along with Nielsen quoted impressions, for every airing. This gives us the Cost and Impressions. Finally, we then apply our targeting measure of buyers per million.
+                    <p></p>
+                    <b>tCPM30</b>
+                    <br />
+                    CPM30 / tRatio
+                </div>
+            </div>
+        </div>
+        <section id="row0">
+            <div class="row">
+                <div id="tratioRatingChart" class="ratingChart">
+                    <h4>tRatio</h4>
+                    <svg></svg>
+                </div>
+                <div id="tcpmRatingChart" class="ratingChart">
+                    <h4>tCPM</h4>
+                    <svg></svg>
+                </div>
+                <div id="cpmRatingChart" class="ratingChart">
+                    <h4>CPM</h4>
+                    <svg></svg>
+                </div>
+                <div id="keyRatingChart" class="ratingChart">
+                    <h4>&nbsp;</h4>
+                    <svg></svg>
+                </div>
+            </div>
+            <div class="copy row">
+                <div>
+                    PrecisionDemand has found all ad airings for the top agencies and carefully compared the audience of each ad to the statistically idea audience.  <a href="#moreInfo1" data-toggle="collapse"><span class="glyphicon glyphicon-info-sign"></span></a>
+                    Compare yourself to the industry! <a href="#moreInfoCompare" data-toggle="collapse"><span class="glyphicon glyphicon-info-sign"></span></a>
+                </div>
+                <div id="moreInfo1" class="collapse infoBox">
+                    The above charts compare each agency against each other in terms of total Spending, total Household Impressions, average CPM, average tRatio and average tCPM.
+                    <br />
+                    Below, please select the agency that you would like to compare.
+                </div>
+                <div id="moreInfoCompare" class="collapse infoBox">
+                    Are you part of one of the industries shown here? If you are, you can compare your performance to others in your industry. Do the following:
+                    <p></p>
+                    <ol type="a">
+                        <li>How good is your CPM? What CPM has your agency been quoting to you? Check your CPM against the SQAD CPM rate that the industry is getting on average. The SQAD CPM price should be higher than the actual CPM price. Therefore, if your CPM is higher than the average SQAD CPM for the industry, then this indicates that your agency is probably over-paying. </li>
+                        <li>How well targeted is your campaign? What is your tRatio versus the industry average? Is your tRatio higher or lower than the industry norm? If it is lower, you should investigate why.</li>
+                        <li>tCPM: What is your tCPM versus the industry average? If your tCPM is higher, then you. </li>
+                    </ol>
+                    In general if your tCPM is worse than average (higher) then you should look at why this is the case. If your tCPM is worse than the grey shaded area, then your company is well outside of the norm for the industry.
+                </div>
+            </div>
+        </section>
+
+        <section id="row1">
+            <div class="row">
+                <div id="tImpsBubbleChart" class="dc-chart">
+                    <div class="filterArea">
+                        <strong>tImps vs Spend (radius: HhImps)</strong>
+                        <span>
+                            <a class="reset" style="display: none;" href="javascript:dc.filterAll(); dc.redrawAll();">reset</a>
+                        </span>
+                    </div>
+                </div>
+                <div id="tRatioBubbleChart" class="dc-chart">
+                    <div class="filterArea">
+                        <strong>tRatio vs tCPM (radius: Spend)</strong>
+                        <span>
+                            <a class="reset" style="display: none;" href="javascript:dc.filterAll(); dc.redrawAll();">reset</a>
+                        </span>
+                    </div>
+                </div>
+                <div class="copy row">
+                    <div>Who spends the most and who gets the most targeted impressions? <a href="#moreInfoBubble" data-toggle="collapse"><span class="glyphicon glyphicon-info-sign"></span></a></div>
+                    <div id="moreInfoBubble" class="collapse infoBox">
+                        We can see that the agencies that are spending the most are not all getting more targeted impressions.
+                            <br />
+                        Bottom and to the right is most efficient.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="row2">
+            <div class="row">
+                <div id="spendPieChart" class="dc-chart">
+                    <div class="filterArea">
+                        <strong>Who Spends More?</strong>
+                        <span class="reset" style="display: none;">
+                            <a class="reset" style="display: none;" href="javascript:dc.filterAll(); dc.redrawAll();">reset</a>
+                        </span>
+
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div id="tImpsPieChart" class="dc-chart">
+                    <strong>Who is getting the tImps?</strong>
+                    <span class="reset" style="display: none;">
+                        <a class="reset" style="display: none;" href="javascript:dc.filterAll(); dc.redrawAll();">reset</a>
+                    </span>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="copy row">
+                <div>Who spends the most and who gets the most targeted impressions. <a href="#moreInfoSpend" data-toggle="collapse"><span class="glyphicon glyphicon-info-sign"></span></a></div>
+                <div id="moreInfoSpend" class="collapse infoBox">
+                    We can see that the agencies that are spending the most are not all getting more targeted impressions.
+                </div>
+            </div>
+        </section>
+
+        <section id="row3">
+            <div class="row">
+                <div id="tRatioLineChart">
+                    <svg></svg>
+                </div>
+            </div>
+            <div class="row">
+                <div id="tCpmLineChart">
+                    <svg></svg>
+                </div>
+            </div>
+            <div class="row">
+                <div id="cpmLineChart">
+                    <svg></svg>
+                </div>
+            </div>
+            <div class="copy row">
+                <div>
+                    PrecisionDemand is looking at all selected advertisers and showing the average tRatio over a small range of time.  <a href="#moreInfo2" data-toggle="collapse"><span class="glyphicon glyphicon-info-sign"></span></a>
+                    Learn more about upper and lower bands. <a href="#moreInfoUppers" data-toggle="collapse"><span class="glyphicon glyphicon-info-sign"></span></a>
+                </div>
+                <div id="moreInfo2" class="collapse infoBox">
+                    tRatio is an important metric to tell how targeted the media is for that agency.
+                    <br />
+                    The more targeted, the more likely a buyer with a high prepensely to buy will be a viewer.
+                    <br />
+                    You can sweep a range to filter down to just that time range. All charts will filter to just that time range.
+                </div>
+                <div id="moreInfoUppers" class="collapse infoBox">
+                    Upper and lowers provide guidance on what the upper 20th percentile and lower 80th percentile values are. These are calculated by (a) summarizing agency-advertiser performance for a given day as an average tRatio, tCPM, CPM, and so on, (b) taking a centered moving average for 90 days prior and 90 days after the current day, (c) reading off the 20th and 80th percentile for values over this period of time.
+                </div>
+            </div>
+        </section>
+
+        <section id="row4">
+            <div class="row">
+                <div id="dowChart" class="dc-chart">
+                    <div class="filterArea">
+                        <strong>Day of Week</strong>
+                        <span class="reset" style="display: none;">
+                            <span class="filter" style="display: none;"></span>
+                        </span>
+                        <a class="reset" style="display: none;" href="javascript:dc.filterAll(); dc.redrawAll();">reset</a>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div id="daypartChart" class="dc-chart">
+                    <div class="filterArea">
+                        <strong>Daypart</strong>
+                        <span class="reset" style="display: none;">
+                            <span class="filter" style="display: none;"></span>
+                        </span>
+                        <a class="reset" style="display: none;" href="javascript:dc.filterAll(); dc.redrawAll();">reset</a>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="copy row">
+                <div>What days of week and dayparts are acencies using most? <a href="#moreInfoDow" data-toggle="collapse"><span class="glyphicon glyphicon-info-sign"></span></a></div>
+                <div id="moreInfoDow" class="collapse infoBox">
+                    Appears to vary greatly depending on lots of circumstances.
+                </div>
+            </div>
+        </section>
+
+        <div style="height: 200px"></div>
+    </div>
+    <div id="footerBorder"></div>
+    <div id="footer">
+        <div id="dateImpsChart" class="dc-chart">
+            <strong>Time Period showing Impressions</strong>
+            <span class="reset" style="display: none;">
+                <span class="filter" style="display: none;"></span>
+            </span>
+            <a class="reset" style="display: none;" href="javascript:dc.filterAll(); dc.redrawAll();">reset</a>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</body>
+</html>
