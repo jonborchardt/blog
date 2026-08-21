@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PD Sell Side — a 2013 crossfilter dashboard</title>
+    <meta
+      name="description"
+      content="A 2013 PrecisionDemand crossfilter dashboard for sell-side TV ad pricing: filter by station, day, hour and industry, and every card and the 15,502-row program grid refilter live."
+    />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta
+      property="og:image"
+      content="https://jonborchardt.github.io/blog/og/google-charts-to-d3.png"
+    />
+    <link href="../industry-rankings/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="./libs/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" />
+    <link href="../industry-rankings/libs/nvd3/nv.d3.min.css" rel="stylesheet" />
+    <link href="../industry-rankings/libs/dc/dc.min.css" rel="stylesheet" />
+    <link href="./content/sellSideStyle.min.css" rel="stylesheet" />
+    <link href="./content/baseStyle.min.css" rel="stylesheet" />
+
+    <script type="text/javascript" src="../maphack/libs/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="../industry-rankings/libs/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="./libs/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+    <script type="text/javascript" src="../industry-rankings/libs/d3/d3.v3.min.js"></script>
+    <script type="text/javascript" src="../industry-rankings/libs/crossfilter/crossfilter.min.js"></script>
+    <script type="text/javascript" src="../industry-rankings/scripts/pddc.min.js"></script>
+    <script type="text/javascript" src="../industry-rankings/libs/nvd3/nv.d3.min.js"></script>
+    <script type="text/javascript" src="./scripts/pdThickLine.min.js"></script>
+    <script type="text/javascript" src="../industry-rankings/scripts/pdSpacedMultiBarHorizontalChart.min.js"></script>
+    <script type="text/javascript" src="../industry-rankings/scripts/pdBarlessMultiBarHorizontalChart.min.js"></script>
+    <script type="text/javascript" src="../industry-rankings/scripts/pdLineChart.min.js"></script>
+    <script type="text/javascript" src="./scripts/baseScript.min.js"></script>
+    <script type="text/javascript" src="./scripts/sellSideScript.min.js"></script>
+  </head>
+
+  <body>
+    <nav id="navbar" class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="bs-js-navbar-scrollspy">
+        <ul class="nav navbar-nav">
+          <li><a class="navbar-brand" href="#">PD Sell Side</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div id="leftCol">
+      <div id="stationChart" class="dc-chart">
+        <div class="filterArea">
+          <strong>Station</strong>
+          <span class="reset" style="display: none">
+            <span class="filter" style="display: none"></span>
+          </span>
+          <a class="reset" style="display: none" href="javascript:dc.filterAll(); dc.redrawAll();"
+            >reset</a
+          >
+        </div>
+        <div class="clearfix"></div>
+      </div>
+      <div id="dowChart" class="dc-chart">
+        <div class="filterArea">
+          <strong>Day</strong>
+          <span class="reset" style="display: none">
+            <span class="filter" style="display: none"></span>
+          </span>
+          <a class="reset" style="display: none" href="javascript:dc.filterAll(); dc.redrawAll();"
+            >reset</a
+          >
+        </div>
+        <div class="clearfix"></div>
+      </div>
+      <div id="hourChart" class="dc-chart">
+        <div class="filterArea">
+          <strong>Hour</strong>
+          <span class="reset" style="display: none">
+            <span class="filter" style="display: none"></span>
+          </span>
+          <a class="reset" style="display: none" href="javascript:dc.filterAll(); dc.redrawAll();"
+            >reset</a
+          >
+        </div>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+
+    <div id="rightCol">
+      <strong>Sort Cards by</strong>
+      <div id="sortToggleDiv">
+        <input
+          id="sortToggle"
+          type="checkbox"
+          checked
+          data-off-label="Alpha"
+          data-on-label="tRatio"
+        />
+      </div>
+      <div id="industryChart" class="dc-chart">
+        <div class="filterArea">
+          <strong>Industry</strong>
+          <span class="reset" style="display: none">
+            <span class="filter" style="display: none"></span>
+          </span>
+          <a class="reset" style="display: none" href="javascript:dc.filterAll(); dc.redrawAll();"
+            >reset</a
+          >
+        </div>
+        <div class="clearfix"></div>
+      </div>
+      <div id="tRatioChart" class="dc-chart">
+        <div class="filterArea">
+          <strong>tRatio</strong>
+          <span class="reset" style="display: none">
+            <span class="filter" style="display: none"></span>
+          </span>
+          <a class="reset" style="display: none" href="javascript:dc.filterAll(); dc.redrawAll();"
+            >reset</a
+          >
+        </div>
+        <div class="clearfix"></div>
+      </div>
+      <div id="tRatioDeltaChart" class="dc-chart">
+        <div class="filterArea">
+          <strong>tRatio Delta</strong>
+          <span class="reset" style="display: none">
+            <span class="filter" style="display: none"></span>
+          </span>
+          <a class="reset" style="display: none" href="javascript:dc.filterAll(); dc.redrawAll();"
+            >reset</a
+          >
+        </div>
+        <div class="clearfix"></div>
+      </div>
+      <div id="tCpmChart" class="dc-chart">
+        <div class="filterArea">
+          <strong>tCPM</strong>
+          <span class="reset" style="display: none">
+            <span class="filter" style="display: none"></span>
+          </span>
+          <a class="reset" style="display: none" href="javascript:dc.filterAll(); dc.redrawAll();"
+            >reset</a
+          >
+        </div>
+        <div class="clearfix"></div>
+      </div>
+      <div id="optimalCpmChart" class="dc-chart">
+        <div class="filterArea">
+          <strong>Optimal CPM</strong>
+          <span class="reset" style="display: none">
+            <span class="filter" style="display: none"></span>
+          </span>
+          <a class="reset" style="display: none" href="javascript:dc.filterAll(); dc.redrawAll();"
+            >reset</a
+          >
+        </div>
+        <div class="clearfix"></div>
+      </div>
+      <div id="cpmDeltaChart" class="dc-chart">
+        <div class="filterArea">
+          <strong>CPM Delta</strong>
+          <span class="reset" style="display: none">
+            <span class="filter" style="display: none"></span>
+          </span>
+          <a class="reset" style="display: none" href="javascript:dc.filterAll(); dc.redrawAll();"
+            >reset</a
+          >
+        </div>
+        <div class="clearfix"></div>
+      </div>
+      <div id="cpmDeltaPercentChart" class="dc-chart">
+        <div class="filterArea">
+          <strong>CPM Delta %</strong>
+          <span class="reset" style="display: none">
+            <span class="filter" style="display: none"></span>
+          </span>
+          <a class="reset" style="display: none" href="javascript:dc.filterAll(); dc.redrawAll();"
+            >reset</a
+          >
+        </div>
+        <div class="clearfix"></div>
+      </div>
+      <div id="impsChart" class="dc-chart">
+        <div class="filterArea">
+          <strong>Impressions</strong>
+          <span class="reset" style="display: none">
+            <span class="filter" style="display: none"></span>
+          </span>
+          <a class="reset" style="display: none" href="javascript:dc.filterAll(); dc.redrawAll();"
+            >reset</a
+          >
+        </div>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+
+    <div id="content" data-spy="scroll" data-target="#navbar" data-offset="0" class="container">
+      <div id="progress"></div>
+
+      <div class="dc-data-count">
+        <span class="filter-count"></span>&nbsp; selected out of
+        <span class="total-count"></span>&nbsp;records |
+        <a href="javascript:dc.filterAll(); dc.renderAll();">Reset All</a>
+      </div>
+
+      <table class="table table-hover" id="table">
+        <thead>
+          <tr class="header">
+            <th>Station</th>
+            <th>Day</th>
+            <th>Hour</th>
+            <th>Program</th>
+            <th>Current Brand</th>
+            <th>Cur Indy</th>
+            <th>Cur CPM</th>
+            <th>Optim</th>
+            <th>&Delta;CPM</th>
+            <th>&Delta;Rev</th>
+            <th>&Delta;tRatio</th>
+            <th>1st</th>
+            <th>2nd</th>
+            <th>3rd</th>
+            <th>4th</th>
+            <th>5th</th>
+            <th>6th</th>
+            <th>7th</th>
+            <th>8th</th>
+            <th>9th</th>
+            <th>10th</th>
+            <th>11th</th>
+            <th>12th</th>
+            <th>13th</th>
+            <th>14th</th>
+            <th>15th</th>
+            <th>16th</th>
+            <th>17th</th>
+            <th>18th</th>
+            <th>19th</th>
+            <th>20th</th>
+            <th>21st</th>
+            <th>22nd</th>
+            <th>23rd</th>
+            <th>Imps</th>
+            <th>&Delta;tImps</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </body>
+</html>
