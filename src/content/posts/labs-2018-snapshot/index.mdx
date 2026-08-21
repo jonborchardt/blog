@@ -1,0 +1,154 @@
+---
+title: The Portfolio I Froze in 2018
+description: In 2018 I copied seventeen years of side projects onto one static site and went job hunting. It still runs. Here is the map of what is in it.
+publishedAt: 2026-08-21
+series: past-work
+seriesOrder: 1
+tags: [retrospective, adtech, data-viz]
+authority: 'E:\github2\Labs'
+hero:
+  src: ./hero.png
+  alt: A grid of portfolio cards, each with a small screenshot thumbnail, for Audience Planner, Upfront Platform, Scatter Platform, MCN Demand Platform, Attenex DocMapper and a row of D3 demos
+draft: true
+---
+
+import Callout from "@/components/blog/Callout.astro";
+import Figure from "@/components/blog/Figure.astro";
+import VizFigure from "@/components/blog/VizFigure.astro";
+import ArcViz from "./arc-viz.svg";
+import landing from "./labs-landing.png";
+
+I left Oath in March 2018 and started at the Allen Institute for AI in May. In the gap I did what
+you do: I went looking for the work I was proudest of, so I could show it to strangers. It was
+scattered across old drives and dead intranets, so over a few weeks in February and March I copied
+all of it into one directory, wrote a landing page over it, and called that my portfolio.
+
+That directory has sat untouched ever since. I opened it again in 2026, expecting to spend a day
+resurrecting it. It took one command. This post is the map of what is in there, and the start of a
+series where I go through it one project at a time.
+
+## What the snapshot actually is
+
+A single folder of static files with a card grid on top of it — `default.htm`, split into
+Products, Demos, and Patents. No build step, no framework, no database. Each card is a thumbnail
+and a one-line description pointing at a gallery of screenshots, a video, or — for a good number of
+them — the live thing itself.
+
+<Figure
+  caption="The landing page of the portfolio, as I left it in March 2018."
+  width="wide"
+  zoom
+>
+  <img
+    src={landing.src}
+    width="1440"
+    height="900"
+    alt="A portfolio landing page headed Jonathan Borchardt, with a Products section of cards for Audience Planner, Upfront Platform, Scatter Platform, MCN Demand Platform, Campaign Reporting, a verification and reconciliation tool, Microsoft Bing, Bunny Puddle Games and Attenex DocMapper, above a Demos section starting with a demos overview video and four D3 demos"
+  />
+</Figure>
+
+The card copy is the pitch I was making to hiring managers in 2018, which is why it reads the way
+it does. "Explore the TV landscape." "What industries should a network target?" I was not writing
+for posterity. I was writing for a phone screen next Tuesday.
+
+<Callout variant="note" title="The data in every screenshot is fake">
+  Advertisers, campaigns and ratings numbers throughout the portfolio — Verizon, YSL, Carfax, the
+  Nielsen figures — are demo data, built for demos. Nothing in this series shows a real client's
+  media plan.
+</Callout>
+
+## Seventeen years, four employers
+
+Almost everything in the folder was made at work, so the folder has the shape of a career. Attenex
+out of school, then Bing, then a TV ad-tech startup that got acquired, then four years inside the
+acquirer while it was renamed around me.
+
+<VizFigure
+  name="Where the portfolio came from, 2001 to 2018"
+  summary="Four employers back to back with only one real gap, in 2007. The 3D visualization work at Attenex sits at one end and the TV buying platforms at the other; tRatio spans the last seven years, appearing in every generation of the product."
+>
+  <ArcViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
+
+The through-line is not a technology. The early work is OpenGL and DirectX, the middle is
+Silverlight, the late work is D3 and AngularJS, and every one of those choices looks dated now.
+What actually persists is a habit of pointing a visualization at a pile of data nobody could read
+— and one metric.
+
+## Everything here started as 20% time
+
+This is the part I want to say plainly, because it is the reason the series exists at all: every
+one of these tools was something I dreamt up and built in 20% time. None of them was assigned.
+
+Several of them stopped being side projects. The Audience Planner, DocMapper, sell-side targeting,
+and the whole approach of building highly interactive dashboards on crossfilter and dc.js all
+became flagship products for the company that employed me at the time. That is a strange ratio
+to look back on — a scratch-an-itch demo becoming the thing the sales team leads with — and it
+happened often enough here that I no longer think it was luck.
+
+## tRatio, the thing that never went away
+
+There is a number called **tRatio** — targeting ratio — on screen in nearly every product in this
+folder. It is in the 2011 Silverlight app, it is in the D3 rewrites, and it is still there in the
+2018 ONE TV interface, several rewrites and two employers later.
+
+A ratio compares two amounts: how much of one thing there is relative to another. tRatio was our
+way of doing that consistently, so that two very different pieces of media could be put next to
+each other and ranked on how well they hit the audience you were paying to reach.
+
+I do not know who coined it, and I never found out why it was the one piece of vocabulary that
+survived every rewrite. I have looked. It just kept getting carried forward, the way a load-bearing
+word does.
+
+## Why it still runs in 2026
+
+Because it is all static files, and static files do not rot the way applications do. Serving the
+whole portfolio in 2026 is one command:
+
+```sh
+npx http-server . -p 8123 -c-1
+```
+
+Then open `default.htm`. Every internal link in the site is root-absolute, so the directory has to
+be the web root — opening a file directly off disk breaks the styling and the navigation, which is
+the only trap.
+
+Two things are genuinely dead. The Silverlight client with its WCF backend cannot run, because no
+browser has Silverlight any more. An ASP.NET MVC explorer needs an API that was switched off years
+ago, though a static equivalent of it survives in the D3 demo set. There is also a slow leak I did
+not design for: several pages load scripts over plain `http://` from CDNs, and one of them, Google's
+old `jsapi` charting library, has been retired outright, which kills two pages dead. Everything
+else — the galleries, the interactive dashboards, the videos — comes up exactly as it did.
+
+The demos overview video sitting in there was recorded in 2018 for the same job hunt. It is me
+narrating my own work to an imagined interviewer, which makes it the closest thing this archive has
+to a time capsule.
+
+## The map of the series
+
+Eleven posts follow this one, roughly chronological, one per project. I will link them here as
+they go up:
+
+- **Attenex DocMapper** — a 3D map of an electronic-discovery document collection, and the patents
+  that came out of it.
+- **Bing hover preview** — the hover preview panel, the quick-answer module and the core results
+  list, on the Bing UX team.
+- **BunnyPuddle games** — Android games shipped around 2010, including a water simulation built
+  because water simulations are fun.
+- **The Audience Planner** — the Silverlight app that became PrecisionDemand's flagship.
+- **Media Foundry** — verifying that a TV spot actually aired, using watermarks and paid spotters
+  across the country.
+- **Google Charts to D3** — replacing off-the-shelf charts with our own, one demo at a time.
+- **Sell-side targeting** — the dashboard that told a network which industries it should be
+  chasing. Real customers, and eventually a patent.
+- **TV data explorers** — the internal tools we built mostly to understand the data we already had.
+- **One codebase, two datasets** — a personal project on public data, and the fork of it that
+  became an internal rewards report.
+- **ONE TV: upfront and scatter** — the platform I spent my last years at AOL and Oath on, in both
+  its upfront and its scatter form.
+- **ONE TV in Australia** — the same system against a different currency, different time zones and
+  a different ratings body.
+
+Some of these I remember in detail. Some I am reconstructing from screenshots and my own
+eight-year-old card copy, and where my memory has a hole in it I would rather say so than fill it
+in. Everything I could not verify gets flagged as such.

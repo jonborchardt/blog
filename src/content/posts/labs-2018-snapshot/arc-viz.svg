@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="620" viewBox="0 0 640 620" font-family="system-ui, sans-serif" font-size="13">
+  <!-- spine -->
+  <line x1="170" y1="40" x2="170" y2="550" stroke="#006a90" stroke-width="5" stroke-linecap="round"/>
+  <line x1="170" y1="550" x2="170" y2="592" stroke="currentColor" stroke-opacity="0.5" stroke-width="2" stroke-dasharray="5 5"/>
+
+  <!-- year ticks -->
+  <circle cx="170" cy="40" r="5" fill="#006a90"/>
+  <text x="60" y="44" fill="currentColor" fill-opacity="0.75" text-anchor="end" font-size="12">2001</text>
+  <circle cx="170" cy="250" r="5" fill="#006a90"/>
+  <text x="60" y="254" fill="currentColor" fill-opacity="0.75" text-anchor="end" font-size="12">2008</text>
+  <circle cx="170" cy="310" r="5" fill="#006a90"/>
+  <text x="60" y="314" fill="currentColor" fill-opacity="0.75" text-anchor="end" font-size="12">2010</text>
+  <circle cx="170" cy="430" r="5" fill="#006a90"/>
+  <text x="60" y="434" fill="currentColor" fill-opacity="0.75" text-anchor="end" font-size="12">2014</text>
+  <circle cx="170" cy="550" r="5" fill="#006a90"/>
+  <text x="60" y="554" fill="currentColor" fill-opacity="0.75" text-anchor="end" font-size="12">2018</text>
+  <circle cx="170" cy="592" r="4" fill="currentColor" fill-opacity="0.5"/>
+  <text x="60" y="596" fill="currentColor" fill-opacity="0.75" text-anchor="end" font-size="12">2026</text>
+
+  <!-- tRatio bracket, 2011 to 2018 -->
+  <line x1="140" y1="340" x2="140" y2="550" stroke="#f0b35a" stroke-width="3" stroke-linecap="round"/>
+  <line x1="133" y1="340" x2="147" y2="340" stroke="#f0b35a" stroke-width="3" stroke-linecap="round"/>
+  <line x1="133" y1="550" x2="147" y2="550" stroke="#f0b35a" stroke-width="3" stroke-linecap="round"/>
+  <text x="126" y="449" fill="currentColor" fill-opacity="0.85" text-anchor="end" font-size="12" font-weight="600">tRatio</text>
+
+  <!-- Attenex -->
+  <rect x="190" y="42" width="430" height="176" rx="6" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <text x="206" y="72" fill="#11171d" font-size="14" font-weight="600">Attenex</text>
+  <text x="206" y="92" fill="#555f69" font-size="12">2001 to 2007 — founding engineer, straight out of UW CS</text>
+  <text x="206" y="124" fill="#11171d" font-size="12.5">Document Mapper: a 3D map of a document collection,</text>
+  <text x="206" y="144" fill="#11171d" font-size="12.5">for lawyers digging through electronic discovery</text>
+  <text x="206" y="172" fill="#11171d" font-size="12.5">OpenGL first, then a migration to DirectX</text>
+  <text x="206" y="196" fill="#11171d" font-size="12.5">5+ visualization patents</text>
+
+  <!-- Microsoft Bing -->
+  <rect x="190" y="252" width="430" height="56" rx="6" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <text x="206" y="274" fill="#11171d" font-size="14" font-weight="600">Microsoft Bing</text>
+  <text x="206" y="296" fill="#555f69" font-size="12">2008 to 2010 — SDE2: hover preview, quick answers, results list</text>
+
+  <!-- PrecisionDemand -->
+  <rect x="190" y="312" width="430" height="116" rx="6" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <text x="206" y="336" fill="#11171d" font-size="14" font-weight="600">PrecisionDemand</text>
+  <text x="206" y="356" fill="#555f69" font-size="12">2010 to 2014 — sole UI developer</text>
+  <text x="206" y="384" fill="#11171d" font-size="12.5">Audience Planner in Silverlight, Media Foundry spot</text>
+  <text x="206" y="404" fill="#11171d" font-size="12.5">verification, Flash to D3, the sell-side dashboards</text>
+
+  <!-- AOL, then Oath -->
+  <rect x="190" y="432" width="430" height="118" rx="6" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <text x="206" y="456" fill="#11171d" font-size="14" font-weight="600">AOL, then Oath</text>
+  <text x="206" y="476" fill="#555f69" font-size="12">2014 to 2018 — Principal from 2016, leading a UI team of 3</text>
+  <text x="206" y="504" fill="#11171d" font-size="12.5">Silverlight to AngularJS, ONE TV upfront and scatter,</text>
+  <text x="206" y="524" fill="#11171d" font-size="12.5">and the MCN Demand Platform in Australia</text>
+
+  <!-- 2026 -->
+  <text x="190" y="590" fill="currentColor" fill-opacity="0.85" font-size="12.5">Served again from one command, because it was all static files</text>
+</svg>
