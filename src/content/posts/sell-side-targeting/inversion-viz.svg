@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="452" viewBox="0 0 640 452" font-family="system-ui, sans-serif" font-size="13">
+  <defs>
+    <marker id="ssv-fg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="currentColor" fill-opacity="0.6"/></marker>
+    <marker id="ssv-hi" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#f0b35a"/></marker>
+  </defs>
+
+  <!-- ============ panel A: buy side ============ -->
+  <text x="16" y="22" fill="currentColor" font-size="14" font-weight="600">Buy side — Industry Ratings</text>
+  <text x="16" y="41" fill="currentColor" fill-opacity="0.85" font-size="12" font-style="italic">Many airings in, one score per industry out.</text>
+
+  <!-- grid of nine airings -->
+  <g stroke="#006a90" stroke-width="1.4" fill="#fafcfe">
+    <rect x="20" y="62" width="38" height="28" rx="3"/>
+    <rect x="68" y="62" width="38" height="28" rx="3"/>
+    <rect x="116" y="62" width="38" height="28" rx="3"/>
+    <rect x="20" y="98" width="38" height="28" rx="3"/>
+    <rect x="68" y="98" width="38" height="28" rx="3"/>
+    <rect x="116" y="98" width="38" height="28" rx="3"/>
+    <rect x="20" y="134" width="38" height="28" rx="3"/>
+    <rect x="68" y="134" width="38" height="28" rx="3"/>
+    <rect x="116" y="134" width="38" height="28" rx="3"/>
+  </g>
+  <g stroke="#555f69" stroke-opacity="0.5" stroke-width="1.6" stroke-linecap="round">
+    <line x1="27" y1="83" x2="51" y2="83"/>
+    <line x1="75" y1="83" x2="99" y2="83"/>
+    <line x1="123" y1="83" x2="147" y2="83"/>
+    <line x1="27" y1="119" x2="51" y2="119"/>
+    <line x1="75" y1="119" x2="99" y2="119"/>
+    <line x1="123" y1="119" x2="147" y2="119"/>
+    <line x1="27" y1="155" x2="51" y2="155"/>
+    <line x1="75" y1="155" x2="99" y2="155"/>
+    <line x1="123" y1="155" x2="147" y2="155"/>
+  </g>
+  <text x="87" y="181" fill="currentColor" fill-opacity="0.75" font-size="11" text-anchor="middle">every spot this</text>
+  <text x="87" y="194" fill="currentColor" fill-opacity="0.75" font-size="11" text-anchor="middle">industry ever bought</text>
+
+  <!-- converging arrows -->
+  <g fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5">
+    <path d="M162 76 Q206 76 238 108" marker-end="url(#ssv-fg)"/>
+    <path d="M162 112 Q206 112 238 114" marker-end="url(#ssv-fg)"/>
+    <path d="M162 148 Q206 148 238 120" marker-end="url(#ssv-fg)"/>
+  </g>
+
+  <!-- one industry score -->
+  <rect x="250" y="92" width="112" height="46" rx="6" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <text x="306" y="112" fill="#11171d" font-size="12" font-weight="600" text-anchor="middle">Luxury Auto</text>
+  <text x="306" y="129" fill="#11171d" font-size="11" text-anchor="middle">tRatio 0.24</text>
+
+  <path d="M368 115 L400 115" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" marker-end="url(#ssv-fg)"/>
+
+  <!-- ranked against the other industries -->
+  <g fill="#006a90">
+    <rect x="410" y="84" width="80" height="9" rx="2"/>
+    <rect x="410" y="102" width="76" height="9" rx="2"/>
+    <rect x="410" y="120" width="52" height="9" rx="2"/>
+    <rect x="410" y="138" width="17" height="9" rx="2"/>
+  </g>
+  <g fill="currentColor" font-size="11">
+    <text x="498" y="92">Senior Life 0.37</text>
+    <text x="498" y="110">Music 0.35</text>
+    <text x="498" y="128" font-weight="600">Luxury Auto 0.24</text>
+    <text x="498" y="146">Exercise Eq. 0.08</text>
+  </g>
+  <text x="410" y="172" fill="currentColor" fill-opacity="0.75" font-size="11">industries ranked against each other</text>
+
+  <!-- ============ the flip ============ -->
+  <line x1="16" y1="206" x2="624" y2="206" stroke="currentColor" stroke-opacity="0.25" stroke-width="1.5" stroke-dasharray="6 5"/>
+  <text x="320" y="230" fill="currentColor" fill-opacity="0.85" font-size="12" font-style="italic" text-anchor="middle">same data, same tRatio — the question turns around</text>
+  <path d="M436 240 Q320 274 208 244" fill="none" stroke="#f0b35a" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#ssv-hi)"/>
+
+  <!-- ============ panel B: sell side ============ -->
+  <text x="16" y="300" fill="currentColor" font-size="14" font-weight="600">Sell side — Sell Side Targeting</text>
+  <text x="16" y="319" fill="currentColor" fill-opacity="0.85" font-size="12" font-style="italic">One airing in, every industry ranked inside it out.</text>
+
+  <!-- one airing, enlarged -->
+  <rect x="24" y="334" width="96" height="66" rx="5" fill="#fafcfe" stroke="#006a90" stroke-width="1.6"/>
+  <rect x="33" y="343" width="78" height="48" rx="3" fill="none" stroke="#555f69" stroke-opacity="0.5" stroke-width="1.4"/>
+  <line x1="72" y1="400" x2="72" y2="408" stroke="#006a90" stroke-width="1.6"/>
+  <line x1="54" y1="408" x2="90" y2="408" stroke="#006a90" stroke-width="1.6" stroke-linecap="round"/>
+  <text x="72" y="426" fill="currentColor" fill-opacity="0.85" font-size="11" text-anchor="middle">MTV, Mon 7AM</text>
+  <text x="72" y="439" fill="currentColor" fill-opacity="0.85" font-size="11" text-anchor="middle">one row of the grid</text>
+
+  <!-- diverging arrows -->
+  <g fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5">
+    <path d="M126 358 Q166 338 196 336" marker-end="url(#ssv-fg)"/>
+    <path d="M126 366 Q166 366 196 366" marker-end="url(#ssv-fg)"/>
+    <path d="M126 374 Q166 394 196 396" marker-end="url(#ssv-fg)"/>
+  </g>
+
+  <!-- ranked industry cards for that one airing -->
+  <g fill="#deeef5" stroke="#006a90" stroke-width="1.5">
+    <rect x="210" y="340" width="64" height="52" rx="5"/>
+    <rect x="284" y="340" width="64" height="52" rx="5"/>
+    <rect x="358" y="340" width="64" height="52" rx="5"/>
+    <rect x="432" y="340" width="64" height="52" rx="5"/>
+  </g>
+  <g fill="#11171d" text-anchor="middle">
+    <text x="242" y="362" font-size="12" font-weight="600">1st</text>
+    <text x="242" y="380" font-size="11">0.39</text>
+    <text x="316" y="362" font-size="12" font-weight="600">2nd</text>
+    <text x="316" y="380" font-size="11">0.39</text>
+    <text x="390" y="362" font-size="12" font-weight="600">3rd</text>
+    <text x="390" y="380" font-size="11">0.07</text>
+    <text x="464" y="362" font-size="12" font-weight="600">4th</text>
+    <text x="464" y="380" font-size="11">0.07</text>
+  </g>
+  <text x="506" y="370" fill="currentColor" fill-opacity="0.85" font-size="12">… through 23rd</text>
+  <text x="210" y="414" fill="currentColor" fill-opacity="0.75" font-size="11">every industry ranked inside this one slot</text>
+</svg>
