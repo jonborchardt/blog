@@ -1,0 +1,48 @@
+---
+/**
+ * MuseumEmbed — candidate presentation for "the sweep": the preserved 2013 demo
+ * itself, served from /museum/d3demo/ and embedded behind a click-to-load
+ * <details>, so nobody downloads its ~2 MB dataset without asking for it.
+ */
+import { href } from "@/lib/url";
+---
+
+<figure class="figure figure-full museum-embed my-8">
+  <details>
+    <summary>Load the real 2013 demo (about 2&nbsp;MB of data)</summary>
+    <iframe
+      src={href("/museum/d3demo/")}
+      title="The preserved 2013 rotation-buys crossfilter demo: drag the timeline strip and every chart refilters"
+      loading="lazy"
+      width="1152"
+      height="1500"></iframe>
+  </details>
+  <figcaption class="text-muted-foreground mt-3 text-center text-sm">
+    Not a copy, not a rebuild: the 2013 page, its charts and its demo dataset, served from this
+    site. Drag across the smaller timeline strip. On a narrow screen it scrolls sideways inside the
+    frame.
+  </figcaption>
+</figure>
+
+<style>
+  .museum-embed summary {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    text-align: center;
+    color: var(--color-primary);
+  }
+  .museum-embed summary:hover {
+    background: var(--color-accent);
+  }
+  .museum-embed details[open] summary {
+    margin-bottom: 0.75rem;
+  }
+  .museum-embed iframe {
+    display: block;
+    width: 100%;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+</style>

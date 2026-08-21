@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rotation Buys — the 2013 crossfilter demo</title>
+    <meta
+      name="description"
+      content="The 2013 PrecisionDemand crossfilter demo, preserved and served as-is: drag the timeline strip and every chart refilters live."
+    />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta
+      property="og:image"
+      content="https://jonborchardt.github.io/blog/og/google-charts-to-d3.png"
+    />
+
+    <link href="libs/nvd3/nv.d3.css" rel="stylesheet" />
+    <link href="styles/rotStyle.css" rel="stylesheet" />
+    <link href="styles/baseStyle.css" rel="stylesheet" />
+
+    <script src="libs/d3.v3.min.js"></script>
+    <script src="libs/d3.geo.projection.v0.min.js"></script>
+    <script src="libs/topojson.v1.min.js"></script>
+    <script src="libs/nvd3/nv.d3.js"></script>
+    <script src="libs/crossfilter/crossfilter.js"></script>
+    <script src="nvd3Ex/PdLineWithFocusChart.js"></script>
+    <script src="nvd3Ex/nvd3RotScript.js"></script>
+  </head>
+  <body>
+    <h1>Example of CrossFilter technology reporting on Rotation Buys</h1>
+    <hr class="clear" />
+
+    <div id="nvd3-spend-over-time">
+      <svg></svg>
+    </div>
+
+    <div class="row">
+      <div class="station">
+        <svg id="nvd3-spend-by-station"></svg>
+      </div>
+      <div class="commission_creativelength">
+        <div class="commission">
+          <svg id="nvd3-spend-by-commission"></svg>
+        </div>
+        <div class="creativelength">
+          <svg id="nvd3-spend-by-creativelength"></svg>
+        </div>
+      </div>
+      <div class="map">
+        <svg id="d3-map"></svg>
+      </div>
+    </div>
+
+    <h3 class="clear">Most expensive Rotations</h3>
+    <div id="rotList"></div>
+    <hr class="clear" />
+  </body>
+</html>

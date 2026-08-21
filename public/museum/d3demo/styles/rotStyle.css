@@ -1,0 +1,153 @@
+﻿.title
+{
+	font: 16px sans-serif;
+}
+
+.nv-area
+{
+	opacity: 0.1;
+}
+
+.zeroline
+{
+	fill: none;
+	stroke: darkgray;
+	shape-rendering: crispEdges;
+}
+
+.tagRect
+{
+	stroke: darkgray;
+	fill: white;
+	opacity: 1;
+}
+
+.tagLabel
+{
+	shape-rendering: crispEdges;
+	font-weight: bold;
+	fill: #6286FF;
+}
+
+.tagCircle
+{
+	stroke: black;
+	fill: white;
+	opacity: 0.5;
+}
+
+.tagLegendContent
+{
+	width: 198px;
+	height: 488px;
+	overflow: auto;
+	border-color: #DCDCDC;
+	border-style: solid;
+	border-width: 1px;
+}
+
+.legendItem
+{
+	margin: 0px 8px 0px 4px;
+}
+
+.legendLabel
+{
+	font: 16px sans-serif;
+	font-weight: bold;
+	fill: #6286FF;
+	margin: 13px 0px 0px 0px;
+}
+
+.legendDesc
+{
+	font: 12px sans-serif;
+	fill: black;
+	margin: -23px 0px 2px 23px;
+}
+
+.legendNote
+{
+	font: 10px sans-serif;
+	fill: black;
+	font-style: italic;
+	margin: 0px 0px 14px 0px;
+}
+
+#nvd3-spend-over-time
+{
+	height: 400px;
+}
+
+.row
+{
+	margin-top: 30px;
+	margin-left: 30px;
+}
+
+.station
+{
+	float: left;
+	height: 460px;
+	margin-bottom: 30px;
+	width: 270px;
+}
+
+.commission_creativelength
+{
+	float: left;
+	height: 460px;
+	margin-left: 30px;
+	margin-bottom: 30px;
+	width: 270px;
+}
+
+.commission
+{
+	height: 200px;
+	margin-bottom: 30px;
+	width: 270px;
+}
+
+.creativelength
+{
+	height: 200px;
+	margin-bottom: 30px;
+	width: 270px;
+}
+
+	.commission svg, .creativelength svg
+	{
+		height: 205px;
+	}
+
+.map
+{
+	float: left;
+	height: 460px;
+	margin-left: 30px;
+	margin-bottom: 30px;
+	width: 405px;
+}
+
+
+.map path
+{
+	fill: #ccc;
+	stroke: #fff;
+	stroke-width: .5px;
+}
+
+.map path:hover
+{
+	fill: red;
+}
+
+
+
+.states {
+  fill: none;
+  stroke: #fff;
+  stroke-linejoin: round;
+}
+

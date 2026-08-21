@@ -17,4 +17,5 @@ export const RESERVED_SLUGS_LIST = [
   "rss.xml",
   "robots.txt",
   "sitemap-index.xml",
+  "museum",
 ];

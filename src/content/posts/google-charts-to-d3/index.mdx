@@ -24,6 +24,7 @@ import sweep3 from "./sweep-3.png";
 import sweepVideo from "./rotations-sweep.webm";
 import SweepDemo from "./components/SweepDemo.astro";
 import FrameScrubber from "./components/FrameScrubber.astro";
+import MuseumEmbed from "./components/MuseumEmbed.astro";
 
 In 2013 I was the only UI developer at PrecisionDemand, a TV ad-tech startup, which meant every
 chart our customers looked at was a chart I had put there. Most of them were not mine. They were
@@ -300,6 +301,13 @@ option 1 behind a pair of previous/next buttons.
     },
   ]}
 />
+
+**Option 5** stops imitating. This is the 2013 page itself — its NVD3 charts, its hand-rolled
+focus chart, its 6&nbsp;MB demo dataset — copied into this site and served from here, with exactly
+two repairs: the three chart libraries it used to fetch from a CDN over plain `http://` now live
+next to it, and a typo in a heading is fixed. Everything else, including the bugs, is 2013's:
+
+<MuseumEmbed />
 
 ## What it turned into
 

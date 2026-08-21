@@ -6,7 +6,17 @@ import prettier from "eslint-config-prettier";
 import globals from "globals";
 
 export default defineConfig(
-  { ignores: ["dist/", ".astro/", "node_modules/", "playwright-report/", "test-results/"] },
+  {
+    ignores: [
+      "dist/",
+      ".astro/",
+      "node_modules/",
+      "playwright-report/",
+      "test-results/",
+      // preserved-as-is historical artifacts served verbatim; not this repo's code style
+      "public/museum/",
+    ],
+  },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   ...astro.configs.recommended,

@@ -1,0 +1,30 @@
+﻿.clear
+{
+	clear: both;
+}
+
+#footer
+{
+    clear: both;
+    border: 1px groove #aaaaaa;
+    background: #DDDDFF;
+    padding: 10px 15px 10px 25px;
+    text-align: left;
+    vertical-align: middle;
+    line-height: normal;
+    margin: 0px 0px 0px -10px;
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    
+    display:none;
+}
+
+.grayout {
+	opacity: 0.8;
+	padding:1px;
+    border:1px solid #021a40;
+    background-color:#aaa;
+	width: 500px;
+	height: auto;
+}

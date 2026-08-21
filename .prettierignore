@@ -8,3 +8,4 @@ test-results/
 src/components/ui/
 *.mdx
 src/content/posts/*/research/
+public/museum/
