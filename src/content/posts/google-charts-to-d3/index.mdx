@@ -8,7 +8,7 @@ tags: [d3, data-viz, adtech, retrospective]
 authority: 'E:\github2\Labs'
 hero:
   src: ./hero.png
-  alt: A timeline strip with a drag window covering mid-2012 onward, above a ranked bar list of TV networks, two spend histograms and a US county map, all showing only the data inside that window
+  alt: A timeline strip with a drag window covering roughly November 2010 through June 2012, above a ranked bar list of TV networks led by FNEW, two spend histograms and a US county map, all showing only the data inside that window
 draft: true
 ---
 
@@ -47,9 +47,9 @@ got:
 ```
 
 Under that, a couple of thousand hardcoded `data.addRows([...])` lines: a date, two tRatio values,
-and two spare string columns per row for an annotation title and its body text. tRatio, our
-targeting ratio and the one number that shows up in every product in this archive, was being drawn
-by a component I did not write and could not change.
+and four spare string columns per row, an annotation title and its body text for each of the two
+series. tRatio, our targeting ratio and the one number that shows up in every product in this
+archive, was being drawn by a component I did not write and could not change.
 
 <Figure
   caption="fordsuvindustry.htm, the Google annotated timeline the D3 work replaced. Every advertiser, network and number in this archive is demo data."
@@ -100,8 +100,10 @@ model namespace. `Pd` for PrecisionDemand. Two siblings sit next to it, `PdBubbl
 }
 ```
 
-A label, a headline and a body per point: exactly the two spare string columns the Google chart used
-for its annotations, with the "text" column split in two. The series colours are pinned in the same
+A label, a headline and a body per point. The label is new: Google auto-lettered its own markers,
+there was no column for it. The other two are a rename of Google's pair: `description` is Google's
+title column, and `notes` is Google's text column, which the Ford data mostly left unused. The series
+colours are pinned in the same
 file to `#4684EE` and `#DC3912`, the same blue and the same red the Google chart drew. Someone
 opening the new page was not supposed to notice a new chart library. They were supposed to notice it
 did more.
@@ -142,7 +144,7 @@ see that tool at all. One file, `crossfilterChart.js`, opens with a comment I am
 
 ```js
 // A direct copy from the crossfilter example:
-// https://github.com/square/crossfilter/blob/.../index.html
+// https://github.com/square/crossfilter/blob/50227903a5567d24c0d38141a5e94b5dec932b4c/index.html
 ```
 
 ## The sweep
@@ -155,8 +157,8 @@ geography. Every chart on the page is a group over one of those dimensions. Filt
 every other group recomputes, incrementally, fast enough that you can do it inside a `mousemove`.
 
 So the timeline strip is not a zoom control. It is a filter, and dragging it refilters the page.
-These four frames are one continuous drag across the strip on `rotationExample.html`, captured
-mid-gesture with the mouse button still down.
+These four frames, shot this month, are one continuous drag across the strip on
+`rotationExample.html`, captured mid-gesture with the mouse button still down.
 
 <Figure
   caption="At rest: all buys from 2010 to 2013. HIST tops the network list at 7,494,926.60."
@@ -185,7 +187,7 @@ mid-gesture with the mouse button still down.
 </Figure>
 
 <Figure
-  caption="Widen to about a year and FNEW takes the lead at 714,225.00, with AMC and GALA within a few thousand of each other."
+  caption="Widen to roughly nine months and FNEW takes the lead at 714,225.00, with AMC edging GALA by just 190."
   width="wide"
   zoom
 >
@@ -193,7 +195,7 @@ mid-gesture with the mouse button still down.
     src={sweep2.src}
     width="1400"
     height="906"
-    alt="The same dashboard with the drag window widened to roughly November 2010 through October 2011, the network list led by FNEW at 714,225.00 followed by AMC at 606,120.00 and GALA at 605,930.00, and the map circles in different places than the previous frame"
+    alt="The same dashboard with the drag window widened to roughly November 2010 through August 2011, the network list led by FNEW at 714,225.00 followed by AMC at 606,120.00 and GALA at 605,930.00, and the map circles in different places than the previous frame"
   />
 </Figure>
 
@@ -213,8 +215,7 @@ mid-gesture with the mouse button still down.
 Nothing on that page is a page load. The network ranking reorders, the commission-rate histogram
 collapses onto two bars and spreads back out, the creative-length split flips between 30-second and
 60-second spots, and the circles on the county map move, all of it while the mouse button is still
-down. Watching a media buyer scrub that strip and narrate what they were seeing is the closest I
-have come to a chart doing my explaining for me.
+down.
 
 The tracker gets the same treatment. Sweep its strip and the annotations stay pinned to their dates
 while the window closes around them:
@@ -242,8 +243,8 @@ The charts themselves did not survive. D3 v3, NVD3 and a hand-rolled `nv.models.
 would draw this today, and the pages that used them were rewritten more than once after AOL acquired
 us in May 2014 and I moved the product off Silverlight and onto AngularJS.
 
-The interaction survived. Asked which of these side projects went anywhere, the list I gave was the
-Audience Planner, DocMapper, sell-side targeting, and then, oddly for a list of products, "using
+The interaction survived. When I ask myself which of these side projects went anywhere, the list is
+the Audience Planner, DocMapper, sell-side targeting, and then, oddly for a list of products, "using
 crossfilter and dc.js for highly interactive charting". The technique itself became flagship. The
 industry-ratings and sell-side dashboards that real customers used were built on this exact model:
 click anything to filter everything, drag the timeline to refilter live. Those are their own posts.
