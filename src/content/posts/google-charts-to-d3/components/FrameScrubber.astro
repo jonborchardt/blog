@@ -1,7 +1,7 @@
 ---
 /**
  * FrameScrubber — candidate presentation for "the sweep": the captured frames from
- * the screenshot sequence, but under a slider, so the gesture belongs to the reader.
+ * the screenshot sequence, stepped through with previous/next buttons.
  * No dependencies; degrades to showing the first frame.
  */
 interface Props {
@@ -28,18 +28,13 @@ const first = frames[0] ?? { src: "", alt: "", label: "" };
       ))
     }
   </div>
-  <input
-    type="range"
-    min="0"
-    max={frames.length - 1}
-    step="1"
-    value="0"
-    data-fs-input
-    aria-label="Scrub through the captured sweep frames"
-    aria-valuetext={first.label}
-  />
+  <div class="frame-scrub-nav">
+    <button type="button" data-fs-prev disabled>&larr; Previous</button>
+    <span data-fs-pos aria-live="polite">1 / {frames.length}</span>
+    <button type="button" data-fs-next>Next &rarr;</button>
+  </div>
   <figcaption class="text-muted-foreground mt-3 text-center text-sm">
-    Drag the slider — the same captured frames, but under your finger.
+    Step through the drag, frame by frame.
     <span data-fs-label>{first.label}</span>
   </figcaption>
 </figure>
@@ -48,27 +43,48 @@ const first = frames[0] ?? { src: "", alt: "", label: "" };
   .fs-hidden {
     display: none;
   }
-  .frame-scrub input[type="range"] {
-    display: block;
-    width: 100%;
+  .frame-scrub-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
     margin-top: 0.5rem;
-    accent-color: var(--color-primary);
+    font-size: var(--text-sm);
+    color: var(--color-muted-foreground);
+  }
+  .frame-scrub-nav button {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 0.25rem 0.875rem;
     min-height: 24px;
-    cursor: ew-resize;
+    cursor: pointer;
+  }
+  .frame-scrub-nav button:hover:not(:disabled) {
+    background: var(--color-accent);
+  }
+  .frame-scrub-nav button:disabled {
+    opacity: 0.4;
+    cursor: default;
   }
 </style>
 
 <script>
   for (const root of document.querySelectorAll(".frame-scrub")) {
-    const input = root.querySelector("[data-fs-input]") as HTMLInputElement | null;
-    const label = root.querySelector("[data-fs-label]");
     const frames = [...root.querySelectorAll("[data-fs-frame]")];
-    input?.addEventListener("input", () => {
-      const i = Number(input.value);
+    const prev = root.querySelector("[data-fs-prev]") as HTMLButtonElement | null;
+    const next = root.querySelector("[data-fs-next]") as HTMLButtonElement | null;
+    const pos = root.querySelector("[data-fs-pos]");
+    const label = root.querySelector("[data-fs-label]");
+    let i = 0;
+    const show = (n: number) => {
+      i = Math.max(0, Math.min(frames.length - 1, n));
       frames.forEach((f, j) => f.classList.toggle("fs-hidden", j !== i));
-      const text = frames[i]?.getAttribute("data-label") ?? "";
-      input.setAttribute("aria-valuetext", text);
-      if (label) label.textContent = text;
-    });
+      if (pos) pos.textContent = `${i + 1} / ${frames.length}`;
+      if (label) label.textContent = frames[i]?.getAttribute("data-label") ?? "";
+      if (prev) prev.disabled = i === 0;
+      if (next) next.disabled = i === frames.length - 1;
+    };
+    prev?.addEventListener("click", () => show(i - 1));
+    next?.addEventListener("click", () => show(i + 1));
   }
 </script>

@@ -8,7 +8,7 @@ tags: [d3, data-viz, adtech, retrospective]
 authority: 'E:\github2\Labs'
 hero:
   src: ./hero.png
-  alt: A timeline strip with a drag window covering roughly November 2010 through June 2012, above a ranked bar list of TV networks led by FNEW, two spend histograms and a US county map, all showing only the data inside that window
+  alt: A dashboard with a dragged timeline window filtering a ranked TV network list, histograms and a map
 draft: false
 ---
 
@@ -63,7 +63,7 @@ could not change.
     src={before.src}
     width="1400"
     height="505"
-    alt="A Google annotated timeline of Ford SUV targeting scores, with zoom preset buttons reading 1h 1d 5d 1w 1m 3m 6m 1y max, a blue Ford line and a red Industry Overall line from 2010 to 2013, lettered markers A to E on the lines, a range-selector strip along the bottom, and a panel on the right listing each annotation with its date"
+    alt="A Google annotated timeline with blue Ford and red Industry lines, lettered markers and zoom presets"
   />
 </Figure>
 
@@ -120,7 +120,7 @@ did more.
     src={trackerRest.src}
     width="1400"
     height="789"
-    alt="A page headed Replacement for existing Flash based Industry Tracker, showing a blue GM SUVs line and a red Non-GM SUVs line from 2010 to 2013 with lettered markers B to E, a full-width context strip of the same two lines below it, and a panel on the right listing five annotations from a mixed bag of winners and losers through to back to a mix of good and bad"
+    alt="The D3 tracker page with GM SUVs and Non-GM SUVs lines, lettered markers and a context strip below"
   />
 </Figure>
 
@@ -172,7 +172,7 @@ These four frames, shot this month, are one continuous drag across the strip on
     src={sweep0.src}
     width="1400"
     height="906"
-    alt="A crossfilter dashboard showing rotation purchases from 2010 to 2013, an unfiltered context strip below it, and a ranked network list led by HIST at 7,494,926.60 and FNEW at 6,601,245.00, beside a commission-rate histogram spread across eight rates and a US county map with four circles"
+    alt="The unfiltered dashboard with all purchases from 2010 to 2013 and HIST leading the network list"
   />
 </Figure>
 
@@ -185,7 +185,7 @@ These four frames, shot this month, are one continuous drag across the strip on
     src={sweep1.src}
     width="1400"
     height="906"
-    alt="The same dashboard with a narrow drag window over late 2010 to early 2011 on the context strip, the main chart rescaled to that window, and the network list now led by GALA at 359,290.00 and FNEW at 209,600.00, with the commission histogram collapsed onto the 9 percent and 10 percent bars"
+    alt="The dashboard with a narrow drag window over the 2010 to 2011 winter, GALA now topping the networks"
   />
 </Figure>
 
@@ -198,7 +198,7 @@ These four frames, shot this month, are one continuous drag across the strip on
     src={sweep2.src}
     width="1400"
     height="906"
-    alt="The same dashboard with the drag window widened to roughly November 2010 through August 2011, the network list led by FNEW at 714,225.00 followed by AMC at 606,120.00 and GALA at 605,930.00, and the map circles in different places than the previous frame"
+    alt="The dashboard with the window widened to about nine months, FNEW leading and the map circles moved"
   />
 </Figure>
 
@@ -211,7 +211,7 @@ These four frames, shot this month, are one continuous drag across the strip on
     src={sweep3.src}
     width="1400"
     height="906"
-    alt="The same dashboard with the drag window covering roughly November 2010 through June 2012, the network list led by FNEW at 2,881,495.00 and HIST at 1,846,784.60, the commission histogram dominated by the 9 percent bar and the creative-length histogram split between 30 and 60 seconds"
+    alt="The dashboard with the window at nineteen months, November 2010 through June 2012, FNEW well ahead"
   />
 </Figure>
 
@@ -232,7 +232,7 @@ while the window closes around them:
     src={trackerSwept.src}
     width="1400"
     height="789"
-    alt="The industry tracker with a drag window over mid-2010 to late 2011 on its context strip, the main chart rescaled so only that period is shown with annotation marker C visible on the blue line, and the same five-item annotation panel unchanged on the right"
+    alt="The industry tracker rescaled to a mid-2010 through late 2011 window, with annotation C still pinned"
   />
 </Figure>
 
@@ -273,30 +273,30 @@ crossfilter doing set intersection under your cursor:
 
 <SweepDemo />
 
-**Option 4** keeps the captured pixels but gives you back the gesture: the four frames from option
-1 under a slider.
+**Option 4** keeps the captured pixels but puts the stepping in your hands: the four frames from
+option 1 behind a pair of previous/next buttons.
 
 <FrameScrubber
   frames={[
     {
       src: sweep0.src,
       label: "At rest: 2010 to 2013, HIST leads.",
-      alt: "A crossfilter dashboard showing rotation purchases from 2010 to 2013, an unfiltered context strip below it, and a ranked network list led by HIST at 7,494,926.60",
+      alt: "The unfiltered dashboard with all purchases from 2010 to 2013 and HIST leading the network list",
     },
     {
       src: sweep1.src,
       label: "A narrow winter window: GALA leads.",
-      alt: "The same dashboard with a narrow drag window over late 2010 to early 2011, the network list led by GALA at 359,290.00",
+      alt: "The dashboard with a narrow drag window over the 2010 to 2011 winter, GALA now topping the networks",
     },
     {
       src: sweep2.src,
       label: "Nine months: FNEW takes the lead.",
-      alt: "The same dashboard with the window widened to roughly November 2010 through August 2011, led by FNEW at 714,225.00",
+      alt: "The dashboard with the window widened to about nine months, FNEW leading and the map circles moved",
     },
     {
       src: sweep3.src,
       label: "Nineteen months: FNEW 2,881,495.00.",
-      alt: "The same dashboard with the window covering roughly November 2010 through June 2012, led by FNEW at 2,881,495.00 and HIST second",
+      alt: "The dashboard with the window at nineteen months, November 2010 through June 2012, FNEW well ahead",
     },
   ]}
 />
