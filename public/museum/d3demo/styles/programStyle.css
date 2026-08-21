@@ -1,0 +1,74 @@
+﻿.title
+{
+	font: 16px sans-serif;
+}
+
+.nv-area
+{
+	opacity: 0.4;
+}
+
+#nvd3-spend-over-tcpm
+{
+	height: 400px;
+}
+
+#nvd3-tcpm
+{
+	margin-top: 20px;
+	height: 200px;
+	clear: both;
+}
+
+#nvd3-tcpm b
+{
+	margin-left: 72px;
+}
+
+.row
+{
+	margin-top: 30px;
+	margin-left: 30px;
+}
+
+.station
+{
+	float: left;
+	height: 460px;
+	margin-bottom: 30px;
+	width: 270px;
+}
+
+.cpm_tcpm, .imps_timps
+{
+	float: left;
+	height: 460px;
+	margin-left: 30px;
+	margin-bottom: 30px;
+	width: 270px;
+}
+
+.cpm, .tcpm, .imps, .timps, .dow, .daypart, .duration
+{
+	height: 200px;
+	margin-bottom: 30px;
+	width: 270px;
+}
+
+.dow
+{
+	clear: both;
+	float: left;
+	margin-left: 30px;
+}
+
+.daypart,  .duration
+{
+	float: left;
+	margin-left: 30px;
+}
+
+	.cpm svg, .tcpm svg, .imps svg, .timps svg, .dow svg, .daypart svg, .duration svg
+	{
+		height: 205px;
+	}

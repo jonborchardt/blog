@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Media Landscape Explorer — the 2013 crossfilter demo</title>
+    <meta
+      name="description"
+      content="The 2013 PrecisionDemand crossfilter demo, preserved and served as-is: filter the media landscape by type, daypart, tRatio and impressions."
+    />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta
+      property="og:image"
+      content="https://jonborchardt.github.io/blog/og/google-charts-to-d3.png"
+    />
+
+    <link href="libs/nvd3/nv.d3.css" rel="stylesheet" />
+    <link href="libs/dc/dc.css" rel="stylesheet" />
+    <link href="libs/jquery/tablesorter/themes/blue/style.css" rel="stylesheet" />
+    <link href="libs/jquery/tablesorter/addons/pager/jquery.tablesorter.pager.css" rel="stylesheet" />
+    <link href="styles/explorerStyle.css" rel="stylesheet" />
+    <link href="styles/baseStyle.css" rel="stylesheet" />
+
+    <script src="libs/d3.v3.min.js"></script>
+    <script src="libs/d3.geo.projection.v0.min.js"></script>
+    <script src="libs/topojson.v1.min.js"></script>
+    <script src="libs/nvd3/nv.d3.js"></script>
+    <script src="libs/crossfilter/crossfilter.js"></script>
+    <script src="libs/dc/dc.js"></script>
+    <script src="libs/jquery/jquery-latest.js"></script>
+    <script src="libs/jquery/jquery.metadata.js"></script>
+    <script src="libs/jquery/tablesorter/jquery.tablesorter.js"></script>
+    <script src="libs/jquery/tablesorter/addons/pager/jquery.tablesorter.pager.js"></script>
+    <script src="nvd3Ex/baseScript.js"></script>
+    <script src="nvd3Ex/explorerScript.js"></script>
+    <script src="nvd3Ex/crossfilterChart.js"></script>
+    <script src="nvd3Ex/PdHeatMap.js"></script>
+    <script src="nvd3Ex/PdBubbleMap.js"></script>
+  </head>
+  <body>
+    <div id="head">
+      <h2>Media Landscape Explorer</h2>
+      <hr class="clear" />
+    </div>
+
+    <div id="filters">
+      <a class="resetFilters" href="javascript:clearAllFilters();dc.redrawAll();">Reset All Filters</a>
+
+      <h5>Media Type</h5>
+      <div id="filterMediaTypeChart" class="filterMediaType"></div>
+      <h5>Daypart</h5>
+      <div id="filterDaypartChart" class="filterDaypart"></div>
+      <h5>tRatio</h5>
+      <div id="filterTratioChart" class="filterTratio"></div>
+      <h5>Impressions</h5>
+      <div id="filterImpsChart" class="filterImpressions"></div>
+
+      <hr class="clear" />
+    </div>
+    <div id="content">
+      <div id="programBubbleChart" class="programBubble">
+        <svg></svg>
+      </div>
+
+      <div class="row">
+        <h4>What are the top targeted networks and programs?</h4>
+        <div id="topNetworksChart" class="topNetworks">
+          <svg></svg>
+        </div>
+        <div id="topProgramsChart" class="topPrograms">
+          <svg></svg>
+        </div>
+        <div class="topProgramsPerDaypart">
+          <table id="topProgramsPerDaypartChart" class="tablesorter"></table>
+          <div id="pager" class="pager">
+            <form>
+              <img src="libs/jquery/tablesorter/images/first.png" class="first" alt="First page" width="16" height="16" />
+              <img src="libs/jquery/tablesorter/images/prev.png" class="prev" alt="Previous page" width="16" height="16" />
+              <input type="text" class="pagedisplay" />
+              <img src="libs/jquery/tablesorter/images/next.png" class="next" alt="Next page" width="16" height="16" />
+              <img src="libs/jquery/tablesorter/images/last.png" class="last" alt="Last page" width="16" height="16" />
+              <select class="pagesize">
+                <option value="17">17 per page</option>
+                <option value="60">60 per page</option>
+              </select>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <h4>What time of day is most targeted media running?</h4>
+      <div id="daypartClusterHeatChart" class="daypartClusterHeat">
+        <svg></svg>
+      </div>
+
+      <hr class="clear" />
+    </div>
+
+    <div class="footer" id="footer">
+      <a href="./industryTracker.html">Industry Tracker</a>&nbsp;&nbsp;
+      <a href="./index.html">Rotations</a>&nbsp;&nbsp;
+      <a href="./programExample.html">Programs</a>&nbsp;&nbsp;
+      <a href="./explorerExample.html">Explorer</a>&nbsp;&nbsp;
+      <a href="./webSpike.html">Web Spike Explorer</a>&nbsp;&nbsp;
+    </div>
+  </body>
+</html>

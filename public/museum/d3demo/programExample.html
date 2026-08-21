@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Programs — the 2013 crossfilter demo</title>
+    <meta
+      name="description"
+      content="The 2013 PrecisionDemand crossfilter demo, preserved and served as-is: drag the timeline strip and every program chart refilters live."
+    />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta
+      property="og:image"
+      content="https://jonborchardt.github.io/blog/og/google-charts-to-d3.png"
+    />
+
+    <link href="libs/nvd3/nv.d3.css" rel="stylesheet" />
+    <link href="styles/programStyle.css" rel="stylesheet" />
+    <link href="styles/baseStyle.css" rel="stylesheet" />
+
+    <script src="libs/d3.v3.min.js"></script>
+    <script src="libs/d3.geo.projection.v0.min.js"></script>
+    <script src="libs/topojson.v1.min.js"></script>
+    <script src="libs/nvd3/nv.d3.js"></script>
+    <script src="libs/crossfilter/crossfilter.js"></script>
+    <script src="nvd3Ex/PdLineWithFocusChart.js"></script>
+    <script src="nvd3Ex/nvd3ProgramScript.js"></script>
+  </head>
+  <body>
+    <h1>Example of CrossFilter technology reporting on Programs</h1>
+    <hr class="clear" />
+
+    <div id="nvd3-spend-over-tcpm">
+      <svg></svg>
+    </div>
+
+    <div class="row">
+      <div class="station">
+        <svg id="nvd3-spend-by-station"></svg>
+      </div>
+      <div class="cpm_tcpm">
+        <div class="cpm">
+          <svg id="nvd3-spend-by-cpm"></svg>
+        </div>
+        <div class="tcpm">
+          <svg id="nvd3-spend-by-tcpm"></svg>
+        </div>
+      </div>
+      <div class="imps_timps">
+        <div class="imps">
+          <svg id="nvd3-spend-by-imps"></svg>
+        </div>
+        <div class="timps">
+          <svg id="nvd3-spend-by-timps"></svg>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="dow">
+        <svg id="nvd3-spend-by-dow"></svg>
+      </div>
+      <div class="daypart">
+        <svg id="nvd3-spend-by-daypart"></svg>
+      </div>
+      <div class="duration">
+        <svg id="nvd3-spend-by-duration"></svg>
+      </div>
+    </div>
+
+    <div id="nvd3-tcpm">
+      <b>CPA increases as Imps increase; however, tCPM (radius) is independent</b>
+      <svg></svg>
+    </div>
+
+    <h3 class="clear">Top Programs to Buy</h3>
+    <div id="programList"></div>
+    <hr class="clear" />
+
+    <div class="footer" id="footer">
+      <a href="./industryTracker.html">Industry Tracker</a>&nbsp;&nbsp;
+      <a href="./index.html">Rotations</a>&nbsp;&nbsp;
+      <a href="./programExample.html">Programs</a>&nbsp;&nbsp;
+      <a href="./explorerExample.html">Explorer</a>&nbsp;&nbsp;
+      <a href="./webSpike.html">Web Spike Explorer</a>&nbsp;&nbsp;
+    </div>
+  </body>
+</html>

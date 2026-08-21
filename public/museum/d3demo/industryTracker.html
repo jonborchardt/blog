@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Industry Tracker — the 2013 crossfilter demo</title>
+    <meta
+      name="description"
+      content="The 2013 PrecisionDemand line-with-focus chart, preserved and served as-is: replacing a Flash-based industry tracker with D3."
+    />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta
+      property="og:image"
+      content="https://jonborchardt.github.io/blog/og/google-charts-to-d3.png"
+    />
+
+    <link href="libs/nvd3/nv.d3.css" rel="stylesheet" />
+    <link href="styles/rotStyle.css" rel="stylesheet" />
+    <link href="styles/baseStyle.css" rel="stylesheet" />
+    <link href="styles/nvd3Style_gm_cadillac_7_15_13.css" rel="stylesheet" />
+
+    <script src="libs/d3.v3.min.js"></script>
+    <script src="libs/nvd3/nv.d3.js"></script>
+    <script src="nvd3Ex/PdLineWithFocusChart.js"></script>
+    <script src="nvd3Ex/nvd3Script_gm_cadillac_7_15_13.js"></script>
+
+    <script>
+      AddChart("data/GM_SUVs_vs_NonGM_SUVs_7_15_13.txt", "#chart1 svg");
+    </script>
+  </head>
+
+  <body>
+    <h1>Replacement for existing Flash based Industry Tracker</h1>
+    <hr class="clear" />
+
+    <div id="chart1" class="chart GM_SUVs_vs_NonGM_SUVs">
+      <svg></svg>
+    </div>
+
+    <div class="footer" id="footer">
+      <a href="./industryTracker.html">Industry Tracker</a>&nbsp;&nbsp;
+      <a href="./index.html">Rotations</a>&nbsp;&nbsp;
+      <a href="./programExample.html">Programs</a>&nbsp;&nbsp;
+      <a href="./explorerExample.html">Explorer</a>&nbsp;&nbsp;
+      <a href="./webSpike.html">Web Spike Explorer</a>&nbsp;&nbsp;
+    </div>
+  </body>
+</html>

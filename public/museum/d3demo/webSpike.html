@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Web Spike Explorer — the 2013 crossfilter demo</title>
+    <meta
+      name="description"
+      content="The 2013 PrecisionDemand web spike explorer, preserved and served as-is: drag the scale handle to rescale the impressions chart."
+    />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta
+      property="og:image"
+      content="https://jonborchardt.github.io/blog/og/google-charts-to-d3.png"
+    />
+
+    <link href="libs/nvd3/nv.d3.css" rel="stylesheet" />
+    <link href="styles/webSpikeStyle.css" rel="stylesheet" />
+    <link href="styles/baseStyle.css" rel="stylesheet" />
+
+    <script src="libs/d3.v3.min.js"></script>
+    <script src="libs/d3.geo.projection.v0.min.js"></script>
+    <script src="libs/topojson.v1.min.js"></script>
+    <script src="libs/nvd3/nv.d3.js"></script>
+    <script src="nvd3Ex/baseScript.js"></script>
+    <script src="nvd3Ex/webSpikeScript.js"></script>
+  </head>
+  <body>
+    <div id="head">
+      <img src="images/art_logo.png" alt="PrecisionDemand logo" width="90" height="59" />
+      <h2>Web Spike Explorer</h2>
+    </div>
+
+    <div id="chartArea">
+      <div id="webSpikeChart" class="webSpikeChart">
+        <svg></svg>
+      </div>
+    </div>
+
+    <div class="footer" id="footer">
+      <a href="./industryTracker.html">Industry Tracker</a>&nbsp;&nbsp;
+      <a href="./index.html">Rotations</a>&nbsp;&nbsp;
+      <a href="./programExample.html">Programs</a>&nbsp;&nbsp;
+      <a href="./explorerExample.html">Explorer</a>&nbsp;&nbsp;
+      <a href="./webSpike.html">Web Spike Explorer</a>&nbsp;&nbsp;
+    </div>
+  </body>
+</html>
