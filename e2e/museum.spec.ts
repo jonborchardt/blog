@@ -8,7 +8,7 @@ import { expect, test } from "@playwright/test";
  * content actually renders — chart pages build an `<svg>` client-side (sometimes only after an
  * async data fetch), the two galleries are static `<img>` screenshots.
  */
-const pages: { path: string; selector: string }[] = [
+const pages = [
   { path: "museum/index.html", selector: "ul li a" },
   { path: "museum/d3demo/index.html", selector: "svg" },
   { path: "museum/d3demo/industryTracker.html", selector: "svg" },
@@ -27,25 +27,26 @@ const pages: { path: string; selector: string }[] = [
 test("every museum page loads clean and renders its content", async ({ page }) => {
   // 13 pages, some with several MB of client-fetched data (industry-rankings, sell-side).
   test.setTimeout(120_000);
+  const failed: string[] = [];
+  page.on("response", (r) => {
+    if (r.status() >= 400) failed.push(`${r.status()} ${r.url()}`);
+  });
   for (const { path, selector } of pages) {
-    const failed: string[] = [];
-    page.removeAllListeners("response");
-    page.on("response", (r) => {
-      if (r.status() >= 400) failed.push(`${r.status()} ${r.url()}`);
-    });
+    failed.length = 0;
     await page.goto(path);
     await expect(page.locator(selector).first(), path).toBeVisible({ timeout: 20_000 });
     expect(failed, path).toEqual([]);
   }
 });
 
-test("lobby lists all twelve demo entries with working links", async ({ page }) => {
+test("lobby links match the shipped demo pages exactly", async ({ page }) => {
   await page.goto("museum/index.html");
   const links = page.locator("ul li a");
-  await expect(links).toHaveCount(12);
-  const hrefs = await links.evaluateAll((as) => as.map((a) => a.getAttribute("href")));
-  for (const href of hrefs) {
-    const res = await page.request.get(new URL(href as string, page.url()).toString());
-    expect(res.ok(), href as string).toBe(true);
-  }
+  const hrefs = await links.evaluateAll((as) => as.map((a) => a.getAttribute("href") ?? ""));
+  const resolved = hrefs.map((h) => `museum/${h.replace("./", "")}`).sort();
+  const shipped = pages
+    .filter((p) => p.path !== "museum/index.html")
+    .map((p) => p.path)
+    .sort();
+  expect(resolved).toEqual(shipped);
 });
