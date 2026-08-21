@@ -71,9 +71,11 @@
   @apply text-xs font-medium tracking-wide uppercase;
 }
 
-/* Tag pill: a link/button to /all-posts/?tag=<id> (post meta rows, listings, archive results). */
+/* Tag pill: a link/button to /all-posts/?tag=<id> (post meta rows, listings, archive results).
+   min-h-6 keeps every pill at the WCAG 2.2 target-size floor (24px) — text-xs alone renders 20px,
+   which axe flags as soon as a tag row wraps and pills become vertical neighbours. */
 @utility tag-pill {
-  @apply bg-muted hover:bg-accent rounded-sm px-1.5 py-0.5 text-xs no-underline;
+  @apply bg-muted hover:bg-accent inline-flex min-h-6 items-center rounded-sm px-1.5 text-xs no-underline;
 }
 
 /* Tailwind's built-in max-w-prose is a fixed 65ch; point it at our token instead. */
