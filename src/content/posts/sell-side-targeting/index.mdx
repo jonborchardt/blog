@@ -8,7 +8,7 @@ tags: [retrospective, adtech, data-viz, d3, patents]
 authority: 'E:\github2\Labs'
 hero:
   src: ./hero.png
-  alt: A dense table of TV airings — station, day, hour, program, brand, CPM — with each row ending in a strip of industry icon cards shaded yellow through bright green by fit score, beside a column of industry filter bars
+  alt: A dense table of TV airings — day, hour, program, brand, CPM — with each row ending in a strip of industry icon cards shaded yellow through bright green by fit score, beside a column of industry filter bars
 draft: true
 ---
 
@@ -23,13 +23,14 @@ import sweptShot from "./industry-rankings-swept.png";
 When I built the [portfolio I froze in 2018](/labs-2018-snapshot/), two of the cards on it were
 almost the same picture. Both were dashboards full of bars and bubbles, built from the same pile of
 scripts, running on the same TV ad data. The card copy is what separated them. One asked how well
-an industry was buying its airtime. The other asked, of a single minute of airtime, which industry
-should be buying it.
+an industry was buying its airtime. The other asked, of one hour-long block of airtime on one
+station, which industry should be buying it.
 
-That second question is the one I am proudest of asking. It started as a 20% time idea, ended up in
-front of paying customers, and eventually became a granted patent with my name on it. But the first
-one is not the warm-up act, and I want to be careful about that, because for years I described it
-that way and it was not true. Industry Ratings was a real product with real customers and it is
+That second question is one of the three things in this portfolio I am proudest of having asked. It
+started as a 20% time idea, ended up in front of real customers, and eventually became a granted
+patent with my name on it. But the first one is not the warm-up act, and I want to be careful about
+that, because I was ready to describe it that way here, and it would not be true. Industry Ratings
+was a real product with real customers and it is
 still, eight years later, the more interesting thing to sit down and _use_.
 
 ## The transaction has two sides
@@ -50,7 +51,7 @@ you hold still.
 
 <VizFigure
   name="The same data read from the buy side and from the sell side"
-  summary="On the buy side, every airing an industry ever bought collapses into one score for that industry, which is then ranked against the other industries. On the sell side, a single airing fans out into all 23 industries ranked by how well they fit that one slot. Same data, same tRatio, inverted question."
+  summary="On the buy side, every airing an industry ever bought collapses into one score for that industry, which is then ranked against the other industries: the four sampled rows shown are Senior Life Insurance at tRatio 0.37, Music at 0.35, Luxury Auto at 0.24 and Exercise Equipement at 0.08. On the sell side, one airing — MTV, Monday 7AM — fans out instead into all 23 industries ranked by how well they fit that single slot, the top two scoring 0.39 and the third and fourth 0.07. Same data, same tRatio, inverted question."
 >
   <InversionViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
 </VizFigure>
@@ -99,15 +100,16 @@ the price of a thousand impressions divided by how well they were targeted: cost
 targeted thousand. Lower is better. Cost estimates came from SQAD clearing rates, impressions from
 Nielsen, and the targeting from our own modelling.
 
-I do not know who coined tRatio, or why it was the one piece of vocabulary that survived every
-rewrite of the platform from 2011 to 2018. It was already there when I started drawing screens for
-it.
+I do not know who coined tRatio, and I never found out why it was the one piece of vocabulary that
+carried. It shows up in every generation of the platform, from the 2011 Silverlight app to the 2018
+interface.
 
 ## Buy side: how well is your industry buying?
 
-`IndustryRankings` shipped under the name **PD Industry Ratings**, and its headline was a question
-posed directly to whoever was looking at it: _How well do the top agencies reach their target
-audience?_
+`IndustryRankings` shipped under the name **PD Industry Ratings** — the navbar brand next to it
+says _PD Industry Ranking_, singular, and nobody ever reconciled the two. Its headline was a
+question posed directly to whoever was looking at it: _How well do the top agencies reach their
+target audience?_
 
 <Figure
   caption="PD Industry Ratings, full data range. Demo data; the industry list is the shipped one, misspellings included."
@@ -146,14 +148,14 @@ And then across the bottom, the thing this whole post exists to show you.
 
 Every dashboard I built in this era had a strip of impressions along the footer with a brush on it.
 Drag a window across the time axis and everything above refilters — instantly, no submit button, no
-page load. Internally we just called it the sweep, and it is the single interaction I would demo
-first if you gave me one minute.
+page load. I think of it as the sweep, and it is the single interaction I would demo first if you
+gave me one minute.
 
 I dragged the brush across the window from 19 January to 10 November 2011. Here is the same page,
 same dataset, one gesture later.
 
 <Figure
-  caption="After sweeping the footer brush to 01/19/2011 through 11/10/2011. Same page, same dataset; the header now shows the range with a reset link."
+  caption="After sweeping the footer brush to 01/19/2011 through 11/10/2011. Same page, same dataset; the footer now shows the range with a reset link."
   width="wide"
   zoom
 >
@@ -179,10 +181,11 @@ stay put:
 | Spend axis                | $0 to $250MM                      | $0 to $70MM                     |
 
 Term insurance climbs from ninth to third, and its targeting _improves_ inside the window rather
-than merely getting cheaper. Two industries — Life Insurance Investment and Exercise Equipment —
-keep their labels but lose their bars entirely, because inside those ten months they have no
-qualifying airings at all. Both bubble charts rescale their axes and re-lay out completely. The
-left-rail histograms redraw. The header grows a range and a reset link.
+than merely getting cheaper. Two industries — Life Insurance Investment and Exercise Equipement,
+spelled the way the product spells it — keep their labels but lose their bars entirely, because
+inside those ten months they have no qualifying airings at all. Both bubble charts rescale their
+axes and re-lay out completely. The left-rail histograms redraw. The footer strip grows a range and
+a reset link.
 
 None of that is a page load. It is [crossfilter](https://github.com/crossfilter/crossfilter) doing
 the set arithmetic and [dc.js](https://dc-js.github.io/dc.js/) redrawing every chart that shares the
@@ -244,7 +247,7 @@ mascara currently in it is not one of them, and the network is under-charging fo
 
 Fifteen thousand rows of that is not a report. It is a worklist. And because it is crossfilter
 underneath, a salesperson could click their own station, drag the tRatio Delta histogram to just the
-slots where the gap was largest, and be looking at their next twenty phone calls in about four
+slots where the gap was largest, and be looking at their next twenty phone calls in a couple of
 seconds.
 
 ## Twenty percent time, and then a patent
@@ -279,6 +282,6 @@ reference `../libs/`, `../scripts/` and `../content/` in lowercase against folde
 a handful of the interactions are subtly buggy now in ways I did not notice at the time and am not
 going to fix in 2026.
 
-The sweep still works, though. I dragged it to make the screenshot above and it felt exactly the
-way I remember it feeling, which after more than a decade and one acquisition is more than I
-expected from a folder of files I bulk-copied into a portfolio the month I quit.
+The sweep still works, though. I drove the brush across it to make the screenshot above, and it
+still repaints the whole page in one frame — which, after more than a decade and one acquisition, is
+more than I expected from a folder of files I bulk-copied into a portfolio the month I quit.
