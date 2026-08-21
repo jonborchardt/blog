@@ -8,32 +8,32 @@
   <text x="150" y="24" fill="currentColor" text-anchor="middle" font-weight="600">Media plan</text>
   <text x="560" y="24" fill="currentColor" text-anchor="middle" font-weight="600">Watermark detections</text>
 
-  <!-- plan block 1: matched -->
+  <!-- plan block 1: matched (generic placeholder labels/counts, not the real record) -->
   <rect x="40" y="46" width="220" height="56" rx="8" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
-  <text x="58" y="68" fill="#11171d" font-weight="600">Mon 8p-12a block</text>
-  <text x="58" y="86" fill="#11171d" fill-opacity="0.8" font-size="12">3 planned, 3 detected</text>
+  <text x="58" y="68" fill="#11171d" font-weight="600">Day 1 block</text>
+  <text x="58" y="86" fill="#11171d" fill-opacity="0.8" font-size="12">2 planned, 2 detected</text>
 
   <!-- plan block 2: matched -->
   <rect x="40" y="126" width="220" height="56" rx="8" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
-  <text x="58" y="148" fill="#11171d" font-weight="600">Tue 12a-4a block</text>
-  <text x="58" y="166" fill="#11171d" fill-opacity="0.8" font-size="12">3 planned, 3 detected</text>
+  <text x="58" y="148" fill="#11171d" font-weight="600">Day 2 block</text>
+  <text x="58" y="166" fill="#11171d" fill-opacity="0.8" font-size="12">2 planned, 2 detected</text>
 
   <!-- plan block 3: nothing detected against it -->
   <rect x="40" y="206" width="220" height="56" rx="8" fill="#fafcfe" stroke="currentColor" stroke-opacity="0.5" stroke-dasharray="4 3"/>
-  <text x="58" y="228" fill="#11171d" font-weight="600">Wed 6a-6p block</text>
-  <text x="58" y="246" fill="#555f69" font-size="12">5 planned, 0 detected</text>
+  <text x="58" y="228" fill="#11171d" font-weight="600">Day 3 block</text>
+  <text x="58" y="246" fill="#555f69" font-size="12">3 planned, 0 detected</text>
 
-  <!-- detection pins (time label sits above the pin, clear of the connecting line) -->
+  <!-- detection pins (generic round placeholder times, not the real record; label sits above the pin, clear of the connecting line) -->
   <circle cx="580" cy="60" r="8" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
-  <text x="580" y="46" fill="currentColor" text-anchor="middle" font-size="11">3:53a</text>
+  <text x="580" y="46" fill="currentColor" text-anchor="middle" font-size="11">8:00p</text>
   <circle cx="580" cy="88" r="8" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
-  <text x="580" y="74" fill="currentColor" text-anchor="middle" font-size="11">11:52p</text>
+  <text x="580" y="74" fill="currentColor" text-anchor="middle" font-size="11">11:30p</text>
   <circle cx="580" cy="140" r="8" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
-  <text x="580" y="126" fill="currentColor" text-anchor="middle" font-size="11">1:42a</text>
+  <text x="580" y="126" fill="currentColor" text-anchor="middle" font-size="11">1:00a</text>
   <circle cx="580" cy="168" r="8" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
-  <text x="580" y="154" fill="currentColor" text-anchor="middle" font-size="11">9:41p</text>
+  <text x="580" y="154" fill="currentColor" text-anchor="middle" font-size="11">4:15a</text>
   <circle cx="580" cy="272" r="8" fill="#fafcfe" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5"/>
-  <text x="580" y="258" fill="currentColor" text-anchor="middle" font-size="11">3:24a</text>
+  <text x="580" y="258" fill="currentColor" text-anchor="middle" font-size="11">6:45a</text>
 
   <!-- matched connections -->
   <path d="M572 60 Q400 62 262 66" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" marker-end="url(#mfv-fg)"/>
