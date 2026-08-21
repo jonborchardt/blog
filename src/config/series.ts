@@ -29,12 +29,12 @@ export const series = {
       alt: "A gridded globe with padlock markers pinned to three coordinates, two of them projecting glowing towers into the sky, while the ISS rides a dashed orbital ring",
     },
   },
-  "labs-retro": {
-    title: "Labs: A 2001–2018 Retrospective",
+  "past-work": {
+    title: "Past Work",
     description:
       "Twelve 2001–2018 side projects built in 20% time — flagships like Audience Planner and DocMapper — tracked by tRatio, in a 2018 job-hunt snapshot.",
     hero: {
-      src: "series/labs-retro.png",
+      src: "series/past-work.png",
       alt: "A timeline from 2001 to 2018 lined with small chart-icon tiles marking side projects, four of them highlighted as dial glyphs where the tRatio metric marks a flagship product",
     },
   },
