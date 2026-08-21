@@ -1,0 +1,314 @@
+---
+title: "DocMapper: The Map I Spent Six Years Drawing"
+description: Attenex DocMapper drew a legal document review as a radial map of concept clusters. Six years, an OpenGL to DirectX rewrite, and five patents.
+publishedAt: 2026-08-21
+series: past-work
+seriesOrder: 2
+tags: [retrospective, data-viz, graphics, patents]
+authority: 'E:\github2\Labs'
+hero:
+  src: ./hero.png
+  alt: The DocMapper cluster view, rings of blue document dots strung along pale spokes inside a dark compass arc, with the concept labels ring, stone and a yellow carat set around the edge
+draft: true
+---
+
+import Callout from "@/components/blog/Callout.astro";
+import Figure from "@/components/blog/Figure.astro";
+import Quote from "@/components/blog/Quote.astro";
+import VizFigure from "@/components/blog/VizFigure.astro";
+import { Image } from "astro:assets";
+import MapAnatomy from "./map-anatomy.svg";
+import ReviewLoop from "./review-loop.svg";
+import screen from "./screen.png";
+import birdsEye from "./birds-eye.png";
+import timeline from "./timeline.png";
+import trays from "./set-aside-trays.png";
+import nbc from "./DocMapperNBC20080213.jpg";
+
+I graduated from the University of Washington's computer science program and went straight to a
+small company in downtown Seattle that had decided lawyers should look at documents instead of
+reading them. I was one of the first engineers there. I stayed six years, from August 2001 to
+October 2007, and I spent nearly all of that time on one screen.
+
+The screen was called the Document Mapper — DocMapper, to everyone who used it. It drew an entire
+legal document review as a map: every document a dot, similar documents gathered into rings,
+rings strung along lines of shared meaning, and the whole thing wrapped in a compass of the
+concepts that organised it. It became the company's flagship product and its primary market
+differentiator, and it left me with five granted patents. It is one of the three projects I am
+proudest of in [the portfolio this series is walking through](/labs-2018-snapshot/).
+
+## The pile
+
+The domain was electronic discovery: when a matter goes to litigation, both sides have to hand
+over the relevant documents, which in practice means someone has to look at all of them and decide
+which ones are relevant. In 2001 "all of them" had just stopped meaning filing cabinets and
+started meaning mail servers. The pile was suddenly measured in millions of items, and the review
+method had not changed at all. It was still one document, one human, one decision, over and over,
+in linear order, by people billing hourly.
+
+The company's answer was a platform called Attenex Patterns. Patterns pulled the text out of
+everything, ran it through linguistic analysis to extract **concepts** — the reviewer guide defines
+one as "a noun or noun phrase in the text of a document" — and gave each document a concept
+profile. The guide has a nice line about it: think of the profile as "an extended 'subject line'
+describing its content." The language machinery underneath was mostly other people's — the front
+matter of the guide credits Inxight's LinguistX Platform for the linguistic analysis and dtSearch
+for full-text search, and carries the copyright notice for Chih-Chung Chang and Chih-Jen Lin's
+support vector machine library.
+
+DocMapper was the front end for that. All the analysis in the world does not help if the reviewer
+still has to open documents one at a time, and the map was the argument that they should not have
+to.
+
+## What the map actually showed
+
+<Figure
+  caption="The cluster view, with the Cluster Folders panel open. The demo dataset in every screenshot here is about diamonds — ring, stone, carat — and, like everything else in this portfolio, it is fake."
+  width="wide"
+  zoom
+>
+  <img
+    src={screen.src}
+    width="814"
+    height="643"
+    alt="A black cluster view showing rings of blue dots on pale spokes with concept labels ring, stone, carat and parking, beside a Cluster Folders tree listing folder groups such as ring (13), stone (15), carat (6) and Not Clustered (86)"
+  />
+</Figure>
+
+Every dot is one document, and its colour is the category a reviewer has marked it with. Documents
+whose concept profiles look alike are gathered into a **cluster**, drawn with a ring around it. A
+cluster is not a folder anyone made; the guide is careful to call it "a temporary grouping of
+documents based on the similarity of their concepts", and it dissolves and re-forms every time you
+recluster.
+
+Clusters that share a concept are joined by a line called a **spine** — "a line of clusters that
+share a common concept" — and a cluster sitting where two spines cross belongs to both. Hovering a
+cluster thickened its spine so you could see, immediately, what else was on the same thread.
+
+Around the outside sits the **concept compass**: the concepts of the longest spines, positioned so
+that each label points along the spine it names. That ring is the thing I would defend hardest if
+someone asked me what the design was for. You could not read a million documents, but you could
+read a handful of words arranged around the edge of a circle, and those words told you what the
+collection was about before you had clicked anything.
+
+<VizFigure
+  name="Anatomy of the DocMapper cluster view"
+  summary="The concept compass carries the top concepts of the longest spines around the edge, each label pointing along its spine. Spines run inward as lines of clusters that share a concept, and each cluster is a ring of documents; magnified, one cluster is a spiral of dots running outward from the centre document, least similar last."
+>
+  <MapAnatomy class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
+
+The layout inside a cluster was not decoration either. Documents were "arranged in a spiral, based
+on their similarity to the center document", so proximity meant something at every zoom level: the
+compass told you what the collection was about, the spine told you what a neighbourhood was about,
+the ring told you what a group was about, and the position of a dot inside the ring told you how
+typical that document was of its group.
+
+Down the right-hand side were the **set-aside trays**. Once you had decided about a document, it
+left the map and went into a tray, so the main region always showed you only the work you had not
+done yet.
+
+<Figure caption="Set-aside trays: decided documents, out of the way but not gone.">
+  <Image
+    src={trays}
+    alt="Three small trays holding stacked dots in cyan, white and magenta, beside two spine labels reading network and coffee"
+  />
+</Figure>
+
+A few things refused to be mapped, and DocMapper was honest about them rather than hiding them.
+Documents with no extractable concepts at all — images, password-protected files — went into a
+square called **Zero Concepts**. Short documents with too few useful concepts went into **Limited
+Concepts**. Long documents with plenty of concepts that were simply not like anything else went
+into **Miscellaneous Files**. In the screenshot above, that is 86 documents out of the assignment
+that the clustering declined to have an opinion about. I still think putting them on screen, in
+their own labelled squares, was the right call. A visualization that quietly drops what it cannot
+explain is lying.
+
+## Where the tenfold came from
+
+The claim we made, and the one I still repeat, is that this was roughly ten times faster than
+traditional review. It is worth being precise about where that came from, because it was not
+rendering and it was not machine learning. It came from changing the unit of work.
+
+Traditional review is one document, one decision. DocMapper's review is one *cluster*, one
+decision. Select a ring, glance at the top concepts that pulled it together, mark the whole ring
+Non-responsive, sweep it into a tray, recluster, and the map redraws around what is left.
+Repeat until the only things still on screen are the documents that genuinely need a human to read
+them.
+
+<VizFigure
+  name="The DocMapper review loop"
+  summary="Three passes down the page. The main region starts full of clusters and the set-aside trays empty; marking whole clusters and pressing Sweep moves them into the trays; reclustering lays out only the survivors, so the map shrinks each time round while the trays fill."
+>
+  <ReviewLoop class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
+
+The reviewer guide put this better than any of our marketing did, and I am quoting it here because
+it is the clearest statement of the whole product I have ever found:
+
+<Quote cite="Attenex Patterns Document Mapper Reviewer Guide, version 3.5">
+  Reviewers who are wanting to eliminate large numbers of non-responsive documents from an
+  assignment may decide to not look for the proverbial "needle in a haystack", but instead look for
+  entire "haystacks with no needles".
+</Quote>
+
+The guide goes on to say that if a reviewer cannot make a decision about a cluster within a few
+seconds of looking at its concepts, they should leave it unmarked and move on. That instruction is
+the tenfold, written down. The map's job was to make the easy majority of the pile obviously easy,
+fast, so that the expensive human attention landed only on the residue.
+
+There was a second half to it that I liked even more. The reviewer could throw concepts *away*.
+Days of the week, phone numbers, the boilerplate at the bottom of everyone's signature — a concept
+that was structuring the map without meaning anything could be dragged off the compass and dropped
+into a trash bin in the corner, and the next reclustering would be computed as though it had never
+existed. The clustering was not an oracle handing down an answer. It was a knob, and the person who
+knew the case got to turn it.
+
+<Callout variant="note" title="On the word 3D">
+  The patents and my own résumé call this a dense three-dimensional scene, and that is what we built
+  it on: a real graphics pipeline, with depth. But look at the screenshots and you will see a plane
+  you pan and zoom, not a scene you fly through. The dimensionality was in the engine and in how
+  densely we could push pixels, more than in what the reviewer experienced. I would rather say that
+  plainly than let the word do work it did not do.
+</Callout>
+
+## Building it
+
+The first version was raw OpenGL. Not a scene graph, not a framework — an assignment is more
+primitives than an early-2000s middle layer wanted to hear about, and all of them had to hit the
+screen at an interactive frame rate on whatever workstation a law firm happened to own, which meant
+owning the pipeline myself. The client was C++ and MFC, with SQL underneath. Later I led the
+migration from OpenGL to DirectX, which bought us both performance and better-looking output, and
+the codebase drifted toward C# as the years went on.
+
+Most of the six years were performance work, honestly. Not the fun kind of graphics performance
+either — the kind where a reviewer opens an assignment of a size nobody tested and you spend a week
+in a database profiler. The résumé line for that period is "profiled and tuned application and
+database performance", which is a tidy way of saying that the difference between a tool people love
+and a tool people are forced to use is usually a few hundred milliseconds wide.
+
+In July 2006 I moved from Software Engineer to Senior, and the job changed shape: I owned the
+DocMapper client outright — architecture, features, performance, quality — specified features
+end to end, and started mentoring other engineers on visualization. When I left in October 2007 my
+VP of engineering wrote a reference that I have kept ever since:
+
+<Quote cite="Skip Walter, VP Engineering, Attenex">
+  Jon has matured during his six years evolving from a competent programmer to a senior software
+  engineer... I highly recommend Jon for senior software engineering positions.
+</Quote>
+
+## Three more ways to look at the same pile
+
+The cluster view was the centrepiece, but a document collection has more than one shape, and the
+product eventually grew a view for each of them. All of them shared highlighting: search or select
+in one, and the matching documents lit up yellow in all the others at once.
+
+**Bird's Eye** was the small always-whole-map inset, with a rectangle marking your current
+viewport. Click anywhere in it to jump. Unglamorous, and the piece I would keep if I could only
+keep one.
+
+<Figure caption="Bird's Eye, over a zoomed-in view of three clusters on a single spine.">
+  <Image
+    src={birdsEye}
+    alt="A small Bird's Eye panel showing the whole cluster map in miniature with a white viewport rectangle, next to a zoomed view of three ringed clusters of blue dots joined by a thin spine"
+  />
+</Figure>
+
+**Timeline** laid the same documents out by date — sent, received, or last modified. Drag across a
+range of months and those documents highlight everywhere else. It is the view that answers "what
+happened in May", which in litigation is very often the actual question.
+
+<Figure caption="The Timeline, with a range highlighted in yellow at the base of the later bars.">
+  <Image
+    src={timeline}
+    alt="A Timeline panel spanning May 2004 to June 2005 as purple bars of document counts, low through most of the period and spiking in May and June 2005, with yellow highlighted segments at the base of several later bars"
+  />
+</Figure>
+
+**Social Network View** drew the participants instead of the documents: every sender and recipient
+a circle sized by volume, every pair who exchanged mail joined by a line — grey for one-way, green
+for two-way. It had three searches I remember with real fondness, because they encode a piece of
+domain knowledge directly into the UI. *Find Zero Received* highlights people who send but never
+receive, which is mostly automated mail. *Find Zero Sent* highlights people who only ever receive,
+which is mostly distribution lists. *Find Single Exchanges* highlights the one-off blasts copied to
+everybody. One menu, and each item on it deletes a large category of noise from a review.
+
+One more piece of the model deserves a mention because it took real arguing to get right. An email
+with two attachments is not one document. Patterns split it into three, so the body and each
+attachment clustered on their own concepts and landed wherever they actually belonged — which was
+often three different places on the map. But you cannot *produce* half an email in litigation, so
+DocMapper computed a separate **production mark** for the compound item from the marks on its
+components, and that is what governed the export. The reviewer worked at the level that made sense
+for reading; the export worked at the level that made sense for the law.
+
+## Five patents
+
+Five granted patents came out of that work, all of them about the same underlying problem: how a
+user interface stays usable when the scene is far too dense for the screen it is on.
+
+| Patent        | Title                                                                                                                          |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| US 7,356,777  | System and method for providing a dynamic user interface for a dense three-dimensional scene                                   |
+| US 7,404,151  | System and method for providing a dynamic user interface for a dense three-dimensional scene                                   |
+| US 7,870,507  | System and method for providing a dynamic user interface for a dense three-dimensional scene with a navigation assistance panel |
+| US 8,056,019  | System and method for providing a dynamic user interface including a plurality of logical layers                               |
+| US 8,402,395  | System and method for providing a dynamic user interface for a dense three-dimensional scene with a plurality of compasses      |
+
+Read the titles in order and you can watch the product being invented. The dense scene comes first.
+Then the navigation assistance panel, which is Bird's Eye. Then logical layers, which is how labels,
+rings, spines and dots could all occupy the same pixels without turning into mud. Then a plurality
+of compasses, which is what happens when one ring of concepts is not enough.
+
+<Callout variant="note" title="A caveat about the dates">
+  My own patent records list "issued" dates for these that cannot be right — several are years
+  earlier than a patent with that number could have been granted, so they are almost certainly
+  filing dates that got mislabelled somewhere along the way. Rather than repeat a date I cannot
+  vouch for, I have given numbers and titles only.
+</Callout>
+
+I do not want to oversell my part in these. Patents are drafted by attorneys and typically carry
+several inventors; what I did was author and edit the disclosures for interfaces I had built. But
+the ideas in them are the ideas in the screenshots above, and I can still explain every one of them
+from memory, which is not something I can say about most documents I have signed.
+
+## The clipping I kept
+
+There is one more file in the folder, and it is the one I am least certain about.
+
+<Figure caption="A clipping I saved to the portfolio folder. I filed it under DocMapper; I cannot prove from the file alone that it is.">
+  <Image
+    src={nbc}
+    alt="A screenshot of NBC's video player showing a Nightly News story headed White House says e-mails missing, dated April 13 2007, about the Senate Judiciary Committee questioning the White House over missing e-mails; the video thumbnail shows a monitor displaying a dark interface with a green arc and rings of blue dots"
+  />
+</Figure>
+
+It is a capture of an NBC Nightly News item from April 2007 about the Senate Judiciary Committee's
+investigation into missing White House emails, and the monitor in the thumbnail is showing a dark
+interface with a green arc and rings of dots that looks a great deal like ours. I saved it. The
+filename I gave it points at February 2008, which does not match the story's own date, so at least
+one of those two things is wrong.
+
+That is the whole of what I can establish. The honest version is: I worked on software for finding
+things in email archives, during years when finding things in email archives was on the news, and I
+kept a clipping that I believed at the time was us. I would rather leave it here with the
+uncertainty attached than tell you a better story.
+
+## What I took from it
+
+Three things, and I have used all of them since.
+
+The first is that the way to make a large collection tractable is to change the unit of work, not
+to speed up the existing unit. Faster document-by-document review would have been a rounding error.
+Reviewing a haystack at a time was a different order of magnitude.
+
+The second is that a visualization has to admit what it does not know. Zero Concepts, Limited
+Concepts, Miscellaneous Files, sitting there in their own squares — that is a system telling the
+truth about its own coverage, and I have never regretted building that into anything.
+
+The third is the concept trash bin. The clustering was good, but the person looking at it always
+knew something the clustering did not, and giving them a way to say so — drag the useless concept
+off the compass, recluster, watch the map reorganise — is what made it a tool rather than a verdict.
+Nearly twenty years later that is still the property I look for first in anything that puts a model
+between a person and their data.
+
+The next post in this series jumps forward to 2008, and to a very different kind of pile: the Bing
+results page.
