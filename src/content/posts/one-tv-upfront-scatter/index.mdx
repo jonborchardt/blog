@@ -1,0 +1,221 @@
+---
+title: "ONE TV: One Design Language, Three Generations"
+description: AOL's ONE TV had an upfront half and a scatter half — and behind both, a constraints dialog I had first drawn in Balsamiq in 2012.
+publishedAt: 2026-08-21
+series: past-work
+seriesOrder: 11
+tags: [retrospective, adtech, data-viz]
+authority: 'E:\github2\Labs'
+hero:
+  src: ./hero.png
+  alt: A ONE TV scenario comparison grid listing scenarios named Current, Sara 1, Shift Test and Olga shift regress with columns for objective, budget, spend, average demo CPM, total demo impressions and three tRatio columns, beside a filter rail of checkboxes with bar gauges
+draft: true
+---
+
+import Callout from "@/components/blog/Callout.astro";
+import Figure from "@/components/blog/Figure.astro";
+import VizFigure from "@/components/blog/VizFigure.astro";
+import Lineage from "./constraints-lineage.svg";
+import upfrontWireframe from "./upfront-wireframe.png";
+import upfrontShipped from "./upfront-shipped.png";
+import scatterWireframe from "./scatter-wireframe-2012.png";
+import scatterSilverlight from "./scatter-silverlight-2013.png";
+import scatterShipped from "./scatter-shipped-2018.png";
+import sodaWar from "./soda-war.png";
+
+AOL bought PrecisionDemand in May 2014, and I spent the four years after that on one product. First
+as the senior engineer leading the migration off Silverlight and onto AngularJS, then, from June
+2016, as a Principal running a UI team of three and owning everything a user saw on the Linear TV
+advertising platform. The platform was called ONE TV.
+
+Two directories in my 2018 portfolio hold what is left of it: `upfront` and `scatter`. Between them
+they contain shipped screens, a hand-annotated wireframe, and — hiding in the scatter folder — the
+same dialog drawn three times across six years.
+
+<Callout variant="note" title="The campaigns are not real">
+  Every advertiser, budget and rating number in these screenshots is demo data. Verizon, YSL's Black
+  Opium, the Nielsen figures — all of it was built for demos.
+</Callout>
+
+## What I remember, and what I don't
+
+Upfront and scatter are the two halves of how television inventory gets bought. I cannot tell you
+how they split ONE TV as a product. Whether they were two products, two modes of one product, or
+just two ways the same screens got used, is not something I still carry around eight years later,
+and I would rather say that than reconstruct a strategy from thumbnails.
+
+So this post does the thing I can actually do honestly: it describes the screens, and it follows
+one dialog through three generations of them.
+
+## Upfront: a quarter, planned all at once
+
+The shipped upfront screen is a scenario comparison. You pick a campaign, a date range, a network
+group and a demographic, and then you make as many plans as you like against that one budget and
+put them side by side.
+
+<Figure
+  caption="The shipped upfront optimizer, February 2018, with me logged in."
+  width="wide"
+  zoom
+>
+  <img
+    src={upfrontShipped.src}
+    width="1426"
+    height="988"
+    alt="A ONE TV screen headed Optimize Upfront with fields for campaign Verizon Q2 2018, dates 3/26/2018 to 6/25/2018, network group Univision Upfront, demographic A18-49 and total spend $2,651,066, above a scenarios grid comparing objective, budget, spend, average demo CPM, total demo impressions and MVS, MQS and SMC tRatio columns, with a summary section of tRatio and impressions charts below"
+  />
+</Figure>
+
+Everything about that screenshot is ordinary except how much of it is people. The campaign is
+"Verizon Q2 2018" and the quarter runs 26 March to 25 June — a whole quarter of inventory, bought
+in one sitting, against the Univision network group and its GALA, UMA and UNI networks. Another
+screen in the same folder shows an NBCU list instead: BRAV, CNBC, E!, MSNB, NBC, SYFY, USA. But the
+scenario names in the grid are `Sara 1`, `Olga- shift regress`, `Test 363`, `Decrease Prod Redo`.
+That is not a product demo. That is Sara and Olga poking at the optimizer on a Tuesday, and I
+apparently never cleared it out before taking the screenshot.
+
+Each scenario runs the optimizer with a different objective — shift the buy, decrease the budget —
+and the grid ranks the results by what they cost and how well they hit the target. By 2018 there were
+three tRatio columns on that grid — MVS, MQS, SMC — three ways of scoring the same plan. I could
+not tell you today what all three of those initialisms stood for.
+
+### The wireframe it came from
+
+Balsamiq first, then code. That was how I worked at PrecisionDemand and it was still how I worked
+at AOL: draw the whole screen, annotate the behaviour on it in callouts, argue about the drawing,
+then build the drawing.
+
+<Figure
+  caption="The upfront design, wireframed and annotated before it was built. The mockup's address bar reads onetv.aol.com."
+  width="wide"
+  zoom
+>
+  <img
+    src={upfrontWireframe.src}
+    width="2036"
+    height="1661"
+    alt="A large hand-annotated Balsamiq wireframe of the upfront screen for a Q3 Verizon campaign on FOX Networks Group, showing an airings grid with per-scenario buy columns, a column of small bar charts, a Scenario Editor dialog of optimizer constraints and target bias values, and a printable Scenario Order Report, with yellow callout notes explaining each behaviour"
+  />
+</Figure>
+
+The callouts are the specification. "Creating a scenario automatically adds a new column to the grid
+below (and a new series in all charting)." "All charts show ALL scenarios AND all update on every
+change." "Ready to print for sending to network" — because the end of all this optimizing was a
+piece of paper that told a network which spots to buy and which to sell back.
+
+The wireframe is a Q3 campaign against FOX Networks Group at \$1.25M, 21% of the total. The shipped
+screen is a Q2 campaign against Univision at \$2.65M. Different quarter, different networks, same
+screen.
+
+## Scatter: the same words, three generations deep
+
+The scatter folder is the interesting one, because it did not get cleaned out either. It has the
+2018 product in it, and it also has the drawings and dialogs from six years earlier, sitting in the
+same directory listing as if no time had passed.
+
+<Figure caption="The shipped scatter screen, 2018." width="wide" zoom>
+  <img
+    src={scatterShipped.src}
+    width="1390"
+    height="657"
+    alt="A ONE TV screen for a campaign called Black Opium Valentine's Day 2018 with a tactic group NBCU $390K, basic settings for budget, inventory source NBCUniversal National Networks, flight dates and spot lengths, a forecasted plan strip showing spend $387,003 and a target impact score of 1.26 tRatio, and an impression distribution table listing USA, OXYG, E!, BRAV, CNBC and NBC with per-network tRatio values"
+  />
+</Figure>
+
+A tactic group inside a campaign, a budget of \$390,000, a forecast of \$387,003 against it, and a
+headline number labelled **1.26 TRATIO**. Underneath, the plan broken out by network with a tRatio
+each: USA at 1.13, Oxygen at 1.86, E! at 1.38, Bravo at 1.21, and CNBC and NBC both down at 0.58.
+Same metric that had been on screen since 2011, still doing the same job — letting you rank two
+completely different pieces of inventory on how efficiently they reach the people you are paying to
+reach.
+
+Now go back six years in the same folder.
+
+<Figure
+  caption="Three campaign-planner dialogs from the PrecisionDemand era, wireframed in Balsamiq. Every date written into the mock is January 2012."
+  width="wide"
+  zoom
+>
+  <img
+    src={scatterWireframe.src}
+    width="3074"
+    height="1399"
+    alt="Three large Balsamiq wireframes side by side for Edit Campaign, Edit Cell and Edit Cell Week dialogs, each with constraint fields, cluster and daypart bias sliders, an example plan table listing programs with station and tRatio columns, and yellow callout notes such as EVERYTHING has a tooltip"
+  />
+</Figure>
+
+That is the PrecisionDemand campaign planner, and every date I put inside the mock is a January
+2012 date — including the completed-milestones box in the corner, which is a mock of our own
+workflow: "1/3/12 JonB Campaign Started", "1/13/12 Steph Buy Complete". The panel on the left,
+labelled Constraints, is the one to watch.
+
+Here is what it looked like a year later, after it had been built — as a Silverlight dialog, in the
+product, with a real edit timestamp on it:
+
+<Figure caption="The same constraints, shipped in Silverlight. Last edit: 29 January 2013.">
+  <img
+    src={scatterSilverlight.src}
+    width="479"
+    height="371"
+    alt="A Silverlight dialog titled Edit Campaign Constraints, Campaign #1, Last Edit 1/29/2013, with numeric fields for minimum and maximum gross rating points, minimum program cluster and blended tRatio, maximum single program buy percentage and count, maximum single cable and broadcast buy percentages, maximum program buy per hour and minimum program CPM"
+  />
+</Figure>
+
+And here is the Scenario Editor from the ONE TV upfront wireframe above, four years after that, at
+a different company, on a different frontend stack, after an acquisition: the same list of fields,
+in the same order, with the same default values.
+
+<VizFigure
+  name="The constraints dialog across three generations, 2012 to 2017"
+  summary="The same five optimizer constraints appear in the same order in a 2012 Balsamiq wireframe, a 2013 shipped Silverlight dialog and a 2017 ONE TV wireframe. The 2012 and 2017 defaults are identical — 0.30, 0.20, 0.05, 50, 3.00 — while the 2013 build used looser ones. The only wording change in five years is program becoming airing."
+  data={{
+    caption: "Constraint fields and their default values in each generation",
+    columns: ["Field", "2012 wireframe", "2013 Silverlight", "2017 wireframe"],
+    rows: [
+      ["Min cluster tRatio", "0.30", "0.50", "0.30"],
+      ["Min blended tRatio", "0.20", "0.50", "0.20"],
+      ["Max single buy %", "0.05", "40.00 %", "0.05"],
+      ["Max single count", "50", "45", "50"],
+      ["Min CPM", "3.00", "$1.00", "3.00"],
+    ],
+  }}
+>
+  <Lineage class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
+
+Minimum cluster tRatio, minimum blended tRatio, maximum single buy percentage, maximum single
+count, minimum CPM per unit. Five years, one rename: what had been a **program** became an
+**airing**, which is a more precise word for the same thing. The 2013 build shipped looser defaults
+than the drawing asked for, which is what happens when a thing meets real data. Otherwise the
+dialog is the dialog.
+
+I do not think anyone decided this. Nobody wrote down a design language and made us follow it. The
+vocabulary was just load-bearing enough that every rewrite carried it forward rather than paying to
+re-derive it — and by 2017 I was drawing wireframes against a list of constraints I had first drawn
+in 2012, mostly out of muscle memory.
+
+## A detour, August 2014
+
+Right after the acquisition there was an Adap.tv hackathon, and we built a thing called Soda War:
+a D3 choropleth of Coke's and Pepsi's television ad spend across the country over twenty-four
+hours, with a play button that ran the day forward. I did the front end; Sawin Lee, Dyng Au and
+Brendan Kitts did the data. Whether we won it, I genuinely do not remember.
+
+<Figure caption="Soda War, the August 2014 hackathon entry." width="wide" zoom>
+  <img
+    src={sodaWar.src}
+    width="1440"
+    height="900"
+    alt="A hackathon page headed Hackathon Aug 2014 Adap.TV, project Dynamic spend map, crediting Jon Borchardt on front end and Sawin Lee, Dyng Au and Brendan Kitts on data, above a play button, a time slider and a D3 map of the United States"
+  />
+</Figure>
+
+## What happened to it
+
+AOL renamed the division Oath in June 2017 — same team, same platform, a new logo on the same
+screens. I left in March 2018, and the reason these screenshots exist at all is that I was taking
+them on the way out, for a portfolio. ONE TV was shuttered after I left.
+
+So the product is gone, and what survived it is a directory listing where a 2012 drawing, a 2013
+dialog and a 2018 web app all sit next to each other, and you cannot tell from the field labels
+which is which.
