@@ -76,24 +76,34 @@ with a small diverging bar (index above/below baseline). Status bar Program Coun
 spinner + bar), `Program Airings`, `Program Duration`, `Program Name`, `Network`, `Cost per Air`
 (value + red/green bar), `Optimal Spend`, `Imps per Air` (value + bar), then a clipped column.
 Buttons bottom-left `Re-calculate Optimal Plan`, bottom-right `Export to Excel`, pager `Page 1 of
-12`. Most visible rows have Optimal Airings 0 / Optimal Spend $0.00; seven of ~25 visible rows are
-non-zero. Verified rows (arithmetic re-checked 2026-08-20, `Optimal Spend = Optimal Airings ×
-Cost per Air` holds to rounding):
+12`. **Exactly 28 rows are visible and exactly 6 have a non-zero Optimal Airings** (recounted
+2026-08-20 — an earlier "~25 rows / 7 non-zero" reading was wrong). The 22 zero rows are Property
+Virgins, NY Ink, How I Met Your Mother, Mutant Planet, My First Place, SyFy Movie, The Great Food
+Truck Race, House Hunters International, Mysteries at the Museum, House Hunters, Planet Earth,
+Toddlers and Tiaras, Tyler Perry's House of Payne, NHL Hockey, WILD WEEKEND, Diners Drive-Ins and
+Dives, Making Monsters, Big Rich Texas, Flipping Out, Curb Appeal: The Block, Swamp Wars, Friends.
 
-| Program                    | Network | Program airings | Duration | Cost per air | Optimal airings | Optimal spend |
-| -------------------------- | ------- | --------------- | -------- | ------------ | --------------- | ------------- |
-| The Tonight Show With Jay Leno | NBC | 367             | 48       | $19,893.62   | 50              | $994,681.10   |
-| House                      | FOX     | 18              | 60       | $129,962.90  | 18              | $2,339,332.13 |
-| Cubs Baseball              | WGNA    | 41              | 190      | $2,670.62    | 41              | $109,495.34   |
-| Say Yes to the Dress       | TLC     | 444             | 31       | $2,734.69    | 50              | $136,734.35   |
-| So You Think You Can Dance | FOX     | 21              | 105      | $149,909.14  | 18              | $2,698,364.60 |
-| 60 Minutes                 | CBS     | 26              | 60       | $102,988.30  | 26              | $2,677,695.77 |
+The six non-zero rows (arithmetic re-checked 2026-08-20). `Optimal Spend ≈ Optimal Airings ×
+Cost per Air`, but **not exactly** — every row is off by up to 15 cents, consistent with the
+displayed `Cost per Air` being rounded to the penny while the stored value is not. Do not state the
+product as equal to the cell:
+
+| Program                        | Network | Program airings | Duration | Cost per air | Optimal airings | Optimal spend (cell) | airings × cost | delta  |
+| ------------------------------ | ------- | --------------- | -------- | ------------ | --------------- | -------------------- | -------------- | ------ |
+| The Tonight Show With Jay Leno | NBC     | 367             | 48       | $19,893.62   | 50              | $994,681.10          | $994,681.00    | +$0.10 |
+| House                          | FOX     | 18              | 60       | $129,962.90  | 18              | $2,339,332.13        | $2,339,332.20  | −$0.07 |
+| Cubs Baseball                  | WGNA    | 41              | 190      | $2,670.62    | 41              | $109,495.34          | $109,495.42    | −$0.08 |
+| Say Yes to the Dress           | TLC     | 444             | 31       | $2,734.69    | 50              | $136,734.35          | $136,734.50    | −$0.15 |
+| So You Think You Can Dance     | FOX     | 21              | 105      | $149,909.14  | 18              | $2,698,364.60        | $2,698,364.52  | +$0.08 |
+| 60 Minutes                     | CBS     | 26              | 60       | $102,988.30  | 26              | $2,677,695.77        | $2,677,695.80  | −$0.03 |
 
 **`charts.PNG` — plan comparison charts.** Seven cards: `Airing Count` ("Airings will be 417 % more
 than Client"), `Targeted CPM` ("Targeted CPM will be 99 % less than Client"), `Targeted
 Impressions` ("Targeted impression will be 6,966 % more than Client"), `Impressions by Day of Week`
 (Monday–Sunday), `Broadcast Impressions`, `Impressions by Daypart`, `Cable Impressions`. Every
-grouped bar chart has five series with no visible legend.
+grouped bar chart has five series with no visible legend. **`Cable Impressions` renders empty** —
+axis labels and gridlines, zero bars. Cause unknown (most likely an empty bucket in the demo data);
+do not explain it as anything more definite than that.
 
 ## Backing stack (`Web.CustomerProfileLegos.Server/CLAUDE.md`)
 
@@ -148,8 +158,10 @@ All campaign data in every screenshot is **fake/demo data** — publish as-is, n
 4. **The five unlabelled series in `charts.PNG`** are not identified anywhere. The card detail panel
    lists exactly five airing rows (four vehicle names plus "PrecisionDemand Optimal"), which is
    suggestive, but the mapping is a guess — mark it as one.
-5. **2,473 and 191 come from two different screenshots** in two different filter states (the 2,473
-   view already has `tRatio: Over -0.4` applied). Do not present 191 as a filtering of 2,473.
+5. **The three screenshots are three different filter states**, not one session: `audience-planner`
+   = 2,473 with `tRatio: Over -0.4` applied; `treeMap` = 191 with one genre ticked; `targeting` =
+   2,328, and back on the card grid rather than the treemap. Do not present 191 as a filtering of
+   2,473, and do not let a reader try to reconcile the 2,328 with either.
 6. **The `Lock` column's exact semantics** are a reading of the UI, not a documented fact.
 7. `d3PivotViewerBorchardt.mp4` exists in the archive but **must not be embedded** — this blog is
    static-first, stills only.

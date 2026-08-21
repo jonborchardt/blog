@@ -1,4 +1,4 @@
-﻿---
+---
 title: "Audience Planner: 2,473 TV Shows on One Screen"
 description: The Silverlight side project that became PrecisionDemand's flagship — explore thousands of TV programs by targeting quality, then optimize the buy.
 publishedAt: 2026-08-21
@@ -29,7 +29,7 @@ Every screen a customer or a salesperson or an analyst ever looked at was mine �
 decisions as well as the code.
 
 The Audience Planner is the one I would show you first. It started as a 20% time idea, it became
-the company's flagship product, and it is the piece of [the portfolio I froze in
+the company's flagship product, and it is one of the three things in [the portfolio I froze in
 2018](/labs-2018-snapshot/) that I am proudest of. It is also completely dead: it was a Silverlight
 application, and no browser has run Silverlight for years. What survives is a folder of screenshots
 and a walkthrough video. That turns out to be enough to reconstruct it, because the product was
@@ -58,7 +58,7 @@ survivors to the optimizer, and you leave with a spreadsheet.
 
 <VizFigure
   name="Explore, filter, optimize, export"
-  summary="The four moves of the Audience Planner, narrowing top to bottom: a collection of program cards shaded by tRatio, a facet panel that cuts them down, a grid where the optimizer assigns airings and spend per program, and a spreadsheet export. The two counts come from two different screenshots in different filter states — the 191 is not a filtering of the 2,473."
+  summary="The four moves of the Audience Planner, narrowing top to bottom. A collection of about 2,473 program cards shaded by tRatio; a facet panel with a tRatio range slider and a genre list (762 documentary, 191 instructions and advice ticked, 149 general drama) that cuts them down; a grid where a 'Re-calculate Optimal Plan' button assigns airings and spend per program, most rows staying at zero; and an 'Export to Excel' spreadsheet at the bottom. The two counts come from two different screenshots in different filter states — the 191 is not a filtering of the 2,473."
 >
   <FlowViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
 </VizFigure>
@@ -72,7 +72,7 @@ updating in the status bar as you went. You never left to run a report.
 Here is the entry view. Each program in the catalogue is a card, and the cards are stacked into a
 histogram binned by tRatio.
 
-<Figure caption="The explore view: 2,473 program cards binned by tRatio, sorted and coloured by the same number. A dated snapshot of the app as it stood." zoom>
+<Figure caption="The explore view: 2,473 program cards binned by tRatio, sorted and coloured by the same number, with the tRatio facet already filtered to everything over -0.4." zoom>
   <img
     src={histogram.src}
     width="948"
@@ -149,7 +149,9 @@ recognisable names sort themselves to the top left without anyone explaining the
 
 ## One card, opened up
 
-Zoom into a single tile and it becomes a card with its own metrics, plus a detail panel.
+Zoom into a single tile and it becomes a card with its own metrics, plus a detail panel. This is a
+third session — back on the card grid rather than the treemap, with 2,328 programs in scope — so do
+not try to reconcile its numbers with the two screenshots above.
 
 <Figure caption="A single program card with its detail panel: metrics in context, an airings breakdown, and the household attributes behind its targeting." zoom>
   <img
@@ -164,8 +166,8 @@ Three things worth pointing at here.
 
 The four metrics on the card each carry a tiny bar showing where that value sits in the whole
 distribution. tCPM $48.02 is meaningless on its own; tCPM $48.02 with a marker near the good end of
-the range is a decision. That pattern — never show a number without showing its context — is the
-single habit from this job I have carried into everything since.
+the range is a decision. That pattern — never show a number without showing its context — is the one
+idea on this screen that has not dated at all.
 
 The **Airings** block lists a maximum weekly airing count and then a row per campaign, four vehicle
 names and one called `PrecisionDemand Optimal`. That last row is the tell: the app is not only
@@ -198,17 +200,19 @@ own airing count, its duration, its name, its network, cost per airing, optimal 
 per airing. Twelve pages of it. Two buttons at the bottom: **Re-calculate Optimal Plan** on the
 left, **Export to Excel** on the right.
 
-The interesting thing about this screenshot is how much of it is zero. Of the twenty-five or so
-rows visible, seven have a non-zero optimal airing count. Property Virgins, NY Ink, How I Met Your
-Mother, Mutant Planet, My First Place: nothing. The plan puts fifty airings into The Tonight Show,
-eighteen into House, forty-one into Cubs Baseball, twenty-six into 60 Minutes. An optimizer that
-concentrates is doing its job; an optimizer that spreads a little money over everything is just
-computing an average. Watching most of the grid stay at zero was how you knew the run had actually
-solved something.
+The interesting thing about this screenshot is how much of it is zero. Of the twenty-eight rows
+visible, six have a non-zero optimal airing count. Property Virgins, NY Ink, How I Met Your Mother,
+Mutant Planet, My First Place: nothing. The plan puts fifty airings into The Tonight Show, eighteen
+into House, forty-one into Cubs Baseball, fifty into Say Yes to the Dress, eighteen into So You
+Think You Can Dance and twenty-six into 60 Minutes. An optimizer that concentrates is doing its job;
+an optimizer that spreads a little money over everything is just computing an average. Watching most
+of the grid stay at zero was how you knew the run had actually solved something.
 
-I checked the arithmetic again while writing this, more than a decade later, and it still holds: optimal
-spend is optimal airings times cost per airing, to the rounding. Fifty airings of The Tonight Show
-at $19,893.62 each is $994,681.10, and that is what the cell says.
+I checked the arithmetic again while writing this, more than a decade later, and it survives: on all
+six rows, optimal spend is optimal airings times cost per airing. Not exactly — fifty airings of The
+Tonight Show at the displayed $19,893.62 comes to $994,681.00, and the cell says $994,681.10 — but
+every row lands within fifteen cents, which is what you get when the per-airing cost on screen is
+itself rounded to the penny and the real one is not.
 
 The `Lock` column is the one piece here I am reading rather than remembering. A checkbox next to an
 editable airing count, on a screen whose main verb is "re-calculate", is almost certainly there so a
@@ -222,8 +226,8 @@ The last move is a button labelled **Export to Excel**, and I have made peace wi
 Nobody bought a media plan out of a Silverlight window. They bought it out of a spreadsheet that
 went to their agency, got argued over, and came back with changes. The most sophisticated part of
 the product handed off to the least sophisticated format available, on purpose, because that is
-where the work continued. Every visualization tool I have built since has needed the same escape
-hatch and I have never once regretted putting one in.
+where the work continued. A visualization tool without an escape hatch is a tool that asks people to
+do their real work somewhere it cannot see.
 
 Before the spreadsheet there was a comparison view.
 
@@ -245,6 +249,11 @@ They need to know whether it is better than what they are doing now.
 Each grouped chart has five bar series and no legend anywhere in the screenshot. The card detail
 panel lists exactly five airing rows, four campaigns plus `PrecisionDemand Optimal`, which is
 suggestive. I would not put money on the mapping.
+
+The `Cable Impressions` card in the bottom right is drawing an empty axis — labelled, gridded, and
+carrying no bars at all. A demo dataset with nothing in one of its buckets, most likely. I am not
+cropping it out, because a portfolio that only shows the panels that filled in is not a portfolio,
+it is a brochure.
 
 ## Why Silverlight, and what is left of it
 
@@ -286,9 +295,9 @@ AOL acquired PrecisionDemand in May 2014, and the quality of the platform was a 
 decision. The Audience Planner was the piece of the platform people meant.
 
 Then I killed it. On the other side of the acquisition I led the migration off Silverlight and onto
-AngularJS, which is to say rebuilding my own flagship in a technology that could survive. I do not remember minding at the time. Looking at these screenshots
-now, I mind slightly more: the rewrite was the right call and the treemap was better than anything
-we shipped for years afterwards.
+AngularJS, which is to say rebuilding my own flagship in a technology that could survive. The
+rewrite was the right call, and the treemap was still better than anything that replaced it for
+years.
 
 ## What I would keep
 
