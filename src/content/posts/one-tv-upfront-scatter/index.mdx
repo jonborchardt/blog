@@ -8,7 +8,7 @@ tags: [retrospective, adtech, data-viz]
 authority: 'E:\github2\Labs'
 hero:
   src: ./hero.png
-  alt: A ONE TV scenario comparison grid listing scenarios named Current, Sara 1, Shift Test and Olga shift regress with columns for objective, budget, spend, average demo CPM, total demo impressions and three tRatio columns, beside a filter rail of checkboxes with bar gauges
+  alt: A ONE TV scenario comparison grid listing scenarios named Current, Sara 1, Shift Test and Olga shift regress with columns for objective, budget, spend, average demo CPM, total demo impressions and three scoring columns, beside a filter rail of checkboxes with bar gauges
 draft: false
 ---
 
@@ -62,7 +62,7 @@ put them side by side.
     src={upfrontShipped.src}
     width="1426"
     height="988"
-    alt="A ONE TV screen headed Optimize Upfront with fields for campaign Verizon Q2 2018, dates 3/26/2018 to 6/25/2018, network group Univision Upfront, demographic A18-49 and total spend $2,651,066, above a scenarios grid comparing objective, budget, spend, average demo CPM, total demo impressions and MVS, MQS and SMC tRatio columns, with a summary section of tRatio and impressions charts below"
+    alt="A ONE TV screen headed Optimize Upfront with fields for campaign Verizon Q2 2018, dates 3/26/2018 to 6/25/2018, network group Univision Upfront, demographic A18-49 and total spend $2,651,066, above a scenarios grid comparing objective, budget, spend, average demo CPM, total demo impressions and MVS, MQS and SMC scoring columns, with a summary section of score and impressions charts below"
   />
 </Figure>
 
@@ -76,7 +76,7 @@ apparently never cleared it out before taking the screenshot.
 
 Each scenario runs the optimizer with a different objective — shift the buy, decrease the budget —
 and the grid ranks the results by what they cost and how well they hit the target. By 2018 there were
-three tRatio columns on that grid — MVS, MQS, SMC — three ways of scoring the same plan. I could
+three scoring columns on that grid — MVS, MQS, SMC — three ways of scoring the same plan. I could
 not tell you today what all three of those initialisms stood for.
 
 ### The wireframe it came from
@@ -122,16 +122,15 @@ directory listing as if no time had passed.
     src={scatterShipped.src}
     width="1390"
     height="657"
-    alt="A ONE TV screen for a campaign called Black Opium Valentine's Day 2018 with a tactic group NBCU $390K, basic settings for budget, inventory source NBCUniversal National Networks, flight dates and spot lengths, a forecasted plan strip showing spend $387,003 and a target impact score of 1.26 tRatio, and an impression distribution table listing USA, OXYG, E!, BRAV, CNBC and NBC with per-network tRatio values"
+    alt="A ONE TV screen for a campaign called Black Opium Valentine's Day 2018 with a tactic group NBCU $390K, basic settings for budget, inventory source NBCUniversal National Networks, flight dates and spot lengths, a forecasted plan strip showing spend $387,003 and a target impact score of 1.26, and an impression distribution table listing USA, OXYG, E!, BRAV, CNBC and NBC with per-network scores"
   />
 </Figure>
 
 A tactic group inside a campaign, a budget of \$390,000, a forecast of \$387,003 against it, and a
-headline number labelled **1.26 TRATIO**. Underneath, the plan broken out by network with a tRatio
-each: USA at 1.13, Oxygen at 1.86, E! at 1.38, Bravo at 1.21, and CNBC and NBC both down at 0.58.
-Same metric that had been on screen since 2011, still doing the same job — letting you rank two
-completely different pieces of inventory on how efficiently they reach the people you are paying to
-reach.
+headline targeting score of 1.26. Underneath, the plan broken out by network with a score
+each: USA at 1.13, Oxygen at 1.86, E! at 1.38, Bravo at 1.21, and CNBC and NBC both down at 0.58 —
+a ranking of two completely different pieces of inventory on how efficiently they reach the people
+you are paying to reach.
 
 Now go back to the start of the same folder.
 
@@ -144,7 +143,7 @@ Now go back to the start of the same folder.
     src={scatterWireframe.src}
     width="3074"
     height="1399"
-    alt="Three large Balsamiq wireframes side by side for Edit Campaign, Edit Cell and Edit Cell Week dialogs, each with constraint fields, cluster and daypart bias sliders, an example plan table listing programs with station and tRatio columns, and yellow callout notes such as EVERYTHING has a tooltip"
+    alt="Three large Balsamiq wireframes side by side for Edit Campaign, Edit Cell and Edit Cell Week dialogs, each with constraint fields, cluster and daypart bias sliders, an example plan table listing programs with station and score columns, and yellow callout notes such as EVERYTHING has a tooltip"
   />
 </Figure>
 
@@ -160,7 +159,7 @@ product, with a real edit timestamp on it:
     src={scatterSilverlight.src}
     width="479"
     height="371"
-    alt="A Silverlight dialog titled Edit Campaign Constraints, Campaign #1, Last Edit 1/29/2013, with numeric fields for minimum and maximum gross rating points, minimum program cluster and blended tRatio, maximum single program buy percentage and count, maximum single cable and broadcast buy percentages, maximum program buy per hour and minimum program CPM"
+    alt="A Silverlight dialog titled Edit Campaign Constraints, Campaign #1, Last Edit 1/29/2013, with numeric fields for minimum and maximum gross rating points, minimum cluster and blended targeting scores, maximum single program buy percentage and count, maximum single cable and broadcast buy percentages, maximum program buy per hour and minimum program CPM"
   />
 </Figure>
 
@@ -170,13 +169,13 @@ in the same order, with the same default values.
 
 <VizFigure
   name="The constraints dialog across three generations, 2012 to 2017"
-  summary="The same five optimizer constraints appear in the same order in a 2012 Balsamiq wireframe, a 2013 shipped Silverlight dialog and a 2017 ONE TV wireframe. The 2012 and 2017 defaults are identical — 0.30, 0.20, 0.05, 50, 3.00 — while the 2013 build shipped different ones: stricter tRatio floors and a much looser cap on any single buy. The only wording change in five years is program becoming airing."
+  summary="The same five optimizer constraints appear in the same order in a 2012 Balsamiq wireframe, a 2013 shipped Silverlight dialog and a 2017 ONE TV wireframe. The 2012 and 2017 defaults are identical — 0.30, 0.20, 0.05, 50, 3.00 — while the 2013 build shipped different ones: stricter score floors and a much looser cap on any single buy. The only wording change in five years is program becoming airing."
   data={{
     caption: "Constraint fields and their default values in each generation",
     columns: ["Field", "2012 wireframe", "2013 Silverlight", "2017 wireframe"],
     rows: [
-      ["Min program / airing cluster tRatio", "0.30", "0.50", "0.30"],
-      ["Min program / airing blended tRatio", "0.20", "0.50", "0.20"],
+      ["Min program / airing cluster score", "0.30", "0.50", "0.30"],
+      ["Min program / airing blended score", "0.20", "0.50", "0.20"],
       ["Max single program / airing buy %", "0.05", "40.00 %", "0.05"],
       ["Max single program / airing count", "50", "45", "50"],
       ["Min program / airing CPM", "3.00", "$1.00", "3.00"],
@@ -186,10 +185,10 @@ in the same order, with the same default values.
   <Lineage class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
 </VizFigure>
 
-Minimum cluster tRatio, minimum blended tRatio, maximum single buy percentage, maximum single
+Minimum cluster score, minimum blended score, maximum single buy percentage, maximum single
 count, minimum CPM per unit. Five years, one rename: what had been a **program** became an
 **airing**, which is a more precise word for the same thing. The numbers in the boxes did move — the
-2013 build shipped stricter tRatio floors than the drawing asked for and a far looser cap on any
+2013 build shipped stricter score floors than the drawing asked for and a far looser cap on any
 single buy, which is what happens when a design meets real inventory. But the fields, and their
 order, are the fields.
 

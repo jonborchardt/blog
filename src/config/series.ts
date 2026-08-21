@@ -32,10 +32,10 @@ export const series = {
   "past-work": {
     title: "Seventeen Years of Side Projects",
     description:
-      "Nobody assigned any of these. Tools I dreamt up in 20% time at four employers, frozen into a static portfolio in 2018 and reopened in 2026.",
+      "Seventeen years of screens, 2001 to 2018 — courtroom document maps, search results, TV ad dashboards — frozen as a static portfolio and reopened in 2026.",
     hero: {
       src: "series/past-work.png",
-      alt: "A timeline from 2001 to 2018 lined with small chart-icon tiles marking side projects, four of them highlighted as dial glyphs where the tRatio metric marks a flagship product",
+      alt: "A timeline from 2001 to 2018 lined with small chart-icon tiles, four of them highlighted as dial glyphs marking flagship products",
     },
   },
   "sierra-games": {

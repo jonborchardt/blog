@@ -8,7 +8,7 @@
   <text x="31" y="85" fill="#11171d" text-anchor="middle" font-size="11" font-weight="600">1</text>
   <text x="50" y="85" fill="currentColor" font-weight="600">EXPLORE</text>
   <text x="20" y="105" fill="currentColor" fill-opacity="0.8" font-size="12" font-style="italic">~2,473 program cards,</text>
-  <text x="20" y="120" fill="currentColor" fill-opacity="0.8" font-size="12" font-style="italic">coloured by tRatio</text>
+  <text x="20" y="120" fill="currentColor" fill-opacity="0.8" font-size="12" font-style="italic">coloured by score</text>
 
   <!-- card collection: 3 rows of 10 -->
   <g stroke="#006a90" stroke-opacity="0.55" stroke-width="1" fill="currentColor">
@@ -60,7 +60,7 @@
   <rect x="292" y="178" width="266" height="18" rx="4" fill="none" stroke="#555f69" stroke-opacity="0.35"/>
   <text x="299" y="191" fill="#555f69" font-size="11">Search…</text>
 
-  <text x="292" y="214" fill="#11171d" font-size="12" font-weight="600">tRatio</text>
+  <text x="292" y="214" fill="#11171d" font-size="12" font-weight="600">score</text>
   <line x1="340" y1="210" x2="558" y2="210" stroke="#555f69" stroke-opacity="0.3" stroke-width="3" stroke-linecap="round"/>
   <line x1="395" y1="210" x2="520" y2="210" stroke="#006a90" stroke-width="3" stroke-linecap="round"/>
   <circle cx="395" cy="210" r="4.5" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>

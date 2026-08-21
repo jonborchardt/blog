@@ -1,5 +1,5 @@
 ---
-title: Buy Side, Sell Side, Same Ratio
+title: Buy Side, Sell Side, Same Data
 description: Two PrecisionDemand dashboards asked opposite questions of the same TV ad data. One of them turned a 20% time idea into a granted patent.
 publishedAt: 2026-08-20
 series: past-work
@@ -51,7 +51,7 @@ you hold still.
 
 <VizFigure
   name="The same data read from the buy side and from the sell side"
-  summary="On the buy side, every airing an industry ever bought collapses into one score for that industry, which is then ranked against the other industries: the four sampled rows shown are Senior Life Insurance at tRatio 0.37, Music at 0.35, Luxury Auto at 0.24 and Exercise Equipement at 0.08. On the sell side, one airing — MTV, Monday 7AM — fans out instead into all 23 industries ranked by how well they fit that single slot, the top two scoring 0.39 and the third and fourth 0.07. Same data, same tRatio, inverted question."
+  summary="On the buy side, every airing an industry ever bought collapses into one targeting score for that industry, which is then ranked against the other industries: the four sampled rows shown are Senior Life Insurance at 0.37, Music at 0.35, Luxury Auto at 0.24 and Exercise Equipement at 0.08. On the sell side, one airing — MTV, Monday 7AM — fans out instead into all 23 industries ranked by how well they fit that single slot, the top two scoring 0.39 and the third and fourth 0.07. Same data, inverted question."
 >
   <InversionViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
 </VizFigure>
@@ -67,42 +67,22 @@ mine, design and code, which is a sentence I get to write about exactly one peri
   real typos.
 </Callout>
 
-## tRatio, the number both sides argued with
+## Two numbers to read the screens with
 
-Both dashboards are built on one metric, and it is worth understanding before looking at either,
-because every bar on both screens is some function of it.
+Every bar on both dashboards is a function of two numbers, so here they are up front.
 
-**tRatio** — targeting ratio — is a correlation coefficient between two vectors: the audience the
-advertiser wants, and the audience the media actually delivered. The product's own help text
-described it as measuring "how many sums of squares in the shape of the target vector are matched
-by the media vector", normalized onto an absolute scale from $-1$ to $+1$:
-
-- $+1$ means the media bought is a perfect match for the target.
-- $0$ means the buy is effectively random — under the normalization, a match for the average of the
-  US population.
-- $-1$ means the buy is the _opposite_ of what it should be. The example in our own help text was
-  senior life insurance advertised on Cartoon Network.
-
-The property we cared about was that it is comparable across industries. A tRatio of $+0.5$ in
-cosmetics means the same quality of match as $+0.5$ in power tools, even though the underlying
-audiences and buyer counts are nothing alike. That is what makes a leaderboard of unrelated
-industries a sane thing to draw at all.
+The first is a targeting score — a stat of ours that correlated the audience the advertiser wants
+with the audience the media actually delivered. Positive means the buy leans toward the right
+people, zero means it is effectively random, and negative means it leans the wrong way — the
+example in our own help text was senior life insurance advertised on Cartoon Network. It was
+comparable across industries, which is what makes a leaderboard of unrelated industries a sane
+thing to draw at all.
 
 Around it sat two prices. **CPM** is cost per thousand impressions, standardized to a thirty-second
 spot — we found spot cost scaled roughly linearly with ad seconds, so a fifteen-second ad's CPM got
-doubled to compare fairly. And **tCPM** is simply
-
-$$
-\text{tCPM} = \frac{\text{CPM}}{\text{tRatio}}
-$$
-
-the price of a thousand impressions divided by how well they were targeted: cost per usefully
-targeted thousand. Lower is better. Cost estimates came from SQAD clearing rates, impressions from
-Nielsen, and the targeting from our own modelling.
-
-I do not know who coined tRatio, and I never found out why it was the one piece of vocabulary that
-carried. It shows up in every generation of the platform, from the 2011 Silverlight app to the 2018
-interface.
+doubled to compare fairly. And **tCPM** is the CPM divided by the targeting score: the price of a
+thousand usefully targeted impressions. Lower is better. Cost estimates came from SQAD clearing
+rates, impressions from Nielsen, and the targeting from our own modelling.
 
 ## Buy side: how well is your industry buying?
 
@@ -124,20 +104,20 @@ target audience?_
   />
 </Figure>
 
-The top band is three horizontal bar charts sharing a single column of labels — tRatio, tCPM, CPM,
-one row per industry. It reads like a leaderboard, but note the sort: the rows are ordered by
-**tCPM ascending**, cheapest useful impressions first, and the tRatio bars are left to fall where
+The top band is three horizontal bar charts sharing a single column of labels — targeting score,
+tCPM, CPM, one row per industry. It reads like a leaderboard, but note the sort: the rows are ordered by
+**tCPM ascending**, cheapest useful impressions first, and the score bars are left to fall where
 they may. That was deliberate. The industry with the best targeting is not the industry getting the
 best deal, and putting the two next to each other in tCPM order makes the mismatch impossible to
-miss. Senior Life Insurance sits at the top with a tRatio of 0.37 and a tCPM of $8.06. Music, three
-rows down, has almost as good a tRatio at 0.35 and pays more than twice as much for it.
+miss. Senior Life Insurance sits at the top with a score of 0.37 and a tCPM of $8.06. Music, three
+rows down, has almost as good a score at 0.35 and pays more than twice as much for it.
 
 Below the bars, two bubble charts do the same job geometrically: targeted impressions against
-spend, and tRatio against tCPM, with bubble radius carrying a third variable. The help text told
+spend, and targeting score against tCPM, with bubble radius carrying a third variable. The help text told
 you where to look — bottom and to the right is most efficient — and the bubbles that sat away from
 the diagonal were the conversation.
 
-Down the left rail are six histograms — tRatio, tCPM, CPM, Spend, Impressions, tImps — and every
+Down the left rail are six histograms — score, tCPM, CPM, Spend, Impressions, tImps — and every
 one of them is a filter. Click a bar, or drag across a range of them, and the whole page recomputes.
 There is a dataset menu in the navbar with twenty industries in it plus a TV-overall set, so you
 could either compare everyone or go and live inside one vertical.
@@ -174,9 +154,9 @@ stay put:
 | ------------------------- | --------------------------------- | ------------------------------- |
 | Top row                   | Senior Life Insurance, tCPM $8.06 | Senior Life Insurance, tCPM $7.40 |
 | Third row                 | Life Insurance Investment         | **Term**                        |
-| Term                      | 9th, tRatio 0.21, tCPM $25.25     | **3rd**, tRatio 0.25, tCPM $20.46 |
+| Term                      | 9th, score 0.21, tCPM $25.25      | **3rd**, score 0.25, tCPM $20.46 |
 | Life Insurance Investment | 3rd                               | 19th, and no bars at all        |
-| Music                     | tRatio 0.35                       | tRatio 0.29                     |
+| Music                     | score 0.35                        | score 0.29                      |
 | tCPM range                | $8.06 to $62.69                   | $7.40 to $38.74                 |
 | Spend axis                | $0 to $250MM                      | $0 to $70MM                     |
 
@@ -220,13 +200,13 @@ Now turn the question around.
 
 The header says `15,502 selected out of 15,502 records`, which is crossfilter's row count and the
 first thing that changes when you touch anything. Down the left are Station, Day and Hour. Down the
-right are the metrics: Industry, tRatio, tRatio Delta, tCPM, Optimal CPM, CPM Delta, CPM Delta %,
+right are the metrics: industry, targeting score and its delta, tCPM, Optimal CPM, CPM Delta, CPM Delta %,
 Impressions — every one of them a filter, and a `Sort Cards by` toggle that flips the ranked cards
-between alphabetical and tRatio order.
+between alphabetical and score order.
 
 The middle is the actual invention. Each row is one airing, and it starts with the facts: station,
 day, hour, program, the brand currently in that slot and its industry. Then the money — current CPM,
-optimal CPM, the delta between them, the revenue delta, the tRatio delta. Then twenty-three columns
+optimal CPM, the delta between them, the revenue delta, the targeting-score delta. Then twenty-three columns
 headed `1st` through `23rd`.
 
 Those columns are the answer. For that one airing, all twenty-three industries in the model are
@@ -239,22 +219,22 @@ are the twenty-three industries who should be bidding for it.
 Take the row for _Ridiculousness_ on MTV, Monday 7am. It is currently running a mascara ad, and the
 `Cur Indy` cell scores that industry's fit at $-0.03$ — effectively worse than random for this
 audience. The two best-fitting industries score 0.39, the third and fourth drop off a cliff to 0.07,
-and the tRatio delta column puts the gap at 0.41. Meanwhile the slot clears at $6.80 CPM against a
+and the delta column puts the gap at 0.41. Meanwhile the slot clears at $6.80 CPM against a
 modelled optimum of $7.60.
 
 That row is a sales call. There are exactly two industries worth phoning about this slot, the
 mascara currently in it is not one of them, and the network is under-charging for it anyway.
 
 Fifteen thousand rows of that is not a report. It is a worklist. And because it is crossfilter
-underneath, a salesperson could click their own station, drag the tRatio Delta histogram to just the
+underneath, a salesperson could click their own station, drag the score-delta histogram to just the
 slots where the gap was largest, and be looking at their next twenty phone calls in a couple of
 seconds.
 
 ## Twenty percent time, and then a patent
 
-Nobody asked for this. Every tool in this portfolio was something I dreamt up and built in the time
-the company let us spend on our own ideas, and this one had the most obvious commercial edge of any
-of them, because it was the only one aimed at the side of the transaction that actually owns the
+Nobody asked for this one. It came out of the time the company let us spend on our own ideas, and
+it had the most obvious commercial edge of anything I built that way, because it was the only one
+aimed at the side of the transaction that actually owns the
 inventory.
 
 It got built, it got in front of customers, and then it got written up. The application was filed

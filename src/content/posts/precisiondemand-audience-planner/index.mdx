@@ -58,7 +58,7 @@ survivors to the optimizer, and you leave with a spreadsheet.
 
 <VizFigure
   name="Explore, filter, optimize, export"
-  summary="The four moves of the Audience Planner, narrowing top to bottom. A collection of about 2,473 program cards shaded by tRatio; a facet panel with a tRatio range slider and a genre list (762 documentary, 191 instructions and advice ticked, 149 general drama) that cuts them down; a grid where a 'Re-calculate Optimal Plan' button assigns airings and spend per program, most rows staying at zero; and an 'Export to Excel' spreadsheet at the bottom. The two counts come from two different screenshots in different filter states — the 191 is not a filtering of the 2,473."
+  summary="The four moves of the Audience Planner, narrowing top to bottom. A collection of about 2,473 program cards shaded by targeting score; a facet panel with a score range slider and a genre list (762 documentary, 191 instructions and advice ticked, 149 general drama) that cuts them down; a grid where a 'Re-calculate Optimal Plan' button assigns airings and spend per program, most rows staying at zero; and an 'Export to Excel' spreadsheet at the bottom. The two counts come from two different screenshots in different filter states — the 191 is not a filtering of the 2,473."
 >
   <FlowViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
 </VizFigure>
@@ -70,9 +70,9 @@ updating in the status bar as you went. You never left to run a report.
 ## Explore: a card for every program
 
 Here is the entry view. Each program in the catalogue is a card, and the cards are stacked into a
-histogram binned by tRatio.
+histogram binned by targeting score.
 
-<Figure caption="The explore view: 2,473 program cards binned by tRatio, sorted and coloured by the same number, with the tRatio facet already filtered to everything over -0.4." zoom>
+<Figure caption="The explore view: 2,473 program cards binned by targeting score, sorted and coloured by the same number, with the score facet already filtered to everything over -0.4." zoom>
   <img
     src={histogram.src}
     width="948"
@@ -87,14 +87,14 @@ Whatever you had filtered down to, those five numbers described it, and they mov
 touched anything. It is the cheapest possible feedback loop and it did more work than any chart on
 the screen.
 
-The left panel is the facet list: a search box, then tRatio with a two-handle range slider over its
-own miniature distribution, then three tRatio clusters, then impressions per airing, targeted
+The left panel is the facet list: a search box, then the targeting score with a two-handle range
+slider over its own miniature distribution, then three score clusters, then impressions per airing, targeted
 impressions per airing, cost per airing, CPM, tCPM, and — further down the scroll — media market,
 network, genre, conversions, cost per acquisition, primary daypart and primary day of week. The
 breadcrumb at the top left says `tRatio: Over -0.4`, which is the filter that produced this view.
 
 The toolbar has two dropdowns that I think are the most important controls in the product: **Sort**
-and **Color**. Both are set to tRatio here. You can point either one at any field independently,
+and **Color**. Both are set to the targeting score here. You can point either one at any field independently,
 which means the same collection can be arranged by cost and shaded by targeting quality, or the
 reverse, and the answer to "am I overpaying for the wrong audience" falls out of the picture rather
 than out of a calculation.
@@ -106,14 +106,12 @@ than out of a calculation.
   source.
 </Callout>
 
-## tRatio was the sort key and the colour
+## The sort key and the colour
 
-tRatio — targeting ratio — is the number this whole series keeps running into. It is on screen in
-the 2011 Silverlight app, it is still on screen in the 2018 interface, an acquisition and a rebrand
-later, and I never found out who coined it.
+The number doing the sorting is a targeting score — a stat of ours that measured how well a
+program's audience matched the audience the advertiser was paying to reach.
 
-What it did was let two very different pieces of media be put next to each other and ranked on how
-well they hit the audience you were paying to reach. In this app it is doing three jobs at once: it
+It let two very different pieces of media be put next to each other and ranked. In this app it is doing three jobs at once: it
 bins the histogram, it sorts the cards, and it colours them on a red-through-yellow-to-green ramp.
 The axis runs from about -0.4 to 0.5 with the slider going down to -1.
 
@@ -126,7 +124,7 @@ cheap for a general audience and expensive for yours. Most of the product is abo
 Tick one box in the Genre facet and the collection redraws. This is the view I would put on a
 poster.
 
-<Figure caption="The treemap view, filtered to one genre: 191 programs, sized by impressions per airing and shaded by tRatio." zoom>
+<Figure caption="The treemap view, filtered to one genre: 191 programs, sized by impressions per airing and shaded by targeting score." zoom>
   <img
     src={treemap.src}
     width="1737"
@@ -136,7 +134,7 @@ poster.
 </Figure>
 
 Every tile is a program, sized by whatever the sort dropdown is pointed at — impressions per airing,
-here — coloured by tRatio, with its network's logo drawn on it. The genre facet on the left is showing its counts — 762 documentary, 191
+here — coloured by targeting score, with its network's logo drawn on it. The genre facet on the left is showing its counts — 762 documentary, 191
 instructions and advice, 149 general drama, 95 feature film, 62 news, 55 popular music, 45 situation
 comedy, 31 sports — and `INSTRUCTIONS, ADVICE` is the one that is ticked, so the status bar now
 reads 191 programs at an average of $1,632.80 an airing.

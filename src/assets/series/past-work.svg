@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 600" width="1500" height="600">
-  <title>A timeline from 2001 to 2018 lined with small chart-icon tiles marking side projects, four of them highlighted as dial glyphs where the tRatio metric marks a flagship product</title>
+  <title>A timeline from 2001 to 2018 lined with small chart-icon tiles, four of them highlighted as dial glyphs marking flagship products</title>
   <defs>
     <g id="bar">
       <rect width="62" height="62" rx="10" fill="#deeef5"/>

@@ -46,10 +46,10 @@ got:
 </script>
 ```
 
-Under that, a couple of thousand hardcoded `data.addRows([...])` lines: a date, two tRatio values,
+Under that, a couple of thousand hardcoded `data.addRows([...])` lines: a date, two targeting-score values,
 and four spare string columns per row, an annotation title and its body text for each of the two
-series. tRatio, our targeting ratio and the one number that shows up in every product in this
-archive, was being drawn by a component I did not write and could not change.
+series. A number our own modelling produced was being drawn by a component I did not write and
+could not change.
 
 <Figure
   caption="fordsuvindustry.htm, the Google annotated timeline the D3 work replaced. Every advertiser, network and number in this archive is demo data."
@@ -60,7 +60,7 @@ archive, was being drawn by a component I did not write and could not change.
     src={before.src}
     width="1400"
     height="505"
-    alt="A Google annotated timeline titled Ford SUV tRatio, with zoom preset buttons reading 1h 1d 5d 1w 1m 3m 6m 1y max, a blue Ford tRatio line and a red Industry Overall tRatio line from 2010 to 2013, lettered markers A to E on the lines, a range-selector strip along the bottom, and a panel on the right listing each annotation with its date"
+    alt="A Google annotated timeline of Ford SUV targeting scores, with zoom preset buttons reading 1h 1d 5d 1w 1m 3m 6m 1y max, a blue Ford line and a red Industry Overall line from 2010 to 2013, lettered markers A to E on the lines, a range-selector strip along the bottom, and a panel on the right listing each annotation with its date"
   />
 </Figure>
 

@@ -17,12 +17,6 @@
   <circle cx="170" cy="592" r="4" fill="currentColor" fill-opacity="0.5"/>
   <text x="60" y="596" fill="currentColor" fill-opacity="0.75" text-anchor="end" font-size="12">2026</text>
 
-  <!-- tRatio bracket, 2011 to 2018 -->
-  <line x1="140" y1="340" x2="140" y2="550" stroke="#f0b35a" stroke-width="3" stroke-linecap="round"/>
-  <line x1="133" y1="340" x2="147" y2="340" stroke="#f0b35a" stroke-width="3" stroke-linecap="round"/>
-  <line x1="133" y1="550" x2="147" y2="550" stroke="#f0b35a" stroke-width="3" stroke-linecap="round"/>
-  <text x="126" y="449" fill="currentColor" fill-opacity="0.85" text-anchor="end" font-size="12" font-weight="600">tRatio</text>
-
   <!-- Attenex -->
   <rect x="190" y="42" width="430" height="176" rx="6" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
   <text x="206" y="72" fill="#11171d" font-size="14" font-weight="600">Attenex</text>
