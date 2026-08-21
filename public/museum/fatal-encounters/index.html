@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en" data-ng-app="app">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fatal Encounters — a 2014 crossfilter dashboard</title>
+    <meta
+      name="description"
+      content="A 2014 AngularJS crossfilter dashboard over real fatalencounters.org data: drag the Filter by Month brush and the map and every chart refilter live."
+    />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta
+      property="og:image"
+      content="https://jonborchardt.github.io/blog/og/google-charts-to-d3.png"
+    />
+
+    <!-- ========== Vendor Stylesheets ========== -->
+    <link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="vendor/ng-grid/ng-grid.css" />
+    <link rel="stylesheet" href="vendor/angular-ui-grid/ui-grid.css" />
+    <link rel="stylesheet" href="vendor/angular-ui-select/dist/select.css" />
+    <link rel="stylesheet" href="vendor/dcjs/dc.css" />
+    <link rel="stylesheet" href="vendor/nvd3/nv.d3.css" />
+    <link rel="stylesheet" href="vendor/adap-charts/chartsBase.css" />
+
+    <!-- ========== Core Stylesheets ========== -->
+    <link rel="stylesheet" href="App/core/app.css" />
+
+    <!-- ========== Common Stylesheets ========== -->
+    <link rel="stylesheet" href="App/features/layout/layout.css" />
+    <link rel="stylesheet" href="App/features/common/common.css" />
+    <link rel="stylesheet" href="App/features/common/progressIndicator/progressIndicator.css" />
+
+    <!-- ========== Feature Stylesheets ========== -->
+    <link rel="stylesheet" href="App/features/encounterReport/encounterReport.css" />
+  </head>
+  <body role="document" data-ng-controller="layoutCtrl">
+    <!-- ============ Primary NavBar ============= -->
+    <div class="header-container" data-ng-include="'App/features/common/navbar.html'"></div>
+    <!-- ========== Page content ========== -->
+    <div class="container" role="main" data-ng-view></div>
+
+    <!--
+      Preserved-demo note: the three templates below are inlined as ng-template scripts
+      (instead of separate .html files fetched via ng-include/templateUrl) purely so this
+      static export has one fewer same-origin round trip per template; AngularJS reads
+      script[type="text/ng-template"] into $templateCache keyed by its id, so behavior is
+      byte-for-byte the same as the original ng-include/templateUrl fetch. Content unchanged
+      from the original app except "#/" nav links -> "#" (this app has a single route, so
+      both resolved to the same view anyway) and a missing ";" on one &nbsp entity.
+    -->
+    <script type="text/ng-template" id="App/features/common/navbar.html">
+      <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+          <div class="container-fluid">
+              <div class="navbar-header">
+                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                      <span class="sr-only">Toggle navigation</span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                  </button>
+                  <a class="navbar-brand" href="#">
+                      <img src="App/core/resources/police.PNG" height="40" width="43" alt="Fatal Encounters logo">
+                  </a>
+              </div>
+
+              <div class="navbar-collapse collapse">
+                  <ul class="nav navbar-nav">
+                      <li><a class="active" href="#">Fatal Encounters</a></li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="App/features/common/progressIndicator/progressIndicator.html">
+      <div id="progressOverlay" ng-switch="isLoading">
+          <div ng-switch-when="true">
+              <div class="dark-overlay"></div>
+              <div ng-switch="showPercentageBar">
+                  <div class="radial-progress" data-progress="{{ percentageLoaded }}" ng-switch-when="true">
+                      <div class="circle">
+                          <div class="mask full">
+                              <div class="fill"></div>
+                          </div>
+                          <div class="mask half">
+                              <div class="fill"></div>
+                              <div class="fill fix"></div>
+                          </div>
+                          <div class="shadow"></div>
+                      </div>
+                      <div class="inset">
+                          <div class="percentage">{{ percentageLoaded + "%" }}</div>
+                      </div>
+                  </div>
+                  <div ng-switch-when="false">
+                      <div class="animated-spinner">
+                          <h4 class="spinner-text">Loading...</h4>
+                          <div class="spinner">
+                              <div class="bounce1"></div>
+                              <div class="bounce2"></div>
+                              <div class="bounce3"></div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="App/features/encounterReport/encounterReportView.html">
+      <div class="container">
+
+          <div >
+              <div >
+                  <div class="page-header col-md-9">
+                      <h2>Fatal Encounters</h2>
+                      <h4>A step toward creating an impartial, comprehensive and searchable national database of people killed during interactions with law enforcement</h4>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-12">
+                          <generic-chart rows="vm.encounterReportCharts.mainChartRows"></generic-chart>
+                          <div class="custom-csv-link-location" ng-show="vm.showDownloadCsv">
+                              <!-- TODO: possibly wrap this in a modal or find a way for auto download -->
+                              <label>Your CSV download link:</label>
+                              <span class="ui-grid-exporter-csv-link">&nbsp;</span>
+                          </div>
+                          <div class="gridStyle"
+                               ui-grid="vm.gridOptions"
+                               ui-grid-exporter>
+                          </div>
+
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </script>
+
+    <!-- ========== Vendor scripts ========== -->
+    <script src="vendor/jquery/dist/jquery.js"></script>
+    <script src="vendor/angular/angular.js"></script>
+    <script src="vendor/angular-route/angular-route.js"></script>
+    <script src="vendor/angular-resource/angular-resource.js"></script>
+    <script src="vendor/angular-sanitize/angular-sanitize.js"></script>
+    <script src="vendor/angular-strap/dist/angular-strap.js"></script>
+    <script src="vendor/angular-strap/dist/angular-strap.tpl.js"></script>
+    <script src="vendor/ng-grid/build/ng-grid.js"></script>
+    <script src="vendor/angular-ui-grid/ui-grid.js"></script>
+    <script src="vendor/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="vendor/momentjs/moment.js"></script>
+    <script src="vendor/angular-ui-select/dist/select.js"></script>
+    <script src="vendor/lodash/dist/lodash.js"></script>
+    <script src="vendor/d3/d3.js"></script>
+    <script src="vendor/crossfilter/crossfilter.js"></script>
+    <script src="vendor/dcjs/dc.js"></script>
+    <script src="vendor/angular-dc/dist/angular-dc.js"></script>
+    <script src="vendor/nvd3/nv.d3.js"></script>
+    <script src="vendor/angular-nvd3/dist/angular-nvd3.js"></script>
+    <script src="vendor/angular-local-storage/dist/angular-local-storage.js"></script>
+    <script src="vendor/adap-charts/NVD3Interfaces.js"></script>
+    <script src="vendor/adap-charts/chartsUtil.js"></script>
+    <script src="vendor/adap-charts/chartBase.js"></script>
+    <script src="vendor/adap-charts/filterBarChart.js"></script>
+    <script src="vendor/adap-charts/filterLineChart.js"></script>
+    <script src="vendor/adap-charts/filterRowChart.js"></script>
+    <script src="vendor/adap-charts/filterPieChart.js"></script>
+    <script src="vendor/adap-charts/filterGeoChoroplethChart.js"></script>
+    <script src="vendor/adap-charts/multiBarChart.js"></script>
+    <script src="vendor/adap-charts/pieChart.js"></script>
+    <script src="vendor/adap-charts/lineChart.js"></script>
+    <script src="vendor/adap-charts/simpleScalarChart.js"></script>
+    <script src="vendor/adap-charts/chartDirective.js"></script>
+
+    <!-- ========== App scripts ========== -->
+    <script src="App/core/app.js"></script>
+    <script src="App/core/config.js"></script>
+
+    <!-- ========== Common feature scripts ========== -->
+    <script src="App/features/common/progressIndicator/progressIndicator.js"></script>
+
+    <!-- ========== Core scripts ========== -->
+    <script src="App/core/models/EncounterLoader.js"></script>
+    <script src="App/core/models/EncounterKeyMetrics.js"></script>
+    <script src="App/core/services/dataAccess.js"></script>
+    <script src="App/core/services/userData.js"></script>
+
+    <!-- ========== Feature scripts ========== -->
+    <script src="App/features/layout/layoutCtrl.js"></script>
+    <script src="App/features/encounterReport/encounterReportCharts.js"></script>
+    <script src="App/features/encounterReport/encounterReportCtrl.js"></script>
+  </body>
+</html>

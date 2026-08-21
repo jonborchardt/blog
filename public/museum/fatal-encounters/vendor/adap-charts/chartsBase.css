@@ -1,0 +1,46 @@
+﻿.dc-chart {
+  margin: 15px 5px 0 0;
+}
+.dc-chart g.row text {
+  fill: darkslategray;
+}
+.dc-chart .title,
+.dc-chart .filter {
+  margin-left: 20px;
+  margin-right: 6px;
+}
+.dc-chart .filter {
+  font-size: 10px;
+}
+.dc-chart a .reset {
+  margin-right: 5px;
+  font-size: 11px;
+  font-weight: normal;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+}
+.dc-chart svg {
+  width: auto;
+}
+nvd3 {
+  float: left;
+}
+nvd3 .title {
+  font-weight: bold;
+}
+.scalarChart {
+  float: left;
+  margin: 10px;
+  padding: 10px;
+  background: #f7f9ff;
+  border: 1px solid lightGray;
+}
+.scalarChart .value {
+  font: 30px Helvetica;
+  text-align: center;
+}
+.scalarChart .key {
+  clear: both;
+  text-align: center;
+}
