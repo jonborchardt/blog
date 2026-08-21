@@ -40,19 +40,25 @@ MVS/MQS/SMC stand for (undocumented anywhere in the authority chain).
   TRATIO, inventory source NBCUniversal National Networks, Nielsen C3. Per-network tRatio: USA 1.13,
   OXYG 1.86, E! 1.38, BRAV 1.21, CNBC 0.58, NBC 0.58.
 - `scatter/campaign.png` — three Balsamiq wireframes (Edit Campaign / Edit Cell / Edit Cell Week),
-  PrecisionDemand campaign planner. All internal dates are January 2012; milestone rows
-  "1/3/12 JonB Campaign Started" and "1/13/12 Steph Buy Complete".
+  PrecisionDemand campaign planner. The completed-milestones box is January 2012 ("1/3/12 JonB
+  Campaign Started", "1/13/12 Steph Buy Complete"), but **the mock is not uniformly January 2012** —
+  End Date 5/3/12, Planned Final Airing 5/11/12, and cell-week rows dated 12/2/12 and 1/6/13 are
+  also visible. `scatter/CLAUDE.md` dates this wireframe set 2012–13; claim only the milestone box.
 - `scatter/constraints.png` — shipped Silverlight dialog "Edit Campaign Constraints (Campaign #1)
   Last Edit: 1/29/2013".
 - `_agent/screenshots/maphack-sodawar.png` — "Hackathon Aug 2014 Adap.TV", project "Dynamic spend
-  map"; credits "Front End: Jon Borchardt", "Data: Sawin Lee, Dyng Au, Brendan Kitts". D3 choropleth
-  of Coke (red) vs Pepsi (blue) TV ad spend by market over 24 hours, with a play button and a time
-  slider.
+  map"; credits "Front End: Jon Borchardt", "Data: Sawin Lee, Dyng Au, Brendan Kitts". **Not a
+  choropleth** (`demos/CLAUDE.md` says choropleth; the artifact overrides it): the page's own Output
+  section says it renders a D3 US map with a circle at each market, circle size = spend, blue for
+  Pepsi and red for Coke, solid circles for local spend and transparent circles for a state's share
+  of a national airing, with a slider selecting the time to display.
 
 ## The constraints lineage (the post's spine and its one diagram)
 
 Read field-for-field off the three images. Identical vocabulary, identical order; `program` becomes
-`airing` in 2017; the 2013 build shipped looser defaults than the 2012 drawing specified.
+`airing` in 2017. The 2013 build shipped **different** defaults from the 2012 drawing, not uniformly
+looser: the tRatio floors and the single-buy count got *stricter* (0.30→0.50, 0.20→0.50, 50→45),
+while the single-buy cap and the CPM floor got much *looser* (0.05→40.00 %, 3.00→$1.00).
 
 | Field                | 2012 wireframe (`campaign.png`) | 2013 Silverlight (`constraints.png`) | 2017 wireframe (`Upfront1_WithCallouts.png`) |
 | -------------------- | ------------------------------- | ------------------------------------ | -------------------------------------------- |
