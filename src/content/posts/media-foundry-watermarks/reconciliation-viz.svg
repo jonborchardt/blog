@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="420" viewBox="0 0 640 420" font-family="system-ui, sans-serif" font-size="13">
+  <defs>
+    <marker id="mfv-fg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="currentColor" fill-opacity="0.6"/></marker>
+    <marker id="mfv-hi" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#f0b35a"/></marker>
+  </defs>
+
+  <!-- column headers -->
+  <text x="150" y="24" fill="currentColor" text-anchor="middle" font-weight="600">Media plan</text>
+  <text x="560" y="24" fill="currentColor" text-anchor="middle" font-weight="600">Watermark detections</text>
+
+  <!-- plan block 1: matched -->
+  <rect x="40" y="46" width="220" height="56" rx="8" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <text x="58" y="68" fill="#11171d" font-weight="600">Mon 8p-12a block</text>
+  <text x="58" y="86" fill="#11171d" fill-opacity="0.8" font-size="12">3 planned, 3 detected</text>
+
+  <!-- plan block 2: matched -->
+  <rect x="40" y="126" width="220" height="56" rx="8" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <text x="58" y="148" fill="#11171d" font-weight="600">Tue 12a-4a block</text>
+  <text x="58" y="166" fill="#11171d" fill-opacity="0.8" font-size="12">3 planned, 3 detected</text>
+
+  <!-- plan block 3: nothing detected against it -->
+  <rect x="40" y="206" width="220" height="56" rx="8" fill="#fafcfe" stroke="currentColor" stroke-opacity="0.5" stroke-dasharray="4 3"/>
+  <text x="58" y="228" fill="#11171d" font-weight="600">Wed 6a-6p block</text>
+  <text x="58" y="246" fill="#555f69" font-size="12">5 planned, 0 detected</text>
+
+  <!-- detection pins (time label sits above the pin, clear of the connecting line) -->
+  <circle cx="580" cy="60" r="8" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <text x="580" y="46" fill="currentColor" text-anchor="middle" font-size="11">3:53a</text>
+  <circle cx="580" cy="88" r="8" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <text x="580" y="74" fill="currentColor" text-anchor="middle" font-size="11">11:52p</text>
+  <circle cx="580" cy="140" r="8" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <text x="580" y="126" fill="currentColor" text-anchor="middle" font-size="11">1:42a</text>
+  <circle cx="580" cy="168" r="8" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <text x="580" y="154" fill="currentColor" text-anchor="middle" font-size="11">9:41p</text>
+  <circle cx="580" cy="272" r="8" fill="#fafcfe" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5"/>
+  <text x="580" y="258" fill="currentColor" text-anchor="middle" font-size="11">3:24a</text>
+
+  <!-- matched connections -->
+  <path d="M572 60 Q400 62 262 66" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" marker-end="url(#mfv-fg)"/>
+  <path d="M572 88 Q400 86 262 86" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" marker-end="url(#mfv-fg)"/>
+  <path d="M572 140 Q400 144 262 146" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" marker-end="url(#mfv-fg)"/>
+  <path d="M572 168 Q400 168 262 166" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" marker-end="url(#mfv-fg)"/>
+
+  <!-- leftover detection into the bucket -->
+  <path d="M572 272 Q520 296 500 306" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" marker-end="url(#mfv-fg)"/>
+
+  <!-- bucket: detected but not in plan -->
+  <rect x="420" y="304" width="180" height="72" rx="8" fill="#fafcfe" stroke="currentColor" stroke-opacity="0.5" stroke-dasharray="4 3"/>
+  <text x="440" y="328" fill="#11171d" font-weight="600">Detected</text>
+  <text x="440" y="346" fill="#11171d" font-weight="600">but not in plan</text>
+  <text x="440" y="364" fill="#555f69" font-size="12">1 unmatched hit</text>
+
+  <!-- drag affordance: pull the leftover detection onto the empty block -->
+  <path d="M428 316 Q340 288 262 240" fill="none" stroke="#f0b35a" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#mfv-hi)"/>
+  <text x="320" y="400" fill="currentColor" fill-opacity="0.85" text-anchor="middle" font-size="12" font-style="italic">Drag a leftover detection onto an empty block to create an airing.</text>
+</svg>
