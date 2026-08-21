@@ -1,0 +1,198 @@
+---
+title: One Codebase, Two Datasets
+description: I built a crossfilter dashboard for the fatalencounters.org data, then forked the whole thing to chart who was rewarding who at work.
+publishedAt: 2026-08-21
+series: past-work
+seriesOrder: 10
+tags: [data-viz, d3, typescript, retrospective]
+authority: 'E:\github2\Labs'
+hero:
+  src: ./hero.png
+  alt: A map of the United States covered in hundreds of translucent red squares, one per record in the fatalencounters.org dataset, densest along both coasts and across the Southeast
+draft: true
+---
+
+import Callout from "@/components/blog/Callout.astro";
+import Comparison from "@/components/blog/Comparison.astro";
+import Figure from "@/components/blog/Figure.astro";
+import sweep from "./fatal-encounters-sweep.png";
+import rewards from "./giving-charts.png";
+
+There are two projects in [my 2018 portfolio snapshot](/labs-2018-snapshot/) that are the same
+application. One of them plots people killed during encounters with police. The other one plots who
+said thank you to whom at work. They share a build, a chart engine, a data model shape, and — still,
+in the copy I have — a package manifest.
+
+This is the story of that pair: what the machine was, why pointing it at a second dataset took
+almost no code, and what that says about how I was building things around 2014.
+
+## Fatal Encounters
+
+Fatal Encounters is a personal project. It was never public, and the data in it is real: it comes
+from [fatalencounters.org](https://fatalencounters.org/), a volunteer effort to build what the
+subtitle on my page called "an impartial, comprehensive and searchable national database of people
+killed during interactions with law enforcement."
+
+Each record is a person. The TypeScript interface I wrote for it has twenty-odd fields — name, age,
+gender, race, date, street address, city, state, county, the agency involved, cause of death, a
+short description, the disposition of the case, a link to the news story, latitude and longitude.
+I am not going to quote a row here. The point is that the row exists, one per death, with a name on
+it, and that this is what "a dataset" looked like when I loaded it into a charting toolkit built for
+advertising metrics.
+
+Honestly, I no longer remember what prompted me to build it. It is not in any notes I kept, and I
+did not put it anywhere anyone could see. What I can tell you is what I did with it: I gave the data
+the same treatment I gave everything else I was working on that year, which was to make every field
+filterable by clicking on it.
+
+<Figure
+  caption="The timeline mid-brush: I have swept out March 2008 to February 2013, and the map below has dropped to just the deaths in that window. The bars outside the brush go grey; a reset chip appears with the date range."
+  width="wide"
+  zoom
+>
+  <img
+    src={sweep.src}
+    width="1200"
+    height="911"
+    alt="A bar chart titled Filter by Month spanning 2000 to 2014 with a pale blue brush window covering March 2008 to February 2013; bars inside it are blue and bars outside are grey, and a red reset filter chip reads 03/08/2008 to 02/03/2013. Below it a US map shows a thinned scatter of red squares"
+  />
+</Figure>
+
+That sweep is the whole interaction model. Drag a window across the time axis and every other chart
+on the page — the map, the age histogram, the state ranking, cause of death — recomputes against the
+filtered set. Click a bar in any of them and the rest refilter again, the timeline included. It is
+crossfilter underneath, dc.js on top, wrapped in AngularJS 1.3 directives.
+
+## The machine
+
+The stack, from `bower.json`: AngularJS 1.3, dc.js by way of `angular-dc`, crossfilter, NVD3,
+ui-grid, D3 3.4, jQuery 2.1, Bootstrap 3.2 and moment.js. The sources are TypeScript, compiled to
+JavaScript with the `.js.map` files checked in next to them — which is a fair snapshot of what
+"modern frontend" meant to me in 2014, and also why I can still read the intent of the code twelve
+years later instead of squinting at compiler output.
+
+The part I still like is that the charts are declared, not built. Each one is a typed config object
+in an array:
+
+```ts
+this.charts["ageBarFilter"] = <Charts.IFilterBarChart<Models.IEncounter>>{
+    title: "Suspect Age",
+    chartType: Charts.ChartType.filterBarChart,
+    keyId: "age",
+    metricIds: ["count"],
+    sizeData: <Charts.ISizeData>{ width: thirdWidth, height: normalHeight, margin: baseMargin },
+    groupCountOverride: 25,
+    minX: 1,
+    maxX: 97,
+    elasticY: true,
+    hideFilter: true
+};
+```
+
+`keyId` names the dimension, `chartType` picks the renderer, `sizeData` places it. A directive walks
+the array and instantiates the dc.js charts; the page itself contains almost no chart code. That
+generic parameter — `IFilterBarChart<IEncounter>` — is doing the load-bearing work here, and it is
+the reason the second project exists at all.
+
+<Callout variant="note" title="It is not an ASP.NET app">
+  Both projects ship as Visual Studio web projects, with a `.csproj`, a `Web.config` and DLLs in
+  `bin/`. None of that runs. The entire dataset is baked into `App/core/models/EncounterLoader.js`
+  as a 2.9 MB literal array, and the one function that would have called a server API is never
+  invoked. It is a folder of static files wearing a server's clothes — which is exactly why it still
+  opens in 2026 with nothing but a local file server.
+</Callout>
+
+## The fork
+
+The other one is the Adap.tv Rewards Report, and it charts the company's peer-recognition program.
+Its subtitle is the whole spec: **who is rewarding who, when, how much, and why.**
+
+<Figure
+  caption="The Rewards Report, cropped to the aggregate charts. Its 'When' timeline takes the same brush as the Fatal Encounters one."
+  width="wide"
+  zoom
+>
+  <img
+    src={rewards.src}
+    width="1200"
+    height="377"
+    alt="A dashboard header reading Adap.tv Rewards Report, who is rewarding who, when, how much, and why, above three charts: a When bar chart of dollars per period from October 2012 to January 2015, a How Much histogram of reward amounts, and an LTV Internal donut"
+  />
+</Figure>
+
+<Callout variant="warning" title="Why that screenshot is cropped">
+  The rewards data is real, and it is full of my former colleagues' names and the thank-you notes
+  they wrote each other. The full page shows a scrolling list of every giver by name, plus ranked
+  charts of top givers and top recipients. I cropped it to the aggregates. The underlying data is
+  not published anywhere and is not going to be.
+</Callout>
+
+Structurally it is the same page. Here are the chart slots each one defines, in source order:
+
+<Comparison labels={["Fatal Encounters", "Rewards Report"]}>
+  <Fragment slot="a">
+
+    - Suspect Age
+    - Gender
+    - Race
+    - State
+    - Cause of Death
+    - Drug Use
+    - Map
+    - Filter by Month _(brushable)_
+
+  </Fragment>
+  <Fragment slot="b">
+
+    - When _(brushable)_
+    - How Much
+    - LTV Internal
+    - Top Givers
+    - Top Rewarded
+    - Why
+    - All Givers
+    - All Rewarded
+
+  </Fragment>
+</Comparison>
+
+Different words, identical shapes: a brushable time dimension, a couple of numeric histograms, a
+pie, and a stack of ranked row charts. Forking meant writing a new loader, a new key-metrics class
+and a new array of config objects. The chart engine, the crossfilter wiring, the layout directives
+and the build were untouched.
+
+That is the argument for declaring charts as data. Retargeting the dashboard was a data-modelling
+job, not a rewrite. I did not go near the rendering code.
+
+## What the fork left behind
+
+I did not do it cleanly. I copied the folder and deleted until it ran, and the archaeology is all
+still in there:
+
+- `GivingCharts/bower.json` still says `"name": "FatalEncounters.Web"`, byte for byte identical to
+  its parent's — including a dependency on `adap-charts` pulled from an internal SVN URL that has
+  not resolved for a decade.
+- `EncounterLoader.js` — all 2.9 MB of it — still sits in the rewards project next to the 1.7 MB
+  `rewardsLoader.js`. The rewards app ships the fatalities dataset it never reads.
+- The `rewardsReport/` feature folder still contains `encounterReportCharts.js` and
+  `encounterReportCtrl.js`, with their source maps, orphaned from the `.ts` files that produced
+  them.
+- There is a `bin (1)/` directory, empty, the way Windows names a folder you pasted twice.
+
+None of that is defensible. All of it is what a fork actually looks like a year later, and I would
+rather show it than tidy the archive into something I did not do.
+
+One more artifact they share: both `index.html` files ask for `encounterLoader.js` with a lowercase
+`e` while the file on disk is `EncounterLoader.js`. It worked fine on Windows and IIS, which is
+where it lived. On any case-sensitive host it is a 404, and the whole page is empty — the entire
+"database" is that one script tag.
+
+## The habit
+
+The through-line is not AngularJS, which I would not choose today, or dc.js, which I might. It is
+that I had built a way of asking questions of a table — sweep the timeline, click the bar, watch
+everything else move — and once you have that, every table you meet starts looking like a candidate.
+Ad impressions, then a civic dataset about people who died, then thank-you notes from coworkers.
+
+Two of those three deserved the treatment. The middle one deserved more than a folder on my hard
+drive, and did not get it.
