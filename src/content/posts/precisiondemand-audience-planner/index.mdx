@@ -1,0 +1,308 @@
+﻿---
+title: "Audience Planner: 2,473 TV Shows on One Screen"
+description: The Silverlight side project that became PrecisionDemand's flagship — explore thousands of TV programs by targeting quality, then optimize the buy.
+publishedAt: 2026-08-21
+series: past-work
+seriesOrder: 5
+tags: [retrospective, adtech, data-viz]
+authority: 'E:\github2\Labs'
+hero:
+  src: ./hero.png
+  alt: A treemap of hundreds of TV program tiles, each carrying a network logo — Food Network, HGTV, TLC, Travel Channel, DIY — sized by audience and shaded from red through yellow to green
+draft: true
+---
+
+import Callout from "@/components/blog/Callout.astro";
+import Figure from "@/components/blog/Figure.astro";
+import VizFigure from "@/components/blog/VizFigure.astro";
+import FlowViz from "./flow-viz.svg";
+import StackViz from "./stack-viz.svg";
+import histogram from "./histogram.png";
+import treemap from "./treemap.png";
+import cardDetail from "./card-detail.png";
+import optimizer from "./optimizer.png";
+import charts from "./charts.png";
+
+I joined PrecisionDemand in March 2010 as the sole user interface developer, and I was still the
+sole user interface developer when AOL bought us in May 2014. Four years, one frontend person.
+Every screen a customer or a salesperson or an analyst ever looked at was mine — the design
+decisions as well as the code.
+
+The Audience Planner is the one I would show you first. It started as a 20% time idea, it became
+the company's flagship product, and it is the piece of [the portfolio I froze in
+2018](/labs-2018-snapshot/) that I am proudest of. It is also completely dead: it was a Silverlight
+application, and no browser has run Silverlight for years. What survives is a folder of screenshots
+and a walkthrough video. That turns out to be enough to reconstruct it, because the product was
+never complicated. It was four moves.
+
+## What PrecisionDemand sold
+
+TV ad-spend optimization. The pitch, more or less as I would have said it in an elevator: we could
+tell you what market your ad dollars would convert into real sales.
+
+That is a harder claim than it sounds. Television inventory is sold on audience size — a rating, a
+CPM, how many eyeballs. The thing an advertiser actually cares about is whether the people watching
+are the people who might buy a mid-size SUV. Our whole business was the gap between those two
+things, and the Audience Planner was the interface where a buyer got to see the gap and act on it.
+
+<Callout variant="note" title="Every number in these screenshots is fake">
+  The advertisers, the programs, the ratings, the dollar figures — all of it is demo data, built to
+  show the product. Nothing here is a real client's media plan.
+</Callout>
+
+## The whole product is four moves
+
+Explore, filter, optimize, export. You open every program we had data on as one visual collection,
+you narrow it with facets until you are looking at the inventory you care about, you hand the
+survivors to the optimizer, and you leave with a spreadsheet.
+
+<VizFigure
+  name="Explore, filter, optimize, export"
+  summary="The four moves of the Audience Planner, narrowing top to bottom: a collection of program cards shaded by tRatio, a facet panel that cuts them down, a grid where the optimizer assigns airings and spend per program, and a spreadsheet export. The two counts come from two different screenshots in different filter states — the 191 is not a filtering of the 2,473."
+>
+  <FlowViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
+
+Nothing about that flow was novel in 2011 and nothing about it is novel now. What made it work was
+that all four moves lived in one window, over the same collection, with the counts and the averages
+updating in the status bar as you went. You never left to run a report.
+
+## Explore: a card for every program
+
+Here is the entry view. Each program in the catalogue is a card, and the cards are stacked into a
+histogram binned by tRatio.
+
+<Figure caption="The explore view: 2,473 program cards binned by tRatio, sorted and coloured by the same number. A dated snapshot of the app as it stood." zoom>
+  <img
+    src={histogram.src}
+    width="948"
+    height="632"
+    alt="The PrecisionDemand application window with a left facet panel and a main pane of nine stacked bars on an axis from minus 0.4 to 0.5, each bar built from small green tiles, over a status bar reading Program Count 2473"
+  />
+</Figure>
+
+The status bar along the bottom is the part I would defend hardest today. Program Count: 2473.
+Average Impressions: 241,772. Average Cost: $1,022.77. Average CPM: $4.23. Average tCPM: $112.12.
+Whatever you had filtered down to, those five numbers described it, and they moved the instant you
+touched anything. It is the cheapest possible feedback loop and it did more work than any chart on
+the screen.
+
+The left panel is the facet list: a search box, then tRatio with a two-handle range slider over its
+own miniature distribution, then three tRatio clusters, then impressions per airing, targeted
+impressions per airing, cost per airing, CPM, tCPM, and — further down the scroll — media market,
+network, genre, conversions, cost per acquisition, primary daypart and primary day of week. The
+breadcrumb at the top left says `tRatio: Over -0.4`, which is the filter that produced this view.
+
+The toolbar has two dropdowns that I think are the most important controls in the product: **Sort**
+and **Color**. Both are set to tRatio here. You can point either one at any field independently,
+which means the same collection can be arranged by cost and shaded by targeting quality, or the
+reverse, and the answer to "am I overpaying for the wrong audience" falls out of the picture rather
+than out of a calculation.
+
+<Callout variant="note" title="What was Microsoft's and what was mine">
+  The directory this lives in is called `PivotViewer`, after the Silverlight control for exploring
+  large card collections with facet filters. I could not honestly tell you now which parts of this
+  chrome came out of that box and which parts I wrote. The archive kept the screenshots, not the
+  source.
+</Callout>
+
+## tRatio was the sort key and the colour
+
+tRatio — targeting ratio — is the number this whole series keeps running into. It is on screen in
+the 2011 Silverlight app, it is still on screen in the 2018 interface, an acquisition and a rebrand
+later, and I never found out who coined it.
+
+What it did was let two very different pieces of media be put next to each other and ranked on how
+well they hit the audience you were paying to reach. In this app it is doing three jobs at once: it
+bins the histogram, it sorts the cards, and it colours them on a red-through-yellow-to-green ramp.
+The axis runs from about -0.4 to 0.5 with the slider going down to -1.
+
+The `t` prefix elsewhere in the UI means "targeted" — you get `CPM` and `tCPM` as a pair, and
+`Imps per Air` and `tImps per Air` as a pair. A program with a good CPM and a terrible tCPM is
+cheap for a general audience and expensive for yours. Most of the product is about noticing that.
+
+## Filter: the treemap
+
+Tick one box in the Genre facet and the collection redraws. This is the view I would put on a
+poster.
+
+<Figure caption="The treemap view, filtered to one genre: 191 programs, sized by impressions per airing and shaded by tRatio." zoom>
+  <img
+    src={treemap.src}
+    width="1737"
+    height="806"
+    alt="A treemap filling the window with hundreds of program tiles carrying Food Network, HGTV, TLC, Travel Channel, OWN and DIY logos, shaded red through yellow to green, beside a genre facet list with counts"
+  />
+</Figure>
+
+Every tile is a program, sized by whatever the sort dropdown is pointed at — impressions per airing,
+here — coloured by tRatio, with its network's logo drawn on it. The genre facet on the left is showing its counts — 762 documentary, 191
+instructions and advice, 149 general drama, 95 feature film, 62 news, 55 popular music, 45 situation
+comedy, 31 sports — and `INSTRUCTIONS, ADVICE` is the one that is ticked, so the status bar now
+reads 191 programs at an average of $1,632.80 an airing.
+
+The logos were a deliberate choice and I would make it again. A buyer does not think in program
+identifiers; they think "the Food Network block is cheap and the Travel Channel block is orange".
+Putting the brand mark on the tile turned a data structure into something a media planner could
+read across a conference table. Sort by impressions per airing, as it is here, and the big
+recognisable names sort themselves to the top left without anyone explaining the layout.
+
+## One card, opened up
+
+Zoom into a single tile and it becomes a card with its own metrics, plus a detail panel.
+
+<Figure caption="A single program card with its detail panel: metrics in context, an airings breakdown, and the household attributes behind its targeting." zoom>
+  <img
+    src={cardDetail.src}
+    width="1165"
+    height="905"
+    alt="A zoomed program card showing CPM $3.93, tCPM $48.02, impressions 50,882 and tRatio 0.06, each with a small bar showing where it sits in the distribution, beside a panel listing weekly airings by campaign and a list of demographic attributes with diverging bars"
+  />
+</Figure>
+
+Three things worth pointing at here.
+
+The four metrics on the card each carry a tiny bar showing where that value sits in the whole
+distribution. tCPM $48.02 is meaningless on its own; tCPM $48.02 with a marker near the good end of
+the range is a decision. That pattern — never show a number without showing its context — is the
+single habit from this job I have carried into everything since.
+
+The **Airings** block lists a maximum weekly airing count and then a row per campaign, four vehicle
+names and one called `PrecisionDemand Optimal`. That last row is the tell: the app is not only
+describing the inventory, it is holding our own recommended plan alongside whatever the client is
+actually running, ready to be compared.
+
+The **Demographics** block is a list of household attributes — year the home was built, gender,
+income, marital status, and, my favourite, `Golf - True` — each with a small diverging bar showing
+whether this program's audience over- or under-indexes on it. The Silverlight-era backend that
+survives on disk connects to two databases, one called `Demographics` and one called `Acxiom`, and I
+would bet this panel is reading the second. Either way it is exactly where the business was: the
+reason we could talk about sales instead of eyeballs is that somebody had joined TV viewing to
+household data, and this panel is where that join surfaced to a human.
+
+## Optimize: "Re-calculate Optimal Plan"
+
+The other end of the product is a grid, and it is deliberately boring.
+
+<Figure caption="The optimizer grid. Most rows get zero airings; the plan concentrates on a handful." zoom>
+  <img
+    src={optimizer.src}
+    width="1075"
+    height="805"
+    alt="A dense data grid with columns for Lock, Optimal Airings, Program Airings, Program Duration, Program Name, Network, Cost per Air, Optimal Spend and Imps per Air, with buttons Re-calculate Optimal Plan and Export to Excel beneath and a pager reading Page 1 of 12"
+  />
+</Figure>
+
+Columns: a lock checkbox, optimal airings as a numeric spinner with a bar beside it, the program's
+own airing count, its duration, its name, its network, cost per airing, optimal spend, impressions
+per airing. Twelve pages of it. Two buttons at the bottom: **Re-calculate Optimal Plan** on the
+left, **Export to Excel** on the right.
+
+The interesting thing about this screenshot is how much of it is zero. Of the twenty-five or so
+rows visible, seven have a non-zero optimal airing count. Property Virgins, NY Ink, How I Met Your
+Mother, Mutant Planet, My First Place: nothing. The plan puts fifty airings into The Tonight Show,
+eighteen into House, forty-one into Cubs Baseball, twenty-six into 60 Minutes. An optimizer that
+concentrates is doing its job; an optimizer that spreads a little money over everything is just
+computing an average. Watching most of the grid stay at zero was how you knew the run had actually
+solved something.
+
+I checked the arithmetic again while writing this, more than a decade later, and it still holds: optimal
+spend is optimal airings times cost per airing, to the rounding. Fifty airings of The Tonight Show
+at $19,893.62 each is $994,681.10, and that is what the cell says.
+
+The `Lock` column is the one piece here I am reading rather than remembering. A checkbox next to an
+editable airing count, on a screen whose main verb is "re-calculate", is almost certainly there so a
+buyer can pin the lines they have already committed to and let the solver move everything else
+around them. I believe that is what it did. I would not swear to it.
+
+## Export, and the comparison charts
+
+The last move is a button labelled **Export to Excel**, and I have made peace with that.
+
+Nobody bought a media plan out of a Silverlight window. They bought it out of a spreadsheet that
+went to their agency, got argued over, and came back with changes. The most sophisticated part of
+the product handed off to the least sophisticated format available, on purpose, because that is
+where the work continued. Every visualization tool I have built since has needed the same escape
+hatch and I have never once regretted putting one in.
+
+Before the spreadsheet there was a comparison view.
+
+<Figure caption="Plan comparison charts: the recommended plan against the client's, on airings, targeted CPM, targeted impressions, and distribution across days and dayparts." zoom>
+  <img
+    src={charts.src}
+    width="941"
+    height="702"
+    alt="Seven chart cards titled Airing Count, Targeted CPM, Targeted Impressions, Impressions by Day of Week, Broadcast Impressions, Impressions by Daypart and Cable Impressions, each a grouped bar chart with five series"
+  />
+</Figure>
+
+The headlines are written as comparisons rather than values: "Airings will be 417 % more than
+Client", "Targeted CPM will be 99 % less than Client", "Targeted impression will be 6,966 % more
+than Client". Those are demo numbers and they are shameless demo numbers — a real proposal did not
+promise a 99% CPM cut — but the framing is right. A buyer does not need to know the targeted CPM.
+They need to know whether it is better than what they are doing now.
+
+Each grouped chart has five bar series and no legend anywhere in the screenshot. The card detail
+panel lists exactly five airing rows, four campaigns plus `PrecisionDemand Optimal`, which is
+suggestive. I would not put money on the mapping.
+
+## Why Silverlight, and what is left of it
+
+Because the company started at the dawn of Silverlight. That is the whole answer. In 2010 it was a
+credible bet: you got a real widget toolkit, real data binding, a real type system and a control
+that already did faceted card browsing, at a time when doing any of that in a browser meant writing
+it yourself. We pivoted away later as other web technology became dominant — not on a particular
+Tuesday when someone slammed a door, just steadily, the way a platform stops being a decision and
+starts being a liability.
+
+The Planner's own source did not make it into the archive, but a sibling from the same period and
+the same hands did, and it is short enough to read in one sitting.
+
+<VizFigure
+  name="The surviving Silverlight-era stack"
+  summary="Three tiers and nothing else: a Silverlight .xap running as a browser plug-in, a single WCF endpoint called DalService.svc, and two SQL databases named Demographics and Acxiom on a server named baker. None of the three tiers can run today."
+>
+  <StackViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
+
+A `.xap` file — a Silverlight client, zipped assemblies, still sitting on disk and still perfectly
+decompilable — plus one WCF service, `DalService.svc`, plus a `Web.config` with Entity Framework
+connection strings hardcoded to `data source=baker` and the catalogues `Demographics` and `Acxiom`.
+Four dated backup copies put that directory between December 2011 and February 2012.
+
+The service contract is three operations wide. `GetClusterSources`, `GetClusters`, and
+`GetRelevantDemographicsOfCluster` — and there is the whole thesis, in an interface definition. Pick
+a data source, get its clusters of households, ask which demographic attributes make a given cluster
+distinctive. Those clusters are the same word as the `tRatio Cluster 1`, `2` and `3` facets in the
+first screenshot, and that last method is the panel I just walked you through. The assemblies are
+branded MarketScale, a name that appears nowhere else in the portfolio.
+
+Three tiers, and every one of them is unreachable now. No browser ships the plug-in. `baker` was
+decommissioned so long ago that I could not tell you what happened to it.
+
+## What happened to it
+
+AOL acquired PrecisionDemand in May 2014, and the quality of the platform was a key factor in that
+decision. The Audience Planner was the piece of the platform people meant.
+
+Then I killed it. On the other side of the acquisition I led the migration off Silverlight and onto
+AngularJS, which is to say rebuilding my own flagship in a technology that could survive. I do not remember minding at the time. Looking at these screenshots
+now, I mind slightly more: the rewrite was the right call and the treemap was better than anything
+we shipped for years afterwards.
+
+## What I would keep
+
+The technology is a museum piece and I would not defend a single line of it. Four decisions I would
+port straight into anything I build tomorrow:
+
+- **A status bar that never lies.** Five aggregates over the current filter, updating live. Cheaper
+  than any dashboard and more trusted than all of them.
+- **Sort and colour as independent, user-chosen dimensions.** Two dropdowns turned one view into
+  every view.
+- **Never a number without its distribution.** The little bar next to $48.02 is what made the $48.02
+  actionable.
+- **An export button.** The tool is not where the decision gets made. Let the work leave.
+
+And the thing that is really worth saying: none of this was assigned. It was a 20% time project that
+turned into the flagship. I have gone on to build a great deal of software that somebody asked for,
+and the ones I would show you first are still the ones nobody did.

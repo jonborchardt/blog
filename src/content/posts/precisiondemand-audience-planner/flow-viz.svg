@@ -1,0 +1,148 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="640" viewBox="0 0 640 640" font-family="system-ui, sans-serif" font-size="13">
+  <defs>
+    <marker id="apv-fg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="currentColor" fill-opacity="0.6"/></marker>
+  </defs>
+
+  <!-- ============ 1. EXPLORE ============ -->
+  <circle cx="31" cy="80" r="11" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <text x="31" y="85" fill="#11171d" text-anchor="middle" font-size="11" font-weight="600">1</text>
+  <text x="50" y="85" fill="currentColor" font-weight="600">EXPLORE</text>
+  <text x="20" y="105" fill="currentColor" fill-opacity="0.8" font-size="12" font-style="italic">~2,473 program cards,</text>
+  <text x="20" y="120" fill="currentColor" fill-opacity="0.8" font-size="12" font-style="italic">coloured by tRatio</text>
+
+  <!-- card collection: 3 rows of 10 -->
+  <g stroke="#006a90" stroke-opacity="0.55" stroke-width="1" fill="currentColor">
+    <rect x="222" y="46" width="36" height="24" rx="2" fill-opacity="0.18"/>
+    <rect x="263" y="46" width="36" height="24" rx="2" fill-opacity="0.27"/>
+    <rect x="304" y="46" width="36" height="24" rx="2" fill-opacity="0.21"/>
+    <rect x="345" y="46" width="36" height="24" rx="2" fill-opacity="0.36"/>
+    <rect x="386" y="46" width="36" height="24" rx="2" fill-opacity="0.30"/>
+    <rect x="427" y="46" width="36" height="24" rx="2" fill-opacity="0.45"/>
+    <rect x="468" y="46" width="36" height="24" rx="2" fill-opacity="0.33"/>
+    <rect x="509" y="46" width="36" height="24" rx="2" fill-opacity="0.54"/>
+    <rect x="550" y="46" width="36" height="24" rx="2" fill-opacity="0.42"/>
+    <rect x="591" y="46" width="36" height="24" rx="2" fill-opacity="0.60"/>
+    <rect x="222" y="74" width="36" height="24" rx="2" fill-opacity="0.24"/>
+    <rect x="263" y="74" width="36" height="24" rx="2" fill-opacity="0.18"/>
+    <rect x="304" y="74" width="36" height="24" rx="2" fill-opacity="0.39"/>
+    <rect x="345" y="74" width="36" height="24" rx="2" fill-opacity="0.30"/>
+    <rect x="386" y="74" width="36" height="24" rx="2" fill-opacity="0.51"/>
+    <rect x="427" y="74" width="36" height="24" rx="2" fill-opacity="0.21"/>
+    <rect x="468" y="74" width="36" height="24" rx="2" fill-opacity="0.57"/>
+    <rect x="509" y="74" width="36" height="24" rx="2" fill-opacity="0.36"/>
+    <rect x="550" y="74" width="36" height="24" rx="2" fill-opacity="0.27"/>
+    <rect x="591" y="74" width="36" height="24" rx="2" fill-opacity="0.48"/>
+    <rect x="222" y="102" width="36" height="24" rx="2" fill-opacity="0.33"/>
+    <rect x="263" y="102" width="36" height="24" rx="2" fill-opacity="0.42"/>
+    <rect x="304" y="102" width="36" height="24" rx="2" fill-opacity="0.24"/>
+    <rect x="345" y="102" width="36" height="24" rx="2" fill-opacity="0.54"/>
+    <rect x="386" y="102" width="36" height="24" rx="2" fill-opacity="0.36"/>
+    <rect x="427" y="102" width="36" height="24" rx="2" fill-opacity="0.18"/>
+    <rect x="468" y="102" width="36" height="24" rx="2" fill-opacity="0.45"/>
+    <rect x="509" y="102" width="36" height="24" rx="2" fill-opacity="0.30"/>
+    <rect x="550" y="102" width="36" height="24" rx="2" fill-opacity="0.60"/>
+    <rect x="591" y="102" width="36" height="24" rx="2" fill-opacity="0.21"/>
+  </g>
+
+  <!-- funnel 1 -->
+  <line x1="222" y1="132" x2="280" y2="166" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.5"/>
+  <line x1="627" y1="132" x2="570" y2="166" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.5"/>
+  <path d="M425 134 L425 162" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" marker-end="url(#apv-fg)"/>
+
+  <!-- ============ 2. FILTER ============ -->
+  <circle cx="31" cy="200" r="11" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <text x="31" y="205" fill="#11171d" text-anchor="middle" font-size="11" font-weight="600">2</text>
+  <text x="50" y="205" fill="currentColor" font-weight="600">FILTER</text>
+  <text x="20" y="225" fill="currentColor" fill-opacity="0.8" font-size="12" font-style="italic">facets cut the set — one</text>
+  <text x="20" y="240" fill="currentColor" fill-opacity="0.8" font-size="12" font-style="italic">genre checkbox: 191 left</text>
+
+  <rect x="280" y="168" width="290" height="130" rx="6" fill="#fafcfe" stroke="#006a90" stroke-width="1.5"/>
+  <rect x="292" y="178" width="266" height="18" rx="4" fill="none" stroke="#555f69" stroke-opacity="0.35"/>
+  <text x="299" y="191" fill="#555f69" font-size="11">Search…</text>
+
+  <text x="292" y="214" fill="#11171d" font-size="12" font-weight="600">tRatio</text>
+  <line x1="340" y1="210" x2="558" y2="210" stroke="#555f69" stroke-opacity="0.3" stroke-width="3" stroke-linecap="round"/>
+  <line x1="395" y1="210" x2="520" y2="210" stroke="#006a90" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="395" cy="210" r="4.5" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <circle cx="520" cy="210" r="4.5" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+
+  <text x="292" y="238" fill="#11171d" font-size="12" font-weight="600">Genre</text>
+  <rect x="294" y="247" width="9" height="9" rx="1.5" fill="none" stroke="#555f69" stroke-opacity="0.6"/>
+  <text x="311" y="255" fill="#555f69" font-size="11">DOCUMENTARY, GEN</text>
+  <text x="556" y="255" fill="#555f69" font-size="11" text-anchor="end">762</text>
+  <rect x="294" y="263" width="9" height="9" rx="1.5" fill="#deeef5" stroke="#006a90" stroke-width="1.2"/>
+  <path d="M296 267.5 L298.5 270 L301.5 265" fill="none" stroke="#006a90" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="311" y="271" fill="#11171d" font-size="11" font-weight="600">INSTRUCTIONS, ADV</text>
+  <text x="556" y="271" fill="#11171d" font-size="11" font-weight="600" text-anchor="end">191</text>
+  <rect x="294" y="279" width="9" height="9" rx="1.5" fill="none" stroke="#555f69" stroke-opacity="0.6"/>
+  <text x="311" y="287" fill="#555f69" font-size="11">GENERAL DRAMA</text>
+  <text x="556" y="287" fill="#555f69" font-size="11" text-anchor="end">149</text>
+
+  <!-- funnel 2 -->
+  <line x1="280" y1="302" x2="315" y2="338" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.5"/>
+  <line x1="570" y1="302" x2="535" y2="338" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.5"/>
+  <path d="M425 304 L425 334" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" marker-end="url(#apv-fg)"/>
+
+  <!-- ============ 3. OPTIMIZE ============ -->
+  <circle cx="31" cy="370" r="11" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <text x="31" y="375" fill="#11171d" text-anchor="middle" font-size="11" font-weight="600">3</text>
+  <text x="50" y="375" fill="currentColor" font-weight="600">OPTIMIZE</text>
+  <text x="20" y="395" fill="currentColor" fill-opacity="0.8" font-size="12" font-style="italic">airings and spend get</text>
+  <text x="20" y="410" fill="currentColor" fill-opacity="0.8" font-size="12" font-style="italic">assigned per program</text>
+
+  <rect x="315" y="340" width="220" height="104" rx="6" fill="#fafcfe" stroke="#006a90" stroke-width="1.5"/>
+  <g stroke-linecap="round">
+    <line x1="326" y1="356" x2="424" y2="356" stroke="#555f69" stroke-opacity="0.45" stroke-width="3"/>
+    <line x1="326" y1="376" x2="404" y2="376" stroke="#555f69" stroke-opacity="0.45" stroke-width="3"/>
+    <line x1="326" y1="396" x2="430" y2="396" stroke="#555f69" stroke-opacity="0.45" stroke-width="3"/>
+    <line x1="326" y1="416" x2="392" y2="416" stroke="#555f69" stroke-opacity="0.45" stroke-width="3"/>
+  </g>
+  <g fill="none" stroke="#555f69" stroke-opacity="0.5">
+    <rect x="440" y="347" width="30" height="15" rx="2"/>
+    <rect x="440" y="367" width="30" height="15" rx="2"/>
+    <rect x="440" y="387" width="30" height="15" rx="2"/>
+    <rect x="440" y="407" width="30" height="15" rx="2"/>
+  </g>
+  <g fill="#11171d" font-size="11" text-anchor="middle">
+    <text x="455" y="358">0</text>
+    <text x="455" y="378">50</text>
+    <text x="455" y="398">0</text>
+    <text x="455" y="418">18</text>
+  </g>
+  <g fill="none" stroke="#555f69" stroke-opacity="0.35">
+    <rect x="480" y="348" width="44" height="13" rx="2"/>
+    <rect x="480" y="368" width="44" height="13" rx="2"/>
+    <rect x="480" y="388" width="44" height="13" rx="2"/>
+    <rect x="480" y="408" width="44" height="13" rx="2"/>
+  </g>
+  <rect x="480" y="368" width="30" height="13" rx="2" fill="#006a90" fill-opacity="0.55"/>
+  <rect x="480" y="408" width="12" height="13" rx="2" fill="#006a90" fill-opacity="0.55"/>
+
+  <rect x="325" y="456" width="200" height="26" rx="4" fill="#deeef5" stroke="#f0b35a" stroke-width="2"/>
+  <text x="425" y="473" fill="#11171d" font-size="12" font-weight="600" text-anchor="middle">Re-calculate Optimal Plan</text>
+
+  <!-- funnel 3 -->
+  <line x1="325" y1="486" x2="355" y2="518" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.5"/>
+  <line x1="525" y1="486" x2="495" y2="518" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.5"/>
+  <path d="M425 488 L425 516" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" marker-end="url(#apv-fg)"/>
+
+  <!-- ============ 4. EXPORT ============ -->
+  <circle cx="31" cy="545" r="11" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <text x="31" y="550" fill="#11171d" text-anchor="middle" font-size="11" font-weight="600">4</text>
+  <text x="50" y="550" fill="currentColor" font-weight="600">EXPORT</text>
+  <text x="20" y="570" fill="currentColor" fill-opacity="0.8" font-size="12" font-style="italic">the plan leaves as a</text>
+  <text x="20" y="585" fill="currentColor" fill-opacity="0.8" font-size="12" font-style="italic">spreadsheet</text>
+
+  <rect x="355" y="520" width="140" height="90" rx="4" fill="#fafcfe" stroke="#006a90" stroke-width="1.5"/>
+  <path d="M356 524 a4 4 0 0 1 4 -4 h132 a4 4 0 0 1 4 4 v16 h-140 z" fill="#deeef5"/>
+  <g stroke="#555f69" stroke-opacity="0.3" stroke-width="1">
+    <line x1="355" y1="540" x2="495" y2="540"/>
+    <line x1="355" y1="558" x2="495" y2="558"/>
+    <line x1="355" y1="576" x2="495" y2="576"/>
+    <line x1="355" y1="594" x2="495" y2="594"/>
+    <line x1="397" y1="520" x2="397" y2="610"/>
+    <line x1="439" y1="540" x2="439" y2="610"/>
+    <line x1="467" y1="540" x2="467" y2="610"/>
+  </g>
+  <text x="425" y="630" fill="currentColor" fill-opacity="0.85" font-size="12" text-anchor="middle">Export to Excel</text>
+</svg>
