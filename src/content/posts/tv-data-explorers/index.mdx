@@ -1,0 +1,116 @@
+---
+title: The Explorers We Built to Understand Our Own Data
+description: Four small internal tools from PrecisionDemand and AOL, none of them shipped products, all built to poke at a dataset until it made sense.
+publishedAt: 2026-08-20
+series: past-work
+seriesOrder: 9
+tags: [retrospective, adtech, data-viz]
+authority: 'E:\github2\Labs'
+hero:
+  src: ./hero.png
+  alt: A 2x2 grid of four dashboard screenshots — a wizard scoring TV ads for targeting fit, an annotated media-package comparison tool, age/education/income charts of total people versus total buyers, and a campaign-pacing bar chart against an expected line
+draft: true
+---
+
+import Figure from "@/components/blog/Figure.astro";
+import adsplore from "./adsplore1.png";
+import comparer from "./comparer_WithCallouts.png";
+import personReporting from "./personReporting7.png";
+import proposal from "./proposal.gif";
+
+Not everything I built at PrecisionDemand and AOL was a product. Some of it was just me, handed a
+new pile of data, building the smallest interface that would let me look at it. None of these four
+shipped to a customer. All four exist because I could not understand a dataset by staring at rows
+of it, and building a small explorer was faster than not understanding it.
+
+## Adsplore: scoring 10,739 ads for fit
+
+Adsplore is a wizard: pick some brands, pick some target audiences, and it hands you every TV ad
+those brands ran, scored from −1 to +1 for how well it targeted the population you picked. One run
+in the screenshots below pulled 10,739 ads. Crossfilter-style charts break the set down by
+daypart, network, market, program, genre, and where the ad sat in its commercial pod, and clicking
+any of them filters all the others live.
+
+<Figure
+  caption="Adsplore's TV Ads step: 10,739 ads scored for targeting fit, broken down by daypart, network, market, program, genre and pod position."
+  width="wide"
+  zoom
+>
+  <img
+    src={adsplore.src}
+    width="932"
+    height="820"
+    alt="Adsplore wizard on the TV Ads step, showing 500 of 10,739 sampled ads with crossfilter charts for daypart, top network, top markets, ad length, top programs, top genres, pod group and pod position"
+  />
+</Figure>
+
+It was a demo, built to see whether we could actually make sense of a brand's TV buy at that
+granularity — not something a client clicked through themselves. The 10,739 is real ad-run volume;
+the brands and targeting scores behind it are demo data.
+
+## Package Compare: putting media buys side by side
+
+Package Compare answers a narrower question: given two or more candidate media packages, which one
+actually performs better against the numbers that matter — targetedness, spend, impressions by
+channel, daypart, CPM, eCPM, GRPs? The tool lets a planner build several packages from an inventory
+list, adjust cost and impression numbers per line, and see every package compared on the same set
+of charts at once.
+
+<Figure
+  caption="Package Compare, annotated: an inventory list feeds any number of packages, each editable inline, all compared on a shared set of charts on the right."
+  width="wide"
+  zoom
+>
+  <img
+    src={comparer.src}
+    width="1746"
+    height="854"
+    alt="Package Compare tool with hand-drawn annotation callouts: an inventory search panel on the left, two editable packages of programs in the middle each with cost and impression fields and notes, and eight comparison charts on the right covering impressions over time, targetedness, spend, and impressions by channel, daypart, CPM, eCPM and GRPs for all packages"
+  />
+</Figure>
+
+The yellow callouts on this one are mine — Balsamiq-era annotations explaining the tool to whoever
+I was showing it to, not a real product spec.
+
+## Population Reporting: total people vs. total buyers
+
+This one compares two curves across four demographic cuts — age in two-year increments, education
+level, household income, and home market value — one line for how a population is distributed,
+another for how buyers of a given target are distributed against it. The field names underneath
+(`Income-EstimatedHouseh…`, `HomeMarketValue`) trace back to the same licensed consumer data,
+Acxiom-lineage, that powered targeting elsewhere in the platform.
+
+<Figure
+  caption="Total People versus Total Buyers by age, education, household income and home value — same underlying consumer-data lineage as the rest of the targeting platform."
+  zoom
+>
+  <img
+    src={personReporting.src}
+    width="962"
+    height="677"
+    alt="Four charts comparing Total People to Total Buyers on a right axis: by age in two-year increments from 18 to over 99, by education level from high school to grad school, by household income from under 15k to over 150k, and by home market value from 25k to over 1M"
+  />
+</Figure>
+
+Where the other three tools are about a campaign or a buy, this one is about the audience itself —
+a way to see whether a target population actually looks different from the general population, and
+where.
+
+## Campaign Reporting: pacing against a plan
+
+The last of the four tracks delivery against a media plan while a campaign is running: weekly
+impressions stacked as confirmed, preliminary, and projected, against an expected line the plan
+committed to. The screenshot below is dated 5/5/2017, tracking a flight running into late July —
+squarely inside the ONE TV era at AOL.
+
+<Figure caption="Campaign pacing, 5/5/2017: confirmed, preliminary and projected weekly impressions against the expected delivery line." zoom>
+  <img
+    src={proposal.src}
+    width="518"
+    height="276"
+    alt="Bar chart titled 5/5/2017 showing weekly impressions from May through late July 2017 as stacked confirmed, preliminary and projected bars, tracking closely against a yellow expected-delivery line"
+  />
+</Figure>
+
+None of these four were pitched to anyone outside the building. They were how I answered my own
+question — "what does this data actually look like?" — before building the thing that used it.
