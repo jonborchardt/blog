@@ -8,7 +8,7 @@ tags: [data-viz, d3, typescript, retrospective]
 authority: 'E:\github2\Labs'
 hero:
   src: ./hero.png
-  alt: A map of the United States covered in hundreds of translucent red squares, one per record in the fatalencounters.org dataset, densest along both coasts and across the Southeast
+  alt: A map of the United States covered in hundreds of translucent red squares, one per ZIP code with at least one record in the fatalencounters.org dataset, densest along both coasts and across the Southeast
 draft: true
 ---
 
@@ -40,13 +40,13 @@ I am not going to quote a row here. The point is that the row exists, one per de
 it, and that this is what "a dataset" looked like when I loaded it into a charting toolkit built for
 advertising metrics.
 
-Honestly, I no longer remember what prompted me to build it. It is not in any notes I kept, and I
-did not put it anywhere anyone could see. What I can tell you is what I did with it: I gave the data
+Honestly, I no longer remember what prompted me to build it, and I did not put it anywhere anyone
+could see. What I can tell you is what I did with it: I gave the data
 the same treatment I gave everything else I was working on that year, which was to make every field
 filterable by clicking on it.
 
 <Figure
-  caption="The timeline mid-brush: I have swept out March 2008 to February 2013, and the map below has dropped to just the deaths in that window. The bars outside the brush go grey; a reset chip appears with the date range."
+  caption="The timeline mid-brush: I have swept out March 2008 to February 2013, and the map below has dropped to just the deaths in that window. The bars outside the brush go grey, and a reset filter chip appears next to the selected range."
   width="wide"
   zoom
 >
@@ -54,7 +54,7 @@ filterable by clicking on it.
     src={sweep.src}
     width="1200"
     height="911"
-    alt="A bar chart titled Filter by Month spanning 2000 to 2014 with a pale blue brush window covering March 2008 to February 2013; bars inside it are blue and bars outside are grey, and a red reset filter chip reads 03/08/2008 to 02/03/2013. Below it a US map shows a thinned scatter of red squares"
+    alt="A bar chart titled Filter by Month spanning 2000 to 2014 with a pale blue brush window covering March 2008 to February 2013; bars inside it are blue and bars outside are grey, and next to the title a red chip labelled reset filter sits beside grey text reading 03/08/2008 to 02/03/2013. Below it a US map shows a thinned scatter of red squares"
   />
 </Figure>
 
@@ -65,7 +65,7 @@ crossfilter underneath, dc.js on top, wrapped in AngularJS 1.3 directives.
 
 ## The machine
 
-The stack, from `bower.json`: AngularJS 1.3, dc.js by way of `angular-dc`, crossfilter, NVD3,
+The stack, from `bower.json` and `vendor/`: AngularJS 1.3, dc.js by way of `angular-dc`, crossfilter, NVD3,
 ui-grid, D3 3.4, jQuery 2.1, Bootstrap 3.2 and moment.js. The sources are TypeScript, compiled to
 JavaScript with the `.js.map` files checked in next to them — which is a fair snapshot of what
 "modern frontend" meant to me in 2014, and also why I can still read the intent of the code twelve
@@ -88,6 +88,9 @@ this.charts["ageBarFilter"] = <Charts.IFilterBarChart<Models.IEncounter>>{
     hideFilter: true
 };
 ```
+
+("Suspect Age" is the title my 2014 code gives that chart; the underlying field is just `Age`. I am
+quoting the code as written rather than quietly relabelling it.)
 
 `keyId` names the dimension, `chartType` picks the renderer, `sizeData` places it. A directive walks
 the array and instantiates the dc.js charts; the page itself contains almost no chart code. That
@@ -173,7 +176,7 @@ still in there:
   its parent's — including a dependency on `adap-charts` pulled from an internal SVN URL that has
   not resolved for a decade.
 - `EncounterLoader.js` — all 2.9 MB of it — still sits in the rewards project next to the 1.7 MB
-  `rewardsLoader.js`. The rewards app ships the fatalities dataset it never reads.
+  `RewardsLoader.js`. The rewards app ships the fatalities dataset it never reads.
 - The `rewardsReport/` feature folder still contains `encounterReportCharts.js` and
   `encounterReportCtrl.js`, with their source maps, orphaned from the `.ts` files that produced
   them.
