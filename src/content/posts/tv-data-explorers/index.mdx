@@ -12,6 +12,7 @@ hero:
 draft: true
 ---
 
+import Callout from "@/components/blog/Callout.astro";
 import Figure from "@/components/blog/Figure.astro";
 import adsplore from "./adsplore1.png";
 import comparer from "./comparer_WithCallouts.png";
@@ -22,6 +23,11 @@ Not everything I built at PrecisionDemand and AOL was a product. Some of it was 
 new pile of data, building the smallest interface that would let me look at it. None of these four
 shipped to a customer. All four exist because I could not understand a dataset by staring at rows
 of it, and building a small explorer was faster than not understanding it.
+
+<Callout variant="note" title="Every number below is demo data">
+  The ad counts, brands, package costs, audience counts, and pacing numbers in all four
+  screenshots below are demo data, built to exercise the tools — not a real campaign.
+</Callout>
 
 ## Adsplore: scoring 10,739 ads for fit
 
@@ -45,8 +51,7 @@ any of them filters all the others live.
 </Figure>
 
 It was a demo, built to see whether we could actually make sense of a brand's TV buy at that
-granularity — not something a client clicked through themselves. The 10,739 is real ad-run volume;
-the brands and targeting scores behind it are demo data.
+granularity — not something a client clicked through themselves.
 
 ## Package Compare: putting media buys side by side
 
