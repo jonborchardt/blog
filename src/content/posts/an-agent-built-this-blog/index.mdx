@@ -18,6 +18,7 @@ import Details from "@/components/blog/Details.astro";
 import Figure from "@/components/blog/Figure.astro";
 import VizFigure from "@/components/blog/VizFigure.astro";
 import Timeline from "./day-one-timeline.svg";
+import GatesViz from "./gates-viz.svg";
 
 This site was written by a coding agent — the code, the styles, the tests, the prose you are
 reading now. That sentence gets made a lot lately, so this series is the version with receipts.
@@ -91,7 +92,7 @@ later claim the suite makes is untrustworthy. Validation you can fool is worse t
 2. **Design system, chrome, homepage, 404** — every colour, size and width as a token in one file; header, footer and theme toggle in plain Astro, zero React.
 3. **Article page, images, series navigation** — hero, table of contents, heading anchors, reading time, responsive image pipeline.
 4. **Shared MDX primitives and reference posts** — Callout, Figure, Tabs, Steps and friends as static components; real published posts double as permanent e2e fixtures.
-5. **Diagrams and math** — Mermaid and KaTeX rendered to static markup at build time.
+5. **Diagrams and math** — diagrams as hand-drawn inline SVG, math via KaTeX rendered to static markup at build time; zero client scripts.
 6. **SEO, social cards, feeds** — a generated Open Graph card for every post, JSON-LD, RSS.
 7. **Build-output validation** — parse every built HTML page; fail the build on broken links, missing alt text, missing metadata, leaked dev pages.
 8. **Archive explorer** — the one React island in site chrome: search, filters, URL state.
@@ -114,17 +115,12 @@ zero. You do not fix that with vigilance; you fix it by making the repository re
 states. A post on this site passes through six layers of validation, each at a different stage,
 each failing loudly:
 
-```mermaid
-flowchart TB
-  accTitle: Six validation gates between authoring and deploy
-  accDescr: A post flows through scaffold checks, the type system, content-load schema, cross-post validation, built-HTML checks, and end-to-end tests before deploy; each gate fails the process on a different class of mistake.
-  A["1 · scaffold<br/>bad slug, unknown series or tag"] --> B["2 · type system<br/>unknown vocabulary won't compile"]
-  B --> C["3 · content load, Zod<br/>title, description, hero, dates"]
-  C --> D["4 · cross-post checks<br/>duplicate slugs and series order"]
-  D --> E["5 · built HTML<br/>broken links, missing alt or SEO"]
-  E --> F["6 · e2e on the real build<br/>axe WCAG 2.2 AA, JS budget"]
-  F --> G([deployed])
-```
+<VizFigure
+  name="Six validation gates between authoring and deploy"
+  summary="A post flows through scaffold checks, the type system, the content-load schema, cross-post validation, built-HTML checks, and end-to-end tests before deploy; each gate fails the process on a different class of mistake."
+>
+  <GatesViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
 
 The scaffold refuses a reserved or duplicate slug before a file exists. The tag and series
 registries compile to literal TypeScript unions, so an unknown tag is not a typo that ages into

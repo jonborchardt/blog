@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="600" viewBox="0 0 640 600" font-family="system-ui, sans-serif" font-size="13">
+  <defs>
+    <marker id="erv-tk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#006a90"/></marker>
+  </defs>
+
+  <!-- main line -->
+  <circle cx="260" cy="36" r="6" fill="currentColor" fill-opacity="0.6"/>
+  <line x1="260" y1="44" x2="260" y2="546" stroke="#006a90" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- stations -->
+  <circle cx="260" cy="90" r="9" fill="#deeef5" stroke="#006a90" stroke-width="2.5"/>
+  <text x="238" y="94" fill="currentColor" text-anchor="end" font-weight="600">Preflight the config</text>
+  <circle cx="260" cy="170" r="9" fill="#deeef5" stroke="#006a90" stroke-width="2.5"/>
+  <text x="238" y="174" fill="currentColor" text-anchor="end" font-weight="600">Run headless</text>
+  <circle cx="260" cy="250" r="9" fill="#deeef5" stroke="#006a90" stroke-width="2.5"/>
+  <text x="238" y="254" fill="currentColor" text-anchor="end" font-weight="600">Compare vs baseline and champion</text>
+  <circle cx="260" cy="330" r="9" fill="#deeef5" stroke="#006a90" stroke-width="2.5"/>
+  <text x="238" y="334" fill="currentColor" text-anchor="end" font-weight="600">Journal verdicts</text>
+  <circle cx="260" cy="410" r="9" fill="#deeef5" stroke="#006a90" stroke-width="2.5"/>
+  <text x="238" y="414" fill="currentColor" text-anchor="end" font-weight="600">Design next round</text>
+  <circle cx="260" cy="490" r="9" fill="#deeef5" stroke="#006a90" stroke-width="2.5"/>
+  <text x="238" y="494" fill="currentColor" text-anchor="end" font-weight="600">Stop and report</text>
+
+  <!-- between-station labels -->
+  <text x="246" y="134" fill="currentColor" fill-opacity="0.75" text-anchor="end" font-size="12">config ok</text>
+  <text x="246" y="214" fill="currentColor" fill-opacity="0.75" text-anchor="end" font-size="12">results grid</text>
+  <text x="246" y="286" fill="currentColor" fill-opacity="0.75" text-anchor="end" font-size="12">verdicts vs baseline</text>
+  <text x="246" y="301" fill="currentColor" fill-opacity="0.75" text-anchor="end" font-size="12">and champion</text>
+  <text x="246" y="366" fill="currentColor" fill-opacity="0.75" text-anchor="end" font-size="12">findings written</text>
+  <text x="246" y="381" fill="currentColor" fill-opacity="0.75" text-anchor="end" font-size="12">next to the data</text>
+  <text x="246" y="454" fill="currentColor" fill-opacity="0.75" text-anchor="end" font-size="12">next round drafted</text>
+  <text x="246" y="530" fill="currentColor" fill-opacity="0.75" text-anchor="end" font-size="12">stop, human reviews</text>
+
+  <!-- failure siding off Preflight -->
+  <path d="M252 95 Q160 122 96 138" fill="none" stroke="#006a90" stroke-width="3.5" marker-end="url(#erv-tk)"/>
+  <circle cx="80" cy="142" r="7" fill="none" stroke="#006a90" stroke-width="2"/>
+  <circle cx="80" cy="142" r="3" fill="#006a90"/>
+  <text x="80" y="168" fill="currentColor" fill-opacity="0.75" text-anchor="middle" font-size="12">check fails,</text>
+  <text x="80" y="183" fill="currentColor" fill-opacity="0.75" text-anchor="middle" font-size="12">stop and report</text>
+
+  <!-- converged siding off Compare -->
+  <path d="M269 254 Q370 290 452 308 L474 314" fill="none" stroke="#006a90" stroke-width="3.5" marker-end="url(#erv-tk)"/>
+  <text x="360" y="250" fill="currentColor" fill-opacity="0.75" font-size="12">no row beats the champion</text>
+  <text x="360" y="264" fill="currentColor" fill-opacity="0.75" font-size="12">twice running</text>
+  <circle cx="490" cy="320" r="7" fill="none" stroke="#006a90" stroke-width="2"/>
+  <circle cx="490" cy="320" r="3" fill="#006a90"/>
+  <text x="490" y="348" fill="currentColor" text-anchor="middle" font-weight="600">Converged: dashboard</text>
+  <text x="490" y="364" fill="currentColor" text-anchor="middle" font-weight="600">and final learnings</text>
+
+  <!-- journal sheet beside its station -->
+  <rect x="284" y="312" width="28" height="34" rx="3" fill="#fafcfe" stroke="#006a90" stroke-width="1.2"/>
+  <line x1="290" y1="322" x2="304" y2="322" stroke="#555f69" stroke-opacity="0.55" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="290" y1="330" x2="300" y2="330" stroke="#555f69" stroke-opacity="0.55" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="290" y1="338" x2="306" y2="338" stroke="#555f69" stroke-opacity="0.55" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- return track: owner says keep going -->
+  <path d="M269 490 H570 Q600 490 600 460 V120 Q600 90 570 90 L276 90" fill="none" stroke="#006a90" stroke-width="3.5" marker-end="url(#erv-tk)"/>
+  <text x="590" y="142" fill="currentColor" fill-opacity="0.75" text-anchor="end" font-size="12">owner says keep going</text>
+
+  <!-- final terminus, human reviewing -->
+  <circle cx="260" cy="556" r="7" fill="none" stroke="#006a90" stroke-width="2"/>
+  <circle cx="260" cy="556" r="3" fill="#006a90"/>
+  <circle cx="300" cy="540" r="5" fill="none" stroke="currentColor" stroke-opacity="0.7" stroke-width="2"/>
+  <path d="M300 546 V562 M292 552 H308 M300 562 L293 574 M300 562 L307 574" fill="none" stroke="currentColor" stroke-opacity="0.7" stroke-width="2" stroke-linecap="round"/>
+</svg>

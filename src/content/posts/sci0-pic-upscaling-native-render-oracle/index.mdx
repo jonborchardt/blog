@@ -17,6 +17,8 @@ import Callout from "@/components/blog/Callout.astro";
 import Figure from "@/components/blog/Figure.astro";
 import VizFigure from "@/components/blog/VizFigure.astro";
 import GapClosure from "./gap-closure.svg";
+import SnapBlendPipelineViz from "./snap-blend-pipeline-viz.svg";
+import OverlayStackViz from "./overlay-stack-viz.svg";
 import DitherBlend from "./dither-blend.svg";
 import sweepOriginalScale6x from "./sweep-original-vs-scale6x.svg";
 import sweepScale6xSnap from "./sweep-scale6x-vs-snap-blend.svg";
@@ -93,27 +95,12 @@ Snap-blend fixes this by altering the rendering directly.
 
 **snap-blend** combines several techniques into a pipeline: a native-resolution pass first, then a scaled pass that the native result supervises fill by fill.
 
-```mermaid
-flowchart TB
-  accTitle: The snap-blend rendering pipeline
-  accDescr: The PIC command stream is rendered once at native resolution to record how many pixels each FILL touches. The same commands are then rendered at the target scale; lines get snapped endpoints, and before each fill a micro-gap pass closes diagonal gaps. Each fill runs under a guard: if it exceeds five times its native count times scale squared, or forty percent of the screen, it is rolled back mid-fill. A fill that ends with zero pixels while its native count is non-zero is recovered by blitting the nearest-neighbour scaled native mask. Undershoots pass through untouched. A final dither-to-RGBA blend runs over the whole canvas.
-  P[PIC command stream] --> N[Phase 1: render at 1x]
-  N --> E[expected pixel count + fill mask per FILL]
-  P --> S
-  subgraph S[Phase 2: render at Nx]
-    direction TB
-    L[DRAW_LINE: snap endpoints, draw]
-    F[FILL: close diagonal micro-gaps,<br/>guarded flood fill]
-    C{fill exceeds native x N^2 x 5<br/>or 40% of screen?}
-    L -. commands in stream order .-> F
-    F --> C
-    C -- no --> K[keep the fill<br/>undershoots pass through]
-    C -- yes --> R[roll back mid-fill]
-    R --> M[zero pixels, native count non-zero<br/>→ blit native mask scaled]
-  end
-  E --> C
-  S --> B[dither-to-RGBA blend]
-```
+<VizFigure
+  name="The snap-blend rendering pipeline"
+  summary="The PIC command stream is rendered once at native resolution to record how many pixels each FILL touches. The same commands are then rendered at the target scale: lines get snapped endpoints, and before each fill a micro-gap pass closes diagonal gaps. Each fill runs under a guard — if it exceeds five times its native count times scale squared, or forty percent of the screen, it is rolled back mid-fill. A fill that ends with zero pixels while its native count is non-zero is recovered by blitting the nearest-neighbour scaled native mask; undershoots pass through untouched. A final dither-to-RGBA blend runs over the whole canvas."
+>
+  <SnapBlendPipelineViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
 
 ### 1. Endpoint snapping and seed nudging
 
@@ -354,21 +341,12 @@ This also sidesteps one of the hardest problems in AI upscaling: maintaining con
 
 The frame is a stack: the deterministic background and its masks stay exact, and only the overlay layer is free to be enhanced.
 
-```mermaid
-flowchart LR
-  accTitle: Deterministic base with an enhanced overlay layer
-  accDescr: The snap-blend background and the priority and control masks come from the deterministic renderer and are composited exactly. Animated sprites, upscaled or AI-enhanced, are composited on top as a separate overlay layer, so enhancement never changes the regions the game logic depends on.
-  subgraph D[deterministic]
-    BG[snap-blend background]
-    M[priority and control masks]
-  end
-  subgraph O[enhanced overlay]
-    SP[animated sprites: upscaled or AI-enhanced]
-  end
-  BG --> C[composited frame]
-  M --> C
-  SP --> C
-```
+<VizFigure
+  name="Deterministic base with an enhanced overlay layer"
+  summary="The snap-blend background and the priority and control masks come from the deterministic renderer and are composited exactly. Animated sprites, upscaled or AI-enhanced, are composited on top as a separate overlay layer, so enhancement never changes the regions the game logic depends on."
+>
+  <OverlayStackViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
 
 ![Eight-frame walk cycle of the Space Quest hero, Roger Wilco, as native pixel art on a blue background: brown hair, purple shirt, grey trousers, black boots](./walk-cycle-native.png)
 

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="510" viewBox="0 0 640 510" font-family="system-ui, sans-serif" font-size="13">
+  <defs>
+    <marker id="ovlv-fg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="currentColor" fill-opacity="0.6"/></marker>
+  </defs>
+
+  <!-- registration lines through the stack -->
+  <line x1="100" y1="130" x2="100" y2="290" stroke="currentColor" stroke-opacity="0.35" stroke-dasharray="3 3"/>
+  <line x1="170" y1="88" x2="170" y2="248" stroke="currentColor" stroke-opacity="0.35" stroke-dasharray="3 3"/>
+
+  <!-- enhanced overlay plane (top) -->
+  <text x="112" y="66" fill="currentColor" font-weight="600">enhanced overlay</text>
+  <path d="M100 130 h210 l70 -42 h-210 z" fill="none" stroke="#006a90" stroke-width="1.5"/>
+  <rect x="154" y="100" width="8" height="8" fill="#f0b35a"/>
+  <rect x="152" y="110" width="12" height="12" fill="#f0b35a"/>
+  <rect x="153" y="124" width="4" height="5" fill="#f0b35a"/>
+  <rect x="161" y="124" width="4" height="5" fill="#f0b35a"/>
+  <text x="245" y="106" fill="currentColor" text-anchor="middle" font-size="12" font-weight="600">animated sprites:</text>
+  <text x="245" y="122" fill="currentColor" text-anchor="middle" font-size="12" font-weight="600">upscaled or AI-enhanced</text>
+
+  <!-- deterministic planes -->
+  <text x="112" y="152" fill="currentColor" font-weight="600">deterministic</text>
+
+  <!-- priority and control masks plane (middle) -->
+  <path d="M100 210 h210 l70 -42 h-210 z" fill="#fafcfe" stroke="#006a90" stroke-width="1.5"/>
+  <ellipse cx="190" cy="178" rx="22" ry="8" fill="none" stroke="#555f69" stroke-dasharray="3 2" stroke-width="1.5"/>
+  <ellipse cx="300" cy="176" rx="18" ry="7" fill="none" stroke="#555f69" stroke-dasharray="3 2" stroke-width="1.5"/>
+  <text x="238" y="205" fill="#11171d" text-anchor="middle" font-size="12" font-weight="600">priority and control masks</text>
+
+  <!-- snap-blend background plane (bottom) -->
+  <path d="M100 290 h210 l70 -42 h-210 z" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <rect x="190" y="250" width="8" height="8" fill="#006a90"/>
+  <rect x="206" y="254" width="8" height="8" fill="#006a90"/>
+  <rect x="222" y="250" width="8" height="8" fill="#006a90"/>
+  <text x="245" y="278" fill="#11171d" text-anchor="middle" font-weight="600">snap-blend background</text>
+
+  <!-- flatten into the frame -->
+  <path d="M386 94 C480 120 540 220 540 332" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" marker-end="url(#ovlv-fg)"/>
+  <path d="M386 174 C460 200 510 260 510 332" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" marker-end="url(#ovlv-fg)"/>
+  <path d="M386 254 C430 280 480 305 480 332" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" marker-end="url(#ovlv-fg)"/>
+
+  <!-- composited frame screen -->
+  <rect x="420" y="340" width="200" height="120" rx="8" fill="#fafcfe" stroke="#006a90" stroke-width="2"/>
+  <rect x="430" y="415" width="180" height="35" rx="4" fill="#deeef5"/>
+  <rect x="470" y="420" width="8" height="8" fill="#006a90"/>
+  <rect x="486" y="424" width="8" height="8" fill="#006a90"/>
+  <rect x="502" y="420" width="8" height="8" fill="#006a90"/>
+  <ellipse cx="565" cy="400" rx="25" ry="12" fill="none" stroke="#555f69" stroke-dasharray="3 2" stroke-width="1.5"/>
+  <rect x="472" y="372" width="8" height="8" fill="#006a90"/>
+  <rect x="470" y="382" width="12" height="12" fill="#006a90"/>
+  <rect x="471" y="396" width="4" height="7" fill="#006a90"/>
+  <rect x="479" y="396" width="4" height="7" fill="#006a90"/>
+  <text x="520" y="486" fill="currentColor" text-anchor="middle" font-weight="600">composited frame</text>
+</svg>

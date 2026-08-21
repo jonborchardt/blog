@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="616" viewBox="0 0 640 616" font-family="system-ui, sans-serif" font-size="13">
+  <defs>
+    <marker id="pipev-fg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="currentColor" fill-opacity="0.6"/></marker>
+  </defs>
+
+  <!-- transcript tape running the full pipeline -->
+  <rect x="64" y="47" width="46" height="494" rx="4" fill="#fafcfe" stroke="#006a90" stroke-width="1.5"/>
+  <!-- perforations -->
+  <g fill="#555f69" fill-opacity="0.5">
+    <rect x="70" y="60" width="6" height="6"/><rect x="98" y="60" width="6" height="6"/>
+    <rect x="70" y="116" width="6" height="6"/><rect x="98" y="116" width="6" height="6"/>
+    <rect x="70" y="172" width="6" height="6"/><rect x="98" y="172" width="6" height="6"/>
+    <rect x="70" y="228" width="6" height="6"/><rect x="98" y="228" width="6" height="6"/>
+    <rect x="70" y="284" width="6" height="6"/><rect x="98" y="284" width="6" height="6"/>
+    <rect x="70" y="340" width="6" height="6"/><rect x="98" y="340" width="6" height="6"/>
+    <rect x="70" y="396" width="6" height="6"/><rect x="98" y="396" width="6" height="6"/>
+    <rect x="70" y="452" width="6" height="6"/><rect x="98" y="452" width="6" height="6"/>
+    <rect x="70" y="508" width="6" height="6"/><rect x="98" y="508" width="6" height="6"/>
+  </g>
+  <!-- transcript text lines on the tape -->
+  <g stroke="#555f69" stroke-opacity="0.55" stroke-width="2" stroke-linecap="round">
+    <line x1="82" y1="91" x2="96" y2="91"/><line x1="80" y1="99" x2="94" y2="99"/>
+    <line x1="82" y1="147" x2="96" y2="147"/><line x1="80" y1="155" x2="94" y2="155"/>
+    <line x1="82" y1="203" x2="96" y2="203"/><line x1="80" y1="211" x2="94" y2="211"/>
+    <line x1="82" y1="259" x2="96" y2="259"/><line x1="80" y1="267" x2="94" y2="267"/>
+    <line x1="82" y1="315" x2="96" y2="315"/><line x1="80" y1="323" x2="94" y2="323"/>
+    <line x1="82" y1="371" x2="96" y2="371"/><line x1="80" y1="379" x2="94" y2="379"/>
+    <line x1="82" y1="427" x2="96" y2="427"/><line x1="80" y1="435" x2="94" y2="435"/>
+    <line x1="82" y1="483" x2="96" y2="483"/><line x1="80" y1="491" x2="94" y2="491"/>
+  </g>
+  <!-- tape fed from station 1, delivered into station 7 -->
+  <path d="M183 60 H118" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#pipev-fg)"/>
+  <path d="M114 528 H183" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#pipev-fg)"/>
+  <text x="90" y="584" fill="currentColor" fill-opacity="0.85" text-anchor="middle" font-size="12" font-style="italic">transcript spans on</text>
+  <text x="90" y="600" fill="currentColor" fill-opacity="0.85" text-anchor="middle" font-size="12" font-style="italic">every edge and quote</text>
+
+  <!-- the line -->
+  <line x1="200" y1="40" x2="200" y2="555" stroke="#006a90" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- station 1 -->
+  <circle cx="200" cy="60" r="13" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <text x="200" y="65" fill="#11171d" text-anchor="middle" font-size="12" font-weight="600">1</text>
+  <text x="225" y="57" fill="currentColor" font-weight="600">Ingest</text>
+  <text x="225" y="75" fill="currentColor" fill-opacity="0.75" font-size="12">transcripts on disk, never refetched</text>
+
+  <!-- station 2 -->
+  <circle cx="200" cy="138" r="13" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <text x="200" y="143" fill="#11171d" text-anchor="middle" font-size="12" font-weight="600">2</text>
+  <text x="225" y="135" fill="currentColor" font-weight="600">Neural extraction</text>
+  <text x="225" y="153" fill="currentColor" fill-opacity="0.75" font-size="12">GLiNER entities + GLiREL relations</text>
+
+  <!-- station 3 -->
+  <circle cx="200" cy="216" r="13" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <text x="200" y="221" fill="#11171d" text-anchor="middle" font-size="12" font-weight="600">3</text>
+  <text x="225" y="213" fill="currentColor" font-weight="600">Canonicalization</text>
+  <text x="225" y="231" fill="currentColor" fill-opacity="0.75" font-size="12">aliases.json + delete-always.ts</text>
+
+  <!-- station 4 -->
+  <circle cx="200" cy="294" r="13" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <text x="200" y="299" fill="#11171d" text-anchor="middle" font-size="12" font-weight="600">4</text>
+  <text x="225" y="291" fill="currentColor" font-weight="600">AI claim extraction</text>
+  <text x="225" y="309" fill="currentColor" fill-opacity="0.75" font-size="12">8-15 claims per video target</text>
+
+  <!-- station 5 -->
+  <circle cx="200" cy="372" r="13" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <text x="200" y="377" fill="#11171d" text-anchor="middle" font-size="12" font-weight="600">5</text>
+  <text x="225" y="369" fill="currentColor" font-weight="600">Reasoning layer</text>
+  <text x="225" y="387" fill="currentColor" fill-opacity="0.75" font-size="12">derived truth, contradictions, counterfactuals</text>
+
+  <!-- station 6 -->
+  <circle cx="200" cy="450" r="13" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <text x="200" y="455" fill="#11171d" text-anchor="middle" font-size="12" font-weight="600">6</text>
+  <text x="225" y="447" fill="currentColor" font-weight="600">Metrics gate</text>
+  <text x="225" y="465" fill="currentColor" fill-opacity="0.75" font-size="12">49 signals vs committed baseline</text>
+
+  <!-- station 7 -->
+  <circle cx="200" cy="528" r="13" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <text x="200" y="533" fill="#11171d" text-anchor="middle" font-size="12" font-weight="600">7</text>
+  <text x="225" y="525" fill="currentColor" font-weight="600">Public site</text>
+  <text x="225" y="543" fill="currentColor" fill-opacity="0.75" font-size="12">static JSON + React on GitHub Pages</text>
+</svg>

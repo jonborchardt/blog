@@ -1,2 +1,2 @@
-im not a huge fan of all the mermaid... other ideas?
+add portfolio blogs
 read it all and edit

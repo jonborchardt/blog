@@ -27,6 +27,8 @@ import { Image } from "astro:assets";
 import pipeline from "./pipeline.png";
 import Counter from "./components/Counter";
 import Island from "./island.svg";
+import BuildPipelineViz from "./build-pipeline-viz.svg";
+import VisualLadderViz from "./visual-ladder-viz.svg";
 
 This blog is written mostly by coding agents, and that changes what "easy to author" means. The
 easiest thing for an agent is a small, explicit vocabulary with a validator that says exactly
@@ -205,25 +207,22 @@ export function href(path: string): string {
 
 ## Diagrams and math
 
-Diagrams are Mermaid fences rendered to SVG **at build time** — the reader gets a picture, not a
-script that draws one. Every diagram gets a sentence describing it and `accTitle`/`accDescr`
-lines inside the fence, because a picture without words is invisible to a screen reader. This one
-shows the path from an MDX file to a deployed page:
+Diagrams are hand-drawn SVG files that live next to the post and render inline **at build
+time** — the reader gets a picture, not a script that draws one. The house style is pictorial by
+default: a rail line, a staircase, a magnifier — a drawing of the mechanism rather than a grid of
+labeled boxes. Every diagram gets a sentence describing it and a name and summary on its figure,
+because a picture without words is invisible to a screen reader. This one shows the path from an
+MDX file to a deployed page:
 
-```mermaid
-flowchart TB
-  accTitle: From source to deployed page
-  accDescr: MDX source is validated, built to static HTML, tested, and deployed to GitHub Pages.
-  A[MDX + frontmatter] --> B{validate}
-  B -- ok --> C[astro build]
-  B -- error --> A
-  C --> D[e2e + axe]
-  D --> E[GitHub Pages]
-```
+<VizFigure
+  name="From source to deployed page"
+  summary="MDX source is validated, built to static HTML, tested, and deployed to GitHub Pages; a validation error sends the file back to be edited."
+>
+  <BuildPipelineViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
 
-One honest footnote: Mermaid renders once in a neutral light theme, and dark mode is a CSS invert
-filter — a deliberate shortcut, unlike the hand-drawn SVGs on this site, which follow the theme
-natively through `currentColor`.
+Because each drawing keeps its neutral strokes and text on `currentColor`, the same file follows
+the reader's theme natively — no dark-mode filter, no second render.
 
 Math uses TeX syntax and renders through KaTeX, also at build time. Inline, reading time is
 $\max(1, \operatorname{round}(w / 230))$ minutes for $w$ words; the display form of the same idea:
@@ -240,16 +239,15 @@ There is no chart library on this site, no carousel, no embed component. Each wo
 dependency and a maintenance promise, and nothing above needed one. When a post wants a visual,
 the house rule is a ladder — stop at the first rung that holds:
 
-```mermaid
-flowchart TB
-  accTitle: The visual ladder
-  accDescr: Four rungs in order of preference — Mermaid fence, static SVG, HTML and CSS, React island. The first three cost zero script; only the island ships JavaScript, and only when the reader must manipulate the visual.
-  A["Mermaid fence<br/>zero script"] -->|"too bespoke to express"| B["static SVG<br/>zero script"]
-  B -->|"really a layout or bars"| C["HTML + CSS<br/>zero script"]
-  C -->|"reader must manipulate it"| D["React island<br/>React + component, loaded on scroll"]
-```
+<VizFigure
+  name="The visual ladder"
+  summary="Four rungs in order of preference — hand-drawn pictorial SVG, static SVG chart, HTML and CSS, React island. The first three cost zero script; only the island ships JavaScript, and only when the reader must manipulate the visual."
+>
+  <VisualLadderViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
 
-A chart with fixed data is an SVG. A chart the reader can filter is an island. That last rung is
+A flow, a state machine, a mechanism — that is a hand-drawn picture. A chart with fixed data is
+an SVG. A chart the reader can filter is an island. That last rung is
 the rest of this post.
 
 ## Islands, not apps

@@ -17,6 +17,9 @@ import Figure from "@/components/blog/Figure.astro";
 import VizFigure from "@/components/blog/VizFigure.astro";
 import GoldWindow from "./gold-window.svg";
 import PiecesLadder from "./pieces-ladder.svg";
+import ExperimentCellViz from "./experiment-cell-viz.svg";
+import TheoryTestViz from "./theory-test-viz.svg";
+import ExperimentRoundViz from "./experiment-round-viz.svg";
 
 Every year I sit down and answer one question: **what's the earliest age I can stop working without ever running out of money?** Instead of a spreadsheet, I have retire-sim, a small deterministic historical-replay simulator that's become something more interesting: a lab, with a lab protocol, and an AI lab assistant that follows it. (The repo is private, so no link — the code described below is real, just not public.)
 
@@ -58,19 +61,12 @@ Add a row, and it automatically runs against every historical start year at ever
 
 The two inputs stay separate all the way through; only the run joins them:
 
-```mermaid
-flowchart TB
-  accTitle: How a JSON experiment row becomes a scored cell
-  accDescr: Committed experiment rows and the committed 1928 to 2025 history feed a validation step together with the chosen dataset, either a gitignored personal config or a committed synthetic one; the validated inputs reach the simulator, which replays every start year at every retirement and claim age and writes survival percentage plus median and worst-case terminal wealth into one results cell per strategy and age.
-  E["experiments.json<br/>one row per strategy, committed"]
-  H["history 1928-2025<br/>committed"]
-  C["dataset: gitignored personal config<br/>or committed synthetic one"]
-  E --> V
-  C --> V
-  V["validate: no micro-caps, livable guardrails,<br/>no personal numbers in committed rows"] --> S
-  H --> S
-  S["replay every start year<br/>x retire age x claim age"] --> R["cell: survival %,<br/>median and worst-case terminal wealth"]
-```
+<VizFigure
+  name="How a JSON experiment row becomes a scored cell"
+  summary="Committed experiment rows and the committed 1928 to 2025 history feed a validation step together with the chosen dataset, either a gitignored personal config or a committed synthetic one. The validated inputs reach the simulator, which replays every start year at every retirement and claim age and writes survival percentage plus median and worst-case terminal wealth into one results cell per strategy and age."
+>
+  <ExperimentCellViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
 
 <Figure caption="The wealth fan chart on the synthetic dataset. Screenshot from an earlier dataset revision with a longer horizon; the committed dataset has since shortened the horizon and added a two-person survivor model, so a fresh run ends in 2067.">
   ![Fan chart of household wealth in today's dollars from 2026 to 2071: 98 faint paths, one per historical start year from 1928 to 2025, with a shaded 10th to 90th percentile band and a median line, and a hover readout for 2032 showing 10th to 90th percentile 117,332 to 329,437 and median 231,387](./wealth-fan-chart.png)
@@ -131,29 +127,12 @@ The bigger lesson: **diversification is not the edge, cohort-matching is.** An "
 
 This is my favorite part. I gave Claude Code a skill called **theory-test**: paste in a retirement-advice YouTube transcript or article, and instead of an opinion, it produces an _empirical verdict from my own simulator_. It sorts the claims into testable mechanisms, assumptions to fact-check against history, and framing that has to be mapped back to whatever real mechanism it's a proxy for. Then it usually builds three experiment rows: the advice **faithfully**, at a **milder dose**, and as a **hybrid grafted onto my reigning champion**. That last one answers the question I actually care about: _does this add anything I don't already have?_
 
-```mermaid
-flowchart TB
-  accTitle: The theory-test skill, from transcript to scoreboard
-  accDescr: A source URL is required and its captions are fetched; the transcript is sorted into testable mechanisms, assumptions fact-checked against history, and framing mapped to a real mechanism; the mechanisms become three experiment rows, faithful, milder dose and hybrid on the champion, which the simulator runs against every start year and compares with the baseline and champion; the failing start years are diagnosed by cohort, and the verdict fans out to the theories scoreboard, the journal and the scored sources list.
-  U["source URL required<br/>captions via npm run transcript"] --> T[transcript or article]
-  T --> S[sort claims]
-  S --> M[testable mechanisms]
-  S --> A["assumptions<br/>fact-checked vs history"]
-  S --> V["framing<br/>mapped to a real mechanism"]
-  M --> F[row 1: faithful]
-  M --> Hd[row 2: milder dose]
-  M --> G[row 3: hybrid on champion]
-  V --> M
-  A --> D
-  F --> R[run vs baseline and champion]
-  Hd --> R
-  G --> R
-  R --> Co["cohort diagnosis<br/>which start years failed"]
-  Co --> D[verdict]
-  D --> TH[row in theories.md]
-  D --> J["journal: notes plus dated learnings"]
-  D --> SR[score in sources.json]
-```
+<VizFigure
+  name="The theory-test skill, from transcript to scoreboard"
+  summary="A source URL is required and its captions are fetched. The transcript is sorted into testable mechanisms, assumptions fact-checked against history, and framing mapped to a real mechanism. The mechanisms become three experiment rows, faithful, milder dose and hybrid on the champion, which the simulator runs against every start year and compares with the baseline and champion. The failing start years are diagnosed by cohort, and the verdict fans out to the theories scoreboard, the journal and the scored sources list."
+>
+  <TheoryTestViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
 
 The verdicts live in a running scoreboard (theories.md, in that same private repo). So far: the bucket strategy lost outright, "own everything + guardrails" lost to the targeted hedge, and the tax-coordination videos were the first outside advice to beat the champion at all, though only as a sensitivity bound, since a flat-rate engine can't verify the low effective rate is actually achievable, which is exactly why it promoted tax modeling to next year's top priority. The later rounds kept the pattern: rising-equity glidepaths were right about the shape and wrong about the asset (my champion _is_ that ravine, filled with gold instead of bonds), the Golden Butterfly won every historic crisis while failing the ordinary futures, VPW's "you can't run out" turned out to be spending collapse relabeled, and even the academic case _against_ gold survived only as a caveat, not a verdict. By the end, most new theories were adjudicated entirely from rows already run, which is what happens when new advice keeps decomposing into experiments already done. The full set of verdicts is its own post: [the simulator watches retirement YouTube](/simulator-watches-retirement-youtube/).
 
@@ -167,29 +146,12 @@ The verdicts live in a running scoreboard (theories.md, in that same private rep
 
 The second skill, **experiment-round**, encodes the whole research loop: validate the config, run headlessly, compare every row against both the baseline _and_ the reigning champion, journal verdicts into the dataset before anything changes, design the next round, then **stop and report**. It carries hard-won discipline as standing rules, like _resolution_: with 98 sequences, one percentage point is one flipped cohort, and re-stamping the as-of month or refreshing an input shifts results by 1–2 points, so differences below that noise floor are ties, not findings. The one-round-then-pause rule exists because my mid-loop catches were worth more than any autonomous run.
 
-```mermaid
-stateDiagram-v2
-  accTitle: One experiment round, from validation to the mandatory pause
-  accDescr: The round preflights the config and stops outright if the check fails, otherwise runs headlessly, compares every row against baseline and champion, journals verdicts into the dataset before anything changes, designs the next round, then stops and reports; the human reviews and only then starts the next round. When two consecutive rounds produce no row that beats the champion beyond the noise floor, the loop converges instead and writes the final summary.
-  [*] --> Validate
-  Validate --> Run: config ok
-  Validate --> [*]: check fails, stop and report
-  Run --> Compare: results grid
-  Compare --> Journal: verdicts vs baseline and champion
-  Compare --> Converged: no row beats the champion twice running
-  Journal --> Design: findings written next to the data
-  Design --> Report: next round drafted
-  Report --> [*]: stop, human reviews
-  Report --> Validate: owner says keep going
-  Converged --> [*]
-  state "Preflight the config" as Validate
-  state "Run headless" as Run
-  state "Compare vs baseline and champion" as Compare
-  state "Converged: dashboard and final learnings" as Converged
-  state "Journal verdicts" as Journal
-  state "Design next round" as Design
-  state "Stop and report" as Report
-```
+<VizFigure
+  name="One experiment round, from validation to the mandatory pause"
+  summary="The round preflights the config and stops outright if the check fails; otherwise it runs headlessly, compares every row against baseline and champion, journals verdicts into the dataset before anything changes, designs the next round, then stops and reports. The human reviews and only then starts the next round. When two consecutive rounds produce no row that beats the champion beyond the noise floor, the loop converges instead and writes the final summary."
+>
+  <ExperimentRoundViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
 
 The lab notebook lives _with the data_: each experiment id gets a hypothesis-before and finding-after note, finished experiments are archived rather than deleted, and cross-cutting lessons accumulate in a `_learnings` list. Next year starts from knowledge, not folklore.
 

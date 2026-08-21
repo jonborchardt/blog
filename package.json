@@ -60,7 +60,6 @@
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "rehype-autolink-headings": "^7.1.0",
-    "rehype-mermaid": "^3.0.0",
     "shadcn": "^4.18.0",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.67.0",

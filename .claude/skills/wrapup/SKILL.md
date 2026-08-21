@@ -40,7 +40,7 @@ grep -rhoE 'from "\.\./[^"]+/components/[^"]+"' src/content/posts | sort | uniq 
 
 ## 3 — Accessibility (what axe cannot judge)
 
-- **Visuals**: every meaningful chart/diagram/demo is wrapped in `VizFigure` with a `name` + `summary` (and `data` when specific values are plotted); decorative visuals are `aria-hidden="true"` with no label; mermaid fences have `accTitle`/`accDescr` and a describing sentence nearby.
+- **Visuals**: every meaningful chart/diagram/demo is wrapped in `VizFigure` with a `name` + `summary` (and `data` when specific values are plotted); decorative visuals are `aria-hidden="true"` with no label; no `mermaid` fences remain anywhere (the build no longer renders them — redraw as a pictorial SVG per `create-visual`).
 - **Motion**: islands that animate check `matchMedia("(prefers-reduced-motion: reduce)")` and skip/stop the animation; the global CSS clamp in `global.css` covers CSS-only motion.
 - **Hover/touch**: nothing conveyed by hover only; draggable/hover interactions have keyboard + touch paths; touch targets ≥ 44×44 px.
 - **Text floor**: nothing below `text-xs`; SVG `<text>` ≥ 11px at rendered size — give the layout room or drop the label, never shrink it.

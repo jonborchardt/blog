@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="460" viewBox="0 0 640 460" font-family="system-ui, sans-serif" font-size="13">
+  <defs>
+    <marker id="repv-fg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="currentColor" fill-opacity="0.6"/></marker>
+  </defs>
+
+  <!-- the one plan: a document sheet -->
+  <rect x="230" y="16" width="180" height="56" rx="5" fill="#fafcfe" stroke="#006a90" stroke-width="1.5"/>
+  <line x1="244" y1="32" x2="396" y2="32" stroke="#555f69" stroke-opacity="0.55" stroke-width="2" stroke-linecap="round"/>
+  <line x1="244" y1="45" x2="366" y2="45" stroke="#555f69" stroke-opacity="0.55" stroke-width="2" stroke-linecap="round"/>
+  <line x1="244" y1="58" x2="382" y2="58" stroke="#555f69" stroke-opacity="0.55" stroke-width="2" stroke-linecap="round"/>
+  <text x="320" y="92" fill="currentColor" text-anchor="middle" font-weight="600">One plan: $1M, $40k/yr real, 60/40, 30 years</text>
+
+  <line x1="320" y1="102" x2="320" y2="140" stroke="currentColor" stroke-opacity="0.6" stroke-width="2" marker-end="url(#repv-fg)"/>
+
+  <!-- start-year timeline -->
+  <text x="50" y="130" fill="currentColor" fill-opacity="0.75" font-size="12" font-style="italic">replay from each start year 1928…2025</text>
+  <line x1="50" y1="150" x2="590" y2="150" stroke="currentColor" stroke-opacity="0.5" stroke-width="2"/>
+  <circle cx="80" cy="150" r="6" fill="#deeef5" stroke="#006a90" stroke-width="2"/>
+  <circle cx="150" cy="150" r="6" fill="#deeef5" stroke="#006a90" stroke-width="2"/>
+  <circle cx="215" cy="150" r="4" fill="currentColor" fill-opacity="0.35"/>
+  <circle cx="280" cy="150" r="4" fill="currentColor" fill-opacity="0.35"/>
+  <circle cx="345" cy="150" r="4" fill="currentColor" fill-opacity="0.35"/>
+  <circle cx="410" cy="150" r="4" fill="currentColor" fill-opacity="0.35"/>
+  <circle cx="475" cy="150" r="4" fill="currentColor" fill-opacity="0.35"/>
+  <circle cx="555" cy="150" r="6" fill="#deeef5" stroke="#006a90" stroke-width="2"/>
+  <text x="80" y="172" fill="currentColor" text-anchor="middle" font-weight="600" font-size="12">1928</text>
+  <text x="150" y="172" fill="currentColor" text-anchor="middle" font-weight="600" font-size="12">1929</text>
+  <text x="555" y="172" fill="currentColor" text-anchor="middle" font-weight="600" font-size="12">2025</text>
+  <text x="42" y="192" fill="currentColor" fill-opacity="0.85" font-size="12" font-style="italic">what actually happened next</text>
+  <text x="150" y="192" fill="currentColor" fill-opacity="0.85" text-anchor="middle" font-size="12" font-style="italic">…</text>
+  <text x="598" y="192" fill="currentColor" fill-opacity="0.85" text-anchor="end" font-size="12" font-style="italic">history, then long-run average</text>
+
+  <line x1="320" y1="204" x2="320" y2="232" stroke="currentColor" stroke-opacity="0.6" stroke-width="2" marker-end="url(#repv-fg)"/>
+
+  <!-- the fan: one start point, 98 lives -->
+  <path d="M70 330 Q300 300 575 245" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.5"/>
+  <path d="M70 330 Q300 305 575 262" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.5"/>
+  <path d="M70 330 Q300 310 575 278" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.5"/>
+  <path d="M70 330 Q300 315 575 292" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.5"/>
+  <path d="M70 330 Q300 322 575 305" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.5"/>
+  <path d="M70 330 Q300 328 575 318" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.5"/>
+  <path d="M70 330 Q300 334 575 332" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.5"/>
+  <path d="M70 330 Q300 340 575 346" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.5"/>
+  <path d="M70 330 Q300 348 575 362" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.5"/>
+  <path d="M70 330 Q300 356 575 380" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.5"/>
+  <path d="M70 330 Q280 366 540 416" fill="none" stroke="#f0b35a" stroke-width="2"/>
+  <circle cx="70" cy="330" r="6" fill="#deeef5" stroke="#006a90" stroke-width="2"/>
+  <line x1="60" y1="418" x2="580" y2="418" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.5"/>
+  <text x="52" y="422" fill="currentColor" fill-opacity="0.75" text-anchor="end" font-size="12">$0</text>
+
+  <text x="320" y="448" fill="currentColor" text-anchor="middle" font-weight="600">98 lives, side by side, in today's dollars</text>
+</svg>

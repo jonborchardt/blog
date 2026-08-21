@@ -22,6 +22,8 @@ import Figure from "@/components/blog/Figure.astro";
 import VizFigure from "@/components/blog/VizFigure.astro";
 import CouplingWeights from "./coupling-weights.svg";
 import VerdictDistribution from "./verdict-distribution.svg";
+import PipelineViz from "./pipeline-viz.svg";
+import VerdictRoutingViz from "./verdict-routing-viz.svg";
 
 **Live site:** [jonborchardt.github.io/WFD](https://jonborchardt.github.io/WFD/)
 
@@ -87,18 +89,12 @@ The rule, in one line: **no claim without evidence**. Every relationship, truth 
 
 The whole thing is a seven-stage pipeline. Everything before the public site runs offline against transcripts on disk; the site is static JSON plus a React front end.
 
-```mermaid
-flowchart TB
-  accTitle: The Why Files Database pipeline
-  accDescr: Transcripts are fetched once and cached, then run through GLiNER and GLiREL sidecars for entities and relations, canonicalised with an aliases file, read by an AI session that writes claims, processed by a pure-code reasoning layer into derived truth and contradictions, gated by a 49-signal metrics check, and finally emitted as static JSON for a React site on GitHub Pages.
-  A[1. Ingest<br/>transcripts on disk, never refetched] --> B[2. Neural extraction<br/>GLiNER entities + GLiREL relations]
-  B --> C[3. Canonicalization<br/>aliases.json + delete-always.ts]
-  C --> D[4. AI claim extraction<br/>8-15 claims per video target]
-  D --> E[5. Reasoning layer<br/>derived truth, contradictions, counterfactuals]
-  E --> F[6. Metrics gate<br/>49 signals vs committed baseline]
-  F --> G[7. Public site<br/>static JSON + React on GitHub Pages]
-  A -.transcript spans on every edge and quote.-> G
-```
+<VizFigure
+  name="The Why Files Database pipeline"
+  summary="Transcripts are fetched once and cached, then run through GLiNER and GLiREL sidecars for entities and relations, canonicalised with an aliases file, read by an AI session that writes claims, processed by a pure-code reasoning layer into derived truth and contradictions, gated by a 49-signal metrics check, and finally emitted as static JSON for a React site on GitHub Pages. Transcript spans travel from ingest all the way to the public site, on every edge and quote."
+>
+  <PipelineViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
 
 ### 1. Ingest
 
@@ -172,17 +168,12 @@ The four `contradicts` subkinds are not equal in propagation. This is the coupli
 
 Cross-video candidates go through a verification step before anything is public. Here is where each verdict ends up:
 
-```mermaid
-flowchart TB
-  accTitle: Cross-video candidate pairs and where each verdict goes
-  accDescr: Sentence-transformer embeddings with a Jaccard fallback propose candidate claim pairs. An AI verification pass assigns one of seven verdicts. Logical contradiction, debunks, undercuts and alternative surface on the public contradictions page; same-claim goes to the cross-video agreements page; complementary and irrelevant are dropped; unverified candidates stay admin-only.
-  E[Embedding similarity<br/>Jaccard fallback] --> C[Candidate pairs]
-  C --> V{AI verification}
-  V -->|LOGICAL-CONTRADICTION<br/>DEBUNKS<br/>UNDERCUTS<br/>ALTERNATIVE| P[Public contradictions page]
-  V -->|SAME-CLAIM| A[Cross-video agreements page]
-  V -->|COMPLEMENTARY<br/>IRRELEVANT| X[Dropped]
-  C -.unverified.-> N["Admin only (verified: null)"]
-```
+<VizFigure
+  name="Cross-video candidate pairs and where each verdict goes"
+  summary="Sentence-transformer embeddings with a Jaccard fallback propose candidate claim pairs. An AI verification pass assigns one of seven verdicts. Logical contradiction, debunks, undercuts and alternative surface on the public contradictions page; same-claim goes to the cross-video agreements page; complementary and irrelevant are dropped; unverified candidates stay admin-only."
+>
+  <VerdictRoutingViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
 
 ### 6. Quality metrics
 

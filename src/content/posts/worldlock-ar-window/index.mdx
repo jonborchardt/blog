@@ -21,6 +21,8 @@ import towers from "./tacoma-seattle-towers.jpg";
 import pillar from "./data-pillar-collar-rings.jpg";
 import GlobeRaycast from "./globe-raycast.svg";
 import FloatUlp from "./float-ulp.svg";
+import CoordPipelineViz from "./coord-pipeline-viz.svg";
+import GeoregStatesViz from "./georeg-states-viz.svg";
 
 Point your phone west from Seattle and there's a glowing tower rising out of Tacoma, labeled `Tacoma 42.4 km`. Pan up and the night side of the Earth curves away from you, city lights and all, with NYC's tower readable 3,815 km over the horizon. A white dash crosses the sky where the ISS actually is, right now.
 
@@ -69,20 +71,12 @@ Everything interesting in this app is a coordinate-precision problem wearing a t
 
 The pipeline, with the one place a double becomes a float:
 
-```mermaid
-flowchart TB
-  accTitle: Coordinate pipeline from ECEF doubles to GL floats
-  accDescr: Geospatial pose and city coordinates are held as ECEF doubles, then converted to ENU metres relative to a render origin near the phone; only those small origin-relative values are cast to 32-bit floats and handed to OpenGL.
-  subgraph D[64-bit doubles]
-    A[lat / lon / alt from Geospatial pose and city list] --> B[ECEF — about 6.4 million m from centre]
-    B --> E[ENU relative to the render origin — metres to a few thousand km]
-  end
-  subgraph F[32-bit floats]
-    direction TB
-    G[GL vertices and uniforms — the one cast] --> H[shaders]
-  end
-  E --> F
-```
+<VizFigure
+  name="Coordinate pipeline from ECEF doubles to GL floats"
+  summary="Geospatial pose and city coordinates are held as ECEF doubles, then converted to ENU metres relative to a render origin near the phone. Only those small origin-relative values are cast to 32-bit floats and handed to OpenGL."
+>
+  <CoordPipelineViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
 
 How bad is it if you skip that? A 32-bit float has 24 bits of mantissa, so the gap between one representable value and the next grows with the magnitude of the number:
 
@@ -113,20 +107,12 @@ The other quiet trick is the reference anchor: the first time the Geospatial pos
 
 There's a looser render gate in front of that (yaw < 25°, with 2× hysteresis so it doesn't flicker), so towers appear early and swing into place while the anchor waits for the tight fix:
 
-```mermaid
-stateDiagram-v2
-  accTitle: Georegistration states, from first fix to reference anchor
-  accDescr: The app starts hidden. When Geospatial position accuracy is under 15 metres and yaw under 25 degrees it renders using the camera pose as origin, dropping back to hidden if accuracy degrades past twice those bounds. The first time yaw accuracy is also under 15 degrees it plants a reference anchor, an ARCore geospatial anchor, and becomes anchored; that state survives pause and resume and indoor use. If ARCore stops tracking the anchor the app falls back to the accuracy gate, rendering from the camera pose or hiding, and re-plants the anchor when the tight fix returns.
-  [*] --> Hidden
-  Hidden --> CameraOrigin: pos < 15 m, yaw < 25°
-  CameraOrigin --> Hidden: worse than 2× the gate
-  CameraOrigin --> Anchored: pos < 15 m, yaw < 15°<br/>plant reference anchor
-  Anchored --> Anchored: pause / resume, indoors
-  Anchored --> CameraOrigin: anchor STOPPED<br/>back to the gate
-  state "Hidden (waiting for fix)" as Hidden
-  state "Rendering from camera pose" as CameraOrigin
-  state "Anchored (riding the reference anchor)" as Anchored
-```
+<VizFigure
+  name="Georegistration states, from first fix to reference anchor"
+  summary="The app starts hidden. When Geospatial position accuracy is under 15 metres and yaw under 25 degrees it renders using the camera pose as origin, dropping back to hidden if accuracy degrades past twice those bounds. The first time yaw accuracy is also under 15 degrees it plants a reference anchor, an ARCore geospatial anchor, and becomes anchored; that state survives pause and resume and indoor use. If ARCore stops tracking the anchor the app falls back to the accuracy gate, rendering from the camera pose or hiding, and re-plants the anchor when the tight fix returns."
+>
+  <GeoregStatesViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
 
 ## The stats that matter
 

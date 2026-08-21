@@ -17,6 +17,7 @@ import Figure from "@/components/blog/Figure.astro";
 import VizFigure from "@/components/blog/VizFigure.astro";
 import Callout from "@/components/blog/Callout.astro";
 import AnchorProjection from "./anchor-projection.svg";
+import PipelineViz from "./pipeline-viz.svg";
 import BytePacking from "./byte-packing.svg";
 import SplatCoverage from "./splat-coverage.svg";
 import sweepSnap from "./sweep-snap-blend-vs-omyac.svg";
@@ -74,20 +75,12 @@ The C reference operates in three layers: a native pre-render to gather command 
 
 The whole pipeline, with the places where the SCI0 fixes attach, looks like this:
 
-```mermaid
-flowchart TB
-  accTitle: The omyac-upscaler pipeline and where the five SCI0 fixes attach
-  accDescr: PIC commands are replayed into a 320 by 190 native pre-render that records colour byte, command index and command type per cell. Fix 1 keeps the full doubled-nibble byte there and fix 5 promotes untouched cells to white fills at its end. The anchor graph projects line anchors and connects them; fix 2 makes its sameColor check use cmdType. The hybrid render draws Bresenham strokes at 6x, then the enhance kernel votes neighbourhoods; fixes 3 and 4 widen its vote buckets to 256 and break ties with the perceptual blend table. After enhance, a final null-pixel mode fill runs and the doubled-nibble output is resolved to RGBA through the blend table.
-  P[PIC commands] --> N[Native pre-render 320×190<br/>colour byte · cmdIndex · cmdType · segments]
-  N --> A[Anchor graph<br/>project line anchors, connect neighbours]
-  A --> H[Hybrid render at 6×<br/>Bresenham anchor-to-anchor, anchor dots]
-  H --> E[Enhance<br/>8-neighbour vote: fill×3 line×1 fill×2 all×4]
-  E --> O[Final null-pixel mode fill<br/>blend-table resolve to RGBA]
-  F1[Fix 1: keep the full byte<br/>Fix 5: CMD_NONE → white CMD_FILL]:::fix -.- N
-  F2[Fix 2: sameColor via cmdType]:::fix -.- A
-  F3[Fix 3: 256 vote buckets<br/>Fix 4: blend-table tie-break]:::fix -.- E
-  classDef fix stroke-dasharray: 4 3
-```
+<VizFigure
+  name="The omyac-upscaler pipeline and where the five SCI0 fixes attach"
+  summary="PIC commands are replayed into a 320 by 190 native pre-render that records colour byte, command index and command type per cell; fix 1 keeps the full doubled-nibble byte there and fix 5 promotes untouched cells to white fills at its end. The anchor graph projects line anchors and connects them, with fix 2 making its sameColor check use cmdType. The hybrid render draws Bresenham strokes at 6 times scale, then the enhance kernel votes neighbourhoods, where fixes 3 and 4 widen its vote buckets to 256 and break ties with the perceptual blend table. After enhance, a final null-pixel mode fill runs and the doubled-nibble output is resolved to RGBA through the blend table."
+>
+  <PipelineViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
 
 ### Native pre-render
 

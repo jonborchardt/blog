@@ -174,20 +174,25 @@ export default defineConfig({ base: "/blog" });
 </CodeBlock>
 ````
 
-## Diagrams and math (fence syntax, not components)
+## Diagrams and math
 
 Both render at build time to static SVG/HTML — no client JavaScript.
 
-````mdx
-```mermaid
-flowchart LR
-  accTitle: Short accessible title
-  accDescr: One sentence describing what the diagram shows.
-  A[Source] --> B[Build] --> C[Deploy]
-```
-````
+Diagrams are hand-drawn pictorial SVG files colocated with the post, imported as inline components and wrapped in `VizFigure` (never a `mermaid` fence — the build does not render them; design language and verification live in skill `create-visual`):
 
-Always precede or follow a diagram with a sentence that says what it shows, and include `accTitle`/`accDescr` inside the fence (they become the SVG's accessible name and description). Dark mode inverts the neutral render with a CSS filter.
+```mdx
+import VizFigure from "@/components/blog/VizFigure.astro";
+import PipelineViz from "./pipeline-viz.svg";
+
+<VizFigure
+  name="Short accessible title"
+  summary="One or two sentences describing the structure the diagram shows."
+>
+  <PipelineViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
+```
+
+Always precede or follow a diagram with a sentence that says what it shows. The SVG uses `currentColor` plus the theme.ts hex twins, so the same file follows light and dark natively.
 
 ```mdx
 Inline math: $E = mc^2$. Display math:

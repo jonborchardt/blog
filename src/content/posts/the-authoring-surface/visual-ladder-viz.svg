@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="424" viewBox="0 0 640 424" font-family="system-ui, sans-serif" font-size="13">
+  <defs>
+    <marker id="vlv-fg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="currentColor" fill-opacity="0.6"/></marker>
+  </defs>
+
+  <!-- step 1: hand-drawn pictorial SVG -->
+  <line x1="20" y1="100" x2="160" y2="100" stroke="#006a90" stroke-width="5" stroke-linecap="round"/>
+  <text x="90" y="122" fill="currentColor" text-anchor="middle" font-weight="600">Hand-drawn SVG</text>
+  <text x="90" y="139" fill="currentColor" fill-opacity="0.75" text-anchor="middle" font-size="12">pictorial, zero script</text>
+  <line x1="160" y1="100" x2="160" y2="190" stroke="#006a90" stroke-width="5" stroke-linecap="round"/>
+  <path d="M144 90 Q176 94 170 128" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="2" marker-end="url(#vlv-fg)"/>
+  <text x="180" y="150" fill="currentColor" fill-opacity="0.75" font-size="12">really a fixed-data chart</text>
+
+  <!-- step 2: static SVG chart -->
+  <line x1="160" y1="190" x2="300" y2="190" stroke="#006a90" stroke-width="5" stroke-linecap="round"/>
+  <text x="230" y="212" fill="currentColor" text-anchor="middle" font-weight="600">Static SVG chart</text>
+  <text x="230" y="229" fill="currentColor" fill-opacity="0.75" text-anchor="middle" font-size="12">zero script</text>
+  <line x1="300" y1="190" x2="300" y2="280" stroke="#006a90" stroke-width="5" stroke-linecap="round"/>
+  <path d="M284 180 Q316 184 310 218" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="2" marker-end="url(#vlv-fg)"/>
+  <text x="320" y="240" fill="currentColor" fill-opacity="0.75" font-size="12">really a layout or bars</text>
+
+  <!-- step 3: HTML + CSS -->
+  <line x1="300" y1="280" x2="430" y2="280" stroke="#006a90" stroke-width="5" stroke-linecap="round"/>
+  <text x="365" y="302" fill="currentColor" text-anchor="middle" font-weight="600">HTML + CSS</text>
+  <text x="365" y="319" fill="currentColor" fill-opacity="0.75" text-anchor="middle" font-size="12">zero script</text>
+  <line x1="430" y1="280" x2="430" y2="370" stroke="#006a90" stroke-width="5" stroke-linecap="round"/>
+  <path d="M414 270 Q446 274 440 308" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="2" marker-end="url(#vlv-fg)"/>
+  <text x="450" y="330" fill="currentColor" fill-opacity="0.75" font-size="12">reader must manipulate it</text>
+
+  <!-- step 4: React island (the only step that ships script) -->
+  <line x1="430" y1="370" x2="630" y2="370" stroke="#006a90" stroke-width="5" stroke-linecap="round"/>
+  <path d="M614 328 L598 354 L608 354 L602 366 L622 342 L611 342 L620 328 Z" fill="#f0b35a"/>
+  <text x="530" y="392" fill="currentColor" text-anchor="middle" font-weight="600">React island</text>
+  <text x="530" y="409" fill="currentColor" fill-opacity="0.75" text-anchor="middle" font-size="11">React + component, loaded on scroll</text>
+</svg>

@@ -17,6 +17,7 @@ import Figure from "@/components/blog/Figure.astro";
 import VizFigure from "@/components/blog/VizFigure.astro";
 import LineThickness from "./line-thickness.svg";
 import JunctionSeal from "./junction-seal.svg";
+import SealPipelineViz from "./seal-pipeline-viz.svg";
 
 I've been working on a TypeScript reimplementation of the Sierra SCI0 engine, and one piece that's been giving me trouble is upscaling the 320×190 PIC backgrounds to a modern resolution (1920×1140, 6× scale) without flood-fill artifacts. I've got a lineage of rendering strategies, snap through snap-v8, that chip away at the problem from different angles ([the native render oracle post](/sci0-pic-upscaling-native-render-oracle/) covers how they are measured). snap-v5 — in its blend variant, `snap-v5-blend` — is still the one I ship for game rendering.
 
@@ -65,17 +66,12 @@ I built two new strategies: `snap-v9` (v4 + the structural rule applied as a bar
 
 Here is where the borrowed piece slots into the existing chain — a single extra pass, fed by the two new provenance buffers, that runs at the start of the per-fill work, before gap closure and the flood fill:
 
-```mermaid
-flowchart TB
-  accTitle: Where the borrowed junction seal fits in the snap pipeline
-  accDescr: The pipeline runs block expansion with endpoint snapping at line-draw time, then for each fill command a new junction-seal pass, then diagonal gap closure, then seed nudging and the flood fill with a per-fill leak guard, falling back to the native mask when a fill produces zero pixels. The agi-up ideas add two provenance buffers, command id and command type per pixel, which feed the junction-seal pass placed before gap closure. Stacked on v5 this is snap-v10.
-  A[Block expansion + endpoint snapping<br/>line-draw time, v1] --> S[Junction seal<br/>borrowed from agi-up: v9 / v10]
-  S --> C[Diagonal pixel-pattern gap closure<br/>v5]
-  C --> D[Seed nudging + flood fill with adaptive leak guard<br/>v1 / v2 / v3]
-  D -->|fill produces zero pixels| E[Native-mask fallback<br/>v4]
-  P[(cmdId + cmdType buffers<br/>per-pixel provenance)] --> S
-  style S stroke-dasharray: 5 5
-```
+<VizFigure
+  name="Where the borrowed junction seal fits in the snap pipeline"
+  summary="The pipeline runs block expansion with endpoint snapping at line-draw time, then for each fill command a new junction-seal pass, then diagonal gap closure, then seed nudging and the flood fill with a per-fill leak guard, falling back to the native mask when a fill produces zero pixels. The agi-up ideas add two provenance buffers, command id and command type per pixel, which feed the junction-seal pass placed before gap closure. Stacked on v5 this is snap-v10."
+>
+  <SealPipelineViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
 
 ## What the numbers said
 

@@ -15,6 +15,9 @@ draft: false
 import Callout from "@/components/blog/Callout.astro";
 import Aside from "@/components/blog/Aside.astro";
 import Quote from "@/components/blog/Quote.astro";
+import VizFigure from "@/components/blog/VizFigure.astro";
+import PipelineViz from "./pipeline-viz.svg";
+import AuthorityViz from "./authority-viz.svg";
 
 [Part 1](/an-agent-built-this-blog/) explained why an agent can't ship a broken page here, and
 [part 2](/the-authoring-surface/) showed the vocabulary posts are written in. This part is about
@@ -30,17 +33,12 @@ Editorial quality here is not a habit; it is seven procedure files, committed un
 `.claude/skills/`, that an agent invokes and follows. Habits do not survive workers who forget
 everything between sessions. Files do.
 
-```mermaid
-flowchart TB
-  accTitle: The editorial pipeline as skills
-  accDescr: write-post invokes create-visual and create-hero, then hands a draft to review-post; findings loop back to write-post; a clean review goes to publish-post, the only place a draft flips to published.
-  W["write-post<br/>scaffold · expert brief · prose"] --> V["create-visual<br/>mandatory visual pass"]
-  W --> H["create-hero<br/>hand-drawn SVG → PNG"]
-  V --> R["review-post<br/>gates + expert validation"]
-  H --> R
-  R -->|"findings"| W
-  R -->|"clean"| P["publish-post<br/>draft: false · push · verify live"]
-```
+<VizFigure
+  name="The editorial pipeline as skills"
+  summary="write-post invokes create-visual and create-hero, then hands a draft to review-post; findings loop back to write-post, and a clean review goes to publish-post — the only place a draft flips to published."
+>
+  <PipelineViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
 
 Each skill guards something specific. `write-post` owns the shape of a draft and ends with a
 mandatory visual pass — its own rule says a technical post typically yields two to four visuals,
@@ -78,20 +76,12 @@ Mechanically, an agent is dispatched *into* the authority repo, where it reads t
 instructions, source, tests, and data, and makes domain decisions. The budget is strict — two
 calls per post:
 
-```mermaid
-sequenceDiagram
-  accTitle: The authority lifecycle
-  accDescr: Two expert calls per post. The blog dispatches an agent into the authority repo, which investigates and returns a domain brief committed to the post's research directory; the blog builds the post from the brief alone; a second call validates the finished draft; the blog fixes findings and publishes.
-  participant B as Blog repo
-  participant A as Authority repo
-  B->>A: author outline (call 1 of 2)
-  A->>A: investigate source,<br/>tests, docs
-  A-->>B: domain brief →<br/>research/brief.md
-  B->>B: write prose, visuals,<br/>hero — from the brief
-  B->>A: finished draft (call 2 of 2)
-  A-->>B: confirm or correct,<br/>with evidence
-  B->>B: fix findings, publish
-```
+<VizFigure
+  name="The authority lifecycle"
+  summary="Two expert calls per post. The blog dispatches an agent into the authority repo, which investigates and returns a domain brief committed to the post's research directory; the blog builds the post from the brief alone, a second call validates the finished draft, and the blog fixes findings and publishes."
+>
+  <AuthorityViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
 
 The first call produces a **domain brief**: the strongest version of the story, the claims worth
 making with their evidence, corrections to the author's outline, terminology, caveats, and — for

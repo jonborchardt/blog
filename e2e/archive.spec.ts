@@ -112,6 +112,6 @@ test("search index lists published posts and carries body text", async ({ reques
   const docs = (await res.json()) as { slug: string; body: string; headings: string[] }[];
   expect(docs.map((d) => d.slug)).toContain("an-agent-built-this-blog");
   const post = docs.find((d) => d.slug === "the-authoring-surface")!;
-  expect(post.body).toContain("Mermaid");
+  expect(post.body).toContain("hand-drawn");
   expect(post.headings).toContain("Diagrams and math");
 });

@@ -3,7 +3,7 @@ import AxeBuilder from "@axe-core/playwright";
 
 // The primitives reference post: uses every static primitive plus one island.
 const POST = "the-authoring-surface/";
-// The zero-JS reference post: prose, Mermaid and inline SVG, no islands.
+// The zero-JS reference post: prose and inline hand-drawn SVG, no islands.
 const ZERO_JS_POST = "an-agent-built-this-blog/";
 
 test("prose post ships no islands and no external scripts", async ({ page }) => {
@@ -71,13 +71,13 @@ test("figure zoom opens and closes a dialog lightbox", async ({ page }) => {
   await expect(page.locator("dialog.figure-dialog[open]")).toHaveCount(0);
 });
 
-test("Mermaid diagrams and math render at build time", async ({ page }) => {
+test("hand-drawn diagrams and math render at build time", async ({ page }) => {
   await page.goto(POST);
-  await expect(page.locator("svg[id^='mermaid']").first()).toBeVisible();
+  await expect(page.locator("article svg.mx-auto").first()).toBeVisible();
   await expect(page.locator(".katex").first()).toBeVisible();
   await expect(page.locator(".katex-display").first()).toBeVisible();
-  // The zero-JS post also carries a Mermaid diagram — rendered with no scripts at all.
+  // The zero-JS post also carries a hand-drawn diagram — inline SVG, no scripts at all.
   await page.goto(ZERO_JS_POST);
-  await expect(page.locator("svg[id^='mermaid']").first()).toBeVisible();
+  await expect(page.locator("article svg.mx-auto").first()).toBeVisible();
   expect(await page.locator("script[src]").count()).toBe(0);
 });

@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="440" viewBox="0 0 640 440" font-family="system-ui, sans-serif" font-size="13">
+  <defs>
+    <marker id="wav-fg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="currentColor" fill-opacity="0.6"/></marker>
+  </defs>
+
+  <!-- start -->
+  <circle cx="305" cy="14" r="6" fill="currentColor" fill-opacity="0.6"/>
+  <line x1="305" y1="22" x2="305" y2="34" stroke="currentColor" stroke-opacity="0.6" stroke-width="2" marker-end="url(#wav-fg)"/>
+
+  <!-- row 1: Unpaired, no link -->
+  <rect x="60" y="42" width="70" height="48" rx="4" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <text x="72" y="72" fill="#11171d" font-size="12" font-weight="600">&gt;_</text>
+  <line x1="95" y1="90" x2="95" y2="98" stroke="#006a90" stroke-width="3"/>
+  <line x1="78" y1="100" x2="112" y2="100" stroke="#006a90" stroke-width="3" stroke-linecap="round"/>
+  <rect x="480" y="38" width="36" height="62" rx="7" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <line x1="490" y1="46" x2="506" y2="46" stroke="#11171d" stroke-opacity="0.5" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="498" cy="92" r="2" fill="#555f69"/>
+  <line x1="140" y1="66" x2="205" y2="66" stroke="currentColor" stroke-opacity="0.35" stroke-width="2" stroke-dasharray="4 4"/>
+  <line x1="415" y1="66" x2="470" y2="66" stroke="currentColor" stroke-opacity="0.35" stroke-width="2" stroke-dasharray="4 4"/>
+  <text x="305" y="71" fill="currentColor" text-anchor="middle" font-weight="600">Unpaired</text>
+
+  <line x1="305" y1="112" x2="305" y2="150" stroke="currentColor" stroke-opacity="0.6" stroke-width="2" marker-end="url(#wav-fg)"/>
+  <text x="317" y="128" fill="currentColor" fill-opacity="0.75" font-size="12">adb pair ip:pairing-port + 6-digit code</text>
+  <text x="317" y="144" fill="currentColor" fill-opacity="0.75" font-size="12">(once, ever, per PC)</text>
+
+  <!-- row 2: Paired, dashed link with a key -->
+  <rect x="60" y="158" width="70" height="48" rx="4" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <text x="72" y="188" fill="#11171d" font-size="12" font-weight="600">&gt;_</text>
+  <line x1="95" y1="206" x2="95" y2="214" stroke="#006a90" stroke-width="3"/>
+  <line x1="78" y1="216" x2="112" y2="216" stroke="#006a90" stroke-width="3" stroke-linecap="round"/>
+  <rect x="480" y="154" width="36" height="62" rx="7" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <line x1="490" y1="162" x2="506" y2="162" stroke="#11171d" stroke-opacity="0.5" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="498" cy="208" r="2" fill="#555f69"/>
+  <line x1="140" y1="182" x2="470" y2="182" stroke="currentColor" stroke-opacity="0.5" stroke-width="2" stroke-dasharray="5 4"/>
+  <g stroke="currentColor" stroke-opacity="0.7" stroke-width="2" fill="none">
+    <circle cx="285" cy="182" r="6"/>
+    <line x1="291" y1="182" x2="312" y2="182"/>
+    <line x1="304" y1="182" x2="304" y2="189"/>
+    <line x1="310" y1="182" x2="310" y2="188"/>
+  </g>
+  <text x="305" y="240" fill="currentColor" text-anchor="middle" font-weight="600">Paired (not connected)</text>
+
+  <line x1="280" y1="252" x2="280" y2="292" stroke="currentColor" stroke-opacity="0.6" stroke-width="2" marker-end="url(#wav-fg)"/>
+  <text x="294" y="276" fill="currentColor" fill-opacity="0.75" font-size="12">adb connect ip:port</text>
+
+  <!-- reboot or wifi drop sends it back -->
+  <path d="M540 330 C630 308 630 226 524 202" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="2" marker-end="url(#wav-fg)"/>
+  <text x="548" y="250" fill="currentColor" fill-opacity="0.75" text-anchor="middle" font-size="12">reboot or</text>
+  <text x="548" y="266" fill="currentColor" fill-opacity="0.75" text-anchor="middle" font-size="12">wifi drop</text>
+  <text x="548" y="282" fill="currentColor" fill-opacity="0.75" text-anchor="middle" font-size="12">(port changes)</text>
+
+  <!-- row 3: Connected, solid link, the loop runs -->
+  <rect x="60" y="296" width="70" height="48" rx="4" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <text x="72" y="326" fill="#11171d" font-size="12" font-weight="600">&gt;_</text>
+  <line x1="95" y1="344" x2="95" y2="352" stroke="#006a90" stroke-width="3"/>
+  <line x1="78" y1="354" x2="112" y2="354" stroke="#006a90" stroke-width="3" stroke-linecap="round"/>
+  <rect x="480" y="292" width="36" height="62" rx="7" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <line x1="490" y1="300" x2="506" y2="300" stroke="#11171d" stroke-opacity="0.5" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="498" cy="346" r="2" fill="#555f69"/>
+  <line x1="140" y1="320" x2="470" y2="320" stroke="currentColor" stroke-opacity="0.7" stroke-width="2.5"/>
+  <path d="M287 308 Q305 292 323 308" fill="none" stroke="currentColor" stroke-opacity="0.7" stroke-width="2"/>
+  <path d="M293 314 Q305 303 317 314" fill="none" stroke="currentColor" stroke-opacity="0.7" stroke-width="2"/>
+  <circle cx="305" cy="319" r="2.5" fill="currentColor" fill-opacity="0.7"/>
+  <path d="M255 332 C255 362 355 362 355 332" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="2" marker-end="url(#wav-fg)"/>
+  <text x="305" y="382" fill="currentColor" fill-opacity="0.75" text-anchor="middle" font-size="12">installDebug, logcat, screenshots</text>
+  <text x="305" y="410" fill="currentColor" text-anchor="middle" font-weight="600">Connected (looks like USB)</text>
+</svg>

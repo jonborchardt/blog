@@ -16,6 +16,8 @@ draft: false
 import Figure from "@/components/blog/Figure.astro";
 import VizFigure from "@/components/blog/VizFigure.astro";
 import VerdictSets from "./verdict-set-arithmetic.svg";
+import PipelineViz from "./pipeline-viz.svg";
+import TriageViz from "./triage-viz.svg";
 
 Here's the problem. YouTube knows I'm interested in finances and retirement, so it feeds me a twenty-minute video every day: "If You're 55 With $2.5M, Watch This BEFORE You Retire." Some of them are genuinely good. Some are confidently wrong in ways that would cost years. And there is no way to tell which from the thumbnail — the production quality of the good ones and the bad ones is identical, and they all say "sequence-of-returns risk" in the first ninety seconds.
 
@@ -28,22 +30,12 @@ I used to watch them. Now I paste the URL into a text file in [my simulator](/re
 
 The whole thing is a short pipeline from a text file to a scoreboard, and the scoreboard feeds back into the front of the queue:
 
-```mermaid
-flowchart TB
-  accTitle: The video-vetting pipeline from queue to scoreboard
-  accDescr: A videos.md queue is deduped and checked against the channel scoreboard, then each video's captions are fetched, its claims triaged, three experiment rows run through the engine, and a verdict written to theories.md and sources.json, which the app renders and which the channel-skip check reads on the next run.
-  Q[videos.md<br/>one URL per line] --> D{dedupe on video id<br/>channel already harmful x2?}
-  D -- SKIPPED-CHANNEL --> Q
-  D --> T[npm run transcript<br/>captions, not pixels]
-  T -- no captions --> Q
-  T --> C[theory-test:<br/>triage claims]
-  C --> R[three rows in<br/>experiments.json]
-  R --> E[engine: every start year<br/>at every retirement age]
-  E --> V[verdict + steelman]
-  V --> S[(theories.md<br/>sources.json)]
-  S --> A[Vetted Videos tab]
-  S -. past verdicts .-> D
-```
+<VizFigure
+  name="The video-vetting pipeline from queue to scoreboard"
+  summary="A videos.md queue is deduped and checked against the channel scoreboard, then each video's captions are fetched, its claims triaged, three experiment rows run through the engine, and a verdict written to theories.md and sources.json, which the app renders and which the channel-skip check reads on the next run."
+>
+  <PipelineViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
 
 ## The queue is a text file
 
@@ -69,20 +61,12 @@ This is where the **theory-test** skill starts, and it's the part I care about m
 
 Only the first pile reaches the engine; the other two still get an answer, just not an experiment:
 
-```mermaid
-flowchart TB
-  accTitle: How each transcript claim is triaged
-  accDescr: Every claim is sorted into mechanism, assumption, or framing. Mechanism claims are checked for whether the engine can express them: if yes they become experiment rows, if only approximately they become rows with a caveat, and if the gap is decisive they are recorded as an open question. Assumption claims are fact-checked against history. Framing claims are mapped to the real mechanism they stand in for, if any.
-  K[claim in transcript] --> M[mechanism<br/>allocation, glide path,<br/>withdrawal rule, timing]
-  K --> S[assumption<br/>8% returns, 4% is safe]
-  K --> F[framing / behavioral<br/>buckets, permission to spend]
-  M --> X{engine can<br/>express it?}
-  X -- yes --> R[experiment rows]
-  X -- nearest primitive --> R2[rows + caveat in notes]
-  X -- gap is decisive --> O[open question,<br/>not a fake verdict]
-  S --> H[fact-check against history,<br/>flag when sunny]
-  F --> P[name the mechanism<br/>it is a proxy for]
-```
+<VizFigure
+  name="How each transcript claim is triaged"
+  summary="Every claim is sorted into mechanism, assumption, or framing. Mechanism claims are checked for whether the engine can express them: if yes they become experiment rows, if only approximately they become rows with a caveat, and if the gap is decisive they are recorded as an open question. Assumption claims are fact-checked against history. Framing claims are mapped to the real mechanism they stand in for, if any."
+>
+  <TriageViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
 
 The rule that keeps this honest is _translate faithfully or say you can't_. If a video's load-bearing rule is something the engine can't express — "refill the cash bucket only after up years" — the skill approximates with the nearest primitive and writes that caveat into the notes. It is forbidden from quietly adding engine features to flatter a video. And if the gap is plausibly decisive, the output is "open question," not a fake verdict. One theory this month — an options-overlay idea — was adjudicated as _honestly untestable_: the return series that would be needed doesn't exist for the failure cohorts. Pinning down exactly what data would be needed and verifying it isn't there is still an adjudication.
 

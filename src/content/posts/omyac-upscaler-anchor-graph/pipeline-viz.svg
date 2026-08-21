@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="690" viewBox="0 0 640 690" font-family="system-ui, sans-serif" font-size="13">
+  <defs>
+    <marker id="omv-fg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="currentColor" fill-opacity="0.6"/></marker>
+  </defs>
+
+  <!-- command tape in -->
+  <text x="240" y="33" fill="currentColor" text-anchor="end" font-weight="600">PIC commands</text>
+  <rect x="265" y="16" width="110" height="26" rx="3" fill="#fafcfe" stroke="#006a90" stroke-width="1.5"/>
+  <line x1="277" y1="23" x2="277" y2="35" stroke="#555f69" stroke-width="2" stroke-linecap="round"/>
+  <line x1="291" y1="23" x2="291" y2="35" stroke="#555f69" stroke-width="2" stroke-linecap="round"/>
+  <line x1="305" y1="23" x2="305" y2="35" stroke="#555f69" stroke-width="2" stroke-linecap="round"/>
+  <line x1="319" y1="23" x2="319" y2="35" stroke="#555f69" stroke-width="2" stroke-linecap="round"/>
+  <line x1="333" y1="23" x2="333" y2="35" stroke="#555f69" stroke-width="2" stroke-linecap="round"/>
+  <line x1="347" y1="23" x2="347" y2="35" stroke="#555f69" stroke-width="2" stroke-linecap="round"/>
+  <line x1="361" y1="23" x2="361" y2="35" stroke="#555f69" stroke-width="2" stroke-linecap="round"/>
+  <line x1="320" y1="46" x2="320" y2="64" stroke="currentColor" stroke-opacity="0.6" stroke-width="2" marker-end="url(#omv-fg)"/>
+
+  <!-- frame 1: native pre-render, staircased cells -->
+  <rect x="255" y="70" width="130" height="90" rx="5" fill="#fafcfe" stroke="#006a90" stroke-width="1.5"/>
+  <g stroke="#555f69" stroke-opacity="0.35" stroke-width="1">
+    <line x1="263" y1="79" x2="263" y2="151"/><line x1="282" y1="79" x2="282" y2="151"/><line x1="301" y1="79" x2="301" y2="151"/><line x1="320" y1="79" x2="320" y2="151"/><line x1="339" y1="79" x2="339" y2="151"/><line x1="358" y1="79" x2="358" y2="151"/><line x1="377" y1="79" x2="377" y2="151"/>
+    <line x1="263" y1="79" x2="377" y2="79"/><line x1="263" y1="97" x2="377" y2="97"/><line x1="263" y1="115" x2="377" y2="115"/><line x1="263" y1="133" x2="377" y2="133"/><line x1="263" y1="151" x2="377" y2="151"/>
+  </g>
+  <g fill="#006a90" fill-opacity="0.45">
+    <rect x="263" y="133" width="19" height="18"/><rect x="282" y="115" width="19" height="18"/><rect x="301" y="115" width="19" height="18"/><rect x="320" y="97" width="19" height="18"/><rect x="339" y="97" width="19" height="18"/><rect x="358" y="79" width="19" height="18"/>
+  </g>
+  <text x="240" y="103" fill="currentColor" text-anchor="end" font-weight="600">Native pre-render 320×190</text>
+  <text x="240" y="121" fill="currentColor" fill-opacity="0.75" text-anchor="end" font-size="12">colour byte · cmdIndex</text>
+  <text x="240" y="137" fill="currentColor" fill-opacity="0.75" text-anchor="end" font-size="12">cmdType · segments</text>
+  <path d="M436 116 Q410 116 389 115" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="440" y="100" fill="currentColor" fill-opacity="0.85" font-size="12" font-style="italic">Fix 1: keep the full byte</text>
+  <text x="440" y="118" fill="currentColor" fill-opacity="0.85" font-size="12" font-style="italic">Fix 5: CMD_NONE →</text>
+  <text x="440" y="136" fill="currentColor" fill-opacity="0.85" font-size="12" font-style="italic">white CMD_FILL</text>
+  <line x1="320" y1="164" x2="320" y2="192" stroke="currentColor" stroke-opacity="0.6" stroke-width="2" marker-end="url(#omv-fg)"/>
+
+  <!-- frame 2: anchor graph, anchors projected onto the segment -->
+  <rect x="255" y="198" width="130" height="90" rx="5" fill="#fafcfe" stroke="#006a90" stroke-width="1.5"/>
+  <g fill="#006a90" fill-opacity="0.12">
+    <rect x="263" y="261" width="19" height="18"/><rect x="282" y="243" width="19" height="18"/><rect x="301" y="243" width="19" height="18"/><rect x="320" y="225" width="19" height="18"/><rect x="339" y="225" width="19" height="18"/><rect x="358" y="207" width="19" height="18"/>
+  </g>
+  <line x1="265" y1="272" x2="375" y2="206" stroke="#555f69" stroke-opacity="0.6" stroke-width="1" stroke-dasharray="3 3"/>
+  <polyline points="274,267 294,255 313,243 333,231 353,219 370,209" fill="none" stroke="#006a90" stroke-width="1.5"/>
+  <g fill="#006a90">
+    <circle cx="274" cy="267" r="3.5"/><circle cx="294" cy="255" r="3.5"/><circle cx="313" cy="243" r="3.5"/><circle cx="333" cy="231" r="3.5"/><circle cx="353" cy="219" r="3.5"/><circle cx="370" cy="209" r="3.5"/>
+  </g>
+  <text x="240" y="231" fill="currentColor" text-anchor="end" font-weight="600">Anchor graph</text>
+  <text x="240" y="249" fill="currentColor" fill-opacity="0.75" text-anchor="end" font-size="12">project line anchors,</text>
+  <text x="240" y="265" fill="currentColor" fill-opacity="0.75" text-anchor="end" font-size="12">connect neighbours</text>
+  <path d="M436 244 Q410 244 389 243" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="440" y="247" fill="currentColor" fill-opacity="0.85" font-size="12" font-style="italic">Fix 2: sameColor via cmdType</text>
+  <line x1="320" y1="292" x2="320" y2="320" stroke="currentColor" stroke-opacity="0.6" stroke-width="2" marker-end="url(#omv-fg)"/>
+
+  <!-- frame 3: hybrid render, sparse wireframe -->
+  <rect x="255" y="326" width="130" height="90" rx="5" fill="#fafcfe" stroke="#006a90" stroke-width="1.5"/>
+  <line x1="265" y1="400" x2="375" y2="334" stroke="#006a90" stroke-width="2"/>
+  <g fill="#11171d">
+    <circle cx="283" cy="389" r="2"/><circle cx="305" cy="376" r="2"/><circle cx="327" cy="363" r="2"/><circle cx="349" cy="350" r="2"/><circle cx="368" cy="338" r="2"/>
+  </g>
+  <g fill="#006a90">
+    <circle cx="285" cy="345" r="2"/><circle cx="310" cy="352" r="2"/><circle cx="300" cy="398" r="2"/><circle cx="345" cy="392" r="2"/><circle cx="365" cy="372" r="2"/>
+  </g>
+  <text x="240" y="359" fill="currentColor" text-anchor="end" font-weight="600">Hybrid render at 6×</text>
+  <text x="240" y="377" fill="currentColor" fill-opacity="0.75" text-anchor="end" font-size="12">Bresenham anchor-to-anchor,</text>
+  <text x="240" y="393" fill="currentColor" fill-opacity="0.75" text-anchor="end" font-size="12">anchor dots</text>
+  <line x1="320" y1="420" x2="320" y2="448" stroke="currentColor" stroke-opacity="0.6" stroke-width="2" marker-end="url(#omv-fg)"/>
+
+  <!-- frame 4: enhance, fill regions spreading -->
+  <rect x="255" y="454" width="130" height="90" rx="5" fill="#fafcfe" stroke="#006a90" stroke-width="1.5"/>
+  <path d="M259 534 L381 464 L381 540 L259 540 Z" fill="#deeef5"/>
+  <g stroke="#555f69" stroke-opacity="0.35" stroke-width="2" stroke-linecap="round">
+    <line x1="263" y1="472" x2="300" y2="472"/>
+    <line x1="263" y1="486" x2="322" y2="486"/>
+    <line x1="263" y1="500" x2="344" y2="500"/>
+    <line x1="263" y1="514" x2="366" y2="514"/>
+  </g>
+  <line x1="259" y1="534" x2="381" y2="464" stroke="#006a90" stroke-width="2"/>
+  <text x="240" y="487" fill="currentColor" text-anchor="end" font-weight="600">Enhance</text>
+  <text x="240" y="505" fill="currentColor" fill-opacity="0.75" text-anchor="end" font-size="12">8-neighbour vote:</text>
+  <text x="240" y="521" fill="currentColor" fill-opacity="0.75" text-anchor="end" font-size="12">fill×3 line×1 fill×2 all×4</text>
+  <path d="M436 500 Q410 500 389 499" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="440" y="494" fill="currentColor" fill-opacity="0.85" font-size="12" font-style="italic">Fix 3: 256 vote buckets</text>
+  <text x="440" y="512" fill="currentColor" fill-opacity="0.85" font-size="12" font-style="italic">Fix 4: blend-table tie-break</text>
+  <line x1="320" y1="548" x2="320" y2="576" stroke="currentColor" stroke-opacity="0.6" stroke-width="2" marker-end="url(#omv-fg)"/>
+
+  <!-- frame 5: final resolve, solid picture -->
+  <rect x="255" y="582" width="130" height="90" rx="5" fill="#fafcfe" stroke="#006a90" stroke-width="1.5"/>
+  <path d="M259 586 L381 586 L381 590 L259 666 Z" fill="#006a90" fill-opacity="0.25"/>
+  <path d="M259 666 L381 590 L381 668 L259 668 Z" fill="#deeef5"/>
+  <line x1="259" y1="666" x2="381" y2="590" stroke="#006a90" stroke-width="2"/>
+  <text x="240" y="619" fill="currentColor" text-anchor="end" font-weight="600">Final null-pixel mode fill</text>
+  <text x="240" y="637" fill="currentColor" fill-opacity="0.75" text-anchor="end" font-size="12">blend-table resolve to RGBA</text>
+</svg>

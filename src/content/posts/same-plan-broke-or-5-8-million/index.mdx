@@ -18,22 +18,18 @@ import VizFigure from "@/components/blog/VizFigure.astro";
 import FourLives from "./four-lives.svg";
 import EndingBalances from "./ending-balances.svg";
 import FailureBands from "./failure-bands.svg";
+import ReplayFanViz from "./replay-fan-viz.svg";
 
 Here is a household. It has \$1,000,000. It retires at 65, spends \$40,000 a year — the textbook 4% — adjusted for inflation every year, holds a 60/40 stock/bond index portfolio, rebalances annually, and needs the money to last thirty years. No Social Security, no pension, no house, no kids, no taxes, no fees. The most boring retirement plan it is possible to write down.
 
 Now run that exact household — same dollars, same spending, same portfolio, same rules — ninety-eight times, once for every year since 1928 it could have retired into, using what stocks, bonds and inflation actually did next. That's what [my simulator](/retirement-simulator-ai-lab/) does: instead of rolling random returns, it replays every historical start year in order, one full life each, and reports the results in today's dollars.
 
-```mermaid
-flowchart TB
-  accTitle: How the simulator turns one plan into ninety-eight lives
-  accDescr: One plan is replayed once per historical start year from 1928 to 2025, each run using the actual stock, bond and inflation sequence that followed that year, producing ninety-eight balance paths that are reported together as a fan in today's dollars.
-  P[One plan: $1M, $40k/yr real, 60/40, 30 years] --> R[Replay from each start year 1928…2025]
-  R --> A[1928 → what actually happened next]
-  R --> B[1929 → …]
-  R --> C[⋮]
-  R --> D[2025 → history, then long-run average]
-  A & B & C & D --> F[98 lives, side by side, in today's dollars]
-```
+<VizFigure
+  name="How the simulator turns one plan into ninety-eight lives"
+  summary="One plan is replayed once per historical start year from 1928 to 2025, each run using the actual stock, bond and inflation sequence that followed that year. The result is ninety-eight balance paths, reported together as a fan in today's dollars."
+>
+  <ReplayFanViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
 
 ![Fan chart of wealth in today's dollars for the baseline plan, 2026 to 2057: one faint line per historical start year, a shaded 10th–90th percentile band and a median line rising slowly from \$1M to about \$1.7M, with individual lines spanning zero to about \$6M](./fan-chart-baseline.png)
 

@@ -14,6 +14,10 @@ draft: false
 ---
 
 import Steps from "@/components/blog/Steps.astro";
+import VizFigure from "@/components/blog/VizFigure.astro";
+import DevLoopViz from "./dev-loop-viz.svg";
+import AdbTiersViz from "./adb-tiers-viz.svg";
+import WirelessAdbViz from "./wireless-adb-viz.svg";
 
 [WorldLock](/worldlock-ar-window/) has never been opened in Android Studio. The entire development loop is three commands and an AI that runs them:
 
@@ -36,35 +40,23 @@ The quiet realization of this project is that Android development is _extremely_
 
 Put together, the loop is a text pipeline with a phone in the middle of it. The only arrows a human touches are the ones on the far right:
 
-```mermaid
-flowchart TB
-  accTitle: The WorldLock development loop
-  accDescr: Claude edits Kotlin and shader source, runs gradlew assembleDebug and reads compiler errors back until it compiles, runs installDebug to push the APK over wifi to the phone, then reads logcat lines and screenshots that come back from the phone. The human only points the phone at the world and judges how it looks.
-  C[Claude edits Kotlin / GLSL] --> A[gradlew assembleDebug]
-  A -- compiler errors --> C
-  A -- APK --> I[gradlew installDebug]
-  I -- wifi --> P[Phone, outside]
-  P -- adb logcat -s Earth --> C
-  P -- screenshots --> C
-  H([Human]) -- points at the sky --> P
-  P -- does it look right? --> H
-```
+<VizFigure
+  name="The WorldLock development loop"
+  summary="Claude edits Kotlin and shader source, runs gradlew assembleDebug and reads compiler errors back until it compiles, runs installDebug to push the APK over wifi to the phone, then reads the logcat lines and screenshots that come back. The human only points the phone at the world and judges how it looks."
+>
+  <DevLoopViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
 
 The human's job shrinks to the three things an agent genuinely can't do: physically pointing the phone at the sky, judging whether the ember particles _look_ right, and occasionally re-running `adb connect` when the wireless link drops (`pair` and `connect` are deliberately not pre-approved).
 
 One guardrail worth copying: the phone is reachable only through a wrapper script (`.\adb.cmd`) — plain `adb` isn't on PATH, and the permission rules key off the wrapper's name. The rules are three tiers, not two. Pre-approved: install, launch, stop, and uninstall of this one package, plus device listing and logcat (the `-s Earth` tag filter is convention, not enforcement). Anything unlisted — shell access, pulling files, other packages — waits for a human. And a hard deny list is refused outright even with a human present: reboot, root, sideload, push, `shell rm`, disabling packages, changing device settings — and reading `local.properties`, the file holding the ARCore API key. The agent can iterate freely on the app without ever holding a blank check to the device.
 
-```mermaid
-flowchart TB
-  accTitle: The adb wrapper as a three-tier permission boundary
-  accDescr: Claude never calls adb directly. Every device command goes through the adb.cmd wrapper. Pre-approved commands, install, launch, stop and uninstall of the WorldLock package plus device listing and logcat, run unattended. Anything unlisted, such as shell access, pulling files or other packages, waits for a human to approve it. A deny list, reboot, root, sideload, push, shell rm, disabling packages, changing settings, and reading the file with the API key, is refused outright even with a human present.
-  C[Claude] --> W[.\adb.cmd wrapper]
-  W -- "install / launch / stop / uninstall of this package<br/>+ devices, logcat" --> OK[Runs unattended]
-  W -- "shell, pull, other packages, pair/connect, ..." --> ASK[Waits for a human]
-  W -- "reboot, root, sideload, push, shell rm,<br/>settings, reading the API-key file" --> DENY[Refused outright]
-  OK --> P[Phone]
-  ASK -. only if approved .-> P
-```
+<VizFigure
+  name="The adb wrapper as a three-tier permission boundary"
+  summary="Claude never calls adb directly; every device command goes through the adb.cmd wrapper. Pre-approved commands (install, launch, stop and uninstall of the WorldLock package, plus device listing and logcat) run unattended. Anything unlisted, such as shell access, pulling files or other packages, waits for a human to approve it. A deny list — reboot, root, sideload, push, shell rm, disabling packages, changing settings, and reading the file with the API key — is refused outright even with a human present."
+>
+  <AdbTiersViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
 
 ## The part that makes it work: wireless debugging
 
@@ -84,18 +76,12 @@ From that point the loop is genuinely wireless: Claude builds and runs `installD
 
 The pairing dance is the only fiddly part (the pairing port is different from the connect port, and both change when the phone reboots or drops off wifi — you re-run `adb connect` with the new port and move on). Minor tax. Pairing happens once; everything after it is a connect that occasionally has to be repeated:
 
-```mermaid
-stateDiagram-v2
-  accTitle: Wireless adb states, from unpaired to connected
-  accDescr: A phone starts unpaired. A one-time adb pair with the six-digit code and the pairing port moves it to paired. adb connect with the separate connect port makes it connected, which is where the whole build, install and logcat loop runs. A reboot or wifi drop sends it back to paired with a new port, and one more adb connect brings it back; pairing itself never has to be repeated.
-  [*] --> Unpaired
-  Unpaired --> Paired: adb pair ip:pairing-port + 6-digit code<br/>(once, ever, per PC)
-  Paired --> Connected: adb connect ip:port
-  Connected --> Connected: installDebug, logcat, screenshots
-  Connected --> Paired: reboot or wifi drop<br/>(port changes)
-  state "Paired (not connected)" as Paired
-  state "Connected (looks like USB)" as Connected
-```
+<VizFigure
+  name="Wireless adb states, from unpaired to connected"
+  summary="A phone starts unpaired. A one-time adb pair with the six-digit code and the pairing port moves it to paired; adb connect with the separate connect port makes it connected, which is where the whole build, install and logcat loop runs. A reboot or wifi drop sends it back to paired with a new port, and one more adb connect brings it back — pairing itself never has to be repeated."
+>
+  <WirelessAdbViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
 
 In exchange, the test loop for an app whose whole premise is _stand somewhere real and look at the real world_ actually matches how the app is used.
 

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="570" viewBox="0 0 640 570" font-family="system-ui, sans-serif" font-size="13">
+  <defs>
+    <marker id="spv-fg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="currentColor" fill-opacity="0.6"/></marker>
+  </defs>
+
+  <!-- intake funnel + main pipe -->
+  <path d="M198 24 L242 24 L228 40 L212 40 Z" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <rect x="212" y="40" width="16" height="410" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+
+  <!-- station 1: block expansion -->
+  <line x1="220" y1="86" x2="220" y2="77" stroke="#006a90" stroke-width="3" stroke-linecap="round"/>
+  <line x1="211" y1="77" x2="229" y2="77" stroke="#006a90" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="220" cy="100" r="14" fill="#deeef5" stroke="#006a90" stroke-width="2"/>
+  <text x="248" y="98" fill="currentColor" font-weight="600">Block expansion + endpoint snapping</text>
+  <text x="248" y="116" fill="currentColor" fill-opacity="0.85" font-size="12" font-style="italic">line-draw time, v1</text>
+
+  <!-- station 2: junction seal (patched-in valve, warm dashed) -->
+  <circle cx="220" cy="190" r="14" fill="#deeef5" stroke="#f0b35a" stroke-width="2.5" stroke-dasharray="4 3"/>
+  <text x="190" y="178" fill="currentColor" text-anchor="end" font-weight="600">Junction seal</text>
+  <text x="190" y="196" fill="currentColor" fill-opacity="0.85" text-anchor="end" font-size="12" font-style="italic">borrowed from agi-up:</text>
+  <text x="190" y="212" fill="currentColor" fill-opacity="0.85" text-anchor="end" font-size="12" font-style="italic">v9 / v10</text>
+
+  <!-- provenance tank feeding station 2 -->
+  <ellipse cx="510" cy="158" rx="100" ry="9" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5"/>
+  <path d="M410 158 V218 A100 9 0 0 0 610 218 V158" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5"/>
+  <text x="510" y="188" fill="currentColor" text-anchor="middle" font-size="12" font-weight="600">cmdId + cmdType buffers</text>
+  <text x="510" y="206" fill="currentColor" text-anchor="middle" font-size="12">per-pixel provenance</text>
+  <line x1="406" y1="190" x2="240" y2="190" stroke="currentColor" stroke-opacity="0.6" stroke-width="2" marker-end="url(#spv-fg)"/>
+
+  <!-- station 3: gap closure -->
+  <line x1="220" y1="266" x2="220" y2="257" stroke="#006a90" stroke-width="3" stroke-linecap="round"/>
+  <line x1="211" y1="257" x2="229" y2="257" stroke="#006a90" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="220" cy="280" r="14" fill="#deeef5" stroke="#006a90" stroke-width="2"/>
+  <text x="248" y="278" fill="currentColor" font-weight="600">Diagonal pixel-pattern gap closure</text>
+  <text x="248" y="296" fill="currentColor" fill-opacity="0.85" font-size="12" font-style="italic">v5</text>
+
+  <!-- station 4: seed nudging + flood fill -->
+  <line x1="220" y1="356" x2="220" y2="347" stroke="#006a90" stroke-width="3" stroke-linecap="round"/>
+  <line x1="211" y1="347" x2="229" y2="347" stroke="#006a90" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="220" cy="370" r="14" fill="#deeef5" stroke="#006a90" stroke-width="2"/>
+  <text x="248" y="360" fill="currentColor" font-weight="600">Seed nudging + flood fill</text>
+  <text x="248" y="378" fill="currentColor" font-weight="600">with adaptive leak guard</text>
+  <text x="248" y="396" fill="currentColor" fill-opacity="0.85" font-size="12" font-style="italic">v1 / v2 / v3</text>
+
+  <!-- outlet, pour, puddle -->
+  <path d="M208 450 L232 450 L238 462 L202 462 Z" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <circle cx="216" cy="472" r="2.5" fill="#006a90" fill-opacity="0.7"/>
+  <circle cx="224" cy="480" r="2.5" fill="#006a90" fill-opacity="0.7"/>
+  <circle cx="219" cy="488" r="2.5" fill="#006a90" fill-opacity="0.7"/>
+  <ellipse cx="220" cy="504" rx="46" ry="10" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+
+  <!-- zero-pixel drip to the fallback bucket -->
+  <path d="M238 460 Q320 484 388 500" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#spv-fg)"/>
+  <text x="340" y="460" fill="currentColor" fill-opacity="0.75" text-anchor="middle" font-size="12">fill produces zero pixels</text>
+  <path d="M394 506 L546 506 L532 552 L408 552 Z" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="470" y="526" fill="currentColor" text-anchor="middle" font-size="12">Native-mask fallback</text>
+  <text x="470" y="543" fill="currentColor" text-anchor="middle" font-size="12">v4</text>
+</svg>

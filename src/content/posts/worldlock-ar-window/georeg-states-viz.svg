@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="460" viewBox="0 0 640 460" font-family="system-ui, sans-serif" font-size="13">
+  <defs>
+    <marker id="gsv-fg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="currentColor" fill-opacity="0.6"/></marker>
+    <marker id="gsv-rail" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="13" markerHeight="13" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#006a90"/></marker>
+  </defs>
+
+  <!-- start -->
+  <circle cx="230" cy="36" r="7" fill="currentColor" fill-opacity="0.6"/>
+
+  <!-- rail down through the three stations -->
+  <line x1="230" y1="43" x2="230" y2="93" stroke="#006a90" stroke-width="5" stroke-linecap="round" marker-end="url(#gsv-rail)"/>
+  <line x1="230" y1="123" x2="230" y2="213" stroke="#006a90" stroke-width="5" stroke-linecap="round" marker-end="url(#gsv-rail)"/>
+  <line x1="230" y1="243" x2="230" y2="335" stroke="#006a90" stroke-width="5" stroke-linecap="round" marker-end="url(#gsv-rail)"/>
+
+  <!-- station: Hidden -->
+  <circle cx="230" cy="110" r="13" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <text x="252" y="114" fill="currentColor" font-weight="600">Hidden (waiting for fix)</text>
+
+  <!-- gate 1 -->
+  <line x1="214" y1="170" x2="246" y2="170" stroke="#006a90" stroke-width="3.5" stroke-linecap="round"/>
+  <text x="252" y="174" fill="currentColor" fill-opacity="0.75" font-size="12">pos &lt; 15 m, yaw &lt; 25&#176;</text>
+
+  <!-- station: rendering from camera pose -->
+  <circle cx="230" cy="230" r="13" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <text x="252" y="234" fill="currentColor" font-weight="600">Rendering from camera pose</text>
+
+  <!-- fallback: back up to Hidden -->
+  <path d="M215 224 C 40 212, 40 128, 213 114" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" marker-end="url(#gsv-fg)"/>
+  <text x="150" y="162" fill="currentColor" fill-opacity="0.75" text-anchor="middle" font-size="12">worse than</text>
+  <text x="150" y="179" fill="currentColor" fill-opacity="0.75" text-anchor="middle" font-size="12">2&#215; the gate</text>
+
+  <!-- gate 2, where the reference anchor is planted -->
+  <line x1="214" y1="290" x2="246" y2="290" stroke="#006a90" stroke-width="3.5" stroke-linecap="round"/>
+  <text x="252" y="285" fill="currentColor" fill-opacity="0.75" font-size="12">pos &lt; 15 m, yaw &lt; 15&#176;</text>
+  <text x="252" y="302" fill="currentColor" fill-opacity="0.75" font-size="12">plant reference anchor</text>
+
+  <!-- fallback: anchor stopped, back to the gate -->
+  <path d="M215 346 C 40 334, 40 246, 213 234" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" marker-end="url(#gsv-fg)"/>
+  <text x="150" y="285" fill="currentColor" fill-opacity="0.75" text-anchor="middle" font-size="12">anchor STOPPED</text>
+  <text x="150" y="302" fill="currentColor" fill-opacity="0.75" text-anchor="middle" font-size="12">back to the gate</text>
+
+  <!-- the reference anchor -->
+  <circle cx="120" cy="336" r="5" fill="none" stroke="#f0b35a" stroke-width="2.5"/>
+  <line x1="120" y1="341" x2="120" y2="372" stroke="#f0b35a" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="110" y1="352" x2="130" y2="352" stroke="#f0b35a" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M106 364 Q120 380 134 364" fill="none" stroke="#f0b35a" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- station: Anchored -->
+  <circle cx="230" cy="352" r="13" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <text x="252" y="356" fill="currentColor" font-weight="600">Anchored (riding the reference anchor)</text>
+
+  <!-- self loop: pause / resume, indoors -->
+  <path d="M238 364 C 274 412, 186 412, 221 366" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" marker-end="url(#gsv-fg)"/>
+  <text x="230" y="428" fill="currentColor" fill-opacity="0.75" text-anchor="middle" font-size="12">pause / resume, indoors</text>
+</svg>

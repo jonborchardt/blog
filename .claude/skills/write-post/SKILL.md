@@ -38,13 +38,13 @@ An additional call is justified only when genuinely needed: the expert flagged a
    - Images: put files in the post directory, use `![meaningful alt](./file.png)` (raster) or `<img>` with width/height/alt for SVG; `Figure` for captions/wide.
      Large rasters and sweep/side-by-side comparisons go in `<Figure zoom>` with a direct `<img>` child so readers can open them full-size; never `zoom` around `VizFigure` or islands.
    - Internal links are root-relative (`/other-post/`, `/series/`); the build prefixes the base and fails on broken links.
-   - Diagrams: `mermaid` fences with `accTitle`/`accDescr` (`TB` by default, short `<br/>`-broken labels, no long text in diamonds, native width ≤ 640px — sizing rules in `create-visual`); math: `$…$`.
-3. **Visual pass — mandatory, no sign-off needed.** Re-read the finished prose and add every visual that earns its place; build each with `create-visual` (its ladder picks the medium — Mermaid → SVG → HTML/CSS → island; do not default to React). Do this even when the author only asked for text.
+   - Diagrams: hand-drawn pictorial SVGs in the post directory, wrapped in `VizFigure` (design language and verification in `create-visual` — never a `mermaid` fence, the build doesn't render them); math: `$…$`.
+3. **Visual pass — mandatory, no sign-off needed.** Re-read the finished prose and add every visual that earns its place; build each with `create-visual` (its ladder picks the medium — pictorial SVG → SVG chart → HTML/CSS → island; do not default to React). Do this even when the author only asked for text.
    - Candidates, by what the prose is doing:
      | The paragraph…                                                                                                 | Visual                                                                |
      | -------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-     | walks a data flow, pipeline, or type/unit boundary (A → B → C, "only here does X become Y")                    | Mermaid `flowchart` with the boundary marked                          |
-     | describes states/modes and what moves between them (first fix, retries, gates, pause/resume)                   | Mermaid `stateDiagram-v2`                                             |
+     | walks a data flow, pipeline, or type/unit boundary (A → B → C, "only here does X become Y")                    | pictorial SVG with the boundary marked (rail line, funnel, gates…)    |
+     | describes states/modes and what moves between them (first fix, retries, gates, pause/resume)                   | pictorial SVG of the states as stations/scenes with labeled moves     |
      | makes a quantitative claim ("grows with", "~7 digits", "jitters by metres", numbers a reader must reconstruct) | static SVG chart of the real function/values, `VizFigure` with `data` |
      | explains a spatial or geometric idea (mesh vs ray-cast, coordinate frames, layouts)                            | bespoke schematic SVG, no data table                                  |
      | compares two approaches side by side                                                                           | two-panel SVG or `Comparison`                                         |

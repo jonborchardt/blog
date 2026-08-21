@@ -30,7 +30,7 @@ A statically generated technical blog (Astro 7 + React islands + MDX + Tailwind/
 - Posts live in `src/content/posts/<dir>/index.mdx`. Entry id = `<dir>`; slug = `slug` frontmatter or `<dir>`. Slugs are kebab-case. Scaffold with `npm run new-post -- <slug> …` (validates slug/series/tags, computes `seriesOrder`, always `draft: true`).
 - Shared MDX primitives (Callout, Figure, Tabs, …) are catalogued in `src/components/blog/README.md`; use them instead of ad-hoc markup.
 - Internal links in MDX are root-relative (`/some-post/`, `/all-posts/`); the build prefixes the base.
-- Diagrams: `mermaid` fences; math: `$`/`$$` (remark-math). Both render at build time (Mermaid needs Chromium: `npx playwright install chromium`).
+- Diagrams: hand-drawn pictorial SVGs colocated with the post, rendered inline and wrapped in `VizFigure` (design language + verification in skill `create-visual`). **Never `mermaid` fences** — the build does not render them. Math: `$`/`$$` (remark-math), rendered at build time.
 - Post-specific assets and components stay in the post directory (`./components/*.tsx`, `./*.svg`). Do not promote them to `src/components/blog/` unless reused by 2+ posts.
 - Frontmatter schema: `src/content.config.ts`. `series` must be a key of `src/config/series.ts`; `tags` must be keys of `src/config/tags.ts`. Add to the registry first, then use.
 - `seriesOrder` requires `series`; when adding to a series without an explicit order use `max(existing) + 1`.

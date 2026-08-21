@@ -310,23 +310,7 @@
   text-decoration: var(--shiki-dark-text-decoration) !important;
 }
 
-/* Build-time diagrams (rehype-mermaid) and math (KaTeX). */
-/* ponytail: single neutral Mermaid render + invert filter for dark mode; upgrade to per-theme
-   dual render only if diagram colours start to matter. */
-.dark svg[id^="mermaid"] {
-  filter: invert(0.88) hue-rotate(180deg);
-}
-svg[id^="mermaid"] {
-  max-width: 100%;
-  height: auto;
-  margin-inline: auto;
-}
-.prose :where(pre.mermaid, .mermaid-wrapper):not(:where(.not-prose *)) {
-  overflow-x: auto;
-  background: none;
-  border: 0;
-  padding: 0;
-}
+/* Build-time math (KaTeX). */
 .katex-display {
   overflow-x: auto;
   overflow-y: hidden;

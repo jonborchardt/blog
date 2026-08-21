@@ -9,7 +9,6 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import { rehypeHeadingIds, unified } from "@astrojs/markdown-remark";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
-import rehypeMermaid from "rehype-mermaid";
 import { checkDist } from "./src/integrations/check-dist.ts";
 import { adminPlugin } from "./src/dev/admin-plugin.ts";
 
@@ -70,35 +69,18 @@ export default defineConfig({
   image: { layout: "constrained", responsiveStyles: true },
   markdown: {
     // High-contrast pair: the default github-light orange (#e36209) fails WCAG AA on white.
-    syntaxHighlight: { type: "shiki", excludeLangs: ["mermaid", "math"] },
+    syntaxHighlight: { type: "shiki", excludeLangs: ["math"] },
     shikiConfig: {
       themes: { light: "github-light-high-contrast", dark: "github-dark-high-contrast" },
     },
     processor: unified({
-      // Math ($ / $$) and Mermaid fences render at build time to static HTML/SVG. Zero client JS.
+      // Math ($ / $$) renders at build time to static HTML. Zero client JS.
       remarkPlugins: [remarkMath],
       rehypePlugins: [
         // Astro adds heading ids after user plugins by default; run it first so anchors can link.
         rehypeHeadingIds,
         [rehypeBaseLinks, { base: BASE }],
         rehypeKatex,
-        [
-          rehypeMermaid,
-          {
-            strategy: "inline-svg",
-            mermaidConfig: {
-              theme: "neutral",
-              // Same stack as the site so build-time text measurement matches what renders.
-              fontFamily: "ui-sans-serif, system-ui, sans-serif",
-              // Compact: prose-sized text and tight spacing. Mermaid's defaults (16px, 50px gaps,
-              // 15px node padding) make even a five-box diagram fill a screen. The flowchart block
-              // also drives stateDiagram-v2 (both use the unified dagre layout).
-              themeVariables: { fontSize: "14px" },
-              flowchart: { nodeSpacing: 24, rankSpacing: 28, padding: 8, diagramPadding: 8 },
-              state: { padding: 6 },
-            },
-          },
-        ],
         [
           rehypeAutolinkHeadings,
           {
