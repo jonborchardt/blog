@@ -21,6 +21,9 @@ import sweep0 from "./sweep-0-rest.png";
 import sweep1 from "./sweep-1.png";
 import sweep2 from "./sweep-2.png";
 import sweep3 from "./sweep-3.png";
+import sweepVideo from "./rotations-sweep.webm";
+import SweepDemo from "./components/SweepDemo.astro";
+import FrameScrubber from "./components/FrameScrubber.astro";
 
 In 2013 I was the only UI developer at PrecisionDemand, a TV ad-tech startup, which meant every
 chart our customers looked at was a chart I had put there. Most of them were not mine. They were
@@ -236,6 +239,67 @@ while the window closes around them:
 If you want to feel this rather than read about it, the dc.js homepage still hosts the canonical
 public version of the same interaction model: [dc.js](https://dc-js.github.io/dc.js/). Click a slice
 or sweep a timeline there and every other chart on the page follows.
+
+## Interlude: four ways to show you a sweep
+
+I am not happy with any of my attempts to put this interaction on a page, so this section is honest
+about being an experiment: the same sweep, presented four ways. One of them will survive a future
+edit; the others will not.
+
+**Option 1** is what you just scrolled through — captured frames with captions. It needs no
+JavaScript and it reads in RSS, and it is also exactly the thing this whole post complains about:
+describing motion instead of showing it.
+
+**Option 2** is a recording. This is the real `rotationExample.html`, driven this month — the brush
+window drawn, then grabbed and slid back and forth while every chart follows:
+
+<Figure caption="The sweep, recorded: the brush is drawn across the strip and then dragged, and the focus chart, network ranking, histograms and county map all refilter while the button is down." width="wide">
+  <video
+    src={sweepVideo}
+    controls
+    muted
+    playsinline
+    preload="metadata"
+    poster={sweep0.src}
+    width="1280"
+    height="860"
+    aria-label="Screen recording of the rotations dashboard: a brush window is drawn on the timeline strip and dragged left and right; the spend line rescales, the network ranking reorders, the commission histogram collapses and spreads, and the county-map circles move during the drag"></video>
+</Figure>
+
+**Option 3** is the real thing, rebuilt small. Not a recording, and not the 2013 code — it is
+crossfilter and dc.js, the same libraries at their current versions, running in this page over two
+thousand synthetic rotation buys. Drag across the lower strip; the count above the charts is
+crossfilter doing set intersection under your cursor:
+
+<SweepDemo />
+
+**Option 4** keeps the captured pixels but gives you back the gesture: the four frames from option
+1 under a slider.
+
+<FrameScrubber
+  frames={[
+    {
+      src: sweep0.src,
+      label: "At rest: 2010 to 2013, HIST leads.",
+      alt: "A crossfilter dashboard showing rotation purchases from 2010 to 2013, an unfiltered context strip below it, and a ranked network list led by HIST at 7,494,926.60",
+    },
+    {
+      src: sweep1.src,
+      label: "A narrow winter window: GALA leads.",
+      alt: "The same dashboard with a narrow drag window over late 2010 to early 2011, the network list led by GALA at 359,290.00",
+    },
+    {
+      src: sweep2.src,
+      label: "Nine months: FNEW takes the lead.",
+      alt: "The same dashboard with the window widened to roughly November 2010 through August 2011, led by FNEW at 714,225.00",
+    },
+    {
+      src: sweep3.src,
+      label: "Nineteen months: FNEW 2,881,495.00.",
+      alt: "The same dashboard with the window covering roughly November 2010 through June 2012, led by FNEW at 2,881,495.00 and HIST second",
+    },
+  ]}
+/>
 
 ## What it turned into
 

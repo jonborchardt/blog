@@ -1,0 +1,187 @@
+---
+/**
+ * SweepDemo — candidate presentation for "the sweep": the real crossfilter + dc.js
+ * focus/range interaction, rebuilt small over synthetic data, running in the page.
+ * Client-only; the <noscript> and surrounding prose carry the content without JS.
+ */
+---
+
+<figure class="figure figure-wide sweep-demo my-8">
+  <div class="sweep-demo-head">
+    <span data-sd-count aria-live="polite">loading the demo…</span>
+    <button type="button" data-sd-reset>reset</button>
+  </div>
+  <div data-sd-focus></div>
+  <div data-sd-range></div>
+  <div data-sd-rows></div>
+  <noscript
+    >This live demo needs JavaScript; the captured frames above show the same interaction.</noscript
+  >
+  <figcaption class="text-muted-foreground mt-3 text-center text-sm">
+    Crossfilter and dc.js — the same libraries, current versions — over 2,000 synthetic rotation
+    buys. Drag across the lower strip and watch the line rescale and the network ranking reorder
+    while the mouse is still down. Every number is generated; none of it is client data.
+  </figcaption>
+</figure>
+
+<style is:global>
+  .sweep-demo-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: var(--text-sm);
+    color: var(--color-muted-foreground);
+    margin-bottom: 0.5rem;
+  }
+  .sweep-demo-head button {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 0.125rem 0.625rem;
+    min-height: 24px;
+    cursor: pointer;
+  }
+  .sweep-demo-head button:hover {
+    background: var(--color-accent);
+  }
+  .sweep-demo svg {
+    max-width: 100%;
+    height: auto;
+  }
+  .sweep-demo .dc-chart text {
+    fill: var(--color-muted-foreground);
+  }
+  .sweep-demo .dc-chart .axis path,
+  .sweep-demo .dc-chart .axis line {
+    stroke: var(--color-border);
+  }
+  .sweep-demo .dc-chart .grid-line line {
+    stroke: var(--color-border);
+    opacity: 0.5;
+  }
+  .sweep-demo .dc-chart .line {
+    stroke: var(--color-primary);
+  }
+  .sweep-demo .dc-chart .area {
+    fill: var(--color-primary);
+    opacity: 0.15;
+  }
+  .sweep-demo .dc-chart rect.bar {
+    fill: var(--color-primary);
+  }
+  .sweep-demo .dc-chart .row rect {
+    fill: var(--color-primary);
+    opacity: 0.85;
+  }
+  .sweep-demo .dc-chart .row text {
+    fill: var(--color-primary-foreground);
+  }
+  .sweep-demo .dc-chart .brush .selection {
+    fill: var(--color-primary);
+    fill-opacity: 0.15;
+    stroke: var(--color-primary);
+  }
+</style>
+
+<script>
+  import crossfilter from "crossfilter2";
+  import * as d3 from "d3";
+  import * as dc from "dc";
+  import "dc/dist/style/dc.css";
+
+  const root = document.querySelector(".sweep-demo");
+  if (root) {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      dc.config.disableTransitions = true;
+    }
+
+    // deterministic synthetic data — mulberry32, fixed seed
+    const rand = ((a: number) => () => {
+      a |= 0;
+      a = (a + 0x6d2b79f5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    })(20130814);
+
+    const networks = ["HIST", "FNEW", "ESPN", "MSNB", "AMC", "SPK", "CNN", "SYFY"];
+    const start = new Date(2010, 7, 1);
+    const rows: { d: Date; n: string; s: number }[] = [];
+    for (let i = 0; i < 2000; i++) {
+      const week = Math.floor(rand() * 156);
+      const d = new Date(start.getTime() + week * 7 * 86400000);
+      const seasonal = 1 + 0.9 * Math.max(0, Math.sin((week / 156) * Math.PI * 4 - 1.2));
+      const n = networks[Math.floor(rand() * rand() * networks.length)] ?? "HIST";
+      const s = Math.round((rand() ** 2 * 90000 + 4000) * seasonal * (1 + week / 156));
+      rows.push({ d, n, s });
+    }
+
+    const ndx = crossfilter(rows);
+    const all = ndx.groupAll();
+    const dateDim = ndx.dimension((r) => d3.timeMonth(r.d));
+    const netDim = ndx.dimension((r) => r.n);
+    const spendByMonth = dateDim.group().reduceSum((r) => r.s);
+    const spendByNet = netDim.group().reduceSum((r) => r.s);
+
+    const w = Math.min(root.clientWidth || 640, 896);
+    const domain: [Date, Date] = [new Date(2010, 7, 1), new Date(2013, 8, 1)];
+    const money = (v: number) => `$${(v / 1e6).toFixed(1)}MM`;
+
+    const focus = new dc.LineChart(root.querySelector("[data-sd-focus]"));
+    const range = new dc.BarChart(root.querySelector("[data-sd-range]"));
+    const nets = new dc.RowChart(root.querySelector("[data-sd-rows]"));
+
+    range
+      .width(w)
+      .height(72)
+      .margins({ top: 4, right: 16, bottom: 22, left: 64 })
+      .dimension(dateDim)
+      .group(spendByMonth)
+      .x(d3.scaleTime().domain(domain))
+      .xUnits(d3.timeMonths)
+      .round(d3.timeMonth.round)
+      .alwaysUseRounding(true)
+      .elasticY(true)
+      .useViewBoxResizing(true);
+    range.yAxis().ticks(0);
+
+    focus
+      .width(w)
+      .height(220)
+      .margins({ top: 8, right: 16, bottom: 24, left: 64 })
+      .dimension(dateDim)
+      .group(spendByMonth)
+      .x(d3.scaleTime().domain(domain))
+      .xUnits(d3.timeMonths)
+      .renderArea(true)
+      .elasticY(true)
+      .brushOn(false)
+      .rangeChart(range)
+      .useViewBoxResizing(true);
+    focus.yAxis().ticks(5).tickFormat(money);
+
+    nets
+      .width(w)
+      .height(230)
+      .margins({ top: 8, right: 16, bottom: 24, left: 8 })
+      .dimension(netDim)
+      .group(spendByNet)
+      .elasticX(true)
+      .useViewBoxResizing(true);
+    nets.xAxis().ticks(4).tickFormat(money);
+
+    const count = root.querySelector("[data-sd-count]");
+    const renderCount = () => {
+      if (count)
+        count.textContent = `${Number(all.value()).toLocaleString()} of ${rows.length.toLocaleString()} buys selected`;
+    };
+    for (const c of [focus, range, nets]) c.on("filtered", () => renderCount());
+
+    root.querySelector("[data-sd-reset]")?.addEventListener("click", () => {
+      dc.filterAll();
+      dc.redrawAll();
+    });
+
+    dc.renderAll();
+    renderCount();
+  }
+</script>

@@ -1,0 +1,74 @@
+---
+/**
+ * FrameScrubber — candidate presentation for "the sweep": the captured frames from
+ * the screenshot sequence, but under a slider, so the gesture belongs to the reader.
+ * No dependencies; degrades to showing the first frame.
+ */
+interface Props {
+  frames: { src: string; alt: string; label: string }[];
+}
+const { frames } = Astro.props;
+const first = frames[0] ?? { src: "", alt: "", label: "" };
+---
+
+<figure class="figure figure-wide frame-scrub my-8">
+  <div class="frame-scrub-stage">
+    {
+      frames.map((f, i) => (
+        <img
+          src={f.src}
+          alt={f.alt}
+          width="1400"
+          height="906"
+          loading="lazy"
+          data-fs-frame={i}
+          data-label={f.label}
+          class:list={[i !== 0 && "fs-hidden"]}
+        />
+      ))
+    }
+  </div>
+  <input
+    type="range"
+    min="0"
+    max={frames.length - 1}
+    step="1"
+    value="0"
+    data-fs-input
+    aria-label="Scrub through the captured sweep frames"
+    aria-valuetext={first.label}
+  />
+  <figcaption class="text-muted-foreground mt-3 text-center text-sm">
+    Drag the slider — the same captured frames, but under your finger.
+    <span data-fs-label>{first.label}</span>
+  </figcaption>
+</figure>
+
+<style>
+  .fs-hidden {
+    display: none;
+  }
+  .frame-scrub input[type="range"] {
+    display: block;
+    width: 100%;
+    margin-top: 0.5rem;
+    accent-color: var(--color-primary);
+    min-height: 24px;
+    cursor: ew-resize;
+  }
+</style>
+
+<script>
+  for (const root of document.querySelectorAll(".frame-scrub")) {
+    const input = root.querySelector("[data-fs-input]") as HTMLInputElement | null;
+    const label = root.querySelector("[data-fs-label]");
+    const frames = [...root.querySelectorAll("[data-fs-frame]")];
+    input?.addEventListener("input", () => {
+      const i = Number(input.value);
+      frames.forEach((f, j) => f.classList.toggle("fs-hidden", j !== i));
+      const text = frames[i]?.getAttribute("data-label") ?? "";
+      input.setAttribute("aria-valuetext", text);
+      if (label) label.textContent = text;
+    });
+  }
+</script>
