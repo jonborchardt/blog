@@ -1,0 +1,105 @@
+﻿#circle circle {
+  fill: none;
+  pointer-events: all;
+}
+.group path {
+  fill-opacity: .5;
+}
+path.chord {
+  stroke: #000;
+  stroke-width: .25px;
+}
+#circle:hover path.fade {
+  display: none;
+}
+#wrapper {
+  min-height: 100%;
+  position: relative;
+}
+#wrapper #leftFilterArea {
+  position: fixed;
+  width: 190px;
+  background-color: #e6e6e6;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  top: 50px;
+  bottom: 0px;
+  padding: 5px;
+  border-left: 1px solid gray;
+}
+#wrapper #leftFilterArea .dc-chart .title,
+#wrapper #leftFilterArea .dc-chart .filter {
+  margin-left: 20px;
+  margin-right: 6px;
+}
+#wrapper #mainArea {
+  position: fixed;
+  margin-left: 190px;
+  top: 50px;
+  bottom: 0px;
+  width: 850px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding: 0 25px 5px 25px;
+  border-right: 1px solid gray;
+}
+#wrapper #bottomFilterArea {
+  width: 1040px;
+  height: 0px;
+  position: fixed;
+  bottom: 0;
+  background-color: #e6e6e6;
+  padding: 0 5px 5px 5px;
+  border: 1px solid gray;
+}
+#wrapper #bottomFilterArea .dc-chart {
+  margin-top: 0;
+}
+#wrapper #bottomFilterArea .dc-chart .title {
+  margin-left: 245px;
+  margin-right: 6px;
+}
+.dc-chart g.state {
+  pointer-events: none;
+}
+.gridStyle {
+  border: 1px solid #d4d4d4;
+  height: 567px;
+  max-width: 900px;
+}
+.textRight {
+  text-align: right;
+}
+.textCenter {
+  text-align: center;
+}
+table {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #666;
+  font-size: 12px;
+  background: #eaebec;
+  margin: 10px;
+  -moz-box-shadow: 0 1px 2px #d1d1d1;
+  -webkit-box-shadow: 0 1px 2px #d1d1d1;
+  box-shadow: 0 1px 2px #d1d1d1;
+  width: 765px;
+}
+table tr {
+  text-align: left;
+  padding-left: 20px;
+}
+table td:first-child {
+  text-align: left;
+  padding-left: 20px;
+  font-weight: bold;
+  width: 170px;
+}
+table td:last-child {
+  padding-right: 20px;
+}
+table td {
+  padding: 3px;
+  background: #fafafa;
+  background: -webkit-gradient(linear, left top, left bottom, from(#fbfbfb), to(#fafafa));
+  background: -moz-linear-gradient(top, #fbfbfb, #fafafa);
+}
