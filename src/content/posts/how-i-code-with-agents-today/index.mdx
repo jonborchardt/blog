@@ -11,30 +11,13 @@ draft: true
 
 import Details from "@/components/blog/Details.astro";
 import ListGrid from "@/components/blog/ListGrid.astro";
+import ProcessMarker from "./components/ProcessMarker.astro";
 
 ## TL;DR
 
 Agentic coding isn't "write a giant prompt and hope." It's an engineering process for moving ambiguity out of my head and into code, validation, plans, and repository rules, in roughly that order:
 
-```text
-idea
-  ↓
-reason about product + architecture
-  ↓
-bootstrap prompt
-  ↓
-working repository scaffold
-  ↓
-repository becomes source of truth
-  ↓
-repository-aware implementation plan
-  ↓
-plan review / steering
-  ↓
-agent execution
-  ↓
-validate the resulting system
-```
+<ProcessMarker step={1} />
 
 The main shift isn't that Claude writes more code. It's that I'm designing a system in which future agent sessions are less likely to do the wrong thing, because the repo itself pushes back. The process has warts: at one point Claude ignored a stop instruction and implemented all eleven plans in one go. That's in here too.
 
@@ -45,6 +28,8 @@ The rest of this post walks that process end to end on one real case study: the 
 The concrete example is a new static technical blog called **Always Shippable**, the one you are reading. The app is intentionally modest; the workflow is the interesting part. The core constraints were a GitHub Pages project site served under `/blog/`, static pages, MDX posts, React only for interactive islands, search with no external service, a local-only admin, and no analytics, comments, CMS, or backend, all while meeting accessibility, SEO, performance, and responsive-behavior targets. That is not a huge application, but routing, static generation, MDX, React islands, client-side search, SEO, accessibility, dev-only admin tooling, and GitHub Pages deployment constraints are enough moving parts to exercise the process.
 
 The blog was just a convenient product. The real object being built was an agent-maintainable codebase, and agentic coding raises the value of executable constraints. "Agent-maintainable" meant explicit contracts, typed schemas, deterministic file organization, validation, reusable primitives, build-time failures for invalid states, straightforward conventions, low ambiguity, and clear instructions for future agents. Instead of relying on future agents to remember prose instructions, I want the repo itself to reject bad states. Each human convention should become a repository contract, and each contract should become a machine-checkable invariant. In practice that means an unknown tag is a build failure, a broken internal link is a validation failure, and admin content in `dist/` is a build failure.
+
+<ProcessMarker step={2} />
 
 ## Step 1: I talked to ChatGPT before Claude
 
@@ -330,6 +315,8 @@ src/content/posts/
 ```
 
 The important component rule is not to force bespoke MDX React components into the global reusable library. Reusable article primitives live in `src/components/blog/`, but a weird visualization that belongs to one article stays with that article, and if it later proves generally useful it gets promoted. This matters for agent-authored content specifically. Agents are likely to create unusual diagrams, visualizations, and demos for specific posts, and if every one-off artifact lands in the shared component library, the design system becomes a junk drawer. Post-local components let agents be creative without degrading the global architecture.
+
+<ProcessMarker step={3} />
 
 ## Prompt 1: build the skeleton, not the product
 
@@ -1238,6 +1225,8 @@ Stop once the scaffold is sound, runnable, documented, and verified.
 
 Checkable acceptance criteria cause the agent to verify; vague quality goals cause it to guess. This applies to any prompt that hands work to an agent. From the agent's side, "build me a great blog" forces it to silently make dozens of decisions and hope, whereas "MDX must statically render, a React island must hydrate, URLs must work under `/blog/`, the build must pass" gives it checkable truths. It can run commands and know whether it is done. The phrasing I keep coming back to is that "what must be true" is checkable and "build something great" is not.
 
+<ProcessMarker step={4} />
+
 ## Claude's first action was not coding
 
 Claude first inspected the environment, versions, package compatibility, and git state. A good agent workflow forces inspection of the live environment before anything else. It started with the boring commands:
@@ -1303,6 +1292,8 @@ The reasons are what matter. "Skipped jsx-a11y" is ambiguous. "Skipped jsx-a11y 
 
 </Details>
 
+<ProcessMarker step={5} />
+
 ## The second prompt changed the source of truth
 
 After the scaffold existed, I stopped treating the prompt as authoritative and made the repository authoritative. Prompt authority decays; repo authority increases. Before the scaffold exists, the product conversation plus the architectural prompt is the source of truth. After it exists, the repository is. The product intent still matters, but now the next agent must reconcile that intent with real files, real tests, real dependencies, and real constraints. The key instruction in Prompt 2 made this explicit:
@@ -1326,6 +1317,8 @@ Identify:
 A clean inspection pass found silent defects that green tests did not catch. `@tailwindcss/typography` was installed but not registered, so no `.prose` CSS existed. Shiki dual-theme was configured, but the dark-mode CSS hook did not exist. UTC frontmatter dates rendered one day early in local time. And Playwright was testing the wrong server because a stale dev server had reused the port.
 
 This worked because the fresh session had no memory of building the scaffold, an explicit instruction to distrust it, permission to inspect the real repo, and a mandate to put foundational fixes early. Those issues became **Plan 1: Foundation fixes** instead of getting buried under feature work. Fresh sessions are not a formality; they are a review mechanism that reduces the chance the agent rationalizes or overlooks its own prior work. The scaffold session had shipped all four defects, not because it was careless but because each one was a silent gap: everything green, output subtly wrong.
+
+<ProcessMarker step={6} />
 
 ## Prompt 2 produced plans, not code
 
@@ -2152,6 +2145,8 @@ Anything future agents need has to move out of ephemeral chat context and into d
 
 The fix was to add a condensed product spec into the plan document itself, plus a subagent briefing rule that subagent prompts must quote, not summarize, the global constraints, execution notes, product spec, and full plan text. Why quote instead of summarize? Because summarization is where invariants die.
 
+<ProcessMarker step={7} />
+
 ## I reviewed the plan with ChatGPT
 
 Before running the plan, I brought it back to ChatGPT for an independent review, as a reviewer and not as an infinite redesign loop. The review kept the plan intact and added execution guardrails: one plan at a time, each independently shippable, no opportunistic refactors, validation against a known production preview, one commit per plan. A second model is useful for catching overengineering, detecting architecture drift, challenging speculative fallbacks, strengthening task boundaries, and checking sequencing. But once the repository-aware plan is coherent, wholesale replanning is usually counterproductive. The full note is in the transcript below.
@@ -2178,6 +2173,8 @@ Before running the plan, I brought it back to ChatGPT for an independent review,
 > Start with Plan 1 only. Stop after Plan 1 is implemented, verified, and committed. Summarize what changed and any implications for the remaining plans.
 
 </Details>
+
+<ProcessMarker step={8} />
 
 ## Execution should have been one plan at a time
 
@@ -2248,6 +2245,8 @@ Stop after Plan 1 is implemented, validated, committed, and summarized.
 > > Implement exactly the requested task. Completing adjacent planned work is a failure even if that work is correct.
 
 </Details>
+
+<ProcessMarker step={9} />
 
 ## The final implementation was strong
 

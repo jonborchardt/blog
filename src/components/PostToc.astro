@@ -51,6 +51,10 @@ const { headings } = Astro.props;
      bottom gap) and scroll inside the panel instead of running off-screen. */
   .toc-panel {
     max-height: calc(100vh - 2rem);
+    overflow-y: hidden; /* collapsed: no scrollbar; the script keeps the current bar in view */
+  }
+  #post-toc:hover .toc-panel,
+  #post-toc:focus-within .toc-panel {
     overflow-y: auto;
   }
   .toc-bar {
@@ -93,13 +97,26 @@ const { headings } = Astro.props;
   const targets = links
     .map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1))))
     .filter((el): el is HTMLElement => el !== null);
-  if (targets.length) {
-    const setCurrent = (id: string) =>
-      links.forEach((a) =>
-        a.hash === `#${id}`
-          ? a.setAttribute("aria-current", "true")
-          : a.removeAttribute("aria-current"),
-      );
+  const panel = document.querySelector<HTMLElement>("#post-toc .toc-panel");
+  if (targets.length && panel) {
+    let currentId = "";
+    const setCurrent = (id: string) => {
+      if (id === currentId) return;
+      currentId = id;
+      for (const a of links) {
+        if (a.hash !== `#${id}`) {
+          a.removeAttribute("aria-current");
+          continue;
+        }
+        a.setAttribute("aria-current", "true");
+        // Keep the current link inside the panel's own scroll box (panel is the offsetParent).
+        const top = a.offsetTop;
+        const bottom = top + a.offsetHeight;
+        if (top < panel.scrollTop) panel.scrollTop = top;
+        else if (bottom > panel.scrollTop + panel.clientHeight)
+          panel.scrollTop = bottom - panel.clientHeight;
+      }
+    };
     // Current = last heading whose top has passed ~30% of the viewport.
     const update = () => {
       let current = targets[0]!;
