@@ -21,9 +21,9 @@ import ExperimentCellViz from "./experiment-cell-viz.svg";
 import TheoryTestViz from "./theory-test-viz.svg";
 import ExperimentRoundViz from "./experiment-round-viz.svg";
 
-Every year I sit down and answer one question: **what's the earliest age I can stop working without ever running out of money?** Instead of a spreadsheet, I have retire-sim, a small deterministic historical-replay simulator that's become something more interesting: a lab, with a lab protocol, and an AI lab assistant that follows it. (The repo is private, so no link — the code described below is real, just not public.)
+Every year I sit down and answer one question: **what's the earliest age I can stop working without ever running out of money?** Instead of a spreadsheet, I have retire-sim, a small deterministic historical-replay simulator that's become something more interesting: a lab, with a lab protocol, and an AI lab assistant that follows it. (The repo is private, so no link; the code described below is real, just not public.)
 
-<Figure caption="An earlier season's results grid. The 'deep guardrail 10y/25%' row beating the honest guardrail is exactly the dishonest-guardrail trap described below — that row, the micro-cap tilt, and the golden-butterfly rows have since been deleted from the committed catalog (the bans are now enforced by the validator), so a fresh clone won't show those rows.">
+<Figure caption="An earlier season's results grid. The 'deep guardrail 10y/25%' row beating the honest guardrail is exactly the guardrail trap described below — that row, the micro-cap tilt, and the golden-butterfly rows have since been deleted from the committed catalog (the bans are now enforced by the validator), so a fresh clone won't show those rows.">
   ![Results grid: strategy rows by retirement-age columns, each cell with survival and terminal wealth](./strategy-grid.png)
 
 </Figure>
@@ -32,7 +32,7 @@ Every year I sit down and answer one question: **what's the earliest age I can s
 
 Most retirement calculators sample random returns each year. That quietly erases the thing that actually kills retirements: _sequence-of-returns risk_, bad years arriving in the wrong order, right when you start withdrawing.
 
-retire-sim instead replays **every actual historical start year since 1928** (Damodaran's yearly dataset: inflation plus seven asset classes: S&P 500, bottom-decile US stocks, T-bills, Treasuries, corporate bonds, home prices, gold, plus a silver column added later from a separate source). Retiring "into 1966" is one complete run, lived year by year in the order it really happened. 98 start years, 98 runs, exhaustively, not a random sample. Only the earlier half have a full lifetime of real data behind them: a run that outlives the dataset finishes on the dataset's own compound-growth year rather than wrapping around. Bad decades stay bad decades.
+retire-sim instead replays **every actual historical start year since 1928** (Damodaran's yearly data: inflation plus seven asset classes, from the S&P 500 and T-bills to home prices and gold, plus a silver column added later from a separate source). Retiring "into 1966" is one complete run, lived year by year in the order it really happened. 98 start years, 98 runs, exhaustively, not a random sample. I call each start year a cohort. Only the earlier half have a full lifetime of real data behind them: a run that outlives the dataset finishes on the dataset's own compound-growth year rather than wrapping around. Bad decades stay bad decades.
 
 ## A goal most tools don't have: never hit zero
 
@@ -44,7 +44,7 @@ Terminal wealth is explicitly _sacrificial_: dying with a giant pile means I wor
 
 ## Experiments are just JSON
 
-Every strategy idea, an allocation, a glide path anchored to years-from-retirement, an "enough" threshold, a spending guardrail, is a small labeled JSON entry:
+Every strategy idea (an allocation, a glide path, an "enough" threshold, a spending guardrail) is a small labeled JSON entry:
 
 ```json
 {
@@ -82,9 +82,9 @@ The single most useful move was diagnosing the **failure mode** before picking s
 - The "enough" ratchet was free (same survival, way less pointless terminal wealth), but only when buffered; set the threshold too low and paths latch into a mix that can't carry the remaining decades.
 - The final winning shape moved my earliest acceptable-risk retirement age about **two years earlier** than the static baseline.
 
-What each piece buys, measured one at a time on the way to the final plan:
+What each piece buys, measured one at a time at the frontier age (the earliest retirement age that clears the 85% bar) on the way to the final plan:
 
-<Figure caption="The pieces ladder: what each decision adds, in success percentage across all 98 historical start years at the frontier retirement age. The spending guardrail is worth about 2 points, holding gold at all is worth 12, timing it into the window is worth another 8, and the enough ratchet is free. The taper alone clears the 85% bar — no piece is load-bearing for the frontier except the gold window itself.">
+<Figure caption="The pieces ladder: what each decision adds, in success percentage across all 98 historical start years at the frontier retirement age. The spending guardrail is worth about 2 points, holding gold at all is worth 12, timing it into the window is worth another 8, and the enough ratchet is free. The taper alone clears the 85% bar — no piece is essential for the frontier except the gold window itself.">
   <VizFigure
     name="Success rate gained by each piece of the plan"
     summary="A waterfall from a 76.5% baseline of 100% stock, up 2 points for the spending guardrail, 12 points for gold as a static asset, and 8 points for the window timing, ending at 99.0% for the full plan; the enough ratchet adds zero. A dashed line marks the 85% target and a marker shows the taper alone reaches 94.9%."
@@ -108,7 +108,11 @@ What each piece buys, measured one at a time on the way to the final plan:
 
 ## Fuck. Gold. Really?
 
-I did not want this result. But the failing cohorts were inflation cohorts, and the asset that rescues those is gold. To be clear, that means gold exposure through an ETF or fund tracking the metal's price, not bars in a safe. A windowed allocation from ~6 years before retirement through ~9 years after, a little over a fifth of the portfolio, then stepped back down to a permanent ~10%: never to zero. Better survival _and_ better medians than the stock/bond baseline. The dose-response curve peaks broadly between a fifth and a quarter; more gold surrenders the good sequences, gold held during accumulation is dead weight. And the versions that ended the hedge at zero re-broke the exact inflation cohorts the hedge exists for, which is why the window lands on a shelf instead of the floor.
+I didn't want this result. But the failing cohorts were inflation cohorts, and the asset that rescues those is gold.
+
+To be clear, that means gold exposure through an ETF or fund tracking the metal's price, not bars in a safe. A windowed allocation from ~6 years before retirement through ~9 years after, a little over a fifth of the portfolio, then stepped back down to a permanent ~10%: never to zero. Better survival _and_ better medians than the stock/bond baseline.
+
+The dose-response curve peaks broadly between a fifth and a quarter; more gold surrenders the good sequences, gold held during accumulation is dead weight. And the versions that ended the hedge at zero re-broke the exact inflation cohorts the hedge exists for, which is why the window lands on a shelf instead of the floor.
 
 <Figure caption="The shape of the winning gold hedge: nothing during accumulation, 22% of the portfolio from six years before retirement through the ninth year after, then a permanent 10%.">
   <VizFigure
@@ -119,9 +123,9 @@ I did not want this result. But the failing cohorts were inflation cohorts, and 
   </VizFigure>
 </Figure>
 
-The obvious objection is that gold's backtest is a peg artifact: gold's market price was fixed at $35/oz before 1971, so the dataset has no meaningful gold history before then. That's what the silver column is for. Mirroring the plan with silver — which had a real market price through the years gold was pegged — reproduces the window's effect and even beats the gold plan at face value. But silver's frontier collapses under a −2%/yr return drag while gold's survives its own, so asymmetry of error keeps gold.
+The obvious objection is that gold's backtest is a peg artifact: gold's market price was fixed at $35/oz before 1971, so the dataset has no meaningful gold history before then. That's what the silver column is for. Mirroring the plan with silver (which had a real market price through the years gold was pegged) reproduces the window's effect and even beats the gold plan at face value. But silver's frontier collapses under a −2%/yr return drag while gold's survives its own, so asymmetry of error keeps gold.
 
-The bigger lesson: **diversification is not the edge, cohort-matching is.** An "own every asset class" basket beat the two-asset baseline but lost badly to the targeted hedge, because it omitted the one asset that cures the specific years that break _this_ plan. And the sim keeps you honest in the other direction too: a bottom-decile micro-cap tilt dominated everything on paper, until we noticed its edge came from pre-1981 data with unbuyable spreads and a size premium that faded the moment it was published. Backtests you can't actually purchase don't count.
+The bigger lesson: **diversification is not the edge, cohort-matching is.** An "own every asset class" basket beat the two-asset baseline but lost badly to the targeted hedge, because it omitted the one asset that cures the specific years that break _this_ plan. And the sim cuts the other way too: a bottom-decile micro-cap tilt dominated everything on paper, until we noticed its edge came from pre-1981 data with unbuyable spreads and a size premium that faded the moment it was published. Backtests you can't actually purchase don't count.
 
 ## The theory-test skill: YouTube gurus, meet the simulator
 
@@ -134,7 +138,7 @@ This is my favorite part. I gave Claude Code a skill called **theory-test**: pas
   <TheoryTestViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
 </VizFigure>
 
-The verdicts live in a running scoreboard (theories.md, in that same private repo). So far: the bucket strategy lost outright, "own everything + guardrails" lost to the targeted hedge, and the tax-coordination videos were the first outside advice to beat the champion at all, though only as a sensitivity bound, since a flat-rate engine can't verify the low effective rate is actually achievable, which is exactly why it promoted tax modeling to next year's top priority. The later rounds kept the pattern: rising-equity glidepaths were right about the shape and wrong about the asset (my champion _is_ that ravine, filled with gold instead of bonds), the Golden Butterfly won every historic crisis while failing the ordinary futures, VPW's "you can't run out" turned out to be spending collapse relabeled, and even the academic case _against_ gold survived only as a caveat, not a verdict. By the end, most new theories were adjudicated entirely from rows already run, which is what happens when new advice keeps decomposing into experiments already done. The full set of verdicts is its own post: [the simulator watches retirement YouTube](/simulator-watches-retirement-youtube/).
+The verdicts live in a running scoreboard (theories.md, in that same private repo). Three verdicts so far: the bucket strategy lost outright; "own everything + guardrails" lost to the targeted hedge; and the tax-coordination videos were the first outside advice to beat the champion, though only as a sensitivity bound, since the flat-tax engine can't verify the low rate. By the end, most new theories were adjudicated entirely from rows already run, which is what happens when new advice keeps decomposing into experiments already done. The full set of verdicts is its own post: [the simulator watches retirement YouTube](/simulator-watches-retirement-youtube/).
 
 | Date    | Source                                                                                                          | Claim                                                                                                                                                 | Result                                                                                                                                                                                                                                                                                                                                                                                                       |
 | ------- | --------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -163,4 +167,8 @@ The whole thing is built to be picked up once a year: open the config tab (every
 
 ## Takeaway
 
-None of this tells you to buy gold. It tells you the method: find which historical regimes break _your_ plan, test remedies against those exact years, distrust anything your instruments can't reproduce, know your noise floor, and write down what you learned next to the data you learned it on. In the final rounds even the sim's own flattering assumptions got that treatment: each caveat — ignored taxes, rich equity valuations, gold mean-reversion, the joint model — was made runnable (taxes as a heavier withdrawal-tax scenario, the rest as permanent return drags) and priced in working years, from about zero–one for gold reversion up to about two for ignored taxes, and the plan's edge over the baseline _widens_ under identical pessimism. The honest insurance against unmodeled tails turned out to be one more working year, not a different portfolio. And it turns out this whole method is exactly the kind of thing you can teach an AI to run.
+None of this tells you to buy gold. It tells you the method: find which historical regimes break _your_ plan, test remedies against those exact years, distrust anything your instruments can't reproduce, know your noise floor, and write down what you learned next to the data you learned it on.
+
+In the final rounds the sim's own flattering assumptions got the same treatment. Each caveat (ignored taxes, rich valuations, gold mean-reversion, the joint model) was made runnable and priced in working years, from about zero to one for gold reversion up to about two for taxes, and the plan's edge over the baseline widens under the same pessimism. The insurance against unmodeled tails turned out to be one more working year, not a different portfolio.
+
+And it turns out this whole method is exactly the kind of thing you can teach an AI to run.

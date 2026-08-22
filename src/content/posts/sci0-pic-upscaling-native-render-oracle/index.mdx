@@ -35,13 +35,13 @@ import roomBurgerExterior from "./sweep-room-burger-exterior.svg";
 import roomDesert from "./sweep-room-desert.svg";
 import sweepAi from "./sweep-original-vs-ai-upscale.svg";
 
-Sierra On-Line's SCI0 engine draws backgrounds as vector commands — lines, patterns, and flood fills executed in sequence at 320x190. It works perfectly at native resolution. But render those same commands at 2x, 3x, or higher? Fills leak through hairline gaps that didn't exist at 320 pixels wide, and your pristine space bar becomes a watercolor disaster.
+Sierra On-Line's SCI0 engine draws backgrounds as vector commands: lines, patterns, and flood fills executed in sequence at 320x190. It works perfectly at native resolution. But render those same commands at 2x, 3x, or higher? Fills leak through hairline gaps that didn't exist at 320 pixels wide, and your pristine space bar becomes a watercolor disaster.
 
 This is the problem **snap-blend** solves.
 
 ## The problem
 
-SCI0 PICs aren't rasterized images — they're programs. A PIC resource is a stream of drawing commands: draw a line here, fill this region there. The fill commands depend on boundaries being watertight. At native resolution, the integer-coordinate Bresenham lines form perfect barriers.
+SCI0 PICs aren't rasterized images; they're programs. A PIC resource is a stream of drawing commands: draw a line here, fill this region there. The fill commands depend on boundaries being watertight. At native resolution, the integer-coordinate Bresenham lines form perfect barriers.
 
 ![A PIC editor listing Line commands beside the crashed-spaceship wireframe those lines draw](./pic-command-stream.png)
 
@@ -67,9 +67,7 @@ Scale the same geometry to 960x570, however, and the independently rounded midpo
 
 ![Two cyan diamonds: the native fill stays sealed, while at 3x a marked one-pixel gap lets it leak](./diamond-gap-native-vs-3x.png)
 
-Existing solutions don't help. ScummVM and SCI Companion render at native res. Pixel-art upscalers (Scale2x, hqx, xBR) operate on finished rasters — they can't fix a fill that leaked during rendering. The problem has to be solved _inside_ the renderer.
-
-Upscaling after rasterization preserves correctness, but introduces uneven line thickness and edge wobble.
+Existing solutions don't help. ScummVM and SCI Companion render at native res. Pixel-art upscalers (Scale2x, hqx, xBR) operate on finished rasters; they can't fix a fill that leaked during rendering. Upscaling after rasterization preserves correctness, but introduces uneven line thickness and edge wobble. The problem has to be solved _inside_ the renderer.
 
 <Figure caption="Original 320x190 render versus a Scale6x post-raster upscale of the same Space Quest 3 room; the sweep moves back and forth between the two." zoom>
   <img
@@ -113,7 +111,7 @@ function snapEndpoint(x, y):
     // directional cone; snap to the closest hit, else keep (x, y)
 ```
 
-Fill seeds get the mirror treatment. At scale, boundary lines are thick enough to cover a seed's coordinates, and a fill seeded on a boundary paints zero pixels — the single biggest failure class the oracle exposed. Seeds are nudged off boundaries before the fill runs.
+Fill seeds get the mirror treatment. At scale, boundary lines are thick enough to cover a seed's coordinates, and a fill seeded on a boundary paints zero pixels, the single biggest failure class the oracle exposed. Seeds are nudged off boundaries before the fill runs.
 
 ### 2. Diagonal micro-gap closure
 
@@ -170,11 +168,11 @@ for each command in picCommands:
         // undershoots are kept as-is
 ```
 
-If a fill blows far past its native-predicted area, it's a leak — the guard unwinds it mid-flood rather than letting it flood the canvas. The native render acts as an oracle supervising the upscaled render. Undershoots are tolerated: thicker upscaled lines eat fill area by construction, so a somewhat-small fill is expected physics at scale, not a leak.
+If a fill blows far past its native-predicted area, it's a leak; the guard unwinds it mid-flood rather than letting it flood the canvas. The native render acts as an oracle supervising the upscaled render. Undershoots are tolerated: thicker upscaled lines eat fill area by construction, so a somewhat-small fill is expected physics at scale, not a leak.
 
 ### 4. Native-mask fallback
 
-When a fill ends with zero pixels — rolled back by the guard, or its seed never produced one — while the native render says the region should have some, the corresponding region from the native render is nearest-neighbor-scaled and composited in. Correctness is preserved at the cost of sharpness in that region — but in practice, fallback fires rarely.
+When a fill ends with zero pixels — rolled back by the guard, or its seed never produced one — while the native render says the region should have some, the corresponding region from the native render is nearest-neighbor-scaled and composited in. Correctness is preserved at the cost of sharpness in that region, but in practice, fallback fires rarely.
 
 ```plaintext
 function blitNativeMask(scaledCanvas, nativeCanvas, fillCmd, scale):
@@ -224,9 +222,9 @@ I haven't seen this approach used in retro vector renderers before. The problem 
 
 ## Results
 
-Across the test corpus at 6x, snap-blend produced no catastrophic fill floods: escapes are caught mid-fill, rolled back, and recovered from the native mask. The flagged fills that remain are overwhelmingly small boundary-thickness undershoots, plus a handful of guarded micro-gap escapes the rollback contains. The blend pass is purely cosmetic — same correctness, nicer pixels.
+Across the test corpus at 6x, snap-blend produced no catastrophic fill floods: escapes are caught mid-fill, rolled back, and recovered from the native mask. The flagged fills that remain are overwhelmingly small boundary-thickness undershoots, plus a handful of guarded micro-gap escapes the rollback contains. The blend pass is purely cosmetic: same correctness, nicer pixels.
 
-It's the production strategy — registered as `snap-v5-blend` — for my sci.js project, a TypeScript reimplementation of the SCI0 engine focused on making Space Quest 3 playable in the browser with upscaled visuals, built on [32bitkid's `@4bitlabs` decoding libraries](https://github.com/32bitkid/sci.js).
+It's the production strategy (registered as `snap-v5-blend`) for my sci.js project, a TypeScript reimplementation of the SCI0 engine focused on making Space Quest 3 playable in the browser with upscaled visuals, built on [32bitkid's `@4bitlabs` decoding libraries](https://github.com/32bitkid/sci.js).
 
 Each comparison below sweeps between the two renders of one Space Quest 3 room; the labels in the bottom corners say which is which.
 
@@ -331,15 +329,7 @@ Each comparison below sweeps between the two renders of one Space Quest 3 room; 
 
 ## Upscaled animation overlays
 
-One practical extension is compositing higher-resolution animated elements on top of snap-blend backgrounds.
-
-Because snap-blend produces clean, stable regions, it acts as a reliable base layer. Animated sprites or effects, whether traditionally upscaled or AI-enhanced, can be overlaid without exposing the kinds of boundary artifacts that plagued the original pipeline.
-
-In motion, the eye is far more forgiving. Minor inconsistencies in sprite detail are less noticeable than structural errors in the background. As long as the underlying regions are correct, the combined result reads as coherent.
-
-This also sidesteps one of the hardest problems in AI upscaling: maintaining consistency across frames. By limiting enhancement to overlays and keeping the background deterministic, you avoid compounding temporal artifacts.
-
-The frame is a stack: the deterministic background and its masks stay exact, and only the overlay layer is free to be enhanced.
+One practical extension is compositing higher-resolution animated elements on top of snap-blend backgrounds. Because snap-blend produces clean, stable regions, it makes a reliable base layer; animated sprites, whether traditionally upscaled or AI-enhanced, composite on top as a separate overlay. In motion the eye forgives minor inconsistencies in sprite detail but not structural errors in the background, so as long as the underlying regions are correct the result reads as coherent. Keeping the background deterministic also sidesteps the hardest problem in AI upscaling, frame-to-frame consistency: enhancement is limited to the overlay, so temporal artifacts never compound.
 
 <VizFigure
   name="Deterministic base with an enhanced overlay layer"
@@ -369,7 +359,7 @@ AI upscaling looks like an obvious shortcut. Take the original 320x190 output, r
 
 That works for screenshots. It breaks down for a renderer.
 
-SCI0 backgrounds are not just images, they are structured scenes with implicit gameplay constraints. Walkable areas, object boundaries, and interaction zones all depend on the exact shape of regions.
+SCI0 backgrounds are not just images, they are structured scenes with implicit gameplay constraints. Walkable areas, object boundaries, and interaction zones all depend on the exact shape of regions. Because generative models can shift those boundaries unpredictably, AI is better treated as a constrained enhancement layer on top of a deterministic renderer.
 
 Different colors tell the engine if the avatar should be seen in front or behind them.
 
@@ -379,13 +369,11 @@ White areas block the avatar. Black areas are walkable with no trigger. Any othe
 
 ![The same room's control map: mostly white, with black walkable bands and green event-trigger patches](./control-map.png)
 
-AI upscaling works well for screenshots, but renderers require deterministic structural correctness. Walk masks, occlusion boundaries, and interaction zones depend on exact regions. Because generative models can shift those boundaries unpredictably, AI is better treated as a constrained enhancement layer on top of a deterministic renderer.
-
 ![An AI-generated scene: two red-mohawked alien guards in sunglasses facing a mustached man in a suit](./ai-upscaled-scene.png)
 
 ## The road here
 
-This was strategy v5 out of ten attempts. Strategies v1 through v4 each solved part of the problem — better line expansion, smarter gap detection — but none handled the full space of edge cases. The native render oracle was the breakthrough: instead of trying to predict where gaps would form, just render at native res first and let the result tell you what's correct. v6 through v10 explored alternatives; v10 even improved the metric slightly, but not visibly enough to earn a switch — that detour has [its own write-up](/agi-up-as-a-reference-renderer/). And one successor isn't a snap variant at all: [the anchor-graph upscaler](/omyac-upscaler-anchor-graph/), a separate paradigm that has since won the PIC visual path. `snap-v5-blend` remains the game-runtime strategy, because the anchor-graph renderer doesn't produce the priority and control layers the engine needs.
+This was strategy v5 out of ten attempts. Strategies v1 through v4 each solved part of the problem (better line expansion, smarter gap detection) but none handled the full space of edge cases. The native render oracle was the breakthrough: instead of trying to predict where gaps would form, just render at native res first and let the result tell you what's correct. v6 through v10 explored alternatives; v10 even improved the metric slightly, but not visibly enough to earn a switch; that detour has [its own write-up](/agi-up-as-a-reference-renderer/). And one successor isn't a snap variant at all: [the anchor-graph upscaler](/omyac-upscaler-anchor-graph/), a separate paradigm that has since won the PIC visual path. `snap-v5-blend` remains the game-runtime strategy, because the anchor-graph renderer doesn't produce the priority and control layers the engine needs.
 
 Sometimes the best algorithm is "do it twice (or ten times) and compare."
 

@@ -31,7 +31,7 @@ import VerdictRoutingViz from "./verdict-routing-viz.svg";
 
 ## The problem
 
-[The Why Files](https://thewhyfiles.com) is a YouTube show — AJ Gentile and his team produce long, well-researched episodes on UFOs, ancient mysteries, conspiracies, cryptids, and the kind of story that sits between "documented" and "fringe." It's good fun. More than a hundred episodes in, the show carries something the format can't show you directly: a **story across episodes**. A claim laid out firmly in one video gets walked back two videos later. A debunking in episode 80 quietly contradicts a presupposition in episode 12. A name (Bigfoot, Roswell, Project Blue Book, Tesla) keeps coming back, and the host's posture toward it shifts.
+[The Why Files](https://thewhyfiles.com) is a YouTube show; AJ Gentile and his team produce long, well-researched episodes on UFOs, ancient mysteries, conspiracies, cryptids, and the kind of story that sits between "documented" and "fringe." It's good fun. More than a hundred episodes in, the show carries something the format can't show you directly: a **story across episodes**. A claim laid out firmly in one video gets walked back two videos later. A debunking in episode 80 quietly contradicts a presupposition in episode 12. A name (Bigfoot, Roswell, Project Blue Book, Tesla) keeps coming back, and the host's posture toward it shifts.
 
 A viewer who's seen every episode carries that map in their head. Anyone else is starting from scratch.
 
@@ -47,15 +47,15 @@ The **Why Files Database** is a public, read-only research index of every public
 
 ![The entities panel: a word cloud of 246 entities coloured by type, with collapsible rows per label](./entities-panel-wordcloud.png)
 
-- Every **person, organization, place, facility, event, date, technology, book/movie, ideology** the show has talked about, with per-entity rollups across every episode.
-- Every relationship between those entities. Twenty-nine typed predicates: located_in, founded, member_of, authored, denies, funded_by, and more — with a transcript span pointer on every single edge so you can jump straight to the moment in the video where the claim was made.
-- **Thesis-level claims per episode** — 8–15 per video as the target, each one with a truth score, confidence score, the host's stance toward it (`asserts` / `denies` / `uncertain` / `steelman`), expandable evidence quotes, and dependency links to other claims (`supports` / `contradicts` / `presupposes` / `elaborates`).
-- A **contradiction browser** — pair / broken-presupposition / cross-video / manual — surfacing every place the show contradicts itself, and every place one episode's evidence depends on something another episode rejected.
-- A **cross-video agreements** page — the flip side, where two different episodes assert the same thesis (positive corroboration).
-- An **entity graph** with a "color by truth" overlay — edges shaded red→green based on how the corpus actually treats those claims (nodes keep their entity-type colours).
-- An **argument map** — claims-as-nodes with dependency, contradiction, and shared-evidence edges, seedable by any entity, video, or single claim.
-- A **counterfactual mode** — "if this claim were false, which other claims move, and by how much?"
-- A **suggest-an-edit** flow on every entity, relationship, claim, and contradiction — opens a prefilled GitHub issue with a one-click admin apply link.
+- **Every entity, with rollups.** Every person, organization, place, facility, event, date, technology, book/movie and ideology the show has talked about, with per-entity rollups across every episode.
+- **Every typed relationship.** Twenty-nine predicates (located_in, founded, member_of, authored, denies, funded_by, and more), each edge carrying a transcript span pointer so you can jump straight to the moment in the video where the claim was made.
+- **Thesis-level claims per episode.** 8–15 per video as the target, each with a truth score, confidence score, the host's stance toward it (`asserts` / `denies` / `uncertain` / `steelman`), expandable evidence quotes, and dependency links to other claims (`supports` / `contradicts` / `presupposes` / `elaborates`).
+- **A contradiction browser.** Pair, broken-presupposition, cross-video and manual kinds, surfacing every place the show contradicts itself and every place one episode's evidence depends on something another episode rejected.
+- **A cross-video agreements page.** The flip side, where two different episodes assert the same thesis (positive corroboration).
+- **An entity graph coloured by truth.** Edges shade red→green by how the corpus actually treats those claims, while nodes keep their entity-type colours.
+- **An argument map.** Claims as nodes with dependency, contradiction and shared-evidence edges, seedable by any entity, video or single claim.
+- **A counterfactual mode.** If this claim were false, which other claims move, and by how much?
+- **A suggest-an-edit flow.** On every entity, relationship, claim and contradiction, it opens a prefilled GitHub issue with a one-click admin apply link.
 
 <Figure caption="Entity rollup for NASA: 334 mentions across 61 videos, each with the timestamps where it comes up.">
   <Image src={entityRollupNasa} alt="The NASA entity page listing episodes with thumbnails, titles and transcript timestamps" />
@@ -98,40 +98,49 @@ The whole thing is a seven-stage pipeline. Everything before the public site run
 
 ### 1. Ingest
 
-A polite YouTube transcript fetcher with rate limiting and a never-refetch rule — once we have a transcript on disk, we never re-fetch it. The catalog tracks what we have, what's missing, and what stages are stale per video.
+A polite YouTube transcript fetcher with rate limiting and a never-refetch rule: once a transcript is on disk it is never re-fetched. The catalog tracks what we have, what's missing, and what stages are stale per video.
 
 ### 2. Neural extraction (entities + relations)
 
-The first version used regex patterns and BERT NER, and it hit a quality ceiling fast — too many false positives, too many missed entities, no good way to handle relations at all.
+The first version used regex patterns and BERT NER, and it hit a quality ceiling fast: too many false positives, too many missed entities, no good way to handle relations at all.
 
 The current version uses two zero-shot neural models running as Python sidecars:
 
-- **GLiNER** for entity extraction. Thirteen typed labels — `person`, `organization`, `group_or_movement`, `location`, `facility`, `event`, `date_time`, `role`, `technology`, `work_of_media`, `law_or_policy`, `ideology`, `nationality_or_ethnicity`. Zero-shot means the labels live in a config file — adding a new one is a one-line change, not a retraining run. (A few labels — `role`, `law_or_policy` — are extracted and then wholesale dropped at curation; they never reach the public index.)
-- **GLiREL** for relation extraction. Twenty-nine typed predicates, with a confidence threshold tuned against the corpus — the config supports per-predicate thresholds, though today all 29 share one value. Every edge carries the exact sentence span it was extracted from.
+- **GLiNER** for entity extraction. Thirteen typed labels: `person`, `organization`, `group_or_movement`, `location`, `facility`, `event`, `date_time`, `role`, `technology`, `work_of_media`, `law_or_policy`, `ideology`, `nationality_or_ethnicity`. Zero-shot means the labels live in a config file; adding a new one is a one-line change, not a retraining run. (A few labels, `role` and `law_or_policy`, are extracted and then wholesale dropped at curation; they never reach the public index.)
+- **GLiREL** for relation extraction. Twenty-nine typed predicates, with a confidence threshold tuned against the corpus; the config supports per-predicate thresholds, though today all 29 share one value. Every edge carries the exact sentence span it was extracted from.
 
-Node spawns the Python sidecars per transcript, one batched call each, and parses the JSON back. If Python is missing or a sidecar errors, the pipeline logs a warning and keeps going — graceful degradation.
+Node spawns the Python sidecars per transcript, one batched call each, and parses the JSON back. If Python is missing or a sidecar errors, the pipeline logs a warning and keeps going: graceful degradation.
 
 There's no regex in the extraction path anymore. The old `src/nlp/` module was deleted.
 
 ### 3. Cross-transcript canonicalization
 
-Neural extraction gives you "Dan" in one video, "Dan Brown" in another, and "D. Brown" in a third. They're all the same person. It also gives you generic noise — "channel," "music," `[music]` cue tags from the transcript — that you don't want in the graph.
+Neural extraction gives you "Dan" in one video, "Dan Brown" in another, and "D. Brown" in a third. They're all the same person. It also gives you generic noise ("channel," "music," `[music]` cue tags from the transcript) that you don't want in the graph.
 
-The fix is a sectioned aliases file (`data/aliases.json`) holding corpus merges, deletions, display-name overrides, per-video merges, per-edge deletions, claim-level truth and field overrides, operator-authored contradictions and dismissals, and the curation memory (not-the-same rulings, dismissed clusters). An admin UI at `/admin/aliases` lets you curate by hand; a heuristic script proposes the obvious cases automatically; an AI audit pass handles the long tail; and a committed `delete-always.ts` file holds code-level decisions (PR-reviewed, auto-applied on every rebuild) in three lists: things that should never be in the graph on this corpus — role-noun persons like "the host," tautologies, transcript artifacts — whole labels to drop, and promotions that merge famous-name short forms like `person:tesla` → `person:nikola tesla`.
+The fix is a sectioned aliases file, `data/aliases.json`. It holds:
+
+- corpus merges and deletions;
+- display-name overrides;
+- per-video merges and per-edge deletions;
+- claim-level truth and field overrides;
+- operator-authored contradictions and dismissals;
+- curation memory (not-the-same rulings, dismissed clusters).
+
+It is curated three ways: an admin UI at `/admin/aliases` for hand edits, a heuristic script that proposes the obvious cases, and an AI audit pass for the long tail. Alongside it, a committed `delete-always.ts` holds PR-reviewed code-level decisions that auto-apply on every rebuild: things that should never be in the graph (role-noun persons like "the host," tautologies, transcript artifacts), whole labels to drop, and promotions that merge famous-name short forms like `person:tesla` → `person:nikola tesla`.
 
 ### 4. Per-video AI claim extraction
 
-Entities and relations are low-level facts. They tell you "Tesla `works_for` Westinghouse" but not "the host believes Tesla's wireless power demonstrations were suppressed by financial interests." That second thing is a **claim** — a thesis-level proposition, the kind of proposition that could anchor a Wikipedia section, debatable, with stance and evidence.
+Entities and relations are low-level facts. They tell you "Tesla `works_for` Westinghouse" but not "the host believes Tesla's wireless power demonstrations were suppressed by financial interests." That second thing is a **claim**: a thesis-level proposition, the kind of proposition that could anchor a Wikipedia section, debatable, with stance and evidence.
 
-For each video, an AI session reads the transcript plus the extracted entities and relations and writes claims to `data/claims/<id>.json` — the prompt targets 8–15 per video; in practice the corpus runs 8–24, averaging about 14. Each claim has:
+For each video, an AI session reads the transcript plus the extracted entities and relations and writes claims to `data/claims/<id>.json`. The prompt targets 8–15 per video; in practice the corpus runs 8–24, averaging about 14. Each claim has:
 
-- **Text** — atomic, single proposition. Compound "X and Y" claims get split and linked.
-- **Kind** — `factual` / `interpretive` / `predictive` / `narrative`.
-- **Host stance** — `asserts` / `denies` / `uncertain` / `steelman`. The `denies` case is important: when the host presents a claim _in order to reject it_ ("some people say X, but…"), the X-claim is extracted with `hostStance: "denies"`. Without this, the cross-video contradiction detector can't tell agreement from rebuttal.
-- **Evidence quotes** — single-sentence spans, 60–150 char target. Multiple narrow quotes beat one paragraph-sized blob. Every quote has to match the transcript byte-for-byte; the validator rejects payloads where it doesn't.
-- `directTruth` — calibrated, not vague. Omitted when there's no basis for judgment. Set only when the host gives a verdict, the claim cites primary evidence, or the proposition has widely-documented factual grounding.
-- **Dependencies** on other claims — `supports` / `contradicts` / `presupposes` / `elaborates`. The `contradicts` rationales carry a typed subkind in a leading tag — `[logical]` / `[debunks]` / `[alternative]` / `[undercuts]` — that drives how strongly the contradicting claims couple in truth propagation.
-- **Tags** — free-form, for filtering.
+- **Text**: atomic, single proposition. Compound "X and Y" claims get split and linked.
+- **Kind**: `factual` / `interpretive` / `predictive` / `narrative`.
+- **Host stance**: `asserts` / `denies` / `uncertain` / `steelman`. The `denies` case is important: when the host presents a claim _in order to reject it_ ("some people say X, but…"), the X-claim is extracted with `hostStance: "denies"`. Without this, the cross-video contradiction detector can't tell agreement from rebuttal.
+- **Evidence quotes**: single-sentence spans, 60–150 char target. Multiple narrow quotes beat one paragraph-sized blob. Every quote has to match the transcript byte-for-byte; the validator rejects payloads where it doesn't.
+- `directTruth`: calibrated, not vague. Omitted when there's no basis for judgment. Set only when the host gives a verdict, the claim cites primary evidence, or the proposition has widely-documented factual grounding.
+- **Dependencies** on other claims: `supports` / `contradicts` / `presupposes` / `elaborates`. The `contradicts` rationales carry a typed subkind in a leading tag (`[logical]` / `[debunks]` / `[alternative]` / `[undercuts]`) that drives how strongly the contradicting claims couple in truth propagation.
+- **Tags**: free-form, for filtering.
 
 Claim files stamp `promptVersion: "v2"`; the metrics gate enforces that every file in the corpus is on the latest prompt version. If I update the prompt, I have to either backfill or fail the gate.
 
@@ -139,11 +148,11 @@ Claim files stamp `promptVersion: "v2"`; the metrics gate enforces that every fi
 
 The reasoning layer sits on top of the claim DAG and computes:
 
-- **Derived truth** per claim, propagated through dependency edges with type-aware coupling. Logical and debunking contradictions pull at full weight. `alternative` (competing explanations) pulls at half weight — competing theories shouldn't hammer each other to zero. `undercuts` (one claim weakening another's evidence) doesn't pull at all but applies a post-cap on the target's truth at `1 - 0.2 * sourceTruth * sourceConfidence`.
+- **Derived truth** per claim, propagated through dependency edges with type-aware coupling. Logical and debunking contradictions pull at full weight. `alternative` (competing explanations) pulls at half weight; competing theories shouldn't hammer each other to zero. `undercuts` (one claim weakening another's evidence) doesn't pull at all but applies a post-cap on the target's truth at `1 - 0.2 * sourceTruth * sourceConfidence`.
 - **Pair contradictions** within a single video. Surfaced only when both sides are asserted true and the dep subkind is `logical` or `debunks` (otherwise it's not a contradiction, it's the host delivering a verdict).
-- **Broken-presupposition contradictions** — a high-truth claim standing on a low-truth foundation: the claim scores at least 0.5 while a claim it presupposes scores under 0.3. The truth-asymmetry requirement keeps chains between two equally-fringe claims from surfacing.
-- **Cross-video contradictions** — sentence-transformer embeddings (with Jaccard fallback) generate candidate pairs; an AI verification pass verdicts each one as `LOGICAL-CONTRADICTION` / `DEBUNKS` / `UNDERCUTS` / `ALTERNATIVE` / `COMPLEMENTARY` / `IRRELEVANT` / `SAME-CLAIM`. Only the first four surface as contradictions on the public site; `SAME-CLAIM` is promoted to the cross-video agreements page; `COMPLEMENTARY` and `IRRELEVANT` drop. `verified: null` candidates are admin-only — the public never sees an unverified contradiction.
-- **Counterfactual queries** — "if claim X were false, what moves?" replays propagation with X pinned and shows the deltas.
+- **Broken-presupposition contradictions**: a high-truth claim standing on a low-truth foundation: the claim scores at least 0.5 while a claim it presupposes scores under 0.3. The truth-asymmetry requirement keeps chains between two equally-fringe claims from surfacing.
+- **Cross-video contradictions**: sentence-transformer embeddings (with Jaccard fallback) generate candidate pairs; an AI verification pass assigns each one a verdict of `LOGICAL-CONTRADICTION` / `DEBUNKS` / `UNDERCUTS` / `ALTERNATIVE` / `COMPLEMENTARY` / `IRRELEVANT` / `SAME-CLAIM`. Only the first four surface as contradictions on the public site; `SAME-CLAIM` is promoted to the cross-video agreements page; `COMPLEMENTARY` and `IRRELEVANT` drop. `verified: null` candidates are admin-only; the public never sees an unverified contradiction.
+- **Counterfactual queries**: "if claim X were false, what moves?" replays propagation with X pinned and shows the deltas.
 
 The four `contradicts` subkinds are not equal in propagation. This is the coupling each one applies:
 
@@ -177,15 +186,15 @@ Cross-video candidates go through a verification step before anything is public.
 
 ### 6. Quality metrics
 
-Every claim, contradiction, alias, and entity feeds a 49-signal metrics module. Five sections — entity hygiene, entity resolution, claims, contradictions, operator corrections. A committed baseline + per-metric target bounds gate every commit; `npm run metrics:check` fails the build on regression. The gate is **direction-aware** — a metric drifting in the "better" direction (more claims with calibrated truth, lower median evidence quote length, more typed contradicts) doesn't trip the gate even if it crosses the tolerance.
+Every claim, contradiction, alias, and entity feeds a 49-signal metrics module. Five sections: entity hygiene, entity resolution, claims, contradictions, operator corrections. A committed baseline + per-metric target bounds gate every commit; `npm run metrics:check` fails the build on regression. The gate is **direction-aware**: a metric drifting in the "better" direction (more claims with calibrated truth, lower median evidence quote length, more typed contradicts) doesn't trip the gate even if it crosses the tolerance.
 
 `/admin/metrics` renders the dashboard live: 49 live metrics, colored by regression status against baseline.
 
 ### 7. Public site
 
-A standalone React + TypeScript + Vite project under `web/`, deployed to GitHub Pages. No server, no API, no database — every search, filter, and graph query runs client-side against pre-built JSON files served as static assets. Routes for the catalog, per-video detail, per-entity rollup, the relationships graph, the claims browser, the contradictions browser, the cross-video agreements page, the argument map, and the about page. Roughly 1.5 MB of JS for the graph view, code-split out so the rest of the site stays light.
+A standalone React + TypeScript + Vite project under `web/`, deployed to GitHub Pages. No server, no API, no database: every search, filter, and graph query runs client-side against pre-built JSON files served as static assets. Routes for the catalog, per-video detail, per-entity rollup, the relationships graph, the claims browser, the contradictions browser, the cross-video agreements page, the argument map, and the about page. Roughly 1.5 MB of JS for the graph view, code-split out so the rest of the site stays light.
 
-The same React codebase has an admin mode, gated on `VITE_ADMIN`. In production the admin code is tree-shaken out entirely — no admin chunk in the deployed bundle. In local dev, Vite proxies `/api/*` to a Node server on `:4173` which serves the alias-mutation endpoints and runs the indexes stage in-process.
+The same React codebase has an admin mode, gated on `VITE_ADMIN`. In production the admin code is tree-shaken out entirely; no admin chunk in the deployed bundle. In local dev, Vite proxies `/api/*` to a Node server on `:4173` which serves the alias-mutation endpoints and runs the indexes stage in-process.
 
 ![The videos catalog: 218 episodes in a sortable table beside a faceted sidebar of histogram filters](./videos-catalog.png)
 
@@ -193,15 +202,15 @@ The same React codebase has an admin mode, gated on `VITE_ADMIN`. In production 
 
 A few things that were not at all obvious when I started:
 
-**Zero-shot beats a regex table for everything except artifacts.** GLiNER and GLiREL handle the entity and relation cases that used to need hundreds of lines of pattern code, and they generalize to new topics for free. Where they fail is the predictable junk — `[music]` cue tags, "the narrator," role nouns like "host" or "guest" that the model treats as person mentions. Those go in a code-level deletion list that auto-applies on every rebuild. The split between neural extraction for content and hard-coded filtering for noise turned out to work best. I tried both ends in isolation and neither worked.
+**Zero-shot beats a regex table for everything except artifacts.** GLiNER and GLiREL handle the entity and relation cases that used to need hundreds of lines of pattern code, and they generalize to new topics for free. Where they fail is the predictable junk: `[music]` cue tags, "the narrator," role nouns like "host" or "guest" that the model treats as person mentions. Those go in a code-level deletion list that auto-applies on every rebuild. Neural for content, hard-coded filters for noise; neither worked alone.
 
-**Stance is more important than truth.** Initially I had every claim get a `directTruth` score and that was it. The result was a mess of 0.3-confidence "factoids" where the host was clearly _rejecting_ the claim (he'd just laid out a fringe theory in order to debunk it), but the extractor scored it as low-confidence assertion. Adding `hostStance: "denies"` made the cross-video reasoning coherent — now if episode 80 rejects "the moon landing was faked" and episode 12 presupposes it, the contradiction surfaces correctly. Across the corpus today: 2,609 asserts, 234 denies, 91 uncertain, 73 steelman (and 83 unset) of 3,090 claims. Stance turned out to matter more than truth scores alone.
+**Stance is more important than truth.** Initially I had every claim get a `directTruth` score and that was it. The result was a mess of 0.3-confidence "factoids" where the host was clearly _rejecting_ the claim (he'd just laid out a fringe theory in order to debunk it), but the extractor scored it as low-confidence assertion. Adding `hostStance: "denies"` made the cross-video reasoning coherent — now if episode 80 rejects "the moon landing was faked" and episode 12 presupposes it, the contradiction surfaces correctly. Across the corpus today: 2,609 asserts, 234 denies, 91 uncertain, 73 steelman (and 83 unset) of 3,090 claims.
 
-**Single-sentence evidence beats paragraph evidence.** The first claims prompt let the model pick "evidence" of any length. The model picked paragraphs. The result was a UI where every claim had a very long evidence quote that you couldn't actually verify — too much to cross-check, too much to skim. Forcing 60–150 character target evidence cleaned this up dramatically. Multiple narrow quotes per claim turned out to be much more useful than one long one — you could see _the specific sentences_ the extractor was keying on.
+**Single-sentence evidence beats paragraph evidence.** The first claims prompt let the model pick "evidence" of any length. The model picked paragraphs. The result was a UI where every claim had a very long evidence quote that you couldn't actually verify: too much to cross-check, too much to skim. Forcing 60–150 character target evidence cleaned this up dramatically. Multiple narrow quotes per claim turned out to be much more useful than one long one; you could see _the specific sentences_ the extractor was keying on.
 
-**Typed contradictions matter more than I thought.** Treating every "contradicts" edge identically meant that "two competing alternative explanations" pulled the truth of both to zero. That's wrong — they're competing, but neither is debunking the other. The typed-subkind tag (`[logical]` / `[debunks]` / `[alternative]` / `[undercuts]`) and the matching coupling weights in propagation made the truth scores much more stable.
+**Typed contradictions matter more than I thought.** Treating every "contradicts" edge identically meant that "two competing alternative explanations" pulled the truth of both to zero. That's wrong: they're competing, but neither is debunking the other. The typed-subkind tag (`[logical]` / `[debunks]` / `[alternative]` / `[undercuts]`) and the matching coupling weights in propagation made the truth scores much more stable.
 
-**Cross-video contradictions need a verification pass.** Embedding-cosine similarity is _good_ at finding "two claims that talk about Tesla" and _bad_ at finding "two claims that disagree about Tesla." The first version of the contradictions page was mostly noise. Adding an AI verification step that verdicts every candidate pair as one of seven kinds before anything surfaces took the false-positive rate from "embarrassing" to "low single digits." The verdicts themselves make the point: of 141 candidate pairs the embeddings proposed, the single biggest bucket was two episodes _agreeing_.
+**Cross-video contradictions need a verification pass.** Embedding-cosine similarity is _good_ at finding "two claims that talk about Tesla" and _bad_ at finding "two claims that disagree about Tesla." The first version of the contradictions page was mostly noise. Adding an AI verification step that assigns every candidate pair a verdict of one of seven kinds before anything surfaces took the false-positive rate from "embarrassing" to "low single digits." The verdicts themselves make the point: of 141 candidate pairs the embeddings proposed, the single biggest bucket was two episodes _agreeing_.
 
 <Figure caption="What 141 embedding-proposed candidate pairs actually turned out to be. Only the four contradiction classes — one strict logical contradiction, 7 debunks, 18 undercuts, 8 alternatives — are allowed to surface as contradictions; the biggest bucket, same-claim, is agreement and feeds the consonance page; complementary and irrelevant are dropped. A verdict only takes effect while its pair is still in the current candidate pool, so the live site shows fewer: 17 cross-video contradictions and 50 agreements today.">
   <VizFigure
@@ -231,18 +240,18 @@ A few things that were not at all obvious when I started:
 
 ## What's still rough
 
-- **Dependency coverage is below target.** Only about 42% of claims carry dependency links, against an aspirational 55% — the metrics gate flags it on every run.
-- **Skeptic scoring is still early.** It works (per-speaker credibility scores mostly from lexical signals — hedges, evasions, absolutes — plus how their claims have held up), but the calibration is rough.
+- **Dependency coverage is below target.** Only about 42% of claims carry dependency links, against an aspirational 55%; the metrics gate flags it on every run.
+- **Skeptic scoring is still early.** It works (per-speaker credibility scores mostly from lexical signals (hedges, evasions, absolutes) plus how their claims have held up), but the calibration is rough.
 - **Public site polish.** Mobile layout on the argument map page is cramped. The graph viewer occasionally hangs on very large neighborhoods.
-- **The "novel links" report** (connections that emerge from combining multiple sources) is computed by the pipeline but has no UI yet — I'm still figuring out how to surface it without false positives.
+- **The "novel links" report** (connections that emerge from combining multiple sources) is computed by the pipeline but has no UI yet; I'm still figuring out how to surface it without false positives.
 
 ## What you can do with it
 
-Start with an episode you remember well. Open the [home page](https://jonborchardt.github.io/WFD/), pick an episode you remember well, and see if the claim list matches your memory. From there, click through to the contradictions page and see if any of them surprise you, then the argument map — seeded by Bigfoot or Roswell or Phantom Time — and walk the dependency chains.
+Start with an episode you remember well. Open the [home page](https://jonborchardt.github.io/WFD/), pick an episode you remember well, and see if the claim list matches your memory. From there, click through to the contradictions page and see if any of them surprise you, then the argument map (seeded by Bigfoot or Roswell or Phantom Time) and walk the dependency chains.
 
 ![An argument map seeded by Bigfoot: a red contradicts edge joins a green claim and a skeptic claim](./argument-map-bigfoot.png)
 
-If you spot something wrong — a bad claim, a missed contradiction, a wrongly-merged entity, a claim whose evidence quote is wrong — every page has a **suggest an edit** button that opens a prefilled GitHub issue. That's the contribution path. Corrections go through Git so they're auditable.
+If you spot something wrong (a bad claim, a missed contradiction, a wrongly-merged entity, a claim whose evidence quote is wrong), every page has a **suggest an edit** button that opens a prefilled GitHub issue. That's the contribution path. Corrections go through Git so they're auditable.
 
 If you're curious about the build, all the code is on [GitHub](https://github.com/jonborchardt/wfd). The README has the full setup; CLAUDE.md has the deeper architecture notes.
 

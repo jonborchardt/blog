@@ -19,7 +19,7 @@ import VerdictSets from "./verdict-set-arithmetic.svg";
 import PipelineViz from "./pipeline-viz.svg";
 import TriageViz from "./triage-viz.svg";
 
-Here's the problem. YouTube knows I'm interested in finances and retirement, so it feeds me a twenty-minute video every day: "If You're 55 With $2.5M, Watch This BEFORE You Retire." Some of them are genuinely good. Some are confidently wrong in ways that would cost years. And there is no way to tell which from the thumbnail — the production quality of the good ones and the bad ones is identical, and they all say "sequence-of-returns risk" in the first ninety seconds.
+Here's the problem. YouTube knows I'm interested in finances and retirement, so it feeds me a twenty-minute video every day: "If You're 55 With $2.5M, Watch This BEFORE You Retire." Some of them are genuinely good. Some are confidently wrong in ways that would cost years. And there's no way to tell which from the thumbnail: the production quality of the good ones and the bad ones is identical, and they all say "sequence-of-returns risk" in the first ninety seconds.
 
 I used to watch them. Now I paste the URL into a text file in [my simulator](/retirement-simulator-ai-lab/) and walk away. Dozens of videos later, I've watched none of them, and I know more about what's in them than I would have if I had.
 
@@ -39,13 +39,13 @@ The whole thing is a short pipeline from a text file to a scoreboard, and the sc
 
 ## The queue is a text file
 
-`videos.md` is one YouTube URL per line. That's the whole interface. When there are a few, I tell Claude Code "run the queue" and a skill called **theory-queue** takes over: it works down the file, runs each pending URL through the full pipeline, and appends `DONE` to the line the moment its verdict lands — not in a batch at the end, so an interrupted session loses nothing.
+`videos.md` is one YouTube URL per line. That's the whole interface. When there are a few, I tell Claude Code "run the queue" and a skill called **theory-queue** takes over: it works down the file, runs each pending URL through the full pipeline, and appends `DONE` to the line the moment its verdict lands, not in a batch at the end, so an interrupted session loses nothing.
 
 Two cheap checks happen before any real work. It dedupes on the 11-character video id (I paste the same video twice more often than I'd like to admit). And it fetches just the transcript header to get the channel name and looks it up in the scoreboard: if that channel already has two videos rated _harmful_, the queue marks the line `SKIPPED-CHANNEL` and moves on. One bad video is never enough to skip a channel — everyone has an off day. The second one earns it.
 
 ## Captions, not video
 
-Nothing in the pipeline looks at pixels. A tiny script (`npm run transcript -- <url>`) pulls the video's captions the way the YouTube app itself does and prints a header — title, channel, URL — followed by the plain transcript. Auto-generated captions are fine; the claims survive the typos. If a video has no captions at all, it gets marked `NO-CAPTIONS` and I can paste a transcript by hand later, which so far has been never.
+Nothing in the pipeline looks at pixels. A tiny script (`npm run transcript -- <url>`) pulls the video's captions the way the YouTube app itself does and prints a header (title, channel, URL) followed by the plain transcript. Auto-generated captions are fine; the claims survive the typos. If a video has no captions at all, it gets marked `NO-CAPTIONS` and I can paste a transcript by hand later, which so far has been never.
 
 That's the entire "watching" step. Twenty minutes of talking head becomes about four thousand words of text in a couple of seconds.
 
@@ -68,19 +68,19 @@ Only the first pile reaches the engine; the other two still get an answer, just 
   <TriageViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
 </VizFigure>
 
-The rule that keeps this honest is _translate faithfully or say you can't_. If a video's load-bearing rule is something the engine can't express — "refill the cash bucket only after up years" — the skill approximates with the nearest primitive and writes that caveat into the notes. It is forbidden from quietly adding engine features to flatter a video. And if the gap is plausibly decisive, the output is "open question," not a fake verdict. One theory this month — an options-overlay idea — was adjudicated as _honestly untestable_: the return series that would be needed doesn't exist for the failure cohorts. Pinning down exactly what data would be needed and verifying it isn't there is still an adjudication.
+The rule is _translate faithfully or say you can't_. If a video's central rule is something the engine can't express ("refill the cash bucket only after up years"), the skill approximates with the nearest primitive and writes that caveat into the notes. It is forbidden from quietly adding engine features to flatter a video. And if the gap is plausibly decisive, the output is "open question," not a fake verdict. One theory this month, an options-overlay idea, was adjudicated as _untestable_: the return series that would be needed doesn't exist for the failure cohorts. Working out which data you'd need, and confirming it doesn't exist, is still an answer.
 
 ## Three rows, one of which matters
 
-For anything testable, three experiment rows go into the committed `experiments.json`, alongside the untouched baseline and the reigning champion:
+For anything testable, three experiment rows go into the committed `experiments.json`, alongside the untouched baseline and the reigning champion (my current best plan):
 
 - **Faithful** — the video's own numbers, translated. Answers "is the video right?"
 
 - **Half dose** — same idea, half strength. Dose-response separates _wrong idea_ from _right idea, wrong dose_.
 
-- **Hybrid** — the video's distinctive mechanism grafted onto my current best plan. This is the load-bearing row, because it answers the only question I actually have: **does this add anything I don't already have?**
+- **Hybrid** — the video's distinctive mechanism grafted onto my current best plan. This is the row that matters, because it answers the only question I actually have: **does this add anything I don't already have?**
 
-Then the normal experiment machinery runs: every row against every historical start year at every candidate retirement age. Same resolution discipline as everything else in the lab — one percentage point of success is one flipped cohort, under two points is a tie, not a finding.
+Then the normal experiment machinery runs: every row against every historical start year at every candidate retirement age. Same resolution discipline as everything else in the lab: one percentage point of success is one flipped cohort, under two points is a tie, not a finding.
 
 <Figure caption="Theory rows beside the baseline and champion, on the synthetic textbook dataset. On this well-funded household at 65 everything clears the success bar, so the bucket rows' losses show up in the worst-case column instead — the verdicts against buckets come from tighter runs where those rows failed real cohorts. Strategies tuned on a well-funded dataset don't transfer.">
   ![Strategy table at retire-at-65: baseline 94.9% success; bucket and cash-bridge rows all at 100%](./strategy-comparison-rows.png)
@@ -89,7 +89,7 @@ Then the normal experiment machinery runs: every row against every historical st
 
 ## The verdict is set arithmetic
 
-The report always leads with one line — _beat the champion / beat baseline only / lost to both_ — but the evidence underneath is a list of years. The engine emits which historical start years failed for each row, and the diagnosis is set arithmetic: which cohort families did the video's idea rescue, which did it re-break, and do those families match the video's own story about what it protects against?
+The report always leads with one line, _beat the champion / beat baseline only / lost to both_, but the evidence underneath is a list of years. The engine emits which historical start years failed for each row, and the diagnosis is set arithmetic: which cohort families (groups of neighbouring start years that fail for the same reason) did the video's idea rescue, which did it re-break, and do those families match the video's own story about what it protects against?
 
 That last question is the tell. The cash-bucket video's story was "protects you from selling stocks in a crash." What the numbers said was: it kept every one of the extended-inflation failures _and_ added a family of slow-growth failures, because the "safe" asset was the casualty. The idea failed on its own terms, and you can point at the years.
 
@@ -108,9 +108,9 @@ The last section of every report is the steelman: what did the source get _right
 
 - `theories.md` — one row per video: source, one-line testable claim, one-line verdict. The public scoreboard.
 
-- `sources.json` — one entry per video: id, channel, host, a score from −1 to 2, plus `right` and `wrong` claim _tags_ using shared wording — "spending guardrails," "bonds as the sequence-risk hedge" — so channels can be compared per topic. A rollup script aggregates it into a per-channel table: mean score, video count, unioned tags.
+- `sources.json` — one entry per video: id, channel, host, a score from −1 to 2, plus `right` and `wrong` claim _tags_ using shared wording ("spending guardrails," "bonds as the sequence-risk hedge") so channels can be compared per topic. A rollup script aggregates it into a per-channel table: mean score, video count, unioned tags.
 
-- **The Vetted Videos tab** in the app itself, which renders that rollup — a calibre table by channel and a per-video list — plus a hand-curated _insights_ block at the top: things that were right but nobody says, things everybody says that are wrong, the most-repeated claims, channels worth more of, engine gaps the videos surfaced.
+- **The Vetted Videos tab** in the app itself, which renders that rollup (a calibre table by channel and a per-video list) plus a hand-curated _insights_ block at the top: things that were right but nobody says, things everybody says that are wrong, the most-repeated claims, channels worth more of, engine gaps the videos surfaced.
 
 The score is a four-point scale keyed to what the three rows did:
 
@@ -125,24 +125,24 @@ The channel-skip rule reads from the same file it writes to. The system's own pa
 
 ## What dozens of videos actually said
 
-The distribution surprised me: at last count, two were _correct_ (beat or confirmed the champion), nineteen _useful_, ten _mixed_, six _harmful_ — six videos whose advice, taken faithfully, would have made a plain two-asset baseline _worse_. Not one was gibberish; the harmful ones were mostly the polished ones recommending a big bond or cash sleeve as sequence-risk protection, which for a plan whose failure cohorts are the inflation years is exactly backwards.
+The distribution surprised me: at last count, two were _correct_ (beat or confirmed the champion), nineteen _useful_, ten _mixed_, six _harmful_: six videos whose advice, taken faithfully, would have made a plain two-asset baseline _worse_. Not one was gibberish; the harmful ones were mostly the polished ones recommending a big bond or cash sleeve as sequence-risk protection, which for a plan whose failure cohorts are the inflation years is exactly backwards.
 
-The most-repeated mechanism across all of them — spending guardrails — turned out to be real, already in my plan, and worth about a couple of points. The thing that mattered most for me — _which asset fills the retirement window_ — is said by essentially nobody. The one outside idea that genuinely beat the champion (tax coordination in the pre-RMD window) came from the CFP videos.
+The most-repeated mechanism across all of them, spending guardrails, turned out to be real, already in my plan, and worth about a couple of points. The thing that mattered most for me (_which asset fills the retirement window_) is said by essentially nobody. The one outside idea that genuinely beat the champion (tax coordination in the pre-RMD window) came from the CFP videos.
 
-And the pattern I did not expect: the first ten or so videos each added experiment rows. Of the last twenty, one needed a real re-run. The rest were adjudicated from rows that had already been run — new mainstream advice now decomposes into experiments already done. The queue stopped being a discovery engine and became a filter, which is what "converged" looks like from the outside.
+And the pattern I did not expect: the first ten or so videos each added experiment rows. Of the last twenty, one needed a real re-run. The rest were adjudicated from rows that had already been run; new mainstream advice now decomposes into experiments already done. The queue stopped being a discovery engine and became a filter, which is what "converged" looks like from the outside.
 
 ## The one I'd have watched
 
-One of the later videos through the pipeline was Rob Berger's [_Can the Bucket Strategy Eliminate Sequence of Returns Risk?_](https://www.youtube.com/watch?v=gVYThVn5gQA) — a channel I actually like, and a topic where he's arguing against the room. It's a good example of why I'm glad I didn't just watch it: I would have nodded along with all of it.
+One of the later videos through the pipeline was Rob Berger's [_Can the Bucket Strategy Eliminate Sequence of Returns Risk?_](https://www.youtube.com/watch?v=gVYThVn5gQA), a channel I actually like, and a topic where he's arguing against the room. It's a good example of why I'm glad I didn't just watch it: I would have nodded along with all of it.
 
-The pipeline agreed with most of it. Buckets vs. plain rebalancing is settled in his favor — every bucket row lost to a rebalanced baseline, keeping the inflation-cohort failures (his own worked example, the 1966 retiree, is the head of that family) and adding growth-starvation ones. His withdrawal-policy content matched the guardrail and variable-withdrawal verdicts already on the board. His "one cash bucket if it helps you sleep" concession matched the measured drag numbers.
+The pipeline agreed with most of it. Buckets vs. plain rebalancing is settled in his favor: every bucket row lost to a rebalanced baseline, keeping the inflation-cohort failures (his own worked example, the 1966 retiree, is the head of that family) and adding growth-starvation ones. His withdrawal-policy content matched the guardrail and variable-withdrawal verdicts already on the board. His "one cash bucket if it helps you sleep" concession matched the measured drag numbers.
 
 But it disagreed on the ranking, and that's the part I'd have absorbed uncritically. His thesis is that nothing eliminates sequence risk and the _withdrawal policy_ is the primary lever. In my tables the withdrawal policy was the secondary lever: the asset filling the retirement window moved the earliest safe retirement age two years, the honest guardrail moved it a couple of points, and no depth of spending flexibility rescued a cohort-mismatched allocation. "Nothing eliminates it, spending policy manages it" is right in general and understates how much cohort-matched allocation cuts it. Score: 1, useful; tags on both sides.
 
 ## What it can't do
 
-It reads captions, so a video that makes its argument in a chart it never describes aloud gets under-read. It can only test what the engine can express — flat taxes, no account location, no convex payoffs — and the discipline of _saying so_ is doing a lot of load. And it grades everything against one household's failure cohorts; a channel that's "harmful" for an inflation-fragile early retiree might be fine advice for a sixty-eight-year-old with a pension. The scores are mine, not universal. But the system could be adapted to anyone's data.
+It reads captions, so a video that makes its argument in a chart it never describes aloud gets under-read. It can only test what the engine can express (flat taxes, no account location, no convex payoffs), and the discipline of _saying so_ does most of the work. And it grades everything against one household's failure cohorts; a channel that's "harmful" for an inflation-fragile early retiree might be fine advice for a sixty-eight-year-old with a pension. The scores are mine, not universal. But the system could be adapted to anyone's data.
 
 ## Takeaway
 
-The trick isn't the AI reading transcripts — that's the easy part. It's that there was already a simulator with a stated objective, a reigning champion, a noise floor, and a habit of writing verdicts next to the data. Given that, "vet this video" reduces to "translate it into three rows and run them," and the vetting compounds: every verdict makes the next one cheaper, and the scoreboard eventually starts telling you which channels to stop feeding it. I get the residue — one line of claim, one line of verdict, and what to keep.
+The trick isn't the AI reading transcripts; that's the easy part. It's that there was already a simulator with a stated objective, a reigning champion, a noise floor, and a habit of writing verdicts next to the data. Given that, "vet this video" reduces to "translate it into three rows and run them," and the vetting compounds: every verdict makes the next one cheaper, and the scoreboard eventually starts telling you which channels to stop feeding it. I get the residue: one line of claim, one line of verdict, and what to keep.

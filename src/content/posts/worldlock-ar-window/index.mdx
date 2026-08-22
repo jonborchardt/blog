@@ -26,9 +26,9 @@ import GeoregStatesViz from "./georeg-states-viz.svg";
 
 Point your phone west from Seattle and there's a glowing tower rising out of Tacoma, labeled `Tacoma 42.4 km`. Pan up and the night side of the Earth curves away from you, city lights and all, with NYC's tower readable 3,815 km over the horizon. A white dash crosses the sky where the ISS actually is, right now.
 
-Source: [github.com/jonborchardt/worldlock](https://github.com/jonborchardt/worldlock)
+That's WorldLock: a native Android AR app that georegisters content to the real world using ARCore's Geospatial API. Not "AR" as in a dinosaur on your coffee table; AR as in the phone knows where it is and which way it's pointing to within a few meters and degrees, so a tower drawn over a city 3,800 km away lines up with where that city actually is.
 
-That's WorldLock: a native Android AR app that georegisters content to the real world using ARCore's Geospatial API. Not "AR" as in a dinosaur on your coffee table — AR as in the phone knows where it is and which way it's pointing to within a few meters and degrees, so a tower drawn over a city 3,800 km away lines up with where that city actually is.
+Source: [github.com/jonborchardt/worldlock](https://github.com/jonborchardt/worldlock)
 
 <Figure caption="Left to right: the night side of the Earth with towers on the horizon; Tacoma and Seattle towers at ground level; the data-pillar tower style.">
   <div class="not-prose grid grid-cols-3 gap-3">
@@ -52,8 +52,8 @@ That's WorldLock: a native Android AR app that georegisters content to the real 
 
 ## What's in it
 
-- **City towers.** A default set (Seattle, Tacoma, Spokane, Missoula, NYC, Tokyo, …) plus any city you add by name — it geocodes and drops a tower. Seven render styles, from a Tron-shell prism to a shrine beam to a "data pillar" with scrolling bands and rotating collar rings, all done in one shader with a style table. Bases sit on real terrain via ARCore terrain anchors.
-- **The whole Earth.** The globe isn't a mesh — it's a per-fragment ray-cast against a sphere through local sea level (deliberately not the true ellipsoid; the upgrade path lives in a `ponytail:` comment), drawn as one fullscreen triangle. Blue Marble day and night textures, blended at the real solar terminator computed from the current time. Tessellating a planet-sized sphere near the camera is a precision disaster; a ray that solves the quadratic in the fragment shader is analytic at every distance — the constant term is precomputed in doubles on the CPU, leaving only a possible float shimmer right at the horizon.
+- **City towers.** A default set (Seattle, Tacoma, Spokane, Missoula, NYC, Tokyo, …) plus any city you add by name; it geocodes and drops a tower. Seven render styles, from a Tron-shell prism to a shrine beam to a "data pillar" with scrolling bands and rotating collar rings, all done in one shader with a style table. Bases sit on real terrain via ARCore terrain anchors.
+- **The whole Earth.** A per-fragment ray-cast against a sphere, not a mesh, drawn as one fullscreen triangle, with Blue Marble day and night textures blended at the real solar terminator computed from the current time.
 - **The live ISS.** Position fetched every 3 seconds from wheretheiss.at, linearly extrapolated between fixes, drawn as a little truss-and-solar-wings model that scales with distance so it stays visible at 400+ km.
 
 <Figure caption="Why the globe is a ray-cast, not a mesh. Left: a tessellated sphere seen from its own surface — huge flat facets, and every vertex is 6.4 million metres from the origin, so it snaps to a half-metre float grid. Right: one fullscreen triangle; each fragment intersects its own ray with the analytic sphere.">
@@ -114,6 +114,8 @@ There's a looser render gate in front of that (yaw < 25°, with 2× hysteresis s
   <GeoregStatesViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
 </VizFigure>
 
+The globe follows the same rule. Tessellating a planet-sized sphere near the camera is a precision disaster; a ray that solves the quadratic in the fragment shader is analytic at every distance. The constant term is precomputed in doubles on the CPU, leaving only a possible float shimmer right at the horizon. The sphere passes through local sea level, deliberately not the true ellipsoid; the upgrade path lives in a `ponytail:` comment.
+
 ## The stats that matter
 
-The entire app is **8 Kotlin files, about 1,900 lines**, with **one AR dependency** (`com.google.ar:core`) plus the Play Services location library that ARCore's Geospatial mode requires. No Android Studio was involved at any point — it's built, deployed, and debugged entirely from the command line. How that works, and why the codebase stayed that small, are the next two posts.
+The entire app is **8 Kotlin files, about 1,900 lines**, with **one AR dependency** (`com.google.ar:core`) plus the Play Services location library that ARCore's Geospatial mode requires. No Android Studio was involved at any point; it's built, deployed, and debugged entirely from the command line. How that works, and why the codebase stayed that small, are the next two posts.
