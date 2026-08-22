@@ -20,7 +20,7 @@ import Callout from "@/components/blog/Callout.astro";
 | `Tabs` + `Tab` | `Tab.label`                                                                                                | alternatives of the same thing (npm/pnpm, JS/TS)                                                                    |
 | `Video`        | `src`+`poster?` or `youtube`, `title` (required), `caption?`                                               | local video files or YouTube embeds                                                                                 |
 | `MuseumEmbed`  | `demo`, `title`, `label`, `teaser`+`teaserAlt`, `description?`, `height?`, `nativeWidth?`, `teaserHeight?` | click-to-load embed of a live preserved `/museum/` demo: teaser strip, load button, full-size link                  |
-| `Gallery`      | `images: {img, alt}[]`, `description?`, `fullHref?`                                                        | a set of screenshots stepped through one at a time with prev/next arrows                                            |
+| `Gallery`      | `images: {img, alt}[]`, `description?`                                                                     | a set of screenshots stepped through one at a time with prev/next arrows                                            |
 | `CodeBlock`    | `title?`                                                                                                   | a fenced block that needs a filename header or a copy button                                                        |
 | `TableWrapper` | — (applied automatically to every Markdown table by `[slug].astro`)                                        | never imported directly                                                                                             |
 
@@ -209,11 +209,10 @@ import shot2 from "./shot2.png";
     { img: shot2, alt: "What the second screenshot shows" },
   ]}
   description="One short sentence of context."
-  fullHref="/museum/my-demo/index.html"
 />
 ```
 
-One image shows at a time (the first — put the one that best tells the story first; it loads eagerly, the rest lazy-load), with prev/next arrows and an "n / m" counter below. The image sits in a fixed 3:2 frame at the prose measure, letterboxed on a muted background with `object-fit: contain`, so switching never shifts the layout. `fullHref` renders an "Open it full size ↗" link after the caption — the escape hatch for reading a screenshot's fine print.
+One image shows at a time (the first — put the one that best tells the story first; it loads eagerly, the rest lazy-load), with prev/next arrows and an "n / m" counter below. The image sits in a fixed 3:2 frame at the prose measure, letterboxed on a muted background with `object-fit: contain`, so switching never shifts the layout. The caption always ends with an "Open it full size ↗" link to the currently shown image — the escape hatch for reading a screenshot's fine print.
 
 ### CodeBlock
 

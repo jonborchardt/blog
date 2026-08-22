@@ -12,7 +12,6 @@ export const tags = {
   astro: { label: "Astro" },
   mdx: { label: "MDX" },
   "web-development": { label: "Web Development" },
-  "web-performance": { label: "Web Performance" },
   "design-system": { label: "Design System" },
   accessibility: { label: "Accessibility" },
   android: { label: "Android" },
