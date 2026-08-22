@@ -22,6 +22,11 @@ import Tab from "@/components/blog/Tab.astro";
 import Video from "@/components/blog/Video.astro";
 import CodeBlock from "@/components/blog/CodeBlock.astro";
 import VizFigure from "@/components/blog/VizFigure.astro";
+import ListGrid from "@/components/blog/ListGrid.astro";
+import Gallery from "@/components/blog/Gallery.astro";
+import MuseumEmbed from "@/components/blog/MuseumEmbed.astro";
+import heroShot from "./hero.png";
+import teaserTracker from "./teaser-tracker.png";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 
 This page exercises every primitive and variant so they can be eyeballed in both themes at
@@ -155,6 +160,48 @@ npm run build
 ```
 
 </CodeBlock>
+
+## ListGrid
+
+<ListGrid>
+
+- explicit contracts
+- typed schemas
+- validation
+- build-time failure
+
+</ListGrid>
+
+## Markdown table (TableWrapper)
+
+| Primitive | Purpose                  | Client JS |
+| --------- | ------------------------ | --------- |
+| Callout   | Highlighted note         | none      |
+| Figure    | Image with caption       | none      |
+| Gallery   | Screenshot carousel      | tiny      |
+
+## Gallery
+
+<Gallery
+  images={[
+    { img: heroShot, alt: "The fixture hero image" },
+    { img: teaserTracker, alt: "A D3 line chart with a context strip below it" },
+  ]}
+  description="Two screenshots, one shown at a time."
+/>
+
+## MuseumEmbed
+
+<MuseumEmbed
+  demo="/museum/d3demo/industryTracker.html"
+  title="The preserved 2013 Industry Tracker: drag the strip under the chart to rescale the window"
+  label="Load the real 2013 tracker (about 300 KB of data)"
+  teaser={teaserTracker}
+  teaserAlt="The D3 tracker page with two lines, lettered markers and a context strip below"
+  description="A click-to-load museum demo."
+  height={800}
+  teaserHeight={300}
+/>
 
 ## shadcn Card
 
