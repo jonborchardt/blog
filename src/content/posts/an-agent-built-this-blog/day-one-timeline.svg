@@ -1,4 +1,4 @@
-<svg viewBox="0 0 380 732" width="380" height="732" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<svg viewBox="0 0 380 718" width="380" height="718" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
   <!-- Panel A: the sprint, 12:35-14:04, 4 px/min -->
   <text x="8" y="18" font-size="14" font-weight="700" fill="currentColor">The sprint — 11 plans in 79 minutes</text>
 
@@ -50,27 +50,32 @@
     <text x="82" y="400">P11 · launch QA</text>
   </g>
 
-  <!-- Panel B: the rest of the day, 14:04-20:49, compressed -->
-  <text x="8" y="440" font-size="14" font-weight="700" fill="currentColor">The rest of the day — polish and taste</text>
+  <!-- Panel B: the days after, grouped by working day, not to scale -->
+  <text x="8" y="440" font-size="14" font-weight="700" fill="currentColor">The sessions after — features and polish</text>
 
-  <line x1="70" y1="458" x2="70" y2="681" stroke="currentColor" stroke-opacity="0.35" stroke-width="2" stroke-dasharray="2 4" />
+  <line x1="70" y1="458" x2="70" y2="682" stroke="currentColor" stroke-opacity="0.35" stroke-width="2" stroke-dasharray="2 4" />
 
-  <rect x="65" y="466" width="10" height="21" rx="3" fill="currentColor" fill-opacity="0.35" />
-  <text x="62" y="480" font-size="12" text-anchor="end" fill="currentColor" fill-opacity="0.75">14:22</text>
-  <text x="82" y="480" font-size="13" fill="currentColor">logo redesigned ×4 (to 15:00)</text>
-
-  <circle cx="70" cy="557" r="4" fill="currentColor" fill-opacity="0.6" />
-  <text x="62" y="561" font-size="12" text-anchor="end" fill="currentColor" fill-opacity="0.75">17:04</text>
-  <text x="82" y="561" font-size="13" fill="currentColor">first real content</text>
-
-  <circle cx="70" cy="617" r="4" fill="currentColor" fill-opacity="0.6" />
-  <circle cx="70" cy="627" r="4" fill="none" stroke="currentColor" stroke-opacity="0.6" />
-  <text x="62" y="625" font-size="12" text-anchor="end" fill="currentColor" fill-opacity="0.75">18:56</text>
-  <text x="82" y="625" font-size="13" fill="currentColor">publish → revert (15 min)</text>
-
-  <circle cx="70" cy="681" r="5" fill="currentColor" />
-  <text x="62" y="685" font-size="12" text-anchor="end" fill="currentColor" fill-opacity="0.75">20:49</text>
-  <text x="82" y="685" font-size="13" fill="currentColor">last commit — 34 on day one</text>
-
-  <text x="8" y="722" font-size="12" fill="currentColor" fill-opacity="0.6">To scale within each panel; the lower panel is compressed ~7×.</text>
+  <g font-size="12" font-weight="700" fill="currentColor" fill-opacity="0.85">
+    <text x="82" y="474">Session 2</text>
+    <text x="82" y="518">Session 3</text>
+    <text x="82" y="598">Session 4</text>
+    <text x="82" y="642">Session 5</text>
+    <text x="82" y="686">Session 6</text>
+  </g>
+  <g fill="currentColor" fill-opacity="0.6">
+    <circle cx="70" cy="470" r="4" />
+    <circle cx="70" cy="514" r="4" />
+    <circle cx="70" cy="594" r="4" />
+    <circle cx="70" cy="638" r="4" />
+  </g>
+  <circle cx="70" cy="682" r="5" fill="currentColor" />
+  <g font-size="13" fill="currentColor">
+    <text x="82" y="492">logo redesigned, added first content</text>
+    <text x="82" y="536">skills for authority/sourcing, next reading,</text>
+    <text x="82" y="554">llms.txt, link checker, lightbox,</text>
+    <text x="82" y="572">git last-updated, print styles</text>
+    <text x="82" y="616">table of contents, tag pills</text>
+    <text x="82" y="660">museum demo support</text>
+    <text x="82" y="704">legal page, read time, navigation cues</text>
+  </g>
 </svg>
