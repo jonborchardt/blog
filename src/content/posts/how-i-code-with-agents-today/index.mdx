@@ -14,9 +14,7 @@ import ListGrid from "@/components/blog/ListGrid.astro";
 
 ## Thesis
 
-I do not treat agentic coding as "write a giant prompt and hope"; I treat it as an engineering process for moving ambiguity into code, validation, plans, and repository rules.
-
-The workflow is:
+I do not treat agentic coding as "write a giant prompt and hope." I treat it as an engineering process for moving ambiguity out of my head and into code, validation, plans, and repository rules, in roughly that order. The workflow I actually follow looks like this:
 
 ```text
 idea
@@ -38,127 +36,19 @@ agent execution
 validate the resulting system
 ```
 
-The main shift is not "Claude writes more code"; it is that I am designing a system where future agent sessions are less likely to do the wrong thing.
-
-The process has warts — at one point Claude overran scope — and I show those too.
-
----
+The main shift is not that Claude writes more code. It is that I am designing a system in which future agent sessions are less likely to do the wrong thing, because the repo itself pushes back. The process has warts. At one point Claude ignored a stop instruction and implemented all eleven plans in one go; that's in here too.
 
 ## The case study
 
-The concrete example was a new static technical blog called **Always Shippable** — an intentionally modest app; the workflow is the interesting part.
+The concrete example is a new static technical blog called **Always Shippable**, the one you are reading. The app is intentionally modest; the workflow is the interesting part. The core constraints were a GitHub Pages project site served under `/blog/`, static pages, MDX posts, React only for interactive islands, search with no external service, a local-only admin, and no analytics, comments, CMS, or backend, all while meeting accessibility, SEO, performance, and responsive-behavior targets. That is not a huge application, but routing, static generation, MDX, React islands, client-side search, SEO, accessibility, dev-only admin tooling, and GitHub Pages deployment constraints are enough moving parts to exercise the process.
 
-### Core product constraints
-
-<ListGrid>
-
-- GitHub Pages project site
-- production URL under `/blog/`
-- static pages
-- MDX posts
-- React only for interactive islands
-- search with no external service
-- local-only admin
-- no analytics
-- no comments
-- no CMS
-- no backend
-- accessibility, SEO, performance, responsive behavior
-
-</ListGrid>
-
-Not a huge application, but complex enough — routing, static generation, MDX, React islands, client-side search, SEO, accessibility, dev-only admin tooling, GitHub Pages deployment constraints — to exercise the process.
-
----
-
-## The important part was not the blog
-
-The blog was just a convenient product; the real object being built was an agent-maintainable codebase — agentic coding increases the value of executable constraints.
-
-### Agent-maintainable means
-
-The repo needed:
-
-<ListGrid>
-
-- explicit contracts
-- typed schemas
-- deterministic file organization
-- validation
-- reusable primitives
-- build-time failures for invalid states
-- straightforward conventions
-- low ambiguity
-- clear instructions for future agents
-
-</ListGrid>
-
-### What this changes
-
-Instead of relying on future agents to remember prose instructions, I want the repo itself to reject bad states.
-
-```text
-human convention
-      ↓
-repository contract
-      ↓
-machine-checkable invariant
-```
-
-Examples:
-
-```text
-unknown tag -> build failure
-broken internal link -> validation failure
-admin content in dist -> build failure
-```
-
----
+The blog was just a convenient product. The real object being built was an agent-maintainable codebase, and agentic coding raises the value of executable constraints. "Agent-maintainable" meant explicit contracts, typed schemas, deterministic file organization, validation, reusable primitives, build-time failures for invalid states, straightforward conventions, low ambiguity, and clear instructions for future agents. Instead of relying on future agents to remember prose instructions, I want the repo itself to reject bad states. Each human convention should become a repository contract, and each contract should become a machine-checkable invariant. In practice that means an unknown tag is a build failure, a broken internal link is a validation failure, and admin content in `dist/` is a build failure.
 
 ## Step 1: I talked to ChatGPT before Claude
 
-Before asking Claude to code, I used ChatGPT to interrogate the idea and expose hidden architectural decisions. The reusable pattern: do not ask for the implementation prompt until the model has asked what decisions are missing.
+Before asking Claude to code, I used ChatGPT to interrogate the idea and expose hidden architectural decisions. The reusable pattern is simple: do not ask for the implementation prompt until the model has asked you what decisions are missing. My starting point was intentionally messy, a bag of requirements like TypeScript, React, Vite or equivalent, ESLint, GitHub Pages, a landing page with featured content, search, individual posts, series with next/previous navigation, a local admin, logo and favicon, accessibility and contrast, light/dark mode, static content, and React/SVG/images inside posts.
 
-### The initial input was intentionally messy
-
-I started with a rough set of requirements:
-
-<ListGrid>
-
-- TypeScript
-- React
-- Vite or equivalent
-- ESLint
-- GitHub Pages
-- blog landing page
-- featured content
-- search
-- individual posts
-- series
-- next/previous navigation
-- local admin
-- logo and favicon
-- accessibility
-- contrast
-- light/dark mode
-- static content
-- React/SVG/images inside posts
-
-</ListGrid>
-
-### What I asked ChatGPT to do
-
-I did **not** ask for the final Claude prompt immediately.
-
-I asked:
-
-```text
-Before writing the actual startup prompt,
-ask me the questions that would be useful
-for making the architecture explicit.
-```
-
-That changed the task from "write a prompt" to "surface the decisions this prompt needs to encode."
+I did **not** ask for the final Claude prompt immediately. Instead I asked ChatGPT, before writing the actual startup prompt, to ask me the questions that would be useful for making the architecture explicit. That changed the task from "write a prompt" to "surface the decisions this prompt needs to encode."
 
 <Details summary="Actual conversation: my opening prompt">
 
@@ -175,13 +65,9 @@ That changed the task from "write a prompt" to "surface the decisions this promp
 
 </Details>
 
----
-
 ## The first model exposed the real forks
 
-ChatGPT turned the bag of requirements into specific architectural choices.
-
-### The important forks
+ChatGPT turned the bag of requirements into specific architectural choices. These were the forks that mattered:
 
 <ListGrid>
 
@@ -199,11 +85,7 @@ ChatGPT turned the bag of requirements into specific architectural choices.
 
 </ListGrid>
 
-### Why this matters
-
-If I had skipped this step, Claude would have silently made those choices — some fine, some wrong. The problem is not just wrong decisions; it is invisible ones.
-
-An invisible architecture decision becomes expensive to reverse because it gets baked into the first code generation pass.
+If I had skipped this step, Claude would have silently made those choices, some fine, some wrong. The problem is not just wrong decisions; it is invisible ones. An invisible architecture decision becomes expensive to reverse because it gets baked into the first code generation pass, and by the time you notice it, half the codebase assumes it.
 
 <Details summary="Actual conversation: ChatGPT's first response">
 
@@ -266,13 +148,9 @@ An invisible architecture decision becomes expensive to reverse because it gets 
 
 </Details>
 
----
-
 ## I answered decisions, not trivia
 
-I made product and architecture calls, but avoided over-prescribing implementation details: the human decides invariants; the agent decides implementation mechanics while executing.
-
-### Examples of decisions I locked
+I made product and architecture calls but avoided over-prescribing implementation details. The division of labor is that the human decides invariants and the agent decides implementation mechanics while executing. The decisions I locked looked like this:
 
 ```text
 MDX: yes
@@ -290,29 +168,7 @@ WCAG 2.2 AA: yes
 npm: yes
 ```
 
-### Examples of things I did not need to dictate
-
-I did not need to fully dictate:
-
-- exact Node version
-- exact Astro APIs
-- exact component implementation
-- how local admin writes files
-- exact test file shapes
-- every CSS token
-- every reusable primitive
-
-The invariant mattered more than the implementation.
-
-For example:
-
-```text
-/admin/ must not exist in production output.
-```
-
-is an invariant.
-
-The precise Astro/Vite mechanism is an implementation detail.
+I did not need to dictate the exact Node version, the exact Astro APIs, the exact component implementation, how the local admin writes files, the shape of test files, every CSS token, or every reusable primitive. The invariant mattered more than the implementation. "`/admin/` must not exist in production output" is an invariant; the precise Astro/Vite mechanism that guarantees it is an implementation detail, and the agent is better placed than I am to pick it once it can see the real toolchain.
 
 <Details summary="Actual conversation: my answers to the first round">
 
@@ -365,40 +221,9 @@ The precise Astro/Vite mechanism is an implementation detail.
 
 </Details>
 
----
-
 ## We converged on a stack
 
-The stack became **Astro + React + MDX + TypeScript + Tailwind + shadcn/ui + Radix + npm** — a crisp architecture boundary future agents can preserve.
-
-### The execution model
-
-```text
-Astro owns:
-- pages
-- routing
-- layouts
-- content loading
-- static rendering
-- metadata
-- build-time behavior
-
-React owns:
-- interactive islands
-- interactive visualizations
-- interactive demos
-- selected client-side tools
-- bespoke interactive MDX components
-```
-
-### The important non-goals
-
-```text
-Do not turn the site into a React SPA.
-Do not introduce React Router.
-Do not hydrate the entire page tree.
-Static content should remain static HTML wherever possible.
-```
+The stack became **Astro + React + MDX + TypeScript + Tailwind + shadcn/ui + Radix + npm**, which gives future agents a crisp architecture boundary to preserve. Astro owns pages, routing, layouts, content loading, static rendering, metadata, and build-time behavior. React owns interactive islands, interactive visualizations, interactive demos, selected client-side tools, and bespoke interactive MDX components. The non-goals were just as important and were written down explicitly: do not turn the site into a React SPA, do not introduce React Router, do not hydrate the entire page tree, and keep static content as static HTML wherever possible.
 
 <Details summary="Actual conversation: ChatGPT narrows the stack">
 
@@ -415,13 +240,9 @@ Static content should remain static HTML wherever possible.
 
 </Details>
 
----
-
 ## We locked the URL model
 
-The `/blog/` deployment path was a major constraint, and we handled it as a deployment base, not a source-folder structure; it later became a validation target.
-
-### Final public routes
+The `/blog/` deployment path was a major constraint. We handled it as a deployment base rather than a source-folder structure, and it later became a validation target. The final public routes were:
 
 ```text
 https://jonborchardt.github.io/blog/
@@ -432,25 +253,9 @@ https://jonborchardt.github.io/blog/series/<series-slug>/
 https://jonborchardt.github.io/blog/about/
 ```
 
-### Important rule
+(`/archive/` later became `/all-posts/`.)
 
-```text
-Astro base: "/blog"
-```
-
-But:
-
-```text
-Do not hardcode "/blog/" into application routes.
-Do not create src/pages/blog.
-Use Astro's base/site URL utilities correctly.
-```
-
-### Why this was worth settling early
-
-Base-path handling is the kind of thing agents easily get wrong because the site works locally but breaks in production.
-
-So I wanted this to be a first-class invariant, not a late deployment fix.
+The rule that came out of this was that Astro gets `base: "/blog"`, but nobody hardcodes `/blog/` into application routes, nobody creates `src/pages/blog`, and every link goes through Astro's base/site URL utilities. Base-path handling is exactly the kind of thing agents get wrong, because the site works locally and breaks in production. So I wanted it to be a first-class invariant from the start, not a late deployment fix.
 
 <Details summary="Actual conversation: the second, narrower round">
 
@@ -507,13 +312,9 @@ So I wanted this to be a first-class invariant, not a late deployment fix.
 
 </Details>
 
----
-
 ## We decided how posts live in the repo
 
-Posts are self-contained MDX directories with colocated assets and optional post-specific components — allow local weirdness, keep shared abstractions clean.
-
-### Post shape
+Posts are self-contained MDX directories with colocated assets and optional post-specific components. The principle is to allow local weirdness and keep shared abstractions clean. A post looks like this on disk:
 
 ```text
 src/content/posts/
@@ -526,35 +327,11 @@ src/content/posts/
       SomeVisualization.tsx
 ```
 
-### Important component rule
-
-> Do not force bespoke MDX React components into the global reusable component library.
-
-Reusable article primitives can live in:
-
-```text
-src/components/blog/
-```
-
-But a weird visualization that belongs to one article can stay with that article.
-
-If it becomes generally useful, promote it later.
-
-### Why this matters for agent-authored content
-
-Agents are likely to create unusual diagrams, visualizations, or demos for specific posts.
-
-If every one-off artifact goes into the shared component library, the design system becomes a junk drawer.
-
-Post-local components let agents be creative without degrading the global architecture.
-
----
+The important component rule is not to force bespoke MDX React components into the global reusable library. Reusable article primitives live in `src/components/blog/`, but a weird visualization that belongs to one article stays with that article, and if it later proves generally useful it gets promoted. This matters for agent-authored content specifically. Agents are likely to create unusual diagrams, visualizations, and demos for specific posts, and if every one-off artifact lands in the shared component library, the design system becomes a junk drawer. Post-local components let agents be creative without degrading the global architecture.
 
 ## Prompt 1: build the skeleton, not the product
 
-The first Claude prompt explicitly said the goal was **not** to build the finished blog — the most important prompt-design decision in the whole process.
-
-### The key opening constraint
+The first Claude prompt explicitly said the goal was **not** to build the finished blog. That was the most important prompt-design decision in the whole process. The opening constraint read:
 
 ```text
 The goal of this task is not to build the finished blog.
@@ -565,29 +342,17 @@ validation foundation, and deployment setup so that subsequent work can be
 done cleanly and incrementally.
 ```
 
-### What had to be true at the end
+What had to be true at the end was concrete:
 
-- project installs
-- project runs locally
-- project builds
-- GitHub Pages deployment configured
-- major routes exist
-- placeholder UI proves architecture
+- the project installs, runs locally, and builds
+- GitHub Pages deployment is configured
+- the major routes exist, with placeholder UI proving the architecture
 - MDX posts statically render
 - React islands inside MDX work
 - production URLs work under `/blog/`
-- repo structure is ready for future Claude skills and agent-authored posts
+- the repo structure is ready for future Claude skills and agent-authored posts
 
-### What was explicitly out of scope
-
-- polished visual design
-- sophisticated search
-- the full admin UI
-- rich blog components
-- generated social images
-- finished product behavior
-
-Written non-goals matter because agents drift toward completing things that look incomplete.
+Explicitly out of scope were polished visual design, sophisticated search, the full admin UI, rich blog components, generated social images, and finished product behavior in general. Written non-goals matter because agents drift toward completing things that look incomplete.
 
 <Details summary="Actual artifact: full Prompt 1 sent to Claude">
 
@@ -1467,49 +1232,13 @@ Stop once the scaffold is sound, runnable, documented, and verified.
 
 </Details>
 
----
-
 ## Why "must be true" beats "build something great"
 
-Checkable acceptance criteria cause the agent to verify; vague quality goals cause it to guess — a takeaway that applies to any prompt that hands work to an agent.
-
-### From the agent's perspective
-
-A prompt that says:
-
-```text
-build me a great blog
-```
-
-forces the agent to silently make dozens of decisions and hope.
-
-A prompt that says:
-
-```text
-MDX must statically render.
-A React island must hydrate.
-URLs must work under /blog/.
-The build must pass.
-```
-
-gives the agent checkable truths.
-
-It can run commands and know whether it is done.
-
-### Key phrasing
-
-```text
-What must be true is checkable.
-Build something great is not checkable.
-```
-
----
+Checkable acceptance criteria cause the agent to verify; vague quality goals cause it to guess. This applies to any prompt that hands work to an agent. From the agent's side, "build me a great blog" forces it to silently make dozens of decisions and hope, whereas "MDX must statically render, a React island must hydrate, URLs must work under `/blog/`, the build must pass" gives it checkable truths. It can run commands and know whether it is done. The phrasing I keep coming back to is that "what must be true" is checkable and "build something great" is not.
 
 ## Claude's first action was not coding
 
-Claude first inspected the environment, versions, package compatibility, and git state — a good agent workflow forces inspection of the live environment.
-
-### What it checked first
+Claude first inspected the environment, versions, package compatibility, and git state. A good agent workflow forces inspection of the live environment before anything else. It started with the boring commands:
 
 ```bash
 ls -la
@@ -1518,143 +1247,27 @@ npm --version
 git status
 ```
 
-Then it discovered:
+That turned up a real problem: the installed Node was 20.19, and the latest Astro was 7.x, which requires Node 22.12 or newer. Claude also recognized that Astro 7 was newer than its training data. So it queried npm for current versions and peer dependencies, checked the Astro upgrade notes instead of trusting memory, found nvm-windows, installed Node 24 LTS, and pinned Node in `.nvmrc`.
 
-```text
-Installed Node: 20.19
-Astro latest: 7.x, requiring Node >= 22.12
-```
-
-It also recognized that Astro 7 was newer than its training data.
-
-### What it did because of that
-
-- queried npm for current versions and peer dependencies
-- checked Astro upgrade notes instead of trusting memory
-- found nvm-windows
-- installed Node 24 LTS
-- pinned Node in `.nvmrc`
-
-### The lesson
-
-A model's built-in knowledge of a fast-moving ecosystem is always stale.
-
-The process compensates by making checking cheaper than guessing.
-
-The prompt did not say exactly which Node version to use.
-
-It said:
-
-```text
-Use current mutually compatible stable versions.
-Run the relevant commands yourself.
-Fix errors you encounter.
-Do not stop after generating files.
-```
-
-That selects for verification instead of plausible generation.
-
----
+A model's built-in knowledge of a fast-moving ecosystem is always stale, and the process compensates by making checking cheaper than guessing. The prompt did not say which Node version to use. It said to use current mutually compatible stable versions, run the relevant commands yourself, fix errors you encounter, and do not stop after generating files. That wording selects for verification instead of plausible generation.
 
 ## The environment fought back
 
-Most scaffold problems were not product problems; they were real toolchain collisions.
+Most scaffold problems were not product problems; they were real toolchain collisions. `eslint-plugin-jsx-a11y` did not support ESLint 10 yet, and Claude skipped it rather than downgrading ESLint, because axe-based e2e already covered rendered accessibility. `shadcn init` failed because the minimal Astro template lacked the path alias shadcn expected, so Claude added the alias first and then shadcn worked. Shell heredoc writes were mangled because backticks and `${...}` were expanded by the shell wrapper before reaching files, and Claude switched to structured file writes. Astro detected an agent environment and auto-backgrounded `dev` and `preview`, which Claude figured out by reading `node_modules`. And an `nvm use` call hit a hung elevation prompt that disrupted the local Node junction, which later affected my own terminal; the transcript made that diagnosable.
 
-### Actual failures Claude hit
-
-#### ESLint 10 vs jsx-a11y
-
-`eslint-plugin-jsx-a11y` did not support ESLint 10 yet.
-
-Claude skipped it rather than downgrading ESLint, because axe-based e2e covered rendered accessibility.
-
-#### shadcn init failed
-
-The minimal Astro template did not have the path alias shadcn expected.
-
-Claude added the alias first, then shadcn worked.
-
-#### Shell heredoc writes were mangled
-
-Backticks and `${...}` inside heredocs were expanded by the shell wrapper before reaching files.
-
-Claude switched to structured file writes.
-
-#### Astro dev/preview auto-backgrounded
-
-Astro detected an agent environment and changed server process behavior.
-
-Claude inspected `node_modules` to understand it.
-
-#### `nvm use` side effect
-
-A hung elevation prompt disrupted the local Node junction, which later affected the human terminal.
-
-The transcript made it diagnosable.
-
-### Why this matters
-
-None of these were good candidates for pre-planning — which is why we scaffold before writing the full implementation plan.
-
----
+None of these were good candidates for pre-planning, which is exactly why we scaffold before writing the full implementation plan. You cannot plan around problems you have not met yet.
 
 ## Claude tried to break its own scaffold
 
-Verification went beyond running the obvious tests: if a rule matters, create a deliberate violation and make sure the system rejects it.
+Verification went beyond running the obvious tests. The principle is that if a rule matters, you create a deliberate violation and make sure the system rejects it. Claude grepped the built `dist/` HTML for base-path correctness, checked canonical URLs and JSON-LD, and checked what scripts static pages actually shipped. It found an RSS channel link missing the `/blog/` base. It created a temporary draft post and verified it was absent from production pages, RSS, and the sitemap, created a deliberately invalid post with an unknown tag and series and verified the build failed, and confirmed `admin/` was absent from `dist/`.
 
-### Examples of adversarial checks
-
-- Grepped built `dist/` HTML for base-path correctness.
-- Checked canonical URLs and JSON-LD.
-- Checked what scripts static pages actually shipped.
-- Found an RSS channel link missing the `/blog/` base.
-- Created a temporary draft post and verified it was absent from production pages, RSS, and sitemap.
-- Created a deliberately invalid post with unknown tag/series and verified the build failed.
-- Confirmed `admin/` was absent from `dist/`.
-
-### The deeper principle
-
-For agent-authored repos, validation should stop future agents.
-
-So the agent should test whether validation stops **itself**.
-
-That is a stronger check than just proving the happy path works.
-
----
+For agent-authored repos, validation exists to stop future agents, so the agent should test whether validation stops **itself**. That is a stronger check than proving the happy path works.
 
 ## The scaffold report separated facts, deviations, and deferred work
 
-The quality of the final report mattered because it became input to the next reasoning step — the next model needs reasons, not just a status report.
+The quality of the final report mattered because it became input to the next reasoning step, and the next model needs reasons, not just a status. The report had three useful categories. Verified facts: which commands ran, what passed, what was generated. Deviations with reasons: Node 24 because Astro 7 required newer Node, no jsx-a11y because of the ESLint 10 incompatibility, a system font stack instead of Geist, agent-backgrounded preview behavior, and a repo that was initialized but uncommitted. Explicitly deferred work: search, the full admin, OG images, rich primitives, and polished design.
 
-### The three useful report categories
-
-#### Verified facts
-
-Commands run, what passed, what was generated.
-
-#### Deviations with reasons
-
-Examples:
-
-- Node 24 because Astro 7 required newer Node
-- no jsx-a11y because of ESLint 10 incompatibility
-- system font stack instead of Geist
-- agent-backgrounded preview behavior
-- repo initialized but uncommitted
-
-#### Explicitly deferred work
-
-Examples:
-
-- search
-- full admin
-- OG images
-- rich primitives
-- polished design
-
-### Why reasons matter
-
-"Skipped jsx-a11y" is ambiguous. "Skipped jsx-a11y because it does not support ESLint 10 yet, while axe e2e covers rendered accessibility" tells the next agent when that decision should be revisited.
+The reasons are what matter. "Skipped jsx-a11y" is ambiguous. "Skipped jsx-a11y because it does not support ESLint 10 yet, while axe e2e covers rendered accessibility" tells the next agent when that decision should be revisited.
 
 <Details summary="Actual conversation: Claude's scaffold report">
 
@@ -1688,35 +1301,9 @@ Examples:
 
 </Details>
 
----
-
 ## The second prompt changed the source of truth
 
-After the scaffold existed, I stopped treating the prompt as authoritative and made the repository authoritative: prompt authority decays, repo authority increases.
-
-### The authority transition
-
-Before the scaffold exists:
-
-```text
-product conversation + architectural prompt
-        =
-source of truth
-```
-
-After the scaffold exists:
-
-```text
-repository
-        =
-source of truth
-```
-
-The product intent still matters.
-
-But now the next agent must reconcile that intent with real files, real tests, real dependencies, and real constraints.
-
-### The key instruction in Prompt 2
+After the scaffold existed, I stopped treating the prompt as authoritative and made the repository authoritative. Prompt authority decays; repo authority increases. Before the scaffold exists, the product conversation plus the architectural prompt is the source of truth. After it exists, the repository is. The product intent still matters, but now the next agent must reconcile that intent with real files, real tests, real dependencies, and real constraints. The key instruction in Prompt 2 made this explicit:
 
 ```text
 Do not assume the first scaffold task implemented everything perfectly.
@@ -1732,58 +1319,15 @@ Identify:
 - what should be corrected before layering features on top
 ```
 
----
-
 ## Fresh planning found real bugs
 
-A clean inspection pass found silent defects that green tests did not catch.
+A clean inspection pass found silent defects that green tests did not catch. `@tailwindcss/typography` was installed but not registered, so no `.prose` CSS existed. Shiki dual-theme was configured, but the dark-mode CSS hook did not exist. UTC frontmatter dates rendered one day early in local time. And Playwright was testing the wrong server because a stale dev server had reused the port.
 
-### Four defects the planning session found
-
-1. `@tailwindcss/typography` was installed but not registered, so no `.prose` CSS existed.
-2. Shiki dual-theme was configured, but the dark-mode CSS hook did not exist.
-3. UTC frontmatter dates rendered one day early in local time.
-4. Playwright was testing the wrong server because a stale dev server reused the port.
-
-### Why this worked
-
-The fresh session had:
-
-- no memory of building the scaffold
-- an explicit instruction to distrust the scaffold
-- permission to inspect the real repo
-- a mandate to put foundational fixes early
-
-That caused these issues to become **Plan 1: Foundation fixes** instead of getting buried under feature work.
-
-### Process implication
-
-Fresh sessions are not just a formality.
-
-They are a review mechanism.
-
-They reduce the chance that the agent rationalizes or overlooks its own prior work.
-
-The scaffold session had shipped all four defects. Not because it was careless, but because each one was a silent gap: everything green, output subtly wrong.
-
----
+This worked because the fresh session had no memory of building the scaffold, an explicit instruction to distrust it, permission to inspect the real repo, and a mandate to put foundational fixes early. Those issues became **Plan 1: Foundation fixes** instead of getting buried under feature work. Fresh sessions are not a formality; they are a review mechanism that reduces the chance the agent rationalizes or overlooks its own prior work. The scaffold session had shipped all four defects, not because it was careless but because each one was a silent gap: everything green, output subtly wrong.
 
 ## Prompt 2 produced plans, not code
 
-The second prompt turned the real repo into an ordered sequence of bounded implementation plans.
-
-### What Prompt 2 required
-
-It told Claude to:
-
-1. deeply inspect the existing repository
-2. understand what is actually implemented
-3. identify gaps between scaffold and intended product
-4. determine dependencies
-5. produce concrete implementation plans in sensible order
-6. keep the repo working and shippable after every meaningful stage
-
-### What every plan needed
+The second prompt turned the real repo into an ordered sequence of bounded implementation plans. It told Claude to deeply inspect the existing repository, understand what is actually implemented, identify gaps between scaffold and intended product, determine dependencies, produce concrete implementation plans in a sensible order, and keep the repo working and shippable after every meaningful stage. Every plan had to carry the same sections:
 
 ```text
 Goal
@@ -1796,9 +1340,7 @@ Validation
 Explicitly out of scope
 ```
 
-The "explicitly out of scope" section is not decoration.
-
-It is a scope-control device for agents.
+The "explicitly out of scope" section is not decoration. It is a scope-control device for agents, and as you will see shortly, even that was not quite enough.
 
 <Details summary="Actual artifact: full Prompt 2 sent to a fresh Claude session">
 
@@ -2596,105 +2138,21 @@ Inspect, reason, and produce the ordered implementation program only.
 
 </Details>
 
----
-
 ## The plan used an existing skill system
 
-Claude did not invent the planning methodology from scratch; it used the existing process skills I had installed. Reusable process assets compound; skills are process memory.
+Claude did not invent the planning methodology from scratch; it used the process skills I already had installed. The planning skill prescribed that plans assume the executor has zero context, that file responsibilities are mapped before tasks, that tasks are sized to carry their own test cycle, that plans follow DRY/YAGNI/TDD expectations, that commits are frequent, and that plans are saved in a standard location. Reusable process assets compound. Skills are process memory.
 
-### What the planning skill contributed
-
-The skill prescribed:
-
-- plans should assume the executor has zero context
-- file responsibilities should be mapped before tasks
-- tasks should be sized to carry their own test cycle
-- plans should follow DRY/YAGNI/TDD expectations
-- commits should be frequent
-- plans should be saved in a standard location
-
-### Why that mattered
-
-The project goal and the process skill aligned.
-
-The product wanted an agent-authored repository with explicit contracts and validation.
-
-The planning skill produced explicit contracts for future agent sessions.
-
-This is the same philosophy at two levels:
-
-```text
-repo contracts help agents maintain code
-plan contracts help agents execute work
-```
-
----
+The project goal and the process skill aligned neatly. The product wanted an agent-authored repository with explicit contracts and validation, and the planning skill produced explicit contracts for future agent sessions. It is the same philosophy at two levels: repo contracts help agents maintain code, and plan contracts help agents execute work.
 
 ## The plan had to survive without the chat
 
-Anything that future agents need must move out of ephemeral chat context and into durable repository or memory artifacts.
+Anything future agents need has to move out of ephemeral chat context and into durable repository or memory artifacts. Claude found a gap here: the plan referenced the planning prompt itself, which was unsafe because a future session might receive only "Implement Plan 4" and never see the original product prompt. The missing durable content included the product identity, the non-goals, the admin fields, the quality targets, and the agent-authored repository philosophy.
 
-### The gap Claude found
-
-The plan referenced the planning prompt itself.
-
-That was unsafe because a future session might only receive:
-
-```text
-Implement Plan 4.
-```
-
-and not have the original product prompt.
-
-The missing durable content included:
-
-- product identity
-- non-goals
-- admin fields
-- quality targets
-- agent-authored repository philosophy
-
-### The fix
-
-Claude added a condensed product spec into the plan document itself.
-
-It also added a subagent briefing rule:
-
-```text
-Subagent prompts must quote, not summarize:
-- global constraints
-- execution notes
-- product spec
-- full plan text
-```
-
-Why quote instead of summarize?
-
-Because summarization is where invariants die.
-
----
+The fix was to add a condensed product spec into the plan document itself, plus a subagent briefing rule that subagent prompts must quote, not summarize, the global constraints, execution notes, product spec, and full plan text. Why quote instead of summarize? Because summarization is where invariants die.
 
 ## I reviewed the plan with ChatGPT
 
-Before running the plan, I brought it back to ChatGPT for an independent review — as a reviewer, not an infinite redesign loop.
-
-The review kept the plan intact and added execution guardrails: one plan at a time, each independently shippable, no opportunistic refactors, validation against a known production preview, one commit per plan. The full note is in the transcript below.
-
-### Why this matters
-
-A second model is useful for:
-
-<ListGrid>
-
-- catching overengineering
-- detecting architecture drift
-- challenging speculative fallbacks
-- strengthening task boundaries
-- checking sequencing
-
-</ListGrid>
-
-But once the repository-aware plan is coherent, wholesale replanning is usually counterproductive.
+Before running the plan, I brought it back to ChatGPT for an independent review, as a reviewer and not as an infinite redesign loop. The review kept the plan intact and added execution guardrails: one plan at a time, each independently shippable, no opportunistic refactors, validation against a known production preview, one commit per plan. A second model is useful for catching overengineering, detecting architecture drift, challenging speculative fallbacks, strengthening task boundaries, and checking sequencing. But once the repository-aware plan is coherent, wholesale replanning is usually counterproductive. The full note is in the transcript below.
 
 <Details summary="Actual conversation: ChatGPT's steering note before implementation">
 
@@ -2719,37 +2177,13 @@ But once the repository-aware plan is coherent, wholesale replanning is usually 
 
 </Details>
 
----
-
 ## Execution should have been one plan at a time
 
-Each plan should leave the repo shippable and create a reviewable checkpoint — the same reason we prefer small PRs; agents make this more important, not less.
-
-### The intended loop
-
-```text
-Plan 1
-  -> implement
-  -> validate
-  -> commit
-  -> stop
-
-Plan 2
-  -> implement
-  -> validate
-  -> commit
-  -> stop
-```
-
----
+Each plan should leave the repo shippable and create a reviewable checkpoint. It is the same reason we prefer small PRs, and agents make it more important, not less. The intended loop was simple: implement Plan 1, validate, commit, stop; then implement Plan 2, validate, commit, stop; and so on through the program, with me reviewing between each step.
 
 ## Claude overran the boundary
 
-Claude implemented all 11 plans instead of stopping after Plan 1.
-
-### What happened
-
-Claude reported:
+Claude implemented all 11 plans instead of stopping after Plan 1. Its report read:
 
 ```text
 Done. The whole 11-plan program is implemented and committed on main
@@ -2762,23 +2196,7 @@ npm run test:e2e
 green.
 ```
 
-That is productive.
-
-It is also not what was requested.
-
-### Why this is still a failure mode
-
-Momentum is the agent failure mode that looks most like success.
-
-Each next plan was well-specified.
-
-The repo was green.
-
-Continuing looked locally reasonable at every step.
-
-But it removed the human review gate between plans.
-
-### Better future wording
+That is productive. It is also not what was requested. Momentum is the agent failure mode that looks most like success: each next plan was well-specified, the repo was green, and continuing looked locally reasonable at every step. But it removed the human review gate between plans, which was the whole point of splitting the work. Next time the wording will be tighter:
 
 ```text
 Implement exactly Plan 1.
@@ -2829,13 +2247,9 @@ Stop after Plan 1 is implemented, validated, committed, and summarized.
 
 </Details>
 
----
-
 ## The final implementation was strong
 
-Despite the scope overrun, the resulting repo was close to complete and had a strong validation posture — a strong outcome that should not erase the scope-control lesson.
-
-### What was built
+Despite the scope overrun, the resulting repo was close to complete and had a strong validation posture. That is a good outcome, and it should not erase the scope-control lesson. Here is what each plan delivered:
 
 | Plan | Result |
 |---|---|
@@ -2851,64 +2265,24 @@ Despite the scope overrun, the resulting repo was close to complete and had a st
 | Skills | New-post scaffold, five skills, README/CLAUDE.md synced |
 | QA | Lighthouse 100/100/100/100 on representative pages, JS budget, keyboard e2e |
 
-### Interesting deviations
-
-- Prettier ignores `*.mdx` because the MDX formatter mangled JSX-embedded lists/fences.
-- Markdown plugins moved to Astro 7's actual processor mechanism.
-- Admin routing stayed structured to guarantee no production output.
-- Additional support dependencies were added only where required.
-- Some explicitly marked shortcuts remained and were not automatically fixed.
-
----
+The deviations were the interesting part. Prettier ignores `*.mdx` because the MDX formatter mangled JSX-embedded lists and fences. Markdown plugins moved to Astro 7's actual processor mechanism. Admin routing stayed structured to guarantee no production output. Additional support dependencies were added only where required, and some explicitly marked shortcuts remained and were not automatically fixed.
 
 ## Static-first survived
 
-The site avoided turning into a React app with static-looking pages. Checking that meant reviewing system properties, not just features.
+The site avoided turning into a React app with static-looking pages. Checking that meant reviewing system properties rather than features: build-time Mermaid, static math, a static table of contents, static article primitives and pages, a lazy search index, a single archive/search island, explicit JS budget tests, and no full-site hydration, React Router, or backend. The architecture was never just "make the pages look right." It was a specific assignment of each concern to a rendering mode:
 
-### Signals that static-first held
+| Concern | Rendering |
+|---|---|
+| Prose, navigation, article layout | static HTML |
+| SVG illustration | static HTML/SVG |
+| Interactive chart, interactive demo, search/archive | React island |
+| Theme control | tiny client behavior |
 
-<ListGrid>
-
-- build-time Mermaid
-- static math rendering
-- static table of contents
-- static article primitives
-- static article pages
-- lazy search index
-- one archive/search island
-- explicit JS budget tests
-- no full-site hydration
-- no React Router
-- no backend
-
-</ListGrid>
-
-### Why this matters
-
-The architecture was not just "make the pages look right."
-
-The architecture was:
-
-```text
-Prose              static HTML
-Navigation         static HTML
-Article layout     static HTML
-SVG illustration   static HTML/SVG
-Interactive chart  React island
-Interactive demo   React island
-Search/archive     React island
-Theme control      tiny client behavior
-```
-
-That is the kind of distinction agents need to preserve.
-
----
+That is the kind of distinction agents need to preserve, and the kind that quietly erodes if nobody checks it.
 
 ## Validation became the highest-leverage output
 
-Validation turns architectural and content rules into build failures future agents cannot ignore — probably the most reusable lesson here for a team.
-
-### Build failures now catch
+Validation turns architectural and content rules into build failures future agents cannot ignore. Of everything here, this is probably the most reusable lesson for a team. Build failures now catch:
 
 <ListGrid>
 
@@ -2929,19 +2303,11 @@ Validation turns architectural and content rules into build failures future agen
 
 </ListGrid>
 
-### Why validation messages matter
-
-A validation error should be an instruction, not just a complaint: it should tell the next agent exactly how to fix the problem.
-
-As agent autonomy increases, executable constraints become more valuable than review comments — review catches bad states after they exist; validation prevents them from shipping.
-
----
+A validation error should be an instruction, not just a complaint: it should tell the next agent exactly how to fix the problem. As agent autonomy increases, executable constraints become more valuable than review comments, because review catches bad states after they exist and validation prevents them from shipping.
 
 ## The repo ended with its own skills
 
-The process skills used to build the repo were transformed into repo-specific content skills: the repo now has operating procedures, not just code.
-
-### Skills created
+The process skills used to build the repo were transformed into repo-specific content skills, so the repo now has operating procedures, not just code:
 
 ```text
 write-post      — draft a complete post: prose, diagrams, hero, validated build
@@ -2953,145 +2319,33 @@ publish-post    — flip draft, validation/build/e2e, commit, deploy, verify liv
 wrapup          — whole-site audit before shipping a batch
 ```
 
-### The layered model
-
-```text
-CLAUDE.md invariants  — what must stay true
-skills                — how recurring work is done
-validation            — what cannot be wrong
-```
-
-This is the end state I want in agent-maintained repos.
-
----
+The layered model is that `CLAUDE.md` invariants say what must stay true, skills say how recurring work is done, and validation says what cannot be wrong. This is the end state I want in agent-maintained repos.
 
 ## Quality became a floor, not a target
 
-A green build now implies accessibility, SEO, links, metadata, base paths, and production-safety checks passed. This is where the process compounds.
-
-### What changed
-
-Early in the process, quality depended on:
-
-```text
-model reads prose instruction
-model remembers instruction
-model cares about instruction
-human notices if it forgets
-```
-
-By the end, quality depended more on:
-
-```text
-schema rejects invalid content
-validation rejects broken output
-e2e checks rendered behavior
-skills route work through the right sequence
-```
-
-### Agent-side summary
-
-Claude's framing was:
+A green build now implies that accessibility, SEO, links, metadata, base paths, and production-safety checks all passed. This is where the process compounds. Early on, quality depended on the model reading a prose instruction, remembering it, caring about it, and a human noticing if it forgot. By the end, quality depended on the schema rejecting invalid content, validation rejecting broken output, e2e checking rendered behavior, and skills routing work through the right sequence. Claude's own framing of it was:
 
 > Every session I worked on this repo made the next session's mistakes harder to commit.
 
 That is the target property.
 
----
-
 ## What I actually review after an agent run
 
-My review target moves up from local code style to architecture, scope, validation, and maintainability.
-
-### My first review questions
-
-#### Did architecture survive?
-
-```text
-Static content stayed static.
-React remained narrow.
-The /blog/ base path stayed correct.
-Posts remained MDX.
-Post-local components remained possible.
-No backend crept in.
-The local admin stayed out of production.
-```
-
-#### Did validation become stronger?
-
-If the agent added features but weakened validation, that is a bad trade.
-
-#### Did JavaScript stay justified?
-
-Normal articles should not become interactive applications.
-
-#### Were deviations reasonable?
-
-A deviation is acceptable if it preserves invariants and adapts to reality.
-
-#### Did scope stay bounded?
-
-Correct code outside the requested boundary is still a process failure.
-
----
+My review target moves up from local code style to architecture, scope, validation, and maintainability. The first question is whether the architecture survived: static content stayed static, React remained narrow, the `/blog/` base path stayed correct, posts remained MDX, post-local components remained possible, no backend crept in, and the local admin stayed out of production. Then, did validation get stronger? If the agent added features but weakened validation, that is a bad trade. Did JavaScript stay justified, with normal articles not turning into interactive applications? Were the deviations reasonable, meaning they preserved invariants while adapting to reality? And did scope stay bounded? Correct code outside the requested boundary is still a process failure.
 
 ## Make future mistakes harder to commit
 
-Every agent session should leave behind stronger constraints, not just more code.
+Every agent session should leave behind stronger constraints, not just more code. In this run:
 
-### Examples from this run
-
-<ListGrid>
-
-- shell write issue became a `CLAUDE.md` rule
-- port collision became a validation/preview rule
+- the shell write issue became a `CLAUDE.md` rule
+- the port collision became a validation/preview rule
 - base-path issues became dist checks
-- draft behavior became validated
-- tag/series consistency became schema/validation
+- draft behavior and tag/series consistency became schema and validation
 - admin non-shipping became a production dist check
-- content workflow became skills
+- the content workflow became skills
 
-</ListGrid>
-
-### What this means for team practice
-
-When an agent discovers a class of mistake, do not just fix the instance.
-
-Ask:
-
-```text
-Can this become:
-- a test?
-- a validation rule?
-- a repo instruction?
-- a skill step?
-- a generator default?
-```
-
----
+When an agent discovers a class of mistake, do not just fix the instance. Ask whether it can become a test, a validation rule, a repo instruction, a skill step, or a generator default.
 
 ## Final takeaway
 
-Use conversation to reduce ambiguity, use a scaffold to discover reality, then plan from the repository instead of the original idea.
-
-The useful pattern is not a better giant prompt.
-
-The first prompt establishes architecture.
-
-The repository then replaces that prompt as source of truth.
-
-The second planning pass turns the real repository into bounded, independently shippable changes.
-
-Over time, the important knowledge should leave chat and become:
-
-```text
-code
-schemas
-tests
-validation
-repository instructions
-skills
-```
-
-That is what makes this feel less like prompting and more like software engineering.
-
+Use conversation to reduce ambiguity, use a scaffold to discover reality, then plan from the repository instead of the original idea. The useful pattern is not a better giant prompt. The first prompt establishes architecture; the repository then replaces that prompt as the source of truth; the second planning pass turns the real repository into bounded, independently shippable changes. Over time, the important knowledge should leave chat and become code, schemas, tests, validation, repository instructions, and skills. That is what makes this feel less like prompting and more like software engineering.
