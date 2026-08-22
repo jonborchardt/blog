@@ -12,6 +12,7 @@ hero:
 draft: false
 ---
 
+import { Image } from "astro:assets";
 import Callout from "@/components/blog/Callout.astro";
 import Figure from "@/components/blog/Figure.astro";
 import VizFigure from "@/components/blog/VizFigure.astro";
@@ -39,10 +40,10 @@ them — the live thing itself.
   width="wide"
   zoom
 >
-  <img
-    src={landing.src}
-    width="1440"
-    height="900"
+  <Image
+    src={landing}
+    width={1440}
+    height={900}
     alt="The portfolio landing page, a card grid of Products led by Audience Planner above a Demos section"
   />
 </Figure>

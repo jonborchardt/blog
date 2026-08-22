@@ -12,6 +12,7 @@ hero:
 draft: false
 ---
 
+import { Image } from "astro:assets";
 import Callout from "@/components/blog/Callout.astro";
 import Figure from "@/components/blog/Figure.astro";
 import VizFigure from "@/components/blog/VizFigure.astro";
@@ -46,10 +47,10 @@ on A&E, for a run of :30 spots. It's dense, so here's how to read it.
   caption="Media Foundry, week of 10/13/2013: planned Carfax spot blocks (columns) against detected watermark hits (rows), with a Detected but not in plan column on the right."
   zoom
 >
-  <img
-    src={grid.src}
-    width="731"
-    height="865"
+  <Image
+    src={grid}
+    width={731}
+    height={865}
     alt="Media Foundry grid for a Carfax week on A&E: planned spot-block columns above detection rows"
   />
 </Figure>

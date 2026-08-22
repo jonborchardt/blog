@@ -12,6 +12,7 @@ hero:
 draft: false
 ---
 
+import { Image } from "astro:assets";
 import Figure from "@/components/blog/Figure.astro";
 import Comparison from "@/components/blog/Comparison.astro";
 
@@ -70,10 +71,10 @@ columns it inherited from the US version.
   forecast, not a delivered campaign."
   zoom
 >
-  <img
-    src={screena.src}
-    width="1311"
-    height="1029"
+  <Image
+    src={screena}
+    width={1311}
+    height={1029}
     alt="The TV TEST tactic group: MCN inventory fields, the Forecasted Plan panel and a distribution table"
   />
 </Figure>
@@ -92,10 +93,10 @@ running rather than being planned:
   target, and a weekly breakdown of expected versus delivered impressions."
   zoom
 >
-  <img
-    src={screenb.src}
-    width="1278"
-    height="780"
+  <Image
+    src={screenb}
+    width={1278}
+    height={780}
     alt="A pacing report with spend and impression totals above four weekly delivered-versus-expected rows"
   />
 </Figure>

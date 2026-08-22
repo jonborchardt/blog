@@ -12,6 +12,7 @@ hero:
 draft: false
 ---
 
+import { Image } from "astro:assets";
 import Callout from "@/components/blog/Callout.astro";
 import Figure from "@/components/blog/Figure.astro";
 import Gallery from "@/components/blog/Gallery.astro";
@@ -82,10 +83,10 @@ of charts at once.
   width="wide"
   zoom
 >
-  <img
-    src={comparer.src}
-    width="1746"
-    height="854"
+  <Image
+    src={comparer}
+    width={1746}
+    height={854}
     alt="Package Compare, annotated by hand: an inventory panel, two editable packages and comparison charts"
   />
 </Figure>
@@ -149,10 +150,10 @@ inside the ONE TV era at AOL.
 <Figure caption="Campaign pacing report by report, 5/5/2017 to 8/4/2017: weekly impressions stacked as confirmed, preliminary and projected against the expected delivery line. With reduced motion the final 8/4/2017 report is shown instead." zoom>
   <picture>
     <source srcset={proposalStill.src} media="(prefers-reduced-motion: reduce)" />
-    <img
-      src={proposal.src}
-      width="518"
-      height="276"
+    <Image
+      src={proposal}
+      width={518}
+      height={276}
       alt="Weekly impression bars stacked as confirmed, preliminary and projected against an expected line"
     />
   </picture>

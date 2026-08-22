@@ -12,15 +12,13 @@ hero:
 draft: false
 ---
 
+import { Image } from "astro:assets";
 import Callout from "@/components/blog/Callout.astro";
 import Figure from "@/components/blog/Figure.astro";
 import before from "./before-google-chart.png";
 import trackerRest from "./tracker-rest.png";
 import trackerSwept from "./tracker-swept.png";
 import sweep0 from "./sweep-0-rest.png";
-import sweep1 from "./sweep-1.png";
-import sweep2 from "./sweep-2.png";
-import sweep3 from "./sweep-3.png";
 import sweepVideo from "./rotations-sweep.webm";
 import teaserPrograms from "./teaser-programs.png";
 import teaserExplorer from "./teaser-explorer.png";
@@ -62,10 +60,10 @@ could not change.
   width="wide"
   zoom
 >
-  <img
-    src={before.src}
-    width="1400"
-    height="505"
+  <Image
+    src={before}
+    width={1400}
+    height={505}
     alt="A Google annotated timeline with blue Ford and red Industry lines, lettered markers and zoom presets"
   />
 </Figure>
@@ -135,10 +133,10 @@ their dates while the window closes around them:
   width="wide"
   zoom
 >
-  <img
-    src={trackerSwept.src}
-    width="1400"
-    height="789"
+  <Image
+    src={trackerSwept}
+    width={1400}
+    height={789}
     alt="The industry tracker rescaled to a mid-2010 through late 2011 window, with annotation C still pinned"
   />
 </Figure>

@@ -12,6 +12,7 @@ hero:
 draft: false
 ---
 
+import { Image } from "astro:assets";
 import Callout from "@/components/blog/Callout.astro";
 import Figure from "@/components/blog/Figure.astro";
 import VizFigure from "@/components/blog/VizFigure.astro";
@@ -57,10 +58,10 @@ put them side by side.
   width="wide"
   zoom
 >
-  <img
-    src={upfrontShipped.src}
-    width="1426"
-    height="988"
+  <Image
+    src={upfrontShipped}
+    width={1426}
+    height={988}
     alt="The Optimize Upfront screen: campaign fields above a scenario grid and a row of summary charts"
   />
 </Figure>
@@ -85,10 +86,10 @@ scatter is the tactical buying that happens inside the quarter, once budgets hav
 is inventory left over to place against.
 
 <Figure caption="The shipped scatter screen, 2018." width="wide" zoom>
-  <img
-    src={scatterShipped.src}
-    width="1390"
-    height="657"
+  <Image
+    src={scatterShipped}
+    width={1390}
+    height={657}
     alt="The Black Opium campaign screen: tactic settings, a forecasted plan strip and a network table"
   />
 </Figure>
@@ -110,10 +111,10 @@ then build the drawing.
   width="wide"
   zoom
 >
-  <img
-    src={upfrontWireframe.src}
-    width="2036"
-    height="1661"
+  <Image
+    src={upfrontWireframe}
+    width={2036}
+    height={1661}
     alt="A hand-annotated Balsamiq wireframe of the upfront screen with yellow callout notes on each panel"
   />
 </Figure>
@@ -136,10 +137,10 @@ passed. Go back to the start of that folder.
   width="wide"
   zoom
 >
-  <img
-    src={scatterWireframe.src}
-    width="3074"
-    height="1399"
+  <Image
+    src={scatterWireframe}
+    width={3074}
+    height={1399}
     alt="Three Balsamiq wireframes: Edit Campaign, Edit Cell and Edit Cell Week dialogs with callout notes"
   />
 </Figure>
@@ -152,10 +153,10 @@ Here is what it looked like a year later, after it had been built — as a Silve
 product, with a real edit timestamp on it:
 
 <Figure caption="The same constraints, shipped in Silverlight. Last edit: 29 January 2013.">
-  <img
-    src={scatterSilverlight.src}
-    width="479"
-    height="371"
+  <Image
+    src={scatterSilverlight}
+    width={479}
+    height={371}
     alt="A Silverlight dialog titled Edit Campaign Constraints with numeric fields for each optimizer limit"
   />
 </Figure>

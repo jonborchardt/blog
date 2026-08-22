@@ -12,6 +12,7 @@ hero:
 draft: false
 ---
 
+import { Image } from "astro:assets";
 import Figure from "@/components/blog/Figure.astro";
 import zp from "./zp.png";
 import zt from "./zt.png";
@@ -29,7 +30,7 @@ rippled like real water — refraction, reflection, a slider to trade quality fo
 choice of ten backgrounds to run the water over.
 
 <Figure caption="Zen Puddle on the Play Store: ten backgrounds, a detail slider, simulated refraction and reflection." width="wide">
-  <img src={zp.src} width={zp.width} height={zp.height} alt="Zen Puddle Play Store listing with background texture thumbnails for tile, brick, and stone" />
+  <Image src={zp} width={zp.width} height={zp.height} alt="Zen Puddle Play Store listing with background texture thumbnails for tile, brick, and stone" />
 </Figure>
 
 There was no product reason for it. I built it because getting water to look and move like water
@@ -42,7 +43,7 @@ flight where you tilt the phone to steer and tap to shoot down the robots chasin
 studio name, same "because it sounded fun" energy, different itch.
 
 <Figure caption="Zen Tunnel on the Play Store: tilt to steer through the tunnel, tap to shoot down the robots chasing you." width="wide">
-  <img src={zt.src} width={zt.width} height={zt.height} alt="Zen Tunnel Play Store listing showing a dark tiled tunnel with glowing green obstacles" />
+  <Image src={zt} width={zt.width} height={zt.height} alt="Zen Tunnel Play Store listing showing a dark tiled tunnel with glowing green obstacles" />
 </Figure>
 
 Both games shipped. I don't remember much beyond that — no launch story, no download numbers I

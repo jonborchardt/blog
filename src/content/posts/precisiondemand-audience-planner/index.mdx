@@ -12,6 +12,7 @@ hero:
 draft: false
 ---
 
+import { Image } from "astro:assets";
 import Callout from "@/components/blog/Callout.astro";
 import Figure from "@/components/blog/Figure.astro";
 import VizFigure from "@/components/blog/VizFigure.astro";
@@ -73,10 +74,10 @@ Here is the entry view. Each program in the catalogue is a card, and the cards a
 histogram binned by targeting score.
 
 <Figure caption="The explore view: 2,473 program cards binned by targeting score, sorted and coloured by the same number, with the score facet already filtered to everything over -0.4." zoom>
-  <img
-    src={histogram.src}
-    width="948"
-    height="632"
+  <Image
+    src={histogram}
+    width={948}
+    height={632}
     alt="The app window: a left facet panel, nine stacked bars of small green tiles, and a status bar below"
   />
 </Figure>
@@ -119,10 +120,10 @@ Tick one box in the Genre facet and the collection redraws. This is the view I w
 poster.
 
 <Figure caption="The treemap view, filtered to one genre: 191 programs, sized by impressions per airing and shaded by targeting score." zoom>
-  <img
-    src={treemap.src}
-    width="1737"
-    height="806"
+  <Image
+    src={treemap}
+    width={1737}
+    height={806}
     alt="A treemap of program tiles carrying network logos, shaded red to green, beside a genre facet list"
   />
 </Figure>
@@ -146,10 +147,10 @@ third session — back on the card grid rather than the treemap, with 2,328 prog
 not try to reconcile its numbers with the two screenshots above.
 
 <Figure caption="A single program card with its detail panel: metrics in context, an airings breakdown, and the household attributes behind its targeting." zoom>
-  <img
-    src={cardDetail.src}
-    width="1165"
-    height="905"
+  <Image
+    src={cardDetail}
+    width={1165}
+    height={905}
     alt="A program card with four metrics, each carrying a small distribution bar, beside its detail panel"
   />
 </Figure>
@@ -179,10 +180,10 @@ household data, and this panel is where that join surfaced to a human.
 The other end of the product is a grid, and it is deliberately boring.
 
 <Figure caption="The optimizer grid. Most rows get zero airings; the plan concentrates on a handful." zoom>
-  <img
-    src={optimizer.src}
-    width="1075"
-    height="805"
+  <Image
+    src={optimizer}
+    width={1075}
+    height={805}
     alt="A dense data grid of program rows with optimal airings and spend columns, and two buttons beneath"
   />
 </Figure>
@@ -224,10 +225,10 @@ do their real work somewhere it cannot see.
 Before the spreadsheet there was a comparison view.
 
 <Figure caption="Plan comparison charts: the recommended plan against the client's, on airings, targeted CPM, targeted impressions, and distribution across days and dayparts." zoom>
-  <img
-    src={charts.src}
-    width="941"
-    height="702"
+  <Image
+    src={charts}
+    width={941}
+    height={702}
     alt="Seven chart cards comparing plans, each a grouped bar chart with five bar series"
   />
 </Figure>

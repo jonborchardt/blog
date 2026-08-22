@@ -12,6 +12,7 @@ hero:
 draft: false
 ---
 
+import { Image } from "astro:assets";
 import Callout from "@/components/blog/Callout.astro";
 import Figure from "@/components/blog/Figure.astro";
 import serpEntityCard from "./serp-entity-card.png";
@@ -52,10 +53,10 @@ developing the people around me stuck for good.
   caption="A Bing search results page, captured around 2017 — the shape of the product area, not the panel I shipped."
   zoom
 >
-  <img
-    src={serpEntityCard.src}
-    width="1252"
-    height="828"
+  <Image
+    src={serpEntityCard}
+    width={1252}
+    height={828}
     alt="A Bing search results page for the query bing, with a results list and a right-rail entity card"
   />
 </Figure>
