@@ -31,13 +31,15 @@
  * />
  * ```
  */
+import { getImage } from "astro:assets";
+import type { ImageMetadata } from "astro";
 import { href } from "@/lib/url";
 
 interface Props {
   demo: string;
   title: string;
   label: string;
-  teaser: { src: string; width: number; height: number };
+  teaser: ImageMetadata;
   teaserAlt: string;
   description?: string;
   height?: number;
@@ -55,12 +57,19 @@ const {
   nativeWidth = 1280,
   teaserHeight = 170,
 } = Astro.props;
+// Run the teaser through the asset pipeline instead of shipping the original file.
+const teaserOpt = await getImage({ src: teaser, format: "webp" });
 ---
 
 <figure class="figure museum-embed my-8">
   <details>
     <summary>
-      <img src={teaser.src} width={teaser.width} height={teaser.height} alt={teaserAlt} />
+      <img
+        src={teaserOpt.src}
+        width={teaserOpt.attributes.width}
+        height={teaserOpt.attributes.height}
+        alt={teaserAlt}
+      />
       <span class="label"
         ><span class="when-closed">{label}</span><span class="when-open">Hide the demo</span></span
       >
