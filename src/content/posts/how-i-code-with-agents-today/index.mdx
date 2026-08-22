@@ -12,9 +12,9 @@ draft: true
 import Details from "@/components/blog/Details.astro";
 import ListGrid from "@/components/blog/ListGrid.astro";
 
-## Thesis
+## TL;DR
 
-I do not treat agentic coding as "write a giant prompt and hope." I treat it as an engineering process for moving ambiguity out of my head and into code, validation, plans, and repository rules, in roughly that order. The workflow I actually follow looks like this:
+Agentic coding isn't "write a giant prompt and hope." It's an engineering process for moving ambiguity out of my head and into code, validation, plans, and repository rules, in roughly that order:
 
 ```text
 idea
@@ -36,7 +36,9 @@ agent execution
 validate the resulting system
 ```
 
-The main shift is not that Claude writes more code. It is that I am designing a system in which future agent sessions are less likely to do the wrong thing, because the repo itself pushes back. The process has warts. At one point Claude ignored a stop instruction and implemented all eleven plans in one go; that's in here too.
+The main shift isn't that Claude writes more code. It's that I'm designing a system in which future agent sessions are less likely to do the wrong thing, because the repo itself pushes back. The process has warts: at one point Claude ignored a stop instruction and implemented all eleven plans in one go. That's in here too.
+
+The rest of this post walks that process end to end on one real case study: the blog you are reading. It starts from a rough idea and a conversation, goes through a bootstrap prompt, a scaffold, a repository-aware plan, and an agent run, and ends with a static site that scores Lighthouse 100/100/100/100 on representative pages, passes an axe WCAG 2.2 AA audit and the W3C Nu markup validator on every page, ships zero JavaScript on prose pages, and fails its own build on a broken link, a missing alt, an unknown tag, or any admin output in `dist/`. Every one of those checks runs in CI on every push, so the quality described at the end is a floor the repo enforces, not a target I remember to aim for.
 
 ## The case study
 
@@ -2327,7 +2329,19 @@ A green build now implies that accessibility, SEO, links, metadata, base paths, 
 
 > Every session I worked on this repo made the next session's mistakes harder to commit.
 
-That is the target property.
+That is the target property. Concretely, here is what the site passes on every push, and the numbers as they stood at launch:
+
+- **Lighthouse 100/100/100/100** (Performance, Accessibility, Best Practices, SEO) on the home page, a prose post, an interactive post, and the archive, mobile preset, against the production preview.
+- **Accessibility:** an axe WCAG 2.2 AA audit of every URL in the sitemap, with zero violations; a keyboard tour (skip link, header, theme toggle, tabs, details, copy button, heading anchors) and a reduced-motion check.
+- **Markup:** every built HTML page runs through the W3C Nu validator; markup errors fail the build.
+- **JavaScript budget:** prose pages load zero script files; the archive loads only its React island, under 120 KB gzipped; an interactive post loads only the chunks for its own island.
+- **Responsive:** no horizontal overflow at 360 px on every sitemap page, including pages with wide tables and code blocks; the archive is usable and axe-clean at 360 px.
+- **SEO:** every page has a unique title, a description, a canonical URL that matches its sitemap entry, `og:url`, a reachable 1200×630 `og:image`, a `summary_large_image` Twitter card, and JSON-LD; articles carry `article:*` tags and `BlogPosting` data; RSS, sitemap, and robots.txt all resolve under `/blog/`.
+- **Links and assets:** every internal link and `#fragment` resolves; nothing links outside the base path; every image has alt text and dimensions; external links that return 404 or 410 fail the build.
+- **Production safety:** `/admin/` returns 404 in the build, asserted twice (dist check and e2e); drafts never appear in pages, listings, RSS, or the sitemap.
+- **Theme and dates:** the theme toggle cycles system → light → dark and persists; code blocks switch to the dark Shiki theme; dates render as UTC calendar dates.
+
+None of that is aspirational. Each line is a test or a build check that runs in CI on every push, and a red one blocks the deploy.
 
 ## What I actually review after an agent run
 

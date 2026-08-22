@@ -9,6 +9,7 @@ export const RESERVED_SLUGS_LIST = [
   "all-posts",
   "series",
   "about",
+  "legal",
   "admin",
   "404",
   "og",
