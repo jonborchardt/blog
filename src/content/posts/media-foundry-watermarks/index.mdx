@@ -20,7 +20,7 @@ import ReconciliationViz from "./reconciliation-viz.svg";
 import grid from "./verification-grid.png";
 
 Buying a television spot and having it actually air are two different events, and PrecisionDemand's
-whole pitch — tell an advertiser what market their ad dollars would convert into real sales — falls
+whole pitch (tell an advertiser what market their ad dollars would convert into real sales) falls
 apart if the second event doesn't happen. Early in my PrecisionDemand years, before the Audience
 Planner took over my time, I built the tool that checked whether it had: Media Foundry.
 
@@ -28,13 +28,13 @@ Planner took over my time, I built the tool that checked whether it had: Media F
 
 A media plan is a promise: this spot, on this station, in this week. Whether the station kept that
 promise is a separate question, and the only way to answer it is to watch television and see what
-actually ran. Media Foundry didn't do that watching itself — we paid outside companies to watch for
+actually ran. Media Foundry didn't do that watching itself. We paid outside companies to watch for
 an ad watermark embedded in the spot, all over the country, and report back every time and place
 they saw it. Media Foundry's job was to take that stream of detections and reconcile it against the
 plan.
 
 <Callout variant="note" title="The campaign on screen is demo data">
-  Carfax, the market, the dollar figures — none of it is a real client's media plan. Every screenshot
+  Carfax, the market, the dollar figures: none of it is a real client's media plan. Every screenshot
   in this series uses fake campaign data built for demos, same as the rest of the portfolio.
 </Callout>
 
@@ -55,7 +55,7 @@ on A&E, for a run of :30 spots. It's dense, so here's how to read it.
   />
 </Figure>
 
-Each column is a planned spot block — a time window, the days of the week it runs, and how many
+Each column is a planned spot block: a time window, the days of the week it runs, and how many
 spots the plan called for and at what price. Each row is a detection: a timestamp and a spot ID that
 some outside spotter's watermark scan caught airing. The circles between them mark, block by block,
 whether that detection lines up with a block in the plan. The far right column, "Detected but not in
@@ -74,14 +74,14 @@ with nowhere in the plan to put it.
   <ReconciliationViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
 </VizFigure>
 
-That third case — a detection with nowhere to go — is where the grid stopped being read-only. Drag
+That third case, a detection with nowhere to go, is where the grid stopped being read-only. Drag
 a row out of "Detected but not in plan" and drop it onto a block, and Media Foundry created a new
 airing record on the spot: a way to correct the reconciliation by hand instead of leaving a mismatch
-sitting on the report. It's a small affordance, but it's the one that turns the grid from a status
+sitting on the report. It's a small feature, but it's the one that turns the grid from a status
 display into a tool someone actually used to close out a week.
 
 ## One week at a time
 
-Reconciliation tools are not glamorous; they exist because a claim ("your ad ran") is worth nothing
+Reconciliation tools aren't glamorous; they exist because a claim ("your ad ran") is worth nothing
 without a way to check it, week after week, campaign after campaign. This was PrecisionDemand's way
 of checking, and one of the first screens I built there.

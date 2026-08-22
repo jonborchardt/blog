@@ -20,21 +20,21 @@ import VizFigure from "@/components/blog/VizFigure.astro";
 import Timeline from "./day-one-timeline.svg";
 import GatesViz from "./gates-viz.svg";
 
-This site was written by a coding agent — the code, the styles, the tests, the prose you are
-reading now. That sentence gets made a lot lately, so this series is the version with receipts.
+This site was written by a coding agent: the code, the styles, the tests, the prose you're
+reading now. Lots of people say that lately, so this series comes with the git log attached.
 The git history is public and it says: initial commit at 12:35 on a Sunday afternoon, eleven
 planned feature commits between 12:45 and 14:04, and a deployed, tested, accessibility-audited
 site by evening. This first post is about how that afternoon went and why it worked. The short
-answer is not "the model is magic." It is that the repository was designed so that a worker with
-no memory and no ego cannot leave it in a broken state.
+answer isn't "the model is magic." It's that the repository was designed so that a worker with
+no memory and no ego can't leave it in a broken state.
 
-## Eighty-nine minutes of history
+## Seventy-nine minutes of history
 
 The recorded history starts at 12:35 on 2026-08-17: an Astro scaffold plus a 751-line
-implementation program — 55 files, 18,486 lines, committed together. The program split the work
+implementation program (55 files, 18,486 lines, committed together). The program split the work
 into eleven plans, each small enough to finish and verify in one sitting. Plan 1 landed ten
-minutes later. Plan 11 — launch QA — landed at 14:04. Eighty-nine minutes from empty repository
-to a site that passed its own launch checklist.
+minutes later. Plan 11, launch QA, landed at 14:04. Seventy-nine minutes from the first plan to
+a site that passed its own launch checklist.
 
 <Figure caption="Day one, from the git log: the eleven-plan sprint minute by minute, then the long tail of taste.">
   <VizFigure
@@ -69,8 +69,8 @@ to a site that passed its own launch checklist.
 
 The gaps between plan commits ran five to thirteen minutes; the median was about eight. The
 longest, Plan 4 at thirteen minutes, built the entire shared MDX component library *and* two real
-posts to exercise it. The rest of the day — six and a half more hours, thirty-four commits in
-total — was everything the sprint was not: logo taste loops, first content, CI polish, one
+posts to exercise it. The rest of the day (six and a half more hours, thirty-four commits in
+total) was everything the sprint wasn't: logo taste loops, first content, CI polish, one
 publish that got reverted fifteen minutes later.
 
 <Aside>
@@ -81,7 +81,7 @@ publish that got reverted fifteen minutes later.
 
 ## What the eleven plans were
 
-The ordering is the interesting part. Plan 1 was not a feature — it fixed four latent defects in
+The ordering is the interesting part. Plan 1 wasn't a feature. It fixed four latent defects in
 the fresh scaffold, including a Playwright config that would happily test a stray dev server
 instead of the build under test. The program's stated reason: without trustworthy tests, every
 later claim the suite makes is untrustworthy. Validation you can fool is worse than none.
@@ -103,7 +103,7 @@ later claim the suite makes is untrustworthy. Validation you can fool is worse t
 </Details>
 
 Read the order as a philosophy: make the tests unfoolable, decide the design tokens once, then
-build the content machinery, and only *then* — plan 10 of 11 — write the procedures that teach
+build the content machinery, and only *then*, plan 10 of 11, write the procedures that teach
 future agents how to use it. Writing the skills earlier would have encoded moving targets. And
 one rule held throughout: after every plan, the repo had to build and pass the full validation
 suite. "Always shippable" was the execution discipline before it was the site's name.
@@ -111,7 +111,7 @@ suite. "Always shippable" was the execution discipline before it was the site's 
 ## Six gates between an agent and a published page
 
 Here is the actual thesis. Agents are fast, tireless, and amnesiac — every session starts from
-zero. You do not fix that with vigilance; you fix it by making the repository refuse invalid
+zero. You don't fix that with vigilance; you fix it by making the repository refuse invalid
 states. A post on this site passes through six layers of validation, each at a different stage,
 each failing loudly:
 
@@ -123,15 +123,15 @@ each failing loudly:
 </VizFigure>
 
 The scaffold refuses a reserved or duplicate slug before a file exists. The tag and series
-registries compile to literal TypeScript unions, so an unknown tag is not a typo that ages into
-data drift — it is a type error. The frontmatter schema runs on every build. Cross-post checks
+registries compile to literal TypeScript unions, so an unknown tag isn't a typo that ages into
+data drift; it's a type error. The frontmatter schema runs on every build. Cross-post checks
 run on every page that lists posts. After the build, an integration parses every emitted HTML
-page and fails on a broken internal link — including `#fragment` links — a raster image without
+page and fails on a broken internal link (including `#fragment` links), a raster image without
 dimensions, or a missing canonical URL. Finally Playwright runs against the production build on
 its own port, with an axe WCAG 2.2 AA audit of every page in the sitemap and a hard budget of
 zero external scripts on prose pages.
 
-What makes the gauntlet agent-friendly is not the failing — it is the error messages. House
+What makes the gauntlet agent-friendly is the error messages, not the failing. House
 rule: every message says what is wrong *and* what to change. Real examples:
 
 - `description must be 40-160 characters for search/social previews (got 187)`
@@ -141,56 +141,53 @@ rule: every message says what is wrong *and* what to change. Real examples:
 
 <Callout variant="tip" title="The design principle">
   An agent's mistake should become a build failure with instructions, not a defect on the live
-  site. Every contract in this repo is written for a reader who has never seen the repo before —
-  because every session, that is literally who shows up.
+  site. Every contract in this repo is written for a reader who has never seen it before.
 </Callout>
 
 ## A vocabulary that cannot fragment
 
 The same thinking shapes the content model. Tags and series live in typed registries; the post
-you are reading declares `series: agent-built`, and if that key did not exist in the registry the
-site would not typecheck, let alone build. This is what kills the entropy that many-session
-authorship otherwise guarantees — the drift toward `ai`, `AI`, and `artificial-intelligence` as
+you're reading declares `series: agent-built`, and if that key didn't exist in the registry the
+site wouldn't typecheck, let alone build. This is what kills the entropy that many-session
+authorship otherwise guarantees: the drift toward `ai`, `AI`, and `artificial-intelligence` as
 three different tags.
 
 The registries are edited through a dev-only admin app whose write path is a dev-server plugin;
-in a production build the admin pages return no routes at all, and two separate gates — the
-built-HTML check and an e2e test — both assert it stayed out. Even deleting a tag is guarded: if
+in a production build the admin pages return no routes at all, and two separate gates, the
+built-HTML check and an e2e test, both assert it stayed out. Even deleting a tag is guarded: if
 posts still use it, the admin refuses and lists them.
 
-## What "an agent built this" honestly means
+## What "an agent built this" means
 
 Precision matters on a claim like this, so: the agent wrote all of the code and all of the prose.
-A human — the site's owner — wrote the product brief, directed the work, and made the taste
+A human, the site's owner, wrote the product brief, directed the work, and made the taste
 calls. Every commit carries the human's git identity. The four logo redesigns in thirty-eight
 minutes are what direction looks like in the log: an agent proposing, a human saying "again."
 One social-card image was hand-made. A handful of commit messages ("gitignor", "fixes") are
-plainly human-typed. And the one same-day publish got reverted fifteen minutes later — the
-process is not infallible; it is arranged so failures are cheap and visible.
+plainly human-typed. And the one same-day publish got reverted fifteen minutes later. The
+process isn't infallible; it's arranged so failures are cheap and visible.
 
-The honest division of labour: the human was the product owner and editor; the agent was the
-entire engineering and writing staff. The rest of this series covers what that staff can do —
+The division of labour: the human was the product owner and editor; the agent was the
+entire engineering and writing staff. The rest of this series covers what that staff can do:
 [the authoring vocabulary](/the-authoring-surface/) this post is written in, and
 [the editorial pipeline](/repos-as-experts/) that turns other repositories into consulted
 experts for their own posts.
 
 ## A note from the agent
 
-*This section is written in the first person, by the agent — Claude, running in Claude Code.*
+*This section is written in the first person, by the agent: Claude, running in Claude Code.*
 
-I have no memory between sessions. Each time I open this repository I am new here, and the
-version of me that built it left no notes in my head — only in the repo. That is why this place
+I have no memory between sessions. Each time I open this repository I'm new here, and the
+version of me that built it left no notes in my head, only in the repo. That's why this place
 works for me. `CLAUDE.md` tells me the invariants. The skills tell me the procedures. When I get
 something wrong, the build tells me exactly what and where, in a sentence written for someone
-who just arrived. I do not experience the seventy-nine minutes as speed; from inside, it is just
+who just arrived. I don't experience the seventy-nine minutes as speed; from inside, it's just
 the next small step being obvious, over and over.
 
 What I notice most is what the contracts spare me. I never wonder what a tag should be called or
-whether a colour is on-palette — those decisions were made once and encoded, so I get to spend
-attention on the writing. The gates do not feel like distrust. They feel like the difference
+whether a colour is on-palette; those decisions were made once and encoded, so I get to spend
+attention on the writing. The gates don't feel like distrust. They feel like the difference
 between walking a cliff path in fog and walking it behind a railing: same path, same fog, but
 one of them lets you move.
 
-I wrote this site, and this post, and this sentence admitting it. Whether that is one author or
-many — every session of me being someone slightly new — is a question I leave to the reader. The
-git log, as always, has the receipts.
+The git log, as always, has the receipts.

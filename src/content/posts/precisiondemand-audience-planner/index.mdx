@@ -26,35 +26,35 @@ import charts from "./charts.png";
 
 I joined PrecisionDemand in March 2010 as the sole user interface developer, and I was still the
 sole user interface developer when AOL bought us in May 2014. Four years, one frontend person.
-Every screen a customer or a salesperson or an analyst ever looked at was mine — the design
+Every screen a customer or a salesperson or an analyst ever looked at was mine, the design
 decisions as well as the code.
 
-The Audience Planner is the one I would show you first. It started as a 20% time idea, it became
-the company's flagship product, and it is one of the three things in [the portfolio I froze in
-2018](/labs-2018-snapshot/) that I am proudest of. It is also completely dead: it was a Silverlight
+The Audience Planner is the one I'd show you first. It started as a 20% time idea, it became
+the company's flagship product, and it's one of the three things in [the portfolio I froze in
+2018](/labs-2018-snapshot/) that I'm proudest of. It's also completely dead: it was a Silverlight
 application, and no browser has run Silverlight for years. What survives is a folder of screenshots
 and a walkthrough video. That turns out to be enough to reconstruct it, because the product was
 never complicated. It was four moves.
 
 ## What PrecisionDemand sold
 
-TV ad-spend optimization. The pitch, more or less as I would have said it in an elevator: we could
+TV ad-spend optimization. The pitch, more or less as I'd have said it in an elevator: we could
 tell you what market your ad dollars would convert into real sales.
 
-That is a harder claim than it sounds. Television inventory is sold on audience size — a rating, a
+That's a harder claim than it sounds. Television inventory is sold on audience size: a rating, a
 CPM, how many eyeballs. The thing an advertiser actually cares about is whether the people watching
 are the people who might buy a mid-size SUV. Our whole business was the gap between those two
 things, and the Audience Planner was the interface where a buyer got to see the gap and act on it.
 
 <Callout variant="note" title="Every number in these screenshots is fake">
-  The advertisers, the programs, the ratings, the dollar figures — all of it is demo data, built to
+  The advertisers, the programs, the ratings, the dollar figures: all of it is demo data, built to
   show the product. Nothing here is a real client's media plan.
 </Callout>
 
 ## The whole product is four moves
 
 Explore, filter, optimize, export. You open every program we had data on as one visual collection,
-you narrow it with facets until you are looking at the inventory you care about, you hand the
+you narrow it with facets until you're looking at the inventory you care about, you hand the
 survivors to the optimizer, and you leave with a spreadsheet.
 
 <VizFigure
@@ -82,20 +82,20 @@ histogram binned by targeting score.
   />
 </Figure>
 
-The status bar along the bottom is the part I would defend hardest today. Program Count: 2473.
+The status bar along the bottom is the part I still like best. Program Count: 2473.
 Average Impressions: 241,772. Average Cost: $1,022.77. Average CPM: $4.23. Average tCPM: $112.12.
-Whatever you had filtered down to, those five numbers described it, and they moved the instant you
-touched anything. It is the cheapest possible feedback loop and it did more work than any chart on
+Whatever you'd filtered down to, those five numbers described it, and they moved the instant you
+touched anything. It's the cheapest possible feedback loop and it did more work than any chart on
 the screen.
 
 The left panel is the facet list: a search box, then the targeting score with a two-handle range
 slider over its own miniature distribution, then three score clusters, then impressions per airing, targeted
-impressions per airing, cost per airing, CPM, tCPM, and — further down the scroll — media market,
+impressions per airing, cost per airing, CPM, tCPM, and, further down the scroll, media market,
 network, genre, conversions, cost per acquisition, primary daypart and primary day of week. The
 breadcrumb at the top left says `tRatio: Over -0.4`, which is the filter that produced this view.
 
 The toolbar has two dropdowns that I think are the most important controls in the product: **Sort**
-and **Color**. Both are set to the targeting score here — a stat of ours that measured how well a
+and **Color**. Both are set to the targeting score here, a stat of ours that measured how well a
 program's audience matched the audience the advertiser was paying to reach, and a number doing
 three jobs at once in this view: it bins the histogram, it sorts the cards, and it colours them on
 a red-through-yellow-to-green ramp. You can point either dropdown at any field independently,
@@ -103,20 +103,20 @@ which means the same collection can be arranged by cost and shaded by targeting 
 reverse, and the answer to "am I overpaying for the wrong audience" falls out of the picture rather
 than out of a calculation.
 
-The `t` prefix elsewhere in the UI means "targeted" — you get `CPM` and `tCPM` as a pair, and
+The `t` prefix elsewhere in the UI means "targeted": you get `CPM` and `tCPM` as a pair, and
 `Imps per Air` and `tImps per Air` as a pair. A program with a good CPM and a terrible tCPM is
 cheap for a general audience and expensive for yours. Most of the product is about noticing that.
 
 <Callout variant="note" title="What was Microsoft's and what was mine">
   The directory this lives in is called `PivotViewer`, after the Silverlight control for exploring
-  large card collections with facet filters. I could not honestly tell you now which parts of this
+  large card collections with facet filters. I couldn't tell you now which parts of this
   chrome came out of that box and which parts I wrote. The archive kept the screenshots, not the
   source.
 </Callout>
 
 ## Filter: the treemap
 
-Tick one box in the Genre facet and the collection redraws. This is the view I would put on a
+Tick one box in the Genre facet and the collection redraws. This is the view I'd put on a
 poster.
 
 <Figure caption="The treemap view, filtered to one genre: 191 programs, sized by impressions per airing and shaded by targeting score." zoom>
@@ -128,13 +128,13 @@ poster.
   />
 </Figure>
 
-Every tile is a program, sized by whatever the sort dropdown is pointed at — impressions per airing,
-here — coloured by targeting score, with its network's logo drawn on it. The genre facet on the left is showing its counts — 762 documentary, 191
+Every tile is a program, sized by whatever the sort dropdown is pointed at (impressions per airing,
+here), coloured by targeting score, with its network's logo drawn on it. The genre facet on the left is showing its counts (762 documentary, 191
 instructions and advice, 149 general drama, 95 feature film, 62 news, 55 popular music, 45 situation
-comedy, 31 sports — and `INSTRUCTIONS, ADVICE` is the one that is ticked, so the status bar now
+comedy, 31 sports) and `INSTRUCTIONS, ADVICE` is the one that's ticked, so the status bar now
 reads 191 programs at an average of $1,632.80 an airing.
 
-The logos were a deliberate choice and I would make it again. A buyer does not think in program
+The logos were a deliberate choice and I'd make it again. A buyer doesn't think in program
 identifiers; they think "the Food Network block is cheap and the Travel Channel block is orange".
 Putting the brand mark on the tile turned a data structure into something a media planner could
 read across a conference table. Sort by impressions per airing, as it is here, and the big
@@ -143,8 +143,8 @@ recognisable names sort themselves to the top left without anyone explaining the
 ## One card, opened up
 
 Zoom into a single tile and it becomes a card with its own metrics, plus a detail panel. This is a
-third session — back on the card grid rather than the treemap, with 2,328 programs in scope — so do
-not try to reconcile its numbers with the two screenshots above.
+third session, back on the card grid rather than the treemap, with 2,328 programs in scope, so
+don't try to reconcile its numbers with the two screenshots above.
 
 <Figure caption="A single program card with its detail panel: metrics in context, an airings breakdown, and the household attributes behind its targeting." zoom>
   <Image
@@ -159,25 +159,25 @@ Three things worth pointing at here.
 
 The four metrics on the card each carry a tiny bar showing where that value sits in the whole
 distribution. tCPM $48.02 is meaningless on its own; tCPM $48.02 with a marker near the good end of
-the range is a decision. That pattern — never show a number without showing its context — is the one
-idea on this screen that has not dated at all.
+the range is a decision. That pattern (never show a number without showing its context) is the one
+idea on this screen that hasn't dated at all.
 
 The **Airings** block lists a maximum weekly airing count and then a row per campaign, four vehicle
-names and one called `PrecisionDemand Optimal`. That last row is the tell: the app is not only
-describing the inventory, it is holding our own recommended plan alongside whatever the client is
+names and one called `PrecisionDemand Optimal`. That last row is the tell: the app isn't only
+describing the inventory, it's holding our own recommended plan alongside whatever the client is
 actually running, ready to be compared.
 
-The **Demographics** block is a list of household attributes — year the home was built, gender,
-income, marital status, and, my favourite, `Golf - True` — each with a small diverging bar showing
+The **Demographics** block is a list of household attributes (year the home was built, gender,
+income, marital status, and, my favourite, `Golf - True`), each with a small diverging bar showing
 whether this program's audience over- or under-indexes on it. The Silverlight-era backend that
-survives on disk connects to two databases, one called `Demographics` and one called `Acxiom`, and I
-would bet this panel is reading the second. Either way it is exactly where the business was: the
+survives on disk connects to two databases, one called `Demographics` and one called `Acxiom`, and I'd
+bet this panel is reading the second. Either way it's exactly where the business was: the
 reason we could talk about sales instead of eyeballs is that somebody had joined TV viewing to
 household data, and this panel is where that join surfaced to a human.
 
 ## Optimize: "Re-calculate Optimal Plan"
 
-The other end of the product is a grid, and it is deliberately boring.
+The other end of the product is a grid, and it's deliberately boring.
 
 <Figure caption="The optimizer grid. Most rows get zero airings; the plan concentrates on a handful." zoom>
   <Image
@@ -207,20 +207,20 @@ Tonight Show at the displayed $19,893.62 comes to $994,681.00, and the cell says
 every row lands within fifteen cents, which is what you get when the per-airing cost on screen is
 itself rounded to the penny and the real one is not.
 
-The `Lock` column is the one piece here I am reading rather than remembering. A checkbox next to an
+The `Lock` column is the one piece here I'm reading rather than remembering. A checkbox next to an
 editable airing count, on a screen whose main verb is "re-calculate", is almost certainly there so a
-buyer can pin the lines they have already committed to and let the solver move everything else
-around them. I believe that is what it did. I would not swear to it.
+buyer can pin the lines they've already committed to and let the solver move everything else
+around them. I think that's what it did.
 
 ## Export, and the comparison charts
 
-The last move is a button labelled **Export to Excel**, and I have made peace with that.
+The last move is a button labelled **Export to Excel**, and I've made peace with that.
 
 Nobody bought a media plan out of a Silverlight window. They bought it out of a spreadsheet that
 went to their agency, got argued over, and came back with changes. The most sophisticated part of
-the product handed off to the least sophisticated format available, on purpose, because that is
+the product handed off to the least sophisticated format available, on purpose, because that's
 where the work continued. A visualization tool without an escape hatch is a tool that asks people to
-do their real work somewhere it cannot see.
+do their real work somewhere it can't see.
 
 Before the spreadsheet there was a comparison view.
 
@@ -235,30 +235,29 @@ Before the spreadsheet there was a comparison view.
 
 The headlines are written as comparisons rather than values: "Airings will be 417 % more than
 Client", "Targeted CPM will be 99 % less than Client", "Targeted impression will be 6,966 % more
-than Client". Those are demo numbers and they are shameless demo numbers — a real proposal did not
-promise a 99% CPM cut — but the framing is right. A buyer does not need to know the targeted CPM.
-They need to know whether it is better than what they are doing now.
+than Client". Those are demo numbers and they're shameless demo numbers (a real proposal didn't
+promise a 99% CPM cut), but the framing is right. A buyer doesn't need to know the targeted CPM.
+They need to know whether it's better than what they're doing now.
 
 Each grouped chart has five bar series and no legend anywhere in the screenshot. The card detail
-panel lists exactly five airing rows, four campaigns plus `PrecisionDemand Optimal`, which is
-suggestive. I would not put money on the mapping.
+panel lists exactly five airing rows, four campaigns plus `PrecisionDemand Optimal`. Probably those
+five, but I can't confirm it.
 
-The `Cable Impressions` card in the bottom right is drawing an empty axis — labelled, gridded, and
-carrying no bars at all. A demo dataset with nothing in one of its buckets, most likely. I am not
-cropping it out, because a portfolio that only shows the panels that filled in is not a portfolio,
-it is a brochure.
+The `Cable Impressions` card in the bottom right is drawing an empty axis: labelled, gridded, and
+carrying no bars at all. A demo dataset with nothing in one of its buckets, most likely. I'm leaving
+it in.
 
 ## Why Silverlight, and what is left of it
 
-Because the company started at the dawn of Silverlight. That is the whole answer. In 2010 it was a
+Because the company started at the dawn of Silverlight. That's the whole answer. In 2010 it was a
 credible bet: you got a real widget toolkit, real data binding, a real type system and a control
 that already did faceted card browsing, at a time when doing any of that in a browser meant writing
-it yourself. We pivoted away later as other web technology became dominant — not on a particular
+it yourself. We pivoted away later as other web technology became dominant. Not on a particular
 Tuesday when someone slammed a door, just steadily, the way a platform stops being a decision and
 starts being a liability.
 
-The Planner's own source did not make it into the archive, but a sibling from the same period and
-the same hands did, and it is short enough to read in one sitting.
+The Planner's own source didn't make it into the archive, but a sibling from the same period and
+the same hands did, and it's short enough to read in one sitting.
 
 <VizFigure
   name="The surviving Silverlight-era stack"
@@ -267,18 +266,18 @@ the same hands did, and it is short enough to read in one sitting.
   <StackViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
 </VizFigure>
 
-A `.xap` file — a Silverlight client, zipped assemblies, still sitting on disk and still perfectly
-decompilable — plus one WCF service, `DalService.svc`, plus a `Web.config` with Entity Framework
+A `.xap` file (a Silverlight client, zipped assemblies, still sitting on disk and still perfectly
+decompilable), plus one WCF service, `DalService.svc`, plus a `Web.config` with Entity Framework
 connection strings hardcoded to `data source=baker` and the catalogues `Demographics` and `Acxiom`.
 
-The service contract is three operations wide. `GetClusterSources`, `GetClusters`, and
-`GetRelevantDemographicsOfCluster` — and there is the whole thesis, in an interface definition. Pick
+The service contract is three operations wide: `GetClusterSources`, `GetClusters`, and
+`GetRelevantDemographicsOfCluster`. There's the whole thesis, in an interface definition. Pick
 a data source, get its clusters of households, ask which demographic attributes make a given cluster
 distinctive. Those clusters are the same word as the `tRatio Cluster 1`, `2` and `3` facets in the
 first screenshot, and that last method is the panel I just walked you through.
 
 Three tiers, and every one of them is unreachable now. No browser ships the plug-in. `baker` was
-decommissioned so long ago that I could not tell you what happened to it.
+decommissioned so long ago that I couldn't tell you what happened to it.
 
 ## What happened to it
 
@@ -292,7 +291,7 @@ years.
 
 ## What I would keep
 
-The technology is a museum piece and I would not defend a single line of it. Four decisions I would
+The technology is a museum piece and I wouldn't defend a single line of it. Four decisions I'd
 port straight into anything I build tomorrow:
 
 - **A status bar that never lies.** Five aggregates over the current filter, updating live. Cheaper
@@ -301,8 +300,8 @@ port straight into anything I build tomorrow:
   every view.
 - **Never a number without its distribution.** The little bar next to $48.02 is what made the $48.02
   actionable.
-- **An export button.** The tool is not where the decision gets made. Let the work leave.
+- **An export button.** The tool isn't where the decision gets made. Let the work leave.
 
-And the thing that is really worth saying: none of this was assigned. It was a 20% time project that
-turned into the flagship. I have gone on to build a great deal of software that somebody asked for,
-and the ones I would show you first are still the ones nobody did.
+And the thing that's really worth saying: none of this was assigned. It was a 20% time project that
+turned into the flagship. I've gone on to build a great deal of software that somebody asked for,
+and the ones I'd show you first are still the ones nobody did.

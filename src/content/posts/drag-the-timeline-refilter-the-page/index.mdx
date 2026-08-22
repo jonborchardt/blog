@@ -50,10 +50,9 @@ got:
 </script>
 ```
 
-Under that, a couple of thousand hardcoded `data.addRows([...])` lines: a date, two targeting-score values,
-and four spare string columns per row, an annotation title and its body text for each of the two
-series. A number our own modelling produced was being drawn by a component I did not write and
-could not change.
+Under that, a couple of thousand hardcoded `data.addRows([...])` lines: a date, two values, and
+annotation text per row. A number our own modelling produced was being drawn by a component I
+didn't write and couldn't change.
 
 <Figure
   caption="fordsuvindustry.htm, the Google annotated timeline the D3 work replaced. Every advertiser, network and number in this archive is demo data."
@@ -68,11 +67,10 @@ could not change.
   />
 </Figure>
 
-It is a good chart. Two series, lettered annotations pinned to dates with a panel explaining them,
+It's a good chart. Two series, lettered annotations pinned to dates with a panel explaining them,
 zoom presets, and a range selector along the bottom. In 2013 Google drew all of that with a Flash
 object, which is the detail that explains the headline on the page I replaced it with: "Replacement
-for existing Flash based Industry Tracker". The Flash in that sentence was never ours. It was
-Google's.
+for existing Flash based Industry Tracker". The Flash in that sentence was Google's, not ours.
 
 <Callout variant="note" title="These pages were supposed to be dead">
   I went in expecting a blank screen. The old `jsapi` loader is long deprecated and I had written
@@ -85,9 +83,9 @@ Google's.
 
 ## Building the equivalent
 
-Did the demo set win an argument inside the company? I don't remember one, and I am not going to
-invent one. What I have is the files, and the files are unusually clear about the intent: this was not a chart inspired by Google's, it was a copy
-of Google's with the ceiling taken off.
+I don't remember whether this won any argument internally. What I have is the files, and they're
+clear about the intent: a copy of Google's chart with the ceiling taken off, not a chart merely
+inspired by it.
 
 The replacement chart is `nv.models.PdLineWithFocusChart`, 795 lines registered straight into NVD3's
 model namespace. `Pd` for PrecisionDemand. Two siblings sit next to it, `PdBubbleMap` and
@@ -108,8 +106,7 @@ there was no column for it. The other two are a rename of Google's pair: `descri
 title column, and `notes` is Google's text column, which the Ford data mostly left unused. The series
 colours are pinned in the same
 file to `#4684EE` and `#DC3912`, the same blue and the same red the Google chart drew. Someone
-opening the new page was not supposed to notice a new chart library. They were supposed to notice it
-did more.
+opening the new page wasn't supposed to notice a new chart library, just that it did more.
 
 <MuseumEmbed
   demo="/museum/d3demo/industryTracker.html"
@@ -123,7 +120,7 @@ did more.
 />
 
 The zoom presets are gone, replaced by a full-width strip of the same two lines underneath the main
-chart. You drag a window across that strip and the chart above it becomes that window. It is a
+chart. You drag a window across that strip and the chart above it becomes that window. It's a
 smaller idea than "1h 1d 5d 1w 1m 3m 6m 1y max" and a much better one, because the window is
 continuous and you can slide it rather than pick it off a menu. The annotations stay pinned to
 their dates while the window closes around them:
@@ -220,20 +217,20 @@ embedded above are preserved here too:
   height={800}
 />
 
-One file, `crossfilterChart.js`, opens with a comment I am still glad I wrote:
+One file, `crossfilterChart.js`, opens with a comment I'm still glad I wrote:
 
 ```js
 // A direct copy from the crossfilter example:
 // https://github.com/square/crossfilter/blob/50227903a5567d24c0d38141a5e94b5dec932b4c/index.html
 ```
 
-Attribution, pinned to an exact commit, in the file itself. Thirteen years later it is the only
+Attribution, pinned to an exact commit, in the file itself. Thirteen years later it's the only
 reason I can tell you with certainty where Square's example ended and my code began.
 
 ## What it turned into
 
-The charts themselves did not survive. D3 v3, NVD3 and a hand-rolled `nv.models.Pd...` are not how I
-would draw this today, and the pages that used them were rewritten more than once after AOL acquired
+The charts themselves didn't survive. D3 v3, NVD3 and a hand-rolled `nv.models.Pd...` aren't how I'd
+draw this today, and the pages that used them were rewritten more than once after AOL acquired
 us in May 2014 and I moved the product off Silverlight and onto AngularJS.
 
 The interaction survived. When I ask myself which of these side projects went anywhere, the list is
@@ -245,13 +242,13 @@ click anything to filter everything, drag the timeline to refilter live. Those a
 ## How it holds up in 2026
 
 It runs. `npx http-server . -p 8123 -c-1`, open `/demos/d3Demo/rotationExample.html`, and the sweep
-above is what you get. Those frames are from this month, not from 2013. The caveats are the ones you
-would expect of a thirteen-year-old page:
+above is what you get. Those frames are from this month, not from 2013. The caveats are the ones you'd
+expect of a thirteen-year-old page:
 
 - D3 and topojson load from `http://d3js.org`, so the demos work over a local `http` server and
   would break as mixed content on any `https` rehost.
-- The sweep works; some of the other interactions are flaky now, and I have left them that way.
+- The sweep works; some of the other interactions are flaky now, and I've left them that way.
 
-The Google chart still renders too, which I did not expect. But it renders because Google kept
+The Google chart still renders too, which I didn't expect. But it renders because Google kept
 maintaining it and silently swapped its guts out from under my page. Mine renders because, once it
 was written, it never needed anything from anyone.

@@ -21,17 +21,17 @@ import AuthorityViz from "./authority-viz.svg";
 
 [Part 1](/an-agent-built-this-blog/) explained why an agent can't ship a broken page here, and
 [part 2](/the-authoring-surface/) showed the vocabulary posts are written in. This part is about
-the harder problem: not *can the page build*, but *is the post any good — and is it true?* An
+the harder problem: not *can the page build*, but *is the post any good, and is it true?* An
 agent writing about a codebase it half-remembers will produce plausible, wrong prose all day.
 This site's answer has two parts: the editorial process is a set of executable files, and every
-technical post names another repository as its domain expert — a repo that gets consulted, like a
+technical post names another repository as its domain expert, a repo that gets consulted, like a
 colleague, about the post describing its own work.
 
 ## The pipeline is a set of files
 
-Editorial quality here is not a habit; it is seven procedure files, committed under
-`.claude/skills/`, that an agent invokes and follows. Habits do not survive workers who forget
-everything between sessions. Files do.
+Editorial quality here isn't a habit; it's seven procedure files, committed under
+`.claude/skills/`, that an agent invokes and follows. Habits don't survive a worker with no
+memory; files do.
 
 <VizFigure
   name="The editorial pipeline as skills"
@@ -41,21 +41,21 @@ everything between sessions. Files do.
 </VizFigure>
 
 Each skill guards something specific. `write-post` owns the shape of a draft and ends with a
-mandatory visual pass — its own rule says a technical post typically yields two to four visuals,
+mandatory visual pass: its own rule says a technical post typically yields two to four visuals,
 and *"zero means the pass was skipped, not that nothing qualified."* `create-hero` makes the
-author write the hero image's alt text **first** — if you cannot write the sentence, the idea is
-not concrete enough to draw. `review-post` runs the automated gates plus a human-judgment
+author write the hero image's alt text **first**: if you can't write the sentence, the idea
+isn't concrete enough to draw. `review-post` runs the automated gates plus a human-judgment
 read-through and outputs a findings list rather than silently rewriting anything. And
 `publish-post` is the only place `draft: false` ever gets set; it ends by verifying the live URL,
 the listings, and the RSS feed on the deployed site, not by trusting the push.
 
 Two supporting skills sit off the main chain: `create-series` (registry entry first, post
-second — the build fails on an unregistered series) and `wrapup`, a whole-site audit for
+second; the build fails on an unregistered series) and `wrapup`, a whole-site audit for
 batches, built around grep sweeps where every hit is either a contract violation or must
 justify itself.
 
 <Aside>
-  The skills deliberately do not restate the rules in `CLAUDE.md` or the component README — they
+  The skills deliberately don't restate the rules in `CLAUDE.md` or the component README; they
   link to them. One source of truth per fact, for procedures as much as for colours.
 </Aside>
 
@@ -66,15 +66,14 @@ repository that owns that post's domain facts. For the three posts about upscali
 adventure-game backgrounds, that is the SCI rendering repo. For the retirement-simulation posts,
 the simulator. For this series, the blog's own repo.
 
-The word *authority* is doing real work. The contract — written into `write-post` and shared by
-the other skills — says the authority repo owns "what the story actually is, what matters and
-what is misleading": behavior, terminology, data meaning, technical claims, evidence, caveats,
-and the semantics of every visual. The blog owns the artifact: structure, prose, MDX, visual
-design, accessibility. The expert is a co-author of meaning, not a fact-checker of last resort.
+The contract, written into `write-post` and shared by the other skills, says the authority repo
+owns "what the story actually is, what matters and what is misleading": behavior, terminology,
+data meaning, technical claims, evidence, caveats, and the semantics of every visual. The blog
+owns the artifact: structure, prose, MDX, visual design, accessibility.
 
 Mechanically, an agent is dispatched *into* the authority repo, where it reads that repo's own
-instructions, source, tests, and data, and makes domain decisions. The budget is strict — two
-calls per post:
+instructions, source, tests, and data, and makes domain decisions. The budget is strict: two
+calls per post.
 
 <VizFigure
   name="The authority lifecycle"
@@ -84,8 +83,8 @@ calls per post:
 </VizFigure>
 
 The first call produces a **domain brief**: the strongest version of the story, the claims worth
-making with their evidence, corrections to the author's outline, terminology, caveats, and — for
-every proposed visual — the exact data and semantics needed to draw it correctly. The brief is
+making with their evidence, corrections to the author's outline, terminology, caveats, and, for
+every proposed visual, the exact data and semantics needed to draw it correctly. The brief is
 committed to the post's directory at `research/brief.md`, in public, and everything downstream
 works from it instead of re-asking. The second call validates the finished draft against what the
 expert previously asserted. A targeted extra question is allowed only when the brief genuinely
@@ -93,21 +92,21 @@ cannot answer it, and the answer gets appended to the brief.
 
 <Callout variant="note" title="Why commit the brief?">
   A committed brief is public evidence a reader can check, a cache the next revision works from,
-  and an anchor for review — the validator compares the draft against what the expert said, not
+  and an anchor for review: the validator compares the draft against what the expert said, not
   against vibes. The `authority` path itself is just a machine address on the author's disk; the
   brief is the part of the expertise that ships.
 </Callout>
 
 ## What an expert actually said
 
-The system earns its keep when the expert pushes back. The first retrofitted brief on this site —
-for the post on [AGI-UP as a reference renderer](/agi-up-as-a-reference-renderer/) — came back
+The system earns its keep when the expert pushes back. The first retrofitted brief on this site,
+for the post on [AGI-UP as a reference renderer](/agi-up-as-a-reference-renderer/), came back
 with eight numbered factual corrections to an already-published post. It found the post's
 pipeline diagram had two stages in the wrong order ("The repo says the opposite… the seal runs
 *before* gap closure"). It found the ending confidently predicted a next step that never
 happened, and named what actually happened instead. It flagged one of the author's own claims as
 unverifiable and said to keep it only if the author personally vouches. It even caught the
-authority repo contradicting *itself* — two configs, two different thresholds — and told the
+authority repo contradicting *itself* (two configs, two different thresholds) and told the
 blog to disclose the discrepancy rather than paper over it.
 
 And asked to propose new visuals, it declined:
@@ -121,36 +120,32 @@ An expert that says *no* is the strongest evidence the role is real.
 
 ## What the system does not guarantee
 
-Honest limits, in order of sharpness. The expert can be wrong — its own repo can disagree with
-itself, as the threshold discrepancy above shows; the contract buys an accountable, evidence-cited
-process, not truth. Briefs go stale — the corrected post above had an ending that was true when
-written and false months later; a brief is a snapshot with an append rule, not a live feed.
-Nothing enforces brief *quality* — a lazy investigation would produce a thin brief and a green
-build; the backstops are the validation pass and the fact that briefs are public. And coverage is
-still partial: the authority system was adopted after ten technical posts were already live, and
-a temporary retrofit skill is backfilling briefs onto them, tracking its own progress in a
-committed worklist — three of ten through the expert pass as this publishes, and the skill's
-final instruction is to delete itself when the list is done.
+The limits, in order of sharpness:
+
+- **The expert can be wrong.** Its own repo disagreed with itself over a threshold. The contract buys an accountable, evidence-cited process, not truth.
+- **Briefs go stale.** The corrected post's ending was true when written and false months later. A brief is a snapshot with an append rule.
+- **Nothing enforces brief quality.** A lazy investigation gives a thin brief and a green build. The backstops are the validation pass and the fact that briefs are public.
+- **Coverage is partial.** The system was adopted after ten technical posts were live. A temporary retrofit skill is backfilling briefs onto them (three of ten done as this publishes) and deletes itself when finished.
 
 One design seam worth noticing: `authority` is optional in the frontmatter schema but required by
-the writing skill. That split is deliberate. The Zod schema enforces what a machine can check —
+the writing skill. That split is deliberate. The Zod schema enforces what a machine can check:
 lengths, registries, date logic. The skills enforce what only procedure can check. The build
 gates from [part 1](/an-agent-built-this-blog/) keep an agent from shipping a broken page; the
 process gates here keep it from shipping a fluent, well-formed, wrong one.
 
 ## This post, as evidence
 
-This post's own `authority` is the blog repository. That is not a joke; it is the rule applied
-uniformly — for a post about the pipeline, the pipeline's repo is the correct expert, the same
+This post's own `authority` is the blog repository. That isn't a joke; it's the rule applied
+uniformly: for a post about the pipeline, the pipeline's repo is the correct expert, the same
 way the SCI renderer was for the upscaling posts. The investigation pass for this post ran like
 any other: an agent was dispatched into the repo, read the seven skills and the one existing
 retrofit brief, and returned the domain brief this post was then written from. It is committed at
 `research/brief.md` in this post's directory, where you can check whether the expert and the
 prose agree. When the authority and the artifact are the same repo, the division of labour is
-procedural rather than physical — two passes and a committed brief instead of two codebases — but
+procedural rather than physical (two passes and a committed brief instead of two codebases), but
 the paper trail is the same.
 
-That is the whole system, and this series is its output: contracts that make broken states
+That's the whole system, and this series is its output: contracts that make broken states
 unbuildable, a vocabulary an agent can wield without inventing anything, and an editorial process
-that treats repositories as colleagues with domain knowledge worth consulting. The receipts, as
-always, are in the repo.
+that treats repositories as colleagues with domain knowledge worth consulting. It's all in the
+repo.

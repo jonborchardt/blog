@@ -29,8 +29,8 @@ as the senior engineer leading the migration off Silverlight and onto AngularJS,
 advertising platform. The platform was called ONE TV.
 
 Two directories in [my 2018 portfolio](/labs-2018-snapshot/) hold what is left of it: `upfront` and
-`scatter`. Between them they contain shipped screens, a hand-annotated wireframe, and — hiding in
-the scatter folder — the same dialog drawn three times across five years.
+`scatter`. Between them they contain shipped screens, a hand-annotated wireframe, and, hiding in
+the scatter folder, the same dialog drawn three times across five years.
 
 <Callout variant="note" title="The campaigns are not real">
   Every advertiser, budget and rating number in these screenshots is demo data. Verizon, YSL's Black
@@ -39,13 +39,13 @@ the scatter folder — the same dialog drawn three times across five years.
 
 ## What I remember, and what I don't
 
-Upfront and scatter are the two halves of how television inventory gets bought. I cannot tell you
+Upfront and scatter are the two halves of how television inventory gets bought. I can't tell you
 how they split ONE TV as a product. Whether they were two products, two modes of one product, or
-just two ways the same screens got used, is not something I still carry around eight years later,
-and I would rather say that than reconstruct a strategy from thumbnails.
+just two ways the same screens got used, isn't something I still carry around eight years later,
+and I'd rather not guess.
 
-So this post does the thing I can actually do honestly: it describes the screens, and it follows
-one dialog through three generations of them.
+So this post does the thing I can actually do: it describes the screens, and it follows one dialog
+through three generations of them.
 
 ## Upfront: a quarter, planned all at once
 
@@ -67,23 +67,23 @@ put them side by side.
 </Figure>
 
 Everything about that screenshot is ordinary except how much of it is people. The campaign is
-"Verizon Q2 2018" and the quarter runs 26 March to 25 June — a whole quarter of inventory, bought
+"Verizon Q2 2018" and the quarter runs 26 March to 25 June: a whole quarter of inventory, bought
 in one sitting, against the Univision network group and its GALA, UMA and UNI networks. Another
 screen in the same folder shows an NBCU list instead: BRAV, CNBC, E!, MSNB, NBC, SYFY, USA. But the
 scenario names in the grid are `Sara 1`, `Olga- shift regress`, `Test 363`, `Decrease Prod Redo`.
 That is not a product demo. That is Sara and Olga poking at the optimizer on a Tuesday, and I
 apparently never cleared it out before taking the screenshot.
 
-Each scenario runs the optimizer with a different objective — shift the buy, decrease the budget —
+Each scenario runs the optimizer with a different objective (shift the buy, decrease the budget),
 and the grid ranks the results by what they cost and how well they hit the target. By 2018 there were
-three scoring columns on that grid — MVS, MQS, SMC — three ways of scoring the same plan. I could
-not tell you today what all three of those initialisms stood for.
+three scoring columns on that grid, MVS, MQS and SMC, three ways of scoring the same plan. I
+couldn't tell you today what all three of those initialisms stood for.
 
 ## Scatter: the tactical half
 
 Scatter is the other half of the year. The upfront market sells a quarter or a season in advance;
-scatter is the tactical buying that happens inside the quarter, once budgets have moved and there
-is inventory left over to place against.
+scatter is the tactical buying that happens inside the quarter, once budgets have moved and there's
+inventory left over to place against.
 
 <Figure caption="The shipped scatter screen, 2018." width="wide" zoom>
   <Image
@@ -96,9 +96,9 @@ is inventory left over to place against.
 
 A tactic group inside a campaign, a budget of \$390,000, a forecast of \$387,003 against it, and a
 headline targeting score of 1.26. Underneath, the plan broken out by network with a score
-each: USA at 1.13, Oxygen at 1.86, E! at 1.38, Bravo at 1.21, and CNBC and NBC both down at 0.58 —
-a ranking of two completely different pieces of inventory on how efficiently they reach the people
-you are paying to reach.
+each: USA at 1.13, Oxygen at 1.86, E! at 1.38, Bravo at 1.21, and CNBC and NBC both down at 0.58.
+It's a ranking of two completely different pieces of inventory on how efficiently they reach the
+people you're paying to reach.
 
 ## The same dialog, three generations deep
 
@@ -121,14 +121,14 @@ then build the drawing.
 
 The callouts are the specification. "Creating a scenario automatically adds a new column to the grid
 below (and a new series in all charting)." "All charts show ALL scenarios AND all update on every
-change." "Ready to print for sending to network" — because the end of all this optimizing was a
+change." "Ready to print for sending to network", because the end of all this optimizing was a
 piece of paper that told a network which spots to buy and which to sell back.
 
 The wireframe is a Q3 campaign against FOX Networks Group at \$1.25M, 21% of the total. The shipped
 screen is a Q2 campaign against Univision at \$2.65M. Different quarter, different networks, same
 screen.
 
-The scatter folder did not get cleaned out either: alongside the 2018 product it still holds the
+The scatter folder didn't get cleaned out either: alongside the 2018 product it still holds the
 drawings and dialogs it grew out of, sitting in the same directory listing as if no time had
 passed. Go back to the start of that folder.
 
@@ -145,11 +145,11 @@ passed. Go back to the start of that folder.
   />
 </Figure>
 
-That is the PrecisionDemand campaign planner. The completed-milestones box in the corner is a mock
-of our own workflow, and it is dated January 2012: "1/3/12 JonB Campaign Started", "1/13/12 Steph
+That's the PrecisionDemand campaign planner. The completed-milestones box in the corner is a mock
+of our own workflow, and it's dated January 2012: "1/3/12 JonB Campaign Started", "1/13/12 Steph
 Buy Complete". The panel on the left, labelled Constraints, is the one to watch.
 
-Here is what it looked like a year later, after it had been built — as a Silverlight dialog, in the
+Here is what it looked like a year later, after it had been built as a Silverlight dialog, in the
 product, with a real edit timestamp on it:
 
 <Figure caption="The same constraints, shipped in Silverlight. Last edit: 29 January 2013.">
@@ -185,22 +185,22 @@ in the same order, with the same default values.
 
 Minimum cluster score, minimum blended score, maximum single buy percentage, maximum single
 count, minimum CPM per unit. Five years, one rename: what had been a **program** became an
-**airing**, which is a more precise word for the same thing. The numbers in the boxes did move — the
+**airing**, which is a more precise word for the same thing. The numbers in the boxes did move: the
 2013 build shipped stricter score floors than the drawing asked for and a far looser cap on any
 single buy, which is what happens when a design meets real inventory. But the fields, and their
 order, are the fields.
 
-I do not think anyone decided this. Nobody wrote down a design language and made us follow it. The
-vocabulary was just load-bearing enough that every rewrite carried it forward rather than paying to
-re-derive it — and by 2017 I was drawing wireframes against a list of constraints I had first drawn
-in 2012, mostly out of muscle memory.
+I don't think anyone decided this. Nobody wrote down a design language and made us follow it. The
+vocabulary was useful enough that every rewrite kept it rather than paying to re-derive it, and by
+2017 I was drawing wireframes against a list of constraints I'd first drawn in 2012, mostly out of
+muscle memory.
 
 ## What happened to it
 
-AOL renamed the division Oath in June 2017 — same team, same platform, a new logo on the same
+AOL renamed the division Oath in June 2017: same team, same platform, a new logo on the same
 screens. I left in March 2018, and the reason these screenshots exist at all is that I was taking
 them on the way out, for a portfolio. ONE TV was shuttered after I left.
 
 So the product is gone, and what survived it is a directory listing where a 2012 drawing, a 2013
-dialog and a 2018 web app all sit next to each other, and you cannot tell from the field labels
+dialog and a 2018 web app all sit next to each other, and you can't tell from the field labels
 which is which.

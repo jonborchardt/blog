@@ -33,7 +33,7 @@ import sodaWarTeaser from "./teaser-soda-war.png";
 
 Not everything I built at PrecisionDemand and AOL was a product. Some of it was just me, handed a
 new pile of data, building the smallest interface that would let me look at it. None of these four
-shipped to a customer. All four exist because I could not understand a dataset by staring at rows
+shipped to a customer. All four exist because I couldn't understand a dataset by staring at rows
 of it, and building a small explorer was faster than not understanding it.
 
 <Callout variant="note" title="Every number below is demo data">
@@ -68,7 +68,7 @@ any of them filters all the others live.
 />
 
 It was a demo, built to see whether we could actually make sense of a brand's TV buy at that
-granularity — not something a client clicked through themselves.
+granularity, not something a client clicked through themselves.
 
 ## Package Compare: putting media buys side by side
 
@@ -91,19 +91,19 @@ of charts at once.
   />
 </Figure>
 
-The yellow callouts on this one are mine — Balsamiq-era annotations explaining the tool to whoever
+The yellow callouts on this one are mine: Balsamiq-era annotations explaining the tool to whoever
 I was showing it to, not a real product spec.
 
 ## Population Reporting: total people vs. total buyers
 
-This one compares two curves across four demographic cuts — age in two-year increments, education
-level, household income, and home market value — one line for how a population is distributed,
+The main view compares two curves across four demographic cuts (age in two-year increments, education
+level, household income, and home market value): one line for how a population is distributed,
 another for how buyers of a given target are distributed against it. The field names underneath
 (`Income-EstimatedHouseh…`, `HomeMarketValue`) trace back to the same licensed consumer data,
-Acxiom-lineage, that powered targeting elsewhere in the platform. The other screens in the set are
-per-target reports — key totals and a tRatio distribution for a single target like PMIC Life — a
-Target Planner with gender and ethnicity donuts over an age histogram, and vehicle-ownership charts
-above the raw population table.
+Acxiom-lineage, that powered targeting elsewhere in the platform. The other screens are per-target
+reports (key totals and a tRatio distribution for a single target like PMIC Life), a Target Planner
+with gender and ethnicity donuts over an age histogram, and vehicle-ownership charts above the raw
+population table.
 
 <Gallery
   images={[
@@ -135,7 +135,7 @@ above the raw population table.
   description="Total People versus Total Buyers by age, education, household income and home value — same underlying consumer-data lineage as the rest of the targeting platform."
 />
 
-Where the other three tools are about a campaign or a buy, this one is about the audience itself —
+Where the other three tools are about a campaign or a buy, this one is about the audience itself:
 a way to see whether a target population actually looks different from the general population, and
 where.
 
@@ -165,7 +165,7 @@ One more, from the same instinct but a different occasion. Right after AOL bough
 there was an Adap.tv hackathon, and we built a thing called Soda War: a D3 map of the United States
 with a circle at every market, sized by spend, red for Coke and blue for Pepsi, and a slider that
 ran twenty-four hours of it forward. I did the front end; Sawin Lee, Dyng Au and Brendan Kitts did
-the data. Whether we won it, I genuinely do not remember. The page still runs, so rather than a
+the data. Whether we won it, I don't remember. The page still runs, so rather than a
 screenshot, here is the page itself — press Play, or drag the slider yourself:
 
 <MuseumEmbed
@@ -179,6 +179,6 @@ screenshot, here is the page itself — press Play, or drag the slider yourself:
   teaserHeight={300}
 />
 
-None of these were pitched to anyone outside the building — the map included. The explorers were
+None of these were pitched to anyone outside the building, the map included. The explorers were
 how I answered my own question, "what does this data actually look like?", before building the
 thing that used it; Soda War was the same instinct with a scoreboard and a deadline attached.

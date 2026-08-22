@@ -32,7 +32,7 @@ import VisualLadderViz from "./visual-ladder-viz.svg";
 
 This blog is written mostly by coding agents, and that changes what "easy to author" means. The
 easiest thing for an agent is a small, explicit vocabulary with a validator that says exactly
-what went wrong — not a big flexible one with conventions you have to remember.
+what went wrong, not a big flexible one with conventions you have to remember.
 [Part 1](/an-agent-built-this-blog/) covered the validators; this part is the vocabulary. Every
 component the site's posts are written with appears below, in the order an author reaches for
 them, doing its actual job — this page is its own demo. It ends at the top of the ladder: the one
@@ -45,7 +45,7 @@ place JavaScript earns its way into a post.
 
 ## Why static first
 
-A blog post is a document. Documents do not need a JavaScript framework to be read, and every
+A blog post is a document. Documents don't need a JavaScript framework to be read, and every
 kilobyte of script is a kilobyte the reader downloads before the text settles. So the rule: a
 prose, code, or diagram post ships **zero external scripts** — no React, no framework runtime,
 nothing but a few lines of inline script for the theme toggle, the table of contents, and a
@@ -103,7 +103,7 @@ When an image needs a caption or a wider measure than the text column, it goes i
 </Figure>
 
 Tables are plain Markdown too. Every table is automatically wrapped so that on narrow screens it
-scrolls sideways inside its own box instead of pushing the page wider — the author does nothing:
+scrolls sideways inside its own box instead of pushing the page wider; the author does nothing:
 
 | Check                     | Where it runs   | Fails the build? |
 | ------------------------- | --------------- | ---------------- |
@@ -138,7 +138,7 @@ Quotations get attribution and, when there is one, a source link:
 
 ## Procedures and alternatives
 
-Steps are an ordered list with a connector line — the Markdown stays a plain `1.` list, so it
+Steps are an ordered list with a connector line. The Markdown stays a plain `1.` list, so it
 degrades to exactly that anywhere else the text is shown.
 
 <Steps>
@@ -172,7 +172,7 @@ Home and End jump to the first and last, and without JavaScript the panels simpl
   </Tab>
 </Tabs>
 
-Long, optional material folds away — a native `<details>` element, no script:
+Long, optional material folds away in a native `<details>` element, no script:
 
 <Details summary="The full frontmatter contract">
 
@@ -183,7 +183,7 @@ Long, optional material folds away — a native `<details>` element, no script:
   - `tags` (each must exist in the registry)
   - `authority` (the repository that owns this post's domain facts — see [part 3](/repos-as-experts/))
   - `draft` (drafts are dev-only: never built, listed, fed, or indexed)
-  - `hero { src, alt }` (required, 1200×630) and optional `ogImage`
+  - `hero { src, alt }` (required, 1500×600) and optional `ogImage`
 
 </Details>
 
@@ -208,8 +208,8 @@ export function href(path: string): string {
 ## Diagrams and math
 
 Diagrams are hand-drawn SVG files that live next to the post and render inline **at build
-time** — the reader gets a picture, not a script that draws one. The house style is pictorial by
-default: a rail line, a staircase, a magnifier — a drawing of the mechanism rather than a grid of
+time**; the reader gets a picture, not a script that draws one. The house style is pictorial by
+default: a rail line, a staircase, a magnifier, a drawing of the mechanism rather than a grid of
 labeled boxes. Every diagram gets a sentence describing it and a name and summary on its figure,
 because a picture without words is invisible to a screen reader. This one shows the path from an
 MDX file to a deployed page:
@@ -222,7 +222,7 @@ MDX file to a deployed page:
 </VizFigure>
 
 Because each drawing keeps its neutral strokes and text on `currentColor`, the same file follows
-the reader's theme natively — no dark-mode filter, no second render.
+the reader's theme natively: no dark-mode filter, no second render.
 
 Math uses TeX syntax and renders through KaTeX, also at build time. Inline, reading time is
 $\max(1, \operatorname{round}(w / 230))$ minutes for $w$ words; the display form of the same idea:
@@ -237,7 +237,7 @@ Neither diagrams nor math adds a byte of JavaScript to the page.
 
 There is no chart library on this site, no carousel, no embed component. Each would be a
 dependency and a maintenance promise, and nothing above needed one. When a post wants a visual,
-the house rule is a ladder — stop at the first rung that holds:
+the house rule is a ladder: stop at the first rung that holds.
 
 <VizFigure
   name="The visual ladder"
@@ -246,7 +246,7 @@ the house rule is a ladder — stop at the first rung that holds:
   <VisualLadderViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
 </VizFigure>
 
-A flow, a state machine, a mechanism — that is a hand-drawn picture. A chart with fixed data is
+A flow, a state machine, a mechanism: that's a hand-drawn picture. A chart with fixed data is
 an SVG. A chart the reader can filter is an island. That last rung is
 the rest of this post.
 
@@ -266,7 +266,7 @@ hydrates.
   </VizFigure>
 </Figure>
 
-Below is the smallest possible island — a counter — living in this post's own directory as
+Below is the smallest possible island, a counter, living in this post's own directory as
 `components/Counter.tsx`. It hydrates when scrolled into view (`client:visible`), so a reader who
 never gets this far never downloads it.
 
@@ -284,10 +284,10 @@ import Counter from "./components/Counter";
 <Counter client:visible />
 ```
 
-That is the entire authoring surface for interactivity: import a component that lives next to
+That's the entire authoring surface for interactivity: import a component that lives next to
 the post, add a directive. The component is ordinary React built from the same design tokens as
-the site chrome — an island cannot invent its own look, so demos age with the theme instead of
-against it — and it has an ordinary unit test next to it.
+the site chrome (an island can't invent its own look, so demos age with the theme instead of
+against it), and it has an ordinary unit test next to it.
 
 Good reasons for an island:
 
@@ -297,18 +297,18 @@ Good reasons for an island:
 
 Bad reasons:
 
-- It was easier to write in React. (It is usually not, once you count the hydration.)
+- It was easier to write in React. (it usually isn't, once you count the hydration)
 - A library exists for it. (The library is now the reader's download.)
 - Everything else on the site is React. (Almost nothing on this site is React.)
 
 Post-specific components stay in the post's directory, with their tests, and are promoted to the
-shared library only when a second post needs the same thing — which is also when it becomes
-worth designing an API for. Site chrome — header, footer, theme toggle — is never an island;
+shared library only when a second post needs the same thing, which is also when it becomes
+worth designing an API for. Site chrome (header, footer, theme toggle) is never an island;
 those are plain Astro with a few lines of inline script. The one exception in the whole site is
 the [archive explorer](/all-posts/): full-text search, tag and series filters, and sortable
 listings genuinely need to respond to the reader, so that page hydrates one island and lazily
 fetches its search index.
 
 Every primitive on this page was placed by an agent following the same catalogue you have just
-read. How a post actually gets written, reviewed, and shipped — including the part where other
-repositories are consulted as domain experts — is [part 3](/repos-as-experts/).
+read. How a post actually gets written, reviewed, and shipped, including the part where other
+repositories are consulted as domain experts, is [part 3](/repos-as-experts/).

@@ -20,8 +20,8 @@ import rewardsTeaser from "./teaser-rewards.png";
 
 There are two projects in [my 2018 portfolio snapshot](/labs-2018-snapshot/) that are the same
 application. One of them plots people killed during encounters with police. The other one plots who
-said thank you to whom at work. They share a build, a chart engine, a data model shape, and — still,
-in the copy I have — a package manifest.
+said thank you to whom at work. They share a build, a chart engine, a data model shape, and (still,
+in the copy I have) a package manifest.
 
 This is the story of that pair: what the machine was, why pointing it at a second dataset took
 almost no code, and what that says about how I was building things around 2014.
@@ -33,17 +33,16 @@ from [fatalencounters.org](https://fatalencounters.org/), a volunteer effort to 
 subtitle on my page called "an impartial, comprehensive and searchable national database of people
 killed during interactions with law enforcement."
 
-Each record is a person. The TypeScript interface I wrote for it has twenty-odd fields — name, age,
+Each record is a person. The TypeScript interface I wrote for it has twenty-odd fields: name, age,
 gender, race, date, street address, city, state, county, the agency involved, cause of death, a
 short description, the disposition of the case, a link to the news story, latitude and longitude.
-I am not going to quote a row here. The point is that the row exists, one per death, with a name on
+I'm not going to quote a row here. The point is that the row exists, one per death, with a name on
 it, and that this is what "a dataset" looked like when I loaded it into a charting toolkit built for
 advertising metrics.
 
-Honestly, I no longer remember what prompted me to build it, and I did not put it anywhere anyone
-could see. What I can tell you is what I did with it: I gave the data
-the same treatment I gave everything else I was working on that year, which was to make every field
-filterable by clicking on it.
+I no longer remember what prompted me to build it, and I didn't put it anywhere anyone could see.
+What I can tell you is what I did with it: I gave the data the same treatment I gave everything
+else I was working on that year, which was to make every field filterable by clicking on it.
 
 <MuseumEmbed
   demo="/museum/fatal-encounters/index.html"
@@ -55,17 +54,17 @@ filterable by clicking on it.
   height={2720}
 />
 
-That sweep is the whole interaction model — the same crossfilter-under-dc.js machinery as [the D3
+That sweep is the whole interaction model: the same crossfilter-under-dc.js machinery as [the D3
 demos](/drag-the-timeline-refilter-the-page/), wrapped here in AngularJS 1.3 directives. Drag a
-window across the time axis and every other chart on the page — the map, the age histogram, the
-state ranking, cause of death — recomputes against the filtered set; click a bar in any of them and
+window across the time axis and every other chart on the page (the map, the age histogram, the
+state ranking, cause of death) recomputes against the filtered set; click a bar in any of them and
 the rest refilter again, the timeline included.
 
 ## The machine
 
 The stack, from `bower.json` and `vendor/`: AngularJS 1.3, dc.js by way of `angular-dc`, crossfilter, NVD3,
 ui-grid, D3 3.4, jQuery 2.1, Bootstrap 3.2 and moment.js. The sources are TypeScript, compiled to
-JavaScript with the `.js.map` files checked in next to them — which is a fair snapshot of what
+JavaScript with the `.js.map` files checked in next to them, which is a fair snapshot of what
 "modern frontend" meant to me in 2014, and also why I can still read the intent of the code twelve
 years later instead of squinting at compiler output.
 
@@ -87,19 +86,17 @@ this.charts["ageBarFilter"] = <Charts.IFilterBarChart<Models.IEncounter>>{
 };
 ```
 
-("Suspect Age" is the title my 2014 code gives that chart; the underlying field is just `Age`. I am
-quoting the code as written rather than quietly relabelling it.)
+("Suspect Age" is the 2014 title; the field is just `Age`.)
 
 `keyId` names the dimension, `chartType` picks the renderer, `sizeData` places it. A directive walks
 the array and instantiates the dc.js charts; the page itself contains almost no chart code. That
-generic parameter — `IFilterBarChart<IEncounter>` — is doing the load-bearing work here, and it is
-the reason the second project exists at all.
+generic parameter is why the second project exists at all.
 
 <Callout variant="note" title="It is not an ASP.NET app">
   Both projects ship as Visual Studio web projects, with a `.csproj`, a `Web.config` and DLLs in
   `bin/`. None of that runs. The entire dataset is baked into `App/core/models/EncounterLoader.js`
   as a 2.9 MB literal array, and the one function that would have called a server API is never
-  invoked. It is a folder of static files wearing a server's clothes — which is exactly why it still
+  invoked. It's a folder of static files wearing a server's clothes, which is exactly why it still
   opens in 2026 with nothing but a local file server.
 </Callout>
 
@@ -117,7 +114,7 @@ Its subtitle is the whole spec: **who is rewarding who, when, how much, and why.
   description="The same chart engine pointed at the rewards dataset. Its When timeline takes the same brush as the Fatal Encounters one."
 />
 
-Structurally it is the same page. Here are the chart slots each one defines, in source order:
+Structurally it's the same page. Here are the chart slots each one defines, in source order:
 
 <Comparison labels={["Fatal Encounters", "Rewards Report"]}>
   <Fragment slot="a">
@@ -151,15 +148,15 @@ pie, and a stack of ranked row charts. Forking meant writing a new loader, a new
 and a new array of config objects. The chart engine, the crossfilter wiring, the layout directives
 and the build were untouched.
 
-That is the argument for declaring charts as data. Retargeting the dashboard was a data-modelling
-job, not a rewrite. I did not go near the rendering code.
+That's the argument for declaring charts as data. Retargeting the dashboard was a data-modelling
+job, not a rewrite. I didn't go near the rendering code.
 
 ## The habit
 
-The through-line is not AngularJS, which I would not choose today, or dc.js, which I might. It is
-that I had built a way of asking questions of a table — sweep the timeline, click the bar, watch
-everything else move — and once you have that, every table you meet starts looking like a candidate.
+The through-line is not AngularJS, which I wouldn't choose today, or dc.js, which I might. It is
+that I had built a way of asking questions of a table (sweep the timeline, click the bar, watch
+everything else move), and once you have that, every table you meet starts looking like a candidate.
 Ad impressions, then a civic dataset about people who died, then thank-you notes from coworkers.
 
-Two of those three deserved the treatment. The middle one deserved more than a folder on my hard
-drive, and did not get it.
+Two of those three deserved the treatment. The police-encounters data deserved more than a folder
+on my hard drive, and didn't get it.

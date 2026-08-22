@@ -25,15 +25,15 @@ scattered across old drives and dead intranets, so over a few weeks in February 
 all of it into one directory, wrote a landing page over it, and called that my portfolio.
 
 That directory has sat untouched ever since. I opened it again in 2026, expecting to spend a day
-resurrecting it. It took one command. This post is the map of what is in there, and the start of a
+resurrecting it. It took one command. This post is the map of what's in there, and the start of a
 series where I go through it one project at a time.
 
 ## What the snapshot actually is
 
-A single folder of static files with a card grid on top of it — `default.htm`, split into
+A single folder of static files with a card grid on top of it: `default.htm`, split into
 Products, Demos, and Patents. No build step, no bundler, nothing to deploy. Each card is a thumbnail
-and a one-line description pointing at a gallery of screenshots, a video, or — for a good number of
-them — the live thing itself.
+and a one-line description pointing at a gallery of screenshots, a video, or (for a good number of
+them) the live thing itself.
 
 <Figure
   caption="The landing page of the portfolio, as I left it in March 2018."
@@ -49,29 +49,27 @@ them — the live thing itself.
 </Figure>
 
 The card copy is the pitch I was making to hiring managers in 2018, which is why it reads the way
-it does. "Explore the TV landscape." "What industries should a network target?" I was not writing
+it does. "Explore the TV landscape." "What industries should a network target?" I wasn't writing
 for posterity. I was writing for a phone screen next Tuesday. The demos overview video sitting in
 the folder was recorded in 2018 for the same job hunt, which makes it the closest thing this
 archive has to a time capsule.
 
 <Callout variant="note" title="The data in every screenshot is fake">
-  Advertisers, campaigns and ratings numbers throughout the portfolio — Verizon, YSL, Carfax, the
-  Nielsen figures — are demo data, built for demos. Nothing in this series shows a real client's
+  Advertisers, campaigns and ratings numbers throughout the portfolio (Verizon, YSL, Carfax, the
+  Nielsen figures) are demo data, built for demos. Nothing in this series shows a real client's
   media plan.
 </Callout>
 
 ## Some of this was the job, and some of it nobody asked for
 
 I want to be straight about which was which. The Bing work was my job. The ONE TV platform at
-AOL was my job. Plenty of what is in this folder was work somebody requested and I shipped.
+AOL was my job. Plenty of what's in this folder was work somebody requested and I shipped.
 
-But the parts I would show you first were not assigned to anyone. DocMapper's visual ring, the
+But the parts I'd show you first weren't assigned to anyone. DocMapper's visual ring, the
 crossfilter and dc.js filtering approach, the PivotViewer Audience Planner, the folder of D3
-demos — those I dreamt up and built in 20% time, and several of them stopped being side projects.
+demos: those I dreamt up and built in 20% time, and several of them stopped being side projects.
 The Audience Planner, DocMapper, and sell-side targeting all became flagship products for the
-company that employed me at the time. That is a strange ratio to look back on — a
-scratch-an-itch demo becoming the thing the sales team leads with — and it happened often enough
-here that I no longer think it was luck.
+company that employed me at the time. It happened often enough that I no longer think it was luck.
 
 ## Seventeen years, four employers
 
@@ -87,13 +85,13 @@ was renamed Oath around me in 2017. I made Principal there in 2016.
   <ArcViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
 </VizFigure>
 
-The through-line is not a technology. The early work is OpenGL and DirectX, the middle is
+The through-line isn't a technology. The early work is OpenGL and DirectX, the middle is
 Silverlight, the late work is D3 and AngularJS, and every one of those choices looks dated now.
 What actually persists is a habit of pointing a visualization at a pile of data nobody could read.
 
 ## Why it still runs in 2026
 
-Because it is all static files, and static files do not rot the way applications do. Serving the
+Because it's all static files, and static files don't rot the way applications do. Serving the
 whole portfolio in 2026 is one command:
 
 ```sh
@@ -101,13 +99,13 @@ npx http-server . -p 8123 -c-1
 ```
 
 Then open `default.htm`. Every internal link in the site is root-absolute, so the directory has to
-be the web root — opening a file directly off disk breaks the styling and the navigation, which is
+be the web root. Opening a file directly off disk breaks the styling and the navigation, which is
 the only trap.
 
 Two things are genuinely dead: the Silverlight client with its WCF backend, because no browser has
 Silverlight any more, and an ASP.NET MVC explorer whose API was switched off years ago, though a
-static equivalent of it survives in the D3 demo set. Everything else — the galleries, the
-interactive dashboards, the videos — comes up mostly as it did, with the kinds of rot you would
+static equivalent of it survives in the D3 demo set. Everything else (the galleries, the
+interactive dashboards, the videos) comes up mostly as it did, with the kinds of rot you'd
 expect of decade-old pages. Each post in this series covers its own project's damage.
 
 ## The map of the series
@@ -126,6 +124,6 @@ Eleven posts follow this one, roughly chronological, one per project:
 - [ONE TV: upfront and scatter](/one-tv-upfront-scatter/)
 - [ONE TV in Australia](/one-tv-australia/)
 
-Some of these I remember in detail. Some I am reconstructing from screenshots and my own
+Some of these I remember in detail. Some I'm reconstructing from screenshots and my own
 eight-year-old card copy, and where my memory has a hole in it I would rather say so than fill it
-in. Everything I could not verify gets flagged as such.
+in. Everything I couldn't verify gets flagged as such.
