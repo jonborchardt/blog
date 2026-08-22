@@ -21,7 +21,7 @@ Agentic coding isn't "write a giant prompt and hope." It's an engineering proces
 
 The main shift isn't that Claude writes more code. It's that I'm designing a system in which future agent sessions are less likely to do the wrong thing, because the repo itself pushes back. The process has warts: at one point Claude ignored a stop instruction and implemented all eleven plans in one go. That's in here too.
 
-The rest of this post walks that process end to end on one real case study: the blog you are reading. It starts from a rough idea and a conversation, goes through a bootstrap prompt, a scaffold, a repository-aware plan, and an agent run, and ends with a static site that scores Lighthouse 100/100/100/100 on representative pages, passes an axe WCAG 2.2 AA audit and the W3C Nu markup validator on every page, ships zero JavaScript on prose pages, and fails its own build on a broken link, a missing alt, an unknown tag, or any admin output in `dist/`. Every one of those checks runs in CI on every push, so the quality described at the end is a floor the repo enforces, not a target I remember to aim for.
+The rest of this post walks that process end to end on one real case study: the blog you are reading. It starts from a rough idea and a conversation, goes through a bootstrap prompt, a scaffold, a repository-aware plan, an agent run, and the short sessions that extended it afterwards, and ends with a static site that scores Lighthouse 100/100/100/100 on representative pages, passes an axe WCAG 2.2 AA audit and the W3C Nu markup validator on every page, ships zero JavaScript on prose pages, and fails its own build on a broken link, a missing alt, an unknown tag, or any admin output in `dist/`. Every one of those checks runs in CI on every push, so the quality described at the end is a floor the repo enforces, not a target I remember to aim for.
 
 ## The case study
 
@@ -2267,6 +2267,67 @@ Despite the scope overrun, the resulting repo was close to complete and had a st
 | QA | Lighthouse 100/100/100/100 on representative pages, JS budget, keyboard e2e |
 
 The deviations were the interesting part. Prettier ignores `*.mdx` because the MDX formatter mangled JSX-embedded lists and fences. Markdown plugins moved to Astro 7's actual processor mechanism. Admin routing stayed structured to guarantee no production output. Additional support dependencies were added only where required, and some explicitly marked shortcuts remained and were not automatically fixed.
+
+<ProcessMarker step={10} />
+
+## The initial run was not the end
+
+The eleven plans did not produce a finished site, and I did not expect them to. Over the next several sessions I went back in and added what the program had not covered: the logo was redesigned, the skills gained authority and sourcing rules, posts got suggested next reading, a table of contents, and read time, this post got its process rail, the site gained an `llms.txt` index, an external link checker, an image lightbox, git-derived last-updated dates, a print stylesheet, a legal page, and a tag-pill fix for WCAG target size.
+
+None of it was challenging, and none of it caused an issue. That is the point. Each feature was a short session against a repository that already knew how to reject a broken state: the schema caught bad frontmatter, the dist checks caught a missing alt or a link outside the base path, the e2e suite caught a layout regression, and the skills routed each change through the same validate-and-build sequence as the original plans. The cost of the validation work in the first afternoon was paid back on every one of these additions, because I could ask for a feature, read the diff, and trust the green build for everything I did not read.
+
+None of them needed a long prompt either. Each was one or two sentences against a repo that already knew its own rules, and in hindsight any of them could have been appended to Prompt 1 as-is. These are roughly what I typed.
+
+<Details summary="The prompts, one per feature">
+
+**Suggested next reading**
+
+> At the end of every post, show one 'read next' card. The series nav already owns same-series posts, so exclude those and the post itself; pick the post with the most shared tags, tie-break by newest then slug so builds are deterministic, and fall back to the newest eligible post so it is never empty. Put the picker in `src/lib/posts.ts` with a unit test.
+
+**`llms.txt` and raw markdown**
+
+> Serve each post as raw markdown at `/<slug>/index.md` and add `/llms.txt` listing the site name, description, and one line per post linking to its `.md`. Strip MDX imports and components to plain markdown. Both go through `getPosts` so drafts are excluded exactly as in HTML; add `llms.txt` to the reserved slugs. Pure builders in `src/lib/llms.ts` with tests; endpoints under `src/pages/`.
+
+**External link checker**
+
+> After the HTML dist checks, fetch every external link once. Only 404 and 410 fail the build; timeouts, 5xx, 403 bot blocks and 429 are warnings, because those are mostly not our fault. Cache reachable URLs for seven days in `node_modules/.cache`, throttle requests, use `AbortSignal.timeout`, and honour `SKIP_EXTERNAL_LINKS=1` for offline builds. Inject `fetch` so it is unit-testable.
+
+**Lightbox**
+
+> Give `Figure` a `zoom` prop that wraps the image in a button (`aria-haspopup=dialog`) and opens a native `<dialog>` with a close button and the caption as its label. One small inline script in the post layout, delegated by class, so pages without zoomable figures ship no extra JavaScript. Hide the dialog in print and make sure it passes axe.
+
+**Git last-updated**
+
+> Show an 'Updated' date on posts from `git log -1` of the post file, build-time only, memoised per file. Render it only when it is at least seven days after the publish date so launch-week fixes stay quiet. Return nothing outside a checkout or for uncommitted files, and set `fetch-depth: 0` in CI or every file reports the same shallow date.
+
+**Print styles**
+
+> Add print rules in `global.css`: hide chrome per element with `print:hidden`, force the light theme, append external link URLs after the link text, avoid page breaks inside code, figures, tables and blockquotes, wrap long code lines, and hide the lightbox and heading anchors.
+
+**Table of contents**
+
+> Add a left-rail table of contents on posts at desktop widths. Collapsed, it is one bar per heading, bar width proportional to the title, with the current section marked by a scroll listener; on hover or keyboard focus it expands into the clickable 'On this page' list. Hidden in print. No framework, a few lines of inline script, and the anchors must resolve in the dist checks.
+
+**Tag pills**
+
+> Tag pills and nav links must meet the WCAG 2.2 24 px target size.
+
+**Legal page**
+
+> Add a `/legal/` page (privacy, disclaimer, terms) as static MDX under `src/pages/` using the page layout, pulling name and site details from the author and site configs. Link it from the footer as 'Legal & Privacy' and add `legal` to the reserved slugs.
+
+**Read time**
+
+> Show reading time in post metadata: whole minutes at about 230 words per minute, minimum one, counted from the post body with collapsed `<Details>` blocks removed since readers skip those. Pure function with a unit test.
+
+**Navigation cues**
+
+> This post walks a nine-stage process. Add a small 'you are here' rail above each stage's section, listing every stage with the current one filled in, so a reader who scrolls in from the middle knows where they are. Post-local component, static, no script. Also make the table of contents keep the current link scrolled into view when the panel is long.
+
+
+Every one of those ran through the same skill, the same validation, and the same build, and every one landed green.
+
+</Details>
 
 ## Static-first survived
 
