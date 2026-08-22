@@ -9,7 +9,7 @@ tags: [engineering, graphics, gamedev, retrocomputing, typescript]
 authority: 'F:\github\sci.js'
 hero:
   src: ./hero.png
-  alt: A grid of native pixel cells split down the middle — on the left a stair-stepped block line, on the right the same cells with anchor dots projected onto a smooth diagonal stroke
+  alt: Pixel cells with a stair-stepped block line on the left and a smooth anchor-dot stroke on the right
 draft: false
 ---
 
@@ -46,7 +46,7 @@ This post documents the SCI0 port, the five engine-specific fixes that made it v
     src={sweepSnap.src}
     width="1920"
     height="1140"
-    alt="Animated wipe comparison of one SCI0 PIC rendered by snap-blend and by omyac-upscaler: a wrecked spacecraft on grey paving under blue lit walls. The omyac side has straight diagonal edges and solid regions where the snap-blend side shows stair-stepping and stippled fills."
+    alt="Wipe between snap-blend and omyac renders of a wrecked spacecraft on grey paving under blue walls"
   />
 </Figure>
 
@@ -137,7 +137,7 @@ After all anchor-to-anchor connections, run a pass for connections that leave th
 The output at this point is a sparse wireframe: anchors connected by Bresenham strokes against a mostly-empty background.
 
 <Figure caption="The wireframe stage on the spacecraft PIC, before any enhance pass. The hot pink is every pixel not yet written — expected here, mid-pipeline, unlike pink in final output.">
-  ![The pre-enhance hybrid render of the spacecraft PIC: thin anchor-to-anchor strokes and per-cell anchor dots trace the scene's geometry, with all unwritten pixels rendered hot pink so the image reads as line art over a pink field](./wireframe-pre-enhance.png)
+  ![Pre-enhance hybrid render: anchor strokes and dots trace the scene over a hot-pink unwritten field](./wireframe-pre-enhance.png)
 
 </Figure>
 
@@ -150,7 +150,7 @@ The kernel takes a mode parameter that controls which neighbour types vote: `fil
 Running the kernel several times with a sequence of modes (the C reference's default is `fill × 3, line × 1, fill × 2, all × 4`) propagates fill regions first, then reclaims line junctions, then converges the remainder.
 
 <Figure caption="The same PIC after the default enhance sequence and the final null-pixel sweep: the pink gaps are gone and every fill region has converged to solid colour.">
-  ![The spacecraft PIC after the enhance passes: the wireframe's pink gaps are fully replaced by solid fill regions, leaving a complete scene with crisp line geometry and no hot pink remaining](./wireframe-enhanced.png)
+  ![After the enhance passes: pink gaps replaced by solid fills, a complete scene with crisp lines](./wireframe-enhanced.png)
 
 </Figure>
 
@@ -242,7 +242,7 @@ This isn't strictly required for correctness — without it the algorithm still 
 
 ### Fix 5: untouched cells mean "white background," not "gap"
 
-![The hot-pink diagnostic render before fix 5: nearly the whole spacecraft PIC is magenta, with only line strokes and a few solid regions in their real colours, showing how many cells the algorithm treated as never painted](./null-cell-diagnostic-hot-pink.png)
+![Diagnostic before fix 5: nearly all the PIC magenta, only strokes and a few regions in real colour](./null-cell-diagnostic-hot-pink.png)
 
 This is the most paradigm-specific of the five fixes, and the one whose absence produced the most visible damage.
 
@@ -277,31 +277,31 @@ The breakthrough that pinpointed fix 5 was a one-line change to the PNG writer: 
 Each comparison below wipes between the original 320×190 PIC (left label) and the omyac-upscaler output at 6× (right label).
 
 <Figure caption="Scrapyard exterior: a toppled ACME cylinder and a cyan hull with lettering." zoom>
-  <img src={sweep1.src} width="1920" height="1140" alt="Wipe comparison, original versus omyac-upscaler: a junkyard scene with a white cylinder labelled ACME, a blue wheel, grey paving stones and a cyan hull. The upscaled side has smooth diagonals on every paving edge." />
+  <img src={sweep1.src} width="1920" height="1140" alt="Wipe comparison of a junkyard scene: a white ACME cylinder, grey paving stones and a cyan hull" />
 </Figure>
 
 <Figure caption="Scrapyard with a magenta stairway and a teal dome." zoom>
-  <img src={sweep2.src} width="1920" height="1140" alt="Wipe comparison, original versus omyac-upscaler: a magenta stepped ramp and dark blue arch over grey paving, a teal dome at left and a purple tower at right." />
+  <img src={sweep2.src} width="1920" height="1140" alt="Wipe comparison of a magenta stepped ramp and dark blue arch, with a teal dome and a purple tower" />
 </Figure>
 
 <Figure caption="Interior with two lit arches and a skeletal machine." zoom>
-  <img src={sweep3.src} width="1920" height="1140" alt="Wipe comparison, original versus omyac-upscaler: a blue interior with two cyan-rimmed arches, red panels inside them, an orange dune at right and blue outlined machinery in the foreground." />
+  <img src={sweep3.src} width="1920" height="1140" alt="Wipe comparison of a blue interior with two cyan-rimmed arches, an orange dune and machinery" />
 </Figure>
 
 <Figure caption="A red cylindrical corridor seen side-on." zoom>
-  <img src={sweep4.src} width="1920" height="1140" alt="Wipe comparison, original versus omyac-upscaler: a long red cylindrical corridor with slatted panels and grey pipes, centred on a black background." />
+  <img src={sweep4.src} width="1920" height="1140" alt="Wipe comparison of a red cylindrical corridor with slatted panels and pipes on a black background" />
 </Figure>
 
 <Figure caption="Hangar with a green-jewelled machine and a red-and-cyan gantry." zoom>
-  <img src={sweep5.src} width="1920" height="1140" alt="Wipe comparison, original versus omyac-upscaler: a grey machine with a green diamond jewel at right, a cyan-rimmed gantry with red panels at left, orange rock overhead and grey paving below." />
+  <img src={sweep5.src} width="1920" height="1140" alt="Wipe comparison of a grey machine with a green diamond jewel, beside a cyan gantry with red panels" />
 </Figure>
 
 <Figure caption="Cavern floor with a crashed grey ship, a white pod and yellow lamp-posts." zoom>
-  <img src={sweep6.src} width="1920" height="1140" alt="Wipe comparison, original versus omyac-upscaler: a crashed grey ship on a rubble-strewn cavern floor, a white pod at left, a yellow lamp on a red pole and blue ribbed pipes in the foreground." />
+  <img src={sweep6.src} width="1920" height="1140" alt="Wipe comparison of a crashed grey ship on a cavern floor, with a white pod and a yellow lamp-post" />
 </Figure>
 
 <Figure caption="Blue ice cavern with a green vehicle and thin outline geometry." zoom>
-  <img src={sweep7.src} width="1920" height="1140" alt="Wipe comparison, original versus omyac-upscaler: a dark blue ice cavern drawn mostly in thin blue outlines, a green vehicle in the centre, cyan pools and grey rubble piles." />
+  <img src={sweep7.src} width="1920" height="1140" alt="Wipe comparison of a dark blue ice cavern in thin outlines, with a green vehicle at the centre" />
 </Figure>
 
 With all five fixes applied the upscaler produces output that:

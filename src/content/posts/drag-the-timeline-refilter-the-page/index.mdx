@@ -1,0 +1,259 @@
+---
+title: Drag the Timeline, Refilter the Page
+description: In 2013 I replaced our off-the-shelf Google charts with hand-built D3 dashboards where dragging the timeline refilters the whole page.
+publishedAt: 2026-08-20
+series: past-work
+seriesOrder: 7
+tags: [d3, data-viz, adtech, retrospective]
+authority: 'E:\github2\Labs'
+hero:
+  src: ./hero.png
+  alt: A dashboard with a dragged timeline window filtering a ranked TV network list, histograms and a map
+draft: false
+---
+
+import Callout from "@/components/blog/Callout.astro";
+import Figure from "@/components/blog/Figure.astro";
+import before from "./before-google-chart.png";
+import trackerRest from "./tracker-rest.png";
+import trackerSwept from "./tracker-swept.png";
+import sweep0 from "./sweep-0-rest.png";
+import sweep1 from "./sweep-1.png";
+import sweep2 from "./sweep-2.png";
+import sweep3 from "./sweep-3.png";
+import sweepVideo from "./rotations-sweep.webm";
+import teaserPrograms from "./teaser-programs.png";
+import teaserExplorer from "./teaser-explorer.png";
+import teaserWebspike from "./teaser-webspike.png";
+import SweepDemo from "./components/SweepDemo.astro";
+import MuseumEmbed from "@/components/blog/MuseumEmbed.astro";
+
+In 2013 I was the only UI developer at PrecisionDemand, a TV ad-tech startup, which meant every
+chart our customers looked at was a chart I had put there. Most of them were not mine. They were
+Google's, loaded off `google.com/jsapi`, configured with a few lines and shipped. That year I spent
+my 20% time replacing them with D3 charts I wrote myself, and the folder of demos that came out of
+that is still sitting in [the portfolio I froze in 2018](/labs-2018-snapshot/).
+
+This is the post about that swap: what the off-the-shelf chart did, what I built to replace it, and
+the one interaction, dragging a window across a timeline and watching an entire page of charts
+recompute, that turned out to matter far more than the charts did.
+
+## The chart I was replacing
+
+Two files still sit unlinked at the root of the portfolio, `fordsuvindustry.htm` and
+`jonbtest.htm`. They are the "before" artifacts, and they are about as simple as a 2013 chart page
+got:
+
+```html
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript">
+  google.load("visualization", "1", { packages: ["annotatedtimeline"] });
+  google.setOnLoadCallback(drawChart);
+</script>
+```
+
+Under that, a couple of thousand hardcoded `data.addRows([...])` lines: a date, two targeting-score values,
+and four spare string columns per row, an annotation title and its body text for each of the two
+series. A number our own modelling produced was being drawn by a component I did not write and
+could not change.
+
+<Figure
+  caption="fordsuvindustry.htm, the Google annotated timeline the D3 work replaced. Every advertiser, network and number in this archive is demo data."
+  width="wide"
+  zoom
+>
+  <img
+    src={before.src}
+    width="1400"
+    height="505"
+    alt="A Google annotated timeline with blue Ford and red Industry lines, lettered markers and zoom presets"
+  />
+</Figure>
+
+It is a good chart. Two series, lettered annotations pinned to dates with a panel explaining them,
+zoom presets, and a range selector along the bottom. In 2013 Google drew all of that with a Flash
+object, which is the detail that explains the headline on the page I replaced it with: "Replacement
+for existing Flash based Industry Tracker". The Flash in that sentence was never ours. It was
+Google's.
+
+<Callout variant="note" title="These pages were supposed to be dead">
+  I went in expecting a blank screen. The old `jsapi` loader is long deprecated and I had written
+  these two pages off. They render fine. `google.load` now forwards to
+  `gstatic.com/charts/51/loader.js`, which quietly draws the modern SVG `annotationchart` instead:
+  twelve `<svg>` elements on the page and not one `<object>` or `<embed>`. So the screenshot above is
+  Google's replacement for its own Flash chart, standing in for the thing I was actually looking at
+  in 2013.
+</Callout>
+
+## Building the equivalent
+
+Did the demo set win an argument inside the company? I don't remember one, and I am not going to
+invent one. What I have is the files, and the files are unusually clear about the intent: this was not a chart inspired by Google's, it was a copy
+of Google's with the ceiling taken off.
+
+The replacement chart is `nv.models.PdLineWithFocusChart`, 795 lines registered straight into NVD3's
+model namespace. `Pd` for PrecisionDemand. Two siblings sit next to it, `PdBubbleMap` and
+`PdHeatMap`. And the data file it eats gives the game away:
+
+```json
+{
+  "date": 1270105200000,
+  "value": -0.044918704,
+  "label": "A",
+  "description": "A mixed bag of winners and losers",
+  "notes": "DISC (Dirty Jobs & Mythbusters), DIY, NFLN, SPD and TRAV are well targeted, ..."
+}
+```
+
+A label, a headline and a body per point. The label is new: Google auto-lettered its own markers,
+there was no column for it. The other two are a rename of Google's pair: `description` is Google's
+title column, and `notes` is Google's text column, which the Ford data mostly left unused. The series
+colours are pinned in the same
+file to `#4684EE` and `#DC3912`, the same blue and the same red the Google chart drew. Someone
+opening the new page was not supposed to notice a new chart library. They were supposed to notice it
+did more.
+
+<MuseumEmbed
+  demo="/museum/d3demo/industryTracker.html"
+  title="The preserved 2013 Industry Tracker: drag the strip under the chart and the window rescales around the pinned annotations"
+  label="Load the real 2013 tracker (about 300 KB of data)"
+  teaser={trackerRest}
+  teaserAlt="The D3 tracker page with GM SUVs and Non-GM SUVs lines, lettered markers and a context strip below"
+  description="The D3 replacement, with its own annotation panel and a focus/context strip in place of Google's zoom presets."
+  height={800}
+  teaserHeight={300}
+/>
+
+The zoom presets are gone, replaced by a full-width strip of the same two lines underneath the main
+chart. You drag a window across that strip and the chart above it becomes that window. It is a
+smaller idea than "1h 1d 5d 1w 1m 3m 6m 1y max" and a much better one, because the window is
+continuous and you can slide it rather than pick it off a menu. The annotations stay pinned to
+their dates while the window closes around them:
+
+<Figure
+  caption="The tracker mid-sweep: the window has closed to mid-2010 through late 2011 and annotation C has come along for the ride."
+  width="wide"
+  zoom
+>
+  <img
+    src={trackerSwept.src}
+    width="1400"
+    height="789"
+    alt="The industry tracker rescaled to a mid-2010 through late 2011 window, with annotation C still pinned"
+  />
+</Figure>
+
+## The sweep
+
+Here is the interaction the whole thing was really about.
+
+Crossfilter holds one flat table in memory (for the rotations page, one row per TV rotation buy) and
+lets you declare dimensions over it: purchase date, network, commission rate, creative length,
+geography. Every chart on the page is a group over one of those dimensions. Filter any dimension and
+every other group recomputes, incrementally, fast enough that you can do it inside a `mousemove`.
+
+So the timeline strip is not a zoom control. It is a filter, and dragging it refilters the page.
+
+Drag across the lower strip; the count above the charts is
+crossfilter doing set intersection under your cursor:
+
+<SweepDemo />
+
+<MuseumEmbed
+  demo="/museum/d3demo/index.html"
+  title="The preserved 2013 rotation-buys crossfilter demo: drag the timeline strip and every chart refilters"
+  label="Load the real 2013 demo (about 2 MB of data)"
+  teaser={sweep0}
+  teaserAlt="The rotations dashboard at rest: a date strip, ranked network list, histograms and a county map"
+  description="Not a copy, not a rebuild: the 2013 page, its charts and its demo dataset, served from this site."
+  nativeWidth={1152}
+/>
+
+Nothing on that page is a page load. The network ranking reorders, the commission-rate histogram
+collapses onto two bars and spreads back out, the creative-length split flips between 30-second and
+60-second spots, and the circles on the county map move, all of it while the mouse button is still
+down.
+
+The tracker gets the same treatment: its strip is the same kind of filter, which is why sweeping it
+rescales the chart instead of zooming a picture.
+
+## The demo set
+
+The tracker and the rotations page were two pages of five. `demos/d3Demo` holds `industryTracker`, `rotationExample`,
+`programExample`, `explorerExample` and `webSpike`, plus two hub pages. The hubs are the part I had
+forgotten and now like the most. `demos.html` is six escalating throwaways (hover, animation on
+click, more advanced animation, charting, animated charts, thousands of animated points), the
+sketchbook of somebody learning a library in public. And `index.html`, titled "Front-end data
+visualization examples", is not a demo at all. It is a page of links: d3js.org, nvd3.org,
+crossfilter, four New York Times interactives, Bostock's Wealth & Health of Nations. That page is
+the actual pitch. The demos underneath it are the evidence I could build that.
+
+The stack under the demos was D3 v3 with NVD3 for the chart models, Square's crossfilter for the
+filtering, dc.js on the explorer page, and topojson for the maps. The three pages not already
+embedded above are preserved here too:
+
+<MuseumEmbed
+  demo="/museum/d3demo/programExample.html"
+  title="The preserved 2013 Programs demo: sweep the cumulative-cost strip and every chart refilters"
+  label="Load the real 2013 Programs demo (about 1 MB of data)"
+  teaser={teaserPrograms}
+  teaserAlt="A cumulative cost-to-buy curve over 1,500 programs above network, CPM and impression charts"
+  description="Programs ranked by cost to buy; the strip under the big curve is the same sweep."
+  height={2000}
+/>
+
+<MuseumEmbed
+  demo="/museum/d3demo/explorerExample.html"
+  title="The preserved 2013 Media Landscape Explorer: click any chart segment to filter the whole page"
+  label="Load the real 2013 Explorer demo (about 3.5 MB of data)"
+  teaser={teaserExplorer}
+  teaserAlt="A bubble plot of programs by tRatio beside a media-type donut, daypart bars and a top-programs table"
+  description="The dc.js page: click a donut slice, daypart or histogram bar and everything refilters."
+  height={1600}
+/>
+
+<MuseumEmbed
+  demo="/museum/d3demo/webSpike.html"
+  title="The preserved 2013 Web Spike Explorer: drag the lower strip to zoom the visitor-spike timeline"
+  label="Load the real 2013 Web Spike demo (about 1.5 MB of data)"
+  teaser={teaserWebspike}
+  teaserAlt="Weeks of daily visitor cycles with a burst of tall spikes in late February"
+  description="The static twin of an ASP.NET explorer whose backing API has been switched off for years; this page is the only way to see that tool at all."
+  height={800}
+/>
+
+One file, `crossfilterChart.js`, opens with a comment I am still glad I wrote:
+
+```js
+// A direct copy from the crossfilter example:
+// https://github.com/square/crossfilter/blob/50227903a5567d24c0d38141a5e94b5dec932b4c/index.html
+```
+
+Attribution, pinned to an exact commit, in the file itself. Thirteen years later it is the only
+reason I can tell you with certainty where Square's example ended and my code began.
+
+## What it turned into
+
+The charts themselves did not survive. D3 v3, NVD3 and a hand-rolled `nv.models.Pd...` are not how I
+would draw this today, and the pages that used them were rewritten more than once after AOL acquired
+us in May 2014 and I moved the product off Silverlight and onto AngularJS.
+
+The interaction survived. When I ask myself which of these side projects went anywhere, the list is
+the Audience Planner, DocMapper, sell-side targeting, and then, oddly for a list of products, "using
+crossfilter and dc.js for highly interactive charting". The technique itself became flagship. The
+industry-ratings and sell-side dashboards that real customers used were built on this exact model:
+click anything to filter everything, drag the timeline to refilter live. Those are their own posts.
+
+## How it holds up in 2026
+
+It runs. `npx http-server . -p 8123 -c-1`, open `/demos/d3Demo/rotationExample.html`, and the sweep
+above is what you get. Those frames are from this month, not from 2013. The caveats are the ones you
+would expect of a thirteen-year-old page:
+
+- D3 and topojson load from `http://d3js.org`, so the demos work over a local `http` server and
+  would break as mixed content on any `https` rehost.
+- The sweep works; some of the other interactions are flaky now, and I have left them that way.
+
+The Google chart still renders too, which I did not expect. But it renders because Google kept
+maintaining it and silently swapped its guts out from under my page. Mine renders because, once it
+was written, it never needed anything from anyone.

@@ -7,7 +7,7 @@ tags: [engineering, ai-assisted-coding, llm, nlp, knowledge-graph, data-viz]
 authority: 'E:\github2\captions'
 hero:
   src: ./hero.png
-  alt: A row of episode reels feeding a graph of claim nodes, two of which are joined by a highlighted contradiction edge, with every node tethered back down to a highlighted span on a transcript strip
+  alt: Episode reels feeding a claim graph with a highlighted contradiction edge and transcript tethers
 draft: false
 ---
 
@@ -39,13 +39,13 @@ YouTube's search bar can't help with this. "Every time the host laid out a fring
 
 I wanted that map visible. So I built it.
 
-![A video page in the Why Files Database: episode metadata, an on-this-page outline (overview, story arc, 14 claims, 1,239 entities, 2,074 relationships, transcript) and a story-arc chart plotting each claim's truth over the episode runtime](./video-page-story-arc.png)
+![A video page in the database with a story-arc chart plotting each claim's truth over the runtime](./video-page-story-arc.png)
 
 ## What it is
 
 The **Why Files Database** is a public, read-only research index of every publicly available Why Files transcript. As of this writing it covers **218 episodes**. It's not a clip search. It's a structured graph:
 
-![The entities panel for one episode: a word cloud of 246 unique entities coloured by type, followed by collapsible rows for person, organization, location, event, facility, technology and other labels with mention counts](./entities-panel-wordcloud.png)
+![The entities panel: a word cloud of 246 entities coloured by type, with collapsible rows per label](./entities-panel-wordcloud.png)
 
 - Every **person, organization, place, facility, event, date, technology, book/movie, ideology** the show has talked about, with per-entity rollups across every episode.
 - Every relationship between those entities. Twenty-nine typed predicates: located_in, founded, member_of, authored, denies, funded_by, and more — with a transcript span pointer on every single edge so you can jump straight to the moment in the video where the claim was made.
@@ -58,32 +58,32 @@ The **Why Files Database** is a public, read-only research index of every public
 - A **suggest-an-edit** flow on every entity, relationship, claim, and contradiction — opens a prefilled GitHub issue with a one-click admin apply link.
 
 <Figure caption="Entity rollup for NASA: 334 mentions across 61 videos, each with the timestamps where it comes up.">
-  <Image src={entityRollupNasa} alt="The NASA entity page listing seven episodes with thumbnail, title and bracketed transcript timestamps for every mention" />
+  <Image src={entityRollupNasa} alt="The NASA entity page listing episodes with thumbnails, titles and transcript timestamps" />
 </Figure>
 
 <Figure caption="The relationship graph around one entity. Every edge is a typed predicate with a span pointer back to the transcript.">
-  <Image src={relationshipGraphCarlAllen} alt="A node-link graph centred on Carl Allen with edges labelled member_of to US Navy, works_for to Office of Navy Research, authored to The Case of the UFO, and denies from Goldi and Jessopp" />
+  <Image src={relationshipGraphCarlAllen} alt="A node-link graph centred on Carl Allen, its edges typed member_of, works_for, authored and denies" />
 </Figure>
 
 <Figure caption="The claims list for an episode: truth and confidence bars, host stance, evidence quotes with timestamps, dependencies and a why? rationale.">
-  <Image src={claimsListKersey} alt="Three claim cards from the Kersey time-slip episode, the first expanded to show a leans-false 0.40 direct truth, host asserts, an evidence quote at 00:10, an elaborates dependency and a rationale paragraph" />
+  <Image src={claimsListKersey} alt="Three claim cards from the Kersey time-slip episode, the first expanded to show its full detail" />
 </Figure>
 
 <Figure caption="The contradictions browser: paired claim cards with stance banners, truth bars, source episodes and shared-entity chips; filters by kind, similarity and publish date on the left.">
-  <Image src={contradictionsBrowser} alt="The contradictions page showing 35 contradictions in the corpus as side-by-side red DENIES and green ASSERTS cards, with faceted filters for kind, cross-video match, shared entities, text similarity and publish date" />
+  <Image src={contradictionsBrowser} alt="The contradictions page showing 35 corpus contradictions as red DENIES and green ASSERTS card pairs" />
 </Figure>
 
 <Figure caption="The argument map seeded from a single claim; dotted edges are shared evidence, coloured nodes are truth.">
-  <Image src={argumentMapCia} alt="An argument map graph with a highlighted central claim about CIA mind control programs and about fifteen surrounding claim nodes coloured green or red, joined by dotted evidence edges" />
+  <Image src={argumentMapCia} alt="An argument map: a highlighted central claim about CIA mind control amid coloured claim nodes" />
 </Figure>
 
 <Figure caption="Counterfactual mode on a claim: pin its truth to false and watch which dependent claims move.">
-  <Image src={counterfactualSlider} alt="A claim card with a counterfactual slider pinned to 0.00 false, showing one shift: a related claim drops from very likely true 0.90 to uncertain 0.54, a delta of minus 0.36" />
+  <Image src={counterfactualSlider} alt="A claim card with its slider pinned to false; a related claim drops from 0.90 to 0.54" />
 </Figure>
 
 The rule, in one line: **no claim without evidence**. Every relationship, truth judgment, and contradiction carries a transcript id and character span.
 
-![The about page walking through four steps: the story arc chart, a single claim with truth 0.62 and host stance, the exact transcript evidence at 08:24, and a cross-episode contradiction card](./about-page-claim-to-tape.png)
+![The about page walking from story-arc chart to claim to transcript evidence to contradiction card](./about-page-claim-to-tape.png)
 
 ## What I built
 
@@ -187,7 +187,7 @@ A standalone React + TypeScript + Vite project under `web/`, deployed to GitHub 
 
 The same React codebase has an admin mode, gated on `VITE_ADMIN`. In production the admin code is tree-shaken out entirely — no admin chunk in the deployed bundle. In local dev, Vite proxies `/api/*` to a Node server on `:4173` which serves the alias-mutation endpoints and runs the indexes stage in-process.
 
-![The videos catalog: 218 episodes in a sortable table with thumbnails, publish dates and lengths, and a faceted sidebar of time-range histograms and top person entities such as Adolf Hitler and Tesla](./videos-catalog.png)
+![The videos catalog: 218 episodes in a sortable table beside a faceted sidebar of histogram filters](./videos-catalog.png)
 
 ## What I learned building it
 
@@ -240,7 +240,7 @@ A few things that were not at all obvious when I started:
 
 Start with an episode you remember well. Open the [home page](https://jonborchardt.github.io/WFD/), pick an episode you remember well, and see if the claim list matches your memory. From there, click through to the contradictions page and see if any of them surprise you, then the argument map — seeded by Bigfoot or Roswell or Phantom Time — and walk the dependency chains.
 
-![An argument map seeded by Bigfoot: a green claim that Bigfoot sightings predate the 1967 Patterson film, a red contradicts edge to a skeptic claim that all modern accounts copy the film, and a dotted evidence edge to a related claim](./argument-map-bigfoot.png)
+![An argument map seeded by Bigfoot: a red contradicts edge joins a green claim and a skeptic claim](./argument-map-bigfoot.png)
 
 If you spot something wrong — a bad claim, a missed contradiction, a wrongly-merged entity, a claim whose evidence quote is wrong — every page has a **suggest an edit** button that opens a prefilled GitHub issue. That's the contribution path. Corrections go through Git so they're auditable.
 

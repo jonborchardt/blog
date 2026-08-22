@@ -9,7 +9,7 @@ tags: [ai-assisted-coding, llm, personal-finance]
 authority: 'F:\github\retire-sim'
 hero:
   src: ./hero.png
-  alt: A play-button video card feeds a queue of URLs into a funnel that sorts claims into three experiment rows, ending in a scoreboard with one verdict per video
+  alt: A video card feeds URLs into a funnel that sorts claims into experiment rows ending in a scoreboard
 draft: false
 ---
 
@@ -24,7 +24,7 @@ Here's the problem. YouTube knows I'm interested in finances and retirement, so 
 I used to watch them. Now I paste the URL into a text file in [my simulator](/retirement-simulator-ai-lab/) and walk away. Dozens of videos later, I've watched none of them, and I know more about what's in them than I would have if I had.
 
 <Figure caption="The Vetted Videos insights panel — a snapshot from an earlier queue run; the counts grow with every batch.">
-  ![The Vetted Videos insights panel: 31 videos across 23 channels, a score mix of 15 useful, 8 mixed, 6 harmful and 2 correct, the topics they talk about, and the claims most often right (spending guardrails, tax coordination pre-RMD) and most often wrong (bonds as the sequence-risk hedge, cash buckets protecting sequence risk)](./vetted-videos-insights.png)
+  ![The Vetted Videos insights panel: score mix, topics, and the claims most often right and wrong](./vetted-videos-insights.png)
 
 </Figure>
 
@@ -83,7 +83,7 @@ For anything testable, three experiment rows go into the committed `experiments.
 Then the normal experiment machinery runs: every row against every historical start year at every candidate retirement age. Same resolution discipline as everything else in the lab — one percentage point of success is one flipped cohort, under two points is a tie, not a finding.
 
 <Figure caption="Theory rows beside the baseline and champion, on the synthetic textbook dataset. On this well-funded household at 65 everything clears the success bar, so the bucket rows' losses show up in the worst-case column instead — the verdicts against buckets come from tighter runs where those rows failed real cohorts. Strategies tuned on a well-funded dataset don't transfer.">
-  ![Strategy comparison table at Social Security 62, retire at 65: baseline 94.9% success; the 2026 plan 100% with 2.8M median terminal wealth; bucket faithful, mild and bucket-plus-gold hybrid rows all 100% but with lower minimum wealth; CFP cash-bridge faithful, mild and hybrid rows at 100% with 3.6M to 3.8M median](./strategy-comparison-rows.png)
+  ![Strategy table at retire-at-65: baseline 94.9% success; bucket and cash-bridge rows all at 100%](./strategy-comparison-rows.png)
 
 </Figure>
 

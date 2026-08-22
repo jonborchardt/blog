@@ -1,25 +1,28 @@
 # Shared MDX primitives
 
-Static `.astro` components for use inside posts. All use design tokens, work in both themes, are responsive and axe-clean, and ship no framework JavaScript (only `Tabs` and `CodeBlock` include a tiny inline script). Import them at the top of a post's `index.mdx`:
+Static `.astro` components for use inside posts. All use design tokens, work in both themes, are responsive and axe-clean, and ship no framework JavaScript (only `Tabs`, `CodeBlock`, `MuseumEmbed` and `Gallery` include a tiny inline script). Import them at the top of a post's `index.mdx`:
 
 ```mdx
 import Callout from "@/components/blog/Callout.astro";
 ```
 
-| Primitive      | Props                                                               | Use it for                                                                                                          |
-| -------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `Callout`      | `variant?: note\|tip\|warning\|danger\|info`, `title?`              | short highlighted notes the reader must not miss                                                                    |
-| `Figure`       | `caption?`, `width?: prose\|wide\|full`, `zoom?`                    | an image/SVG with a caption; wide diagrams that need breakout                                                       |
-| `VizFigure`    | `name`, `summary?`, `interactive?`, `data?: {caption,columns,rows}` | any meaningful chart/diagram/demo: gives it an accessible name, summary and (optionally) a screen-reader data table |
-| `Quote`        | `cite?`, `href?`                                                    | pull quotes with attribution                                                                                        |
-| `Aside`        | —                                                                   | short side notes (margin note on wide screens)                                                                      |
-| `Comparison`   | `labels: string[]` (2–3), slots `a`, `b`, `c`                       | before/after, pros/cons, option comparisons                                                                         |
-| `Steps`        | — (wraps a Markdown `1.` list)                                      | numbered procedures                                                                                                 |
-| `Details`      | `summary`, `open?`                                                  | optional depth: long configs, digressions, answers                                                                  |
-| `Tabs` + `Tab` | `Tab.label`                                                         | alternatives of the same thing (npm/pnpm, JS/TS)                                                                    |
-| `Video`        | `src`+`poster?` or `youtube`, `title` (required), `caption?`        | local video files or YouTube embeds                                                                                 |
-| `CodeBlock`    | `title?`                                                            | a fenced block that needs a filename header or a copy button                                                        |
-| `TableWrapper` | — (applied automatically to every Markdown table by `[slug].astro`) | never imported directly                                                                                             |
+| Primitive      | Props                                                                                                      | Use it for                                                                                                          |
+| -------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `Callout`      | `variant?: note\|tip\|warning\|danger\|info`, `title?`                                                     | short highlighted notes the reader must not miss                                                                    |
+| `Figure`       | `caption?`, `width?: prose\|wide\|full`, `zoom?`                                                           | an image/SVG with a caption; wide diagrams that need breakout                                                       |
+| `VizFigure`    | `name`, `summary?`, `interactive?`, `data?: {caption,columns,rows}`                                        | any meaningful chart/diagram/demo: gives it an accessible name, summary and (optionally) a screen-reader data table |
+| `Quote`        | `cite?`, `href?`                                                                                           | pull quotes with attribution                                                                                        |
+| `Aside`        | —                                                                                                          | short side notes (margin note on wide screens)                                                                      |
+| `Comparison`   | `labels: string[]` (2–3), slots `a`, `b`, `c`                                                              | before/after, pros/cons, option comparisons                                                                         |
+| `Steps`        | — (wraps a Markdown `1.` list)                                                                             | numbered procedures                                                                                                 |
+| `Details`      | `summary`, `open?`                                                                                         | optional depth: long configs, digressions, answers                                                                  |
+| `ListGrid`     | — (wraps a Markdown `-` list)                                                                              | inventory-style lists of short items shown as a grid of boxes instead of a tall bullet column                       |
+| `Tabs` + `Tab` | `Tab.label`                                                                                                | alternatives of the same thing (npm/pnpm, JS/TS)                                                                    |
+| `Video`        | `src`+`poster?` or `youtube`, `title` (required), `caption?`                                               | local video files or YouTube embeds                                                                                 |
+| `MuseumEmbed`  | `demo`, `title`, `label`, `teaser`+`teaserAlt`, `description?`, `height?`, `nativeWidth?`, `teaserHeight?` | click-to-load embed of a live preserved `/museum/` demo: teaser strip, load button, full-size link                  |
+| `Gallery`      | `images: {img, alt}[]`, `description?`, `fullHref?`                                                        | a set of screenshots stepped through one at a time with prev/next arrows                                            |
+| `CodeBlock`    | `title?`                                                                                                   | a fenced block that needs a filename header or a copy button                                                        |
+| `TableWrapper` | — (applied automatically to every Markdown table by `[slug].astro`)                                        | never imported directly                                                                                             |
 
 ## Examples
 
@@ -133,6 +136,18 @@ import chart from "./downloads.svg";
 </Details>
 ```
 
+### ListGrid
+
+```mdx
+<ListGrid>
+
+- explicit contracts
+- typed schemas
+- validation
+
+</ListGrid>
+```
+
 ### Tabs
 
 ````mdx
@@ -161,6 +176,44 @@ Keyboard: arrow keys move between tabs, Home/End jump. Without JavaScript the pa
 ```mdx
 <Video youtube="dQw4w9WgXcQ" title="Talk: Always Shippable" caption="Recorded 2026." />
 ```
+
+### MuseumEmbed
+
+```mdx
+import MuseumEmbed from "@/components/blog/MuseumEmbed.astro";
+import teaser from "./teaser-my-demo.png";
+
+<MuseumEmbed
+  demo="/museum/my-demo/index.html"
+  title="The preserved 2014 demo: what interacting with it does"
+  label="Load the real 2014 demo (about 3 MB of data)"
+  teaser={teaser}
+  teaserAlt="What the teaser strip shows"
+  description="One short sentence of context."
+  height={2720}
+/>
+```
+
+Closed it shows the teaser (a flat strip with no clickable-looking widgets, `teaserHeight` px tall — default 170, raise toward ~300 when the teaser must carry the demo's content on its own) above the load button; open it renders the demo at its native desktop width (`nativeWidth`, default 1280) and scales it down to fit the column. `height` is the demo page's height at that width (default 1500). The caption always ends with an "Open it full size ↗" link, which is the escape hatch on small screens where the scaled demo is too tiny to read. Use it only for live demos — for a set of static screenshots use `Gallery`.
+
+### Gallery
+
+```mdx
+import Gallery from "@/components/blog/Gallery.astro";
+import shot1 from "./shot1.png";
+import shot2 from "./shot2.png";
+
+<Gallery
+  images={[
+    { img: shot1, alt: "What the first screenshot shows" },
+    { img: shot2, alt: "What the second screenshot shows" },
+  ]}
+  description="One short sentence of context."
+  fullHref="/museum/my-demo/index.html"
+/>
+```
+
+One image shows at a time (the first — put the one that best tells the story first; it loads eagerly, the rest lazy-load), with prev/next arrows and an "n / m" counter below. The image sits in a fixed 3:2 frame at the prose measure, letterboxed on a muted background with `object-fit: contain`, so switching never shifts the layout. `fullHref` renders an "Open it full size ↗" link after the caption — the escape hatch for reading a screenshot's fine print.
 
 ### CodeBlock
 

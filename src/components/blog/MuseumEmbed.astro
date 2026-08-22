@@ -1,0 +1,150 @@
+---
+/**
+ * MuseumEmbed — click-to-load embed for a preserved demo under /museum/.
+ *
+ * Closed: a flat teaser strip (consistent 170px tall, `object-fit: cover` —
+ * pick an image with no clickable-looking widgets) above a load button, so
+ * nobody downloads a multi-MB baked-in dataset without asking. Open: the demo
+ * in an iframe rendered at its native desktop width and scaled down to fit
+ * the column by a tiny inline script (the demos are fixed-width 2014 pages).
+ * The caption always carries an "Open it full size" link.
+ *
+ * Props: `demo` (root-relative museum path), `title` (iframe accessible
+ * name), `label` (load-button text), `teaser` + `teaserAlt` (imported image),
+ * `description?` (one short caption sentence), `height?` (demo page height
+ * at `nativeWidth`, default 1500), `nativeWidth?` (default 1280),
+ * `teaserHeight?` (rendered teaser strip height in px, default 170 — raise it
+ * toward ~300 when the teaser must carry the demo's content on its own; crop
+ * the image close to the displayed aspect so `object-fit: cover` loses little).
+ *
+ * ```mdx
+ * import MuseumEmbed from "@/components/blog/MuseumEmbed.astro";
+ * import teaser from "./teaser-my-demo.png";
+ *
+ * <MuseumEmbed
+ *   demo="/museum/my-demo/index.html"
+ *   title="The preserved demo: what interacting with it does"
+ *   label="Load the real 2014 demo (about 3 MB of data)"
+ *   teaser={teaser}
+ *   teaserAlt="What the strip shows"
+ *   description="One short sentence of context."
+ * />
+ * ```
+ */
+import { href } from "@/lib/url";
+
+interface Props {
+  demo: string;
+  title: string;
+  label: string;
+  teaser: { src: string; width: number; height: number };
+  teaserAlt: string;
+  description?: string;
+  height?: number;
+  nativeWidth?: number;
+  teaserHeight?: number;
+}
+const {
+  demo,
+  title,
+  label,
+  teaser,
+  teaserAlt,
+  description,
+  height = 1500,
+  nativeWidth = 1280,
+  teaserHeight = 170,
+} = Astro.props;
+---
+
+<figure class="figure museum-embed my-8">
+  <details>
+    <summary>
+      <img src={teaser.src} width={teaser.width} height={teaser.height} alt={teaserAlt} />
+      <span class="label"
+        ><span class="when-closed">{label}</span><span class="when-open">Hide the demo</span></span
+      >
+    </summary>
+    <div class="museum-scaler">
+      <iframe src={href(demo)} title={title} loading="lazy" width={nativeWidth} height={height}
+      ></iframe>
+    </div>
+  </details>
+  <figcaption class="text-muted-foreground mt-3 text-center text-sm">
+    {description && <span>{description}</span>}{" "}
+    <a href={href(demo)} target="_blank" rel="noopener">Open it full size ↗</a>
+  </figcaption>
+</figure>
+
+<script>
+  // Scale each fixed-width demo down to its container; ResizeObserver also
+  // fires when the parent <details> opens (width goes 0 → real).
+  for (const scaler of document.querySelectorAll<HTMLElement>(".museum-scaler")) {
+    const iframe = scaler.querySelector("iframe");
+    if (!iframe) continue;
+    const nativeW = Number(iframe.getAttribute("width"));
+    const nativeH = Number(iframe.getAttribute("height"));
+    const fit = () => {
+      const s = Math.min(1, scaler.clientWidth / nativeW);
+      if (s <= 0) return;
+      iframe.style.transform = `scale(${s})`;
+      scaler.style.height = `${Math.round(nativeH * s)}px`;
+    };
+    new ResizeObserver(fit).observe(scaler);
+  }
+</script>
+
+<style define:vars={{ "teaser-h": `${teaserHeight}px` }}>
+  .museum-embed summary {
+    cursor: pointer;
+    list-style: none;
+  }
+  .museum-embed summary::-webkit-details-marker {
+    display: none;
+  }
+  .museum-embed summary img {
+    display: block;
+    width: 100%;
+    height: var(--teaser-h);
+    object-fit: cover;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+  .museum-embed .label {
+    display: block;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 0.5rem 1rem;
+    margin-top: 0.75rem;
+    text-align: center;
+    color: var(--color-primary);
+  }
+  .museum-embed summary:hover .label {
+    background: var(--color-accent);
+  }
+  .museum-embed details[open] summary img,
+  .museum-embed details[open] .when-closed,
+  .museum-embed details:not([open]) .when-open {
+    display: none;
+  }
+  .museum-embed details[open] .label {
+    margin: 0 0 0.75rem;
+  }
+  .museum-scaler {
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+  .museum-scaler iframe {
+    display: block;
+    border: 0;
+    transform-origin: top left;
+  }
+  /* Same breakout as Figure.astro's .figure-full, so the demo gets the page measure. */
+  @media (min-width: 64rem) {
+    .museum-embed {
+      width: min(var(--container-page), calc(100vw - 3rem));
+      margin-inline: calc((var(--container-prose) - min(var(--container-page), 100vw - 3rem)) / 2);
+    }
+  }
+</style>

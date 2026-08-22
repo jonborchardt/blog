@@ -8,7 +8,7 @@ tags: [retrospective, adtech, data-viz]
 authority: 'E:\github2\Labs'
 hero:
   src: ./hero.png
-  alt: A treemap of hundreds of TV program tiles, each carrying a network logo — Food Network, HGTV, TLC, Travel Channel, DIY — sized by audience and shaded from red through yellow to green
+  alt: A treemap of hundreds of TV program tiles with network logos, shaded red through yellow to green
 draft: false
 ---
 
@@ -77,7 +77,7 @@ histogram binned by targeting score.
     src={histogram.src}
     width="948"
     height="632"
-    alt="The PrecisionDemand application window with a left facet panel and a main pane of nine stacked bars on an axis from minus 0.4 to 0.5, each bar built from small green tiles, over a status bar reading Program Count 2473"
+    alt="The app window: a left facet panel, nine stacked bars of small green tiles, and a status bar below"
   />
 </Figure>
 
@@ -94,10 +94,17 @@ network, genre, conversions, cost per acquisition, primary daypart and primary d
 breadcrumb at the top left says `tRatio: Over -0.4`, which is the filter that produced this view.
 
 The toolbar has two dropdowns that I think are the most important controls in the product: **Sort**
-and **Color**. Both are set to the targeting score here. You can point either one at any field independently,
+and **Color**. Both are set to the targeting score here — a stat of ours that measured how well a
+program's audience matched the audience the advertiser was paying to reach, and a number doing
+three jobs at once in this view: it bins the histogram, it sorts the cards, and it colours them on
+a red-through-yellow-to-green ramp. You can point either dropdown at any field independently,
 which means the same collection can be arranged by cost and shaded by targeting quality, or the
 reverse, and the answer to "am I overpaying for the wrong audience" falls out of the picture rather
 than out of a calculation.
+
+The `t` prefix elsewhere in the UI means "targeted" — you get `CPM` and `tCPM` as a pair, and
+`Imps per Air` and `tImps per Air` as a pair. A program with a good CPM and a terrible tCPM is
+cheap for a general audience and expensive for yours. Most of the product is about noticing that.
 
 <Callout variant="note" title="What was Microsoft's and what was mine">
   The directory this lives in is called `PivotViewer`, after the Silverlight control for exploring
@@ -105,19 +112,6 @@ than out of a calculation.
   chrome came out of that box and which parts I wrote. The archive kept the screenshots, not the
   source.
 </Callout>
-
-## The sort key and the colour
-
-The number doing the sorting is a targeting score — a stat of ours that measured how well a
-program's audience matched the audience the advertiser was paying to reach.
-
-It let two very different pieces of media be put next to each other and ranked. In this app it is doing three jobs at once: it
-bins the histogram, it sorts the cards, and it colours them on a red-through-yellow-to-green ramp.
-The axis runs from about -0.4 to 0.5 with the slider going down to -1.
-
-The `t` prefix elsewhere in the UI means "targeted" — you get `CPM` and `tCPM` as a pair, and
-`Imps per Air` and `tImps per Air` as a pair. A program with a good CPM and a terrible tCPM is
-cheap for a general audience and expensive for yours. Most of the product is about noticing that.
 
 ## Filter: the treemap
 
@@ -129,7 +123,7 @@ poster.
     src={treemap.src}
     width="1737"
     height="806"
-    alt="A treemap filling the window with hundreds of program tiles carrying Food Network, HGTV, TLC, Travel Channel, OWN and DIY logos, shaded red through yellow to green, beside a genre facet list with counts"
+    alt="A treemap of program tiles carrying network logos, shaded red to green, beside a genre facet list"
   />
 </Figure>
 
@@ -156,7 +150,7 @@ not try to reconcile its numbers with the two screenshots above.
     src={cardDetail.src}
     width="1165"
     height="905"
-    alt="A zoomed program card showing CPM $3.93, tCPM $48.02, impressions 50,882 and tRatio 0.06, each with a small bar showing where it sits in the distribution, beside a panel listing weekly airings by campaign and a list of demographic attributes with diverging bars"
+    alt="A program card with four metrics, each carrying a small distribution bar, beside its detail panel"
   />
 </Figure>
 
@@ -189,7 +183,7 @@ The other end of the product is a grid, and it is deliberately boring.
     src={optimizer.src}
     width="1075"
     height="805"
-    alt="A dense data grid with columns for Lock, Optimal Airings, Program Airings, Program Duration, Program Name, Network, Cost per Air, Optimal Spend and Imps per Air, with buttons Re-calculate Optimal Plan and Export to Excel beneath and a pager reading Page 1 of 12"
+    alt="A dense data grid of program rows with optimal airings and spend columns, and two buttons beneath"
   />
 </Figure>
 
@@ -234,7 +228,7 @@ Before the spreadsheet there was a comparison view.
     src={charts.src}
     width="941"
     height="702"
-    alt="Seven chart cards titled Airing Count, Targeted CPM, Targeted Impressions, Impressions by Day of Week, Broadcast Impressions, Impressions by Daypart and Cable Impressions, each a grouped bar chart with five series"
+    alt="Seven chart cards comparing plans, each a grouped bar chart with five bar series"
   />
 </Figure>
 
@@ -275,14 +269,12 @@ the same hands did, and it is short enough to read in one sitting.
 A `.xap` file — a Silverlight client, zipped assemblies, still sitting on disk and still perfectly
 decompilable — plus one WCF service, `DalService.svc`, plus a `Web.config` with Entity Framework
 connection strings hardcoded to `data source=baker` and the catalogues `Demographics` and `Acxiom`.
-Four dated backup copies put that directory between December 2011 and February 2012.
 
 The service contract is three operations wide. `GetClusterSources`, `GetClusters`, and
 `GetRelevantDemographicsOfCluster` — and there is the whole thesis, in an interface definition. Pick
 a data source, get its clusters of households, ask which demographic attributes make a given cluster
 distinctive. Those clusters are the same word as the `tRatio Cluster 1`, `2` and `3` facets in the
-first screenshot, and that last method is the panel I just walked you through. The assemblies are
-branded MarketScale, a name that appears nowhere else in the portfolio.
+first screenshot, and that last method is the panel I just walked you through.
 
 Three tiers, and every one of them is unreachable now. No browser ships the plug-in. `baker` was
 decommissioned so long ago that I could not tell you what happened to it.

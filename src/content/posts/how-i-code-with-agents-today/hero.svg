@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 600" width="1500" height="600">
+  <title>A tangled idea unwinds through a two-model conversation and a written plan into a repository of ordered blocks behind a validation gate</title>
+  <rect width="1500" height="600" fill="#fafcfe"/>
+
+  <!-- left flank: fainter tangle continuation (non-essential) -->
+  <g stroke="#d9dfe3" stroke-width="5" fill="none" stroke-linecap="round">
+    <path d="M40 260 q60 -90 120 -30 q50 50 -10 90 q-60 40 -20 90 q35 45 95 5"/>
+    <path d="M120 140 q80 -40 130 30"/>
+    <path d="M60 430 q70 60 150 10"/>
+  </g>
+
+  <!-- stage 1: the tangled idea -->
+  <g stroke="#006a90" stroke-width="8" fill="none" stroke-linecap="round">
+    <path d="M330 300 q10 -110 100 -90 q90 20 60 90 q-30 70 -110 40 q-80 -30 -20 -95 q55 -60 130 -15 q70 40 20 105 q-45 60 -115 20"/>
+  </g>
+  <!-- arrow 1 -->
+  <g stroke="#555f69" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M520 300 h50"/><path d="M555 285 l15 15 l-15 15"/>
+  </g>
+
+  <!-- stage 2: two speech bubbles, the pre-code conversation -->
+  <g>
+    <rect x="590" y="200" width="130" height="80" rx="14" fill="#deeef5" stroke="#d9dfe3" stroke-width="3"/>
+    <path d="M620 280 l0 22 l24 -22 z" fill="#deeef5" stroke="#d9dfe3" stroke-width="3"/>
+    <g stroke="#555f69" stroke-width="6" stroke-linecap="round">
+      <line x1="608" y1="228" x2="700" y2="228"/>
+      <line x1="608" y1="252" x2="672" y2="252"/>
+    </g>
+    <rect x="650" y="300" width="130" height="80" rx="14" fill="#fafcfe" stroke="#006a90" stroke-width="3"/>
+    <path d="M750 380 l0 22 l-24 -22 z" fill="#fafcfe" stroke="#006a90" stroke-width="3"/>
+    <g stroke="#006a90" stroke-width="6" stroke-linecap="round">
+      <line x1="668" y1="328" x2="760" y2="328"/>
+      <line x1="668" y1="352" x2="736" y2="352"/>
+    </g>
+  </g>
+
+  <!-- arrow 2 -->
+  <g stroke="#555f69" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M795 300 h55"/><path d="M835 285 l15 15 l-15 15"/>
+  </g>
+
+  <!-- stage 3: the written plan -->
+  <g>
+    <rect x="868" y="210" width="120" height="180" rx="8" fill="#fafcfe" stroke="#11171d" stroke-width="4"/>
+    <g stroke="#555f69" stroke-width="6" stroke-linecap="round">
+      <line x1="886" y1="244" x2="970" y2="244"/>
+      <line x1="886" y1="272" x2="970" y2="272"/>
+      <line x1="886" y1="300" x2="952" y2="300"/>
+      <line x1="886" y1="328" x2="970" y2="328"/>
+    </g>
+    <line x1="886" y1="356" x2="940" y2="356" stroke="#f0b35a" stroke-width="8" stroke-linecap="round"/>
+  </g>
+
+  <!-- arrow 3 -->
+  <g stroke="#555f69" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M998 300 h28"/><path d="M1011 285 l15 15 l-15 15"/>
+  </g>
+
+  <!-- stage 4: the repository of ordered blocks -->
+  <rect x="1035" y="180" width="160" height="240" rx="14" fill="#fafcfe" stroke="#11171d" stroke-width="5"/>
+  <g fill="#deeef5">
+    <rect x="1052" y="198" width="36" height="36" rx="6"/>
+    <rect x="1097" y="198" width="36" height="36" rx="6"/>
+    <rect x="1142" y="198" width="36" height="36" rx="6"/>
+    <rect x="1052" y="248" width="36" height="36" rx="6"/>
+    <rect x="1142" y="248" width="36" height="36" rx="6"/>
+    <rect x="1052" y="298" width="36" height="36" rx="6"/>
+    <rect x="1097" y="298" width="36" height="36" rx="6"/>
+  </g>
+  <g fill="#006a90">
+    <rect x="1097" y="248" width="36" height="36" rx="6"/>
+    <rect x="1142" y="298" width="36" height="36" rx="6"/>
+    <rect x="1052" y="348" width="36" height="36" rx="6"/>
+    <rect x="1097" y="348" width="36" height="36" rx="6"/>
+    <rect x="1142" y="348" width="36" height="36" rx="6"/>
+  </g>
+
+  <!-- validation gate: badge on the repo entrance -->
+  <circle cx="1042" cy="418" r="34" fill="#f0b35a"/>
+  <path d="M1025 418 l12 13 l24 -26" stroke="#11171d" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- right flank: grid continuation fading out (non-essential) -->
+  <g fill="none" stroke="#d9dfe3" stroke-width="4">
+    <rect x="1300" y="200" width="40" height="40" rx="6"/>
+    <rect x="1355" y="200" width="40" height="40" rx="6"/>
+    <rect x="1410" y="200" width="40" height="40" rx="6"/>
+    <rect x="1300" y="255" width="40" height="40" rx="6"/>
+    <rect x="1355" y="255" width="40" height="40" rx="6"/>
+    <rect x="1300" y="310" width="40" height="40" rx="6"/>
+    <rect x="1410" y="255" width="40" height="40" rx="6"/>
+    <rect x="1355" y="310" width="40" height="40" rx="6"/>
+  </g>
+</svg>

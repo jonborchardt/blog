@@ -107,7 +107,7 @@ function PostRow({
           <time dateTime={doc.publishedAt}>{formatDate(doc.publishedAt)}</time>
           <span>{doc.readingTime} min read</span>
           {doc.tags.length > 0 && (
-            <span className="flex flex-wrap gap-1.5" aria-label="Tags">
+            <span className="flex flex-wrap gap-1.5" role="group" aria-label="Tags">
               {doc.tags.map((t) => (
                 <button key={t.id} type="button" className="tag-pill" onClick={() => onTag(t.id)}>
                   {t.label}

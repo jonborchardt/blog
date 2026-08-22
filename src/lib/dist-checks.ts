@@ -117,6 +117,13 @@ export function checkDist({ pages, files, base, site }: DistCheckInput): DistChe
           `${file}: ${desc} has empty alt but is not marked decorative → write alt text or add aria-hidden="true"`,
         );
       }
+      const alt = img.getAttribute("alt") ?? "";
+      if (alt.length > 100) {
+        // WAVE raises a "long alternative text" alert above 100 characters.
+        errors.push(
+          `${file}: ${desc} alt is ${alt.length} chars (max 100) → say only what the image shows; move detail into the caption or surrounding prose`,
+        );
+      }
       if (!img.hasAttribute("width") || !img.hasAttribute("height")) {
         errors.push(
           `${file}: ${desc} lacks width/height → use <Image> / Markdown images for raster files, or pass width and height for SVG <img>`,
@@ -189,6 +196,30 @@ export function checkDist({ pages, files, base, site }: DistCheckInput): DistChe
   }
 
   return { errors, stats: { pages: pages.length, links, images } };
+}
+
+/**
+ * Astro emits some <style> elements into the body (the island runtime style, styles propagated
+ * into rendered MDX content). That placement is invalid HTML — the W3C checker flags it — but the
+ * CSS itself is location-independent, so moving the elements to the end of <head> (in document
+ * order) is behaviour-preserving. <style> inside inline <svg> is valid SVG and stays put.
+ */
+export function hoistBodyStyles(html: string): string {
+  const headEnd = html.indexOf("</head>");
+  if (headEnd === -1) return html;
+  const moved: string[] = [];
+  const body = html
+    .slice(headEnd)
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/g, (m, offset: number, s: string) => {
+      const before = s.slice(0, offset);
+      const open = (before.match(/<svg[\s>]/g) ?? []).length;
+      const close = (before.match(/<\/svg>/g) ?? []).length;
+      if (open > close) return m;
+      moved.push(m);
+      return "";
+    });
+  if (moved.length === 0) return html;
+  return html.slice(0, headEnd) + moved.join("") + body;
 }
 
 /** http(s) link → dist files using it. Network policy lives in src/lib/external-links.ts. */

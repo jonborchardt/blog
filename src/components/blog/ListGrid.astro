@@ -1,0 +1,47 @@
+---
+/**
+ * ListGrid — a plain Markdown bullet list displayed as a responsive grid of boxed items.
+ * Use for inventory-style lists of short items (constraints, checklists, registries) that
+ * would be monotonous as a tall bullet column; keep narrative lists as normal Markdown.
+ *
+ * ```mdx
+ * import ListGrid from "@/components/blog/ListGrid.astro";
+ *
+ * <ListGrid>
+ *
+ * - explicit contracts
+ * - typed schemas
+ * - validation
+ *
+ * </ListGrid>
+ * ```
+ */
+---
+
+<div class="list-grid my-8"><slot /></div>
+
+<style is:global>
+  .list-grid > ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+  }
+  .list-grid > ul > li {
+    margin: 0;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--muted) 40%, transparent);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+  .list-grid > ul > li > :first-child {
+    margin-top: 0;
+  }
+  .list-grid > ul > li > :last-child {
+    margin-bottom: 0;
+  }
+</style>

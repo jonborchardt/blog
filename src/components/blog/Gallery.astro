@@ -1,0 +1,169 @@
+---
+/**
+ * Gallery — a set of screenshots shown one at a time in a fixed 3:2 frame at
+ * the prose measure, with prev/next arrows and an "n / m" counter below, so
+ * switching never shifts the layout. Images letterbox on a muted background
+ * (`object-fit: contain`). The first image is the default and loads eagerly;
+ * the rest lazy-load when shown. Use it for screenshot sets (a preserved
+ * tool, a walkthrough); use `MuseumEmbed` when there is a live demo to load.
+ *
+ * Props: `images` (in display order — put the one that best tells the story
+ * first), each `{ img, alt }` with `img` an imported image; `description?`
+ * (one short caption sentence). The caption always ends with an "Open it
+ * full size ↗" link to the currently shown image file.
+ *
+ * ```mdx
+ * import Gallery from "@/components/blog/Gallery.astro";
+ * import shot1 from "./shot1.png";
+ * import shot2 from "./shot2.png";
+ *
+ * <Gallery
+ *   images={[
+ *     { img: shot1, alt: "What the first screenshot shows" },
+ *     { img: shot2, alt: "What the second screenshot shows" },
+ *   ]}
+ *   description="One short sentence of context."
+ * />
+ * ```
+ */
+interface GalleryImage {
+  img: { src: string; width: number; height: number };
+  alt: string;
+}
+interface Props {
+  images: GalleryImage[];
+  description?: string;
+}
+const { images, description } = Astro.props;
+---
+
+<figure class="figure shot-gallery my-8">
+  <div class="gallery-main">
+    {
+      images.map((im, i) => (
+        <img
+          src={im.img.src}
+          width={im.img.width}
+          height={im.img.height}
+          alt={im.alt}
+          loading={i === 0 ? "eager" : "lazy"}
+          class={i === 0 ? "active" : undefined}
+        />
+      ))
+    }
+  </div>
+  <div class="gallery-nav">
+    <button type="button" class="gallery-prev" aria-label="Previous screenshot">&larr;</button>
+    {
+      images.map((im, i) => (
+        <button
+          type="button"
+          class="gallery-dot"
+          aria-current={i === 0 ? "true" : "false"}
+          aria-label={`Screenshot ${i + 1} of ${images.length}: ${im.alt}`}
+        >
+          <span />
+        </button>
+      ))
+    }
+    <button type="button" class="gallery-next" aria-label="Next screenshot">&rarr;</button>
+    <span class="sr-only" aria-live="polite">Screenshot 1 of {images.length}</span>
+  </div>
+  <figcaption class="text-muted-foreground mt-2 text-center text-sm">
+    {description && <span>{description}</span>}{" "}
+    <a class="gallery-full-link" href={images[0]!.img.src} target="_blank" rel="noopener">
+      Open it full size ↗
+    </a>
+  </figcaption>
+</figure>
+
+<script>
+  for (const gallery of document.querySelectorAll(".shot-gallery")) {
+    const imgs = gallery.querySelectorAll<HTMLImageElement>(".gallery-main img");
+    const dots = gallery.querySelectorAll(".gallery-dot");
+    const live = gallery.querySelector(".gallery-nav .sr-only");
+    const link = gallery.querySelector<HTMLAnchorElement>(".gallery-full-link");
+    let current = 0;
+    const show = (i: number) => {
+      current = (i + imgs.length) % imgs.length;
+      imgs.forEach((im, j) => im.classList.toggle("active", j === current));
+      dots.forEach((d, j) => d.setAttribute("aria-current", String(j === current)));
+      if (live) live.textContent = `Screenshot ${current + 1} of ${imgs.length}`;
+      const shown = imgs[current];
+      if (link && shown) link.href = shown.src;
+    };
+    gallery.querySelector(".gallery-prev")?.addEventListener("click", () => show(current - 1));
+    gallery.querySelector(".gallery-next")?.addEventListener("click", () => show(current + 1));
+    dots.forEach((d, i) => d.addEventListener("click", () => show(i)));
+  }
+</script>
+
+<style>
+  .gallery-main {
+    position: relative;
+    aspect-ratio: 3 / 2;
+    background: var(--color-muted);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+  .gallery-main img {
+    display: none;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: scale-down; /* fit like contain, but a smaller image stays natural size, centered */
+  }
+  .gallery-main img.active {
+    display: block;
+  }
+  .gallery-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+  .gallery-prev,
+  .gallery-next {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid var(--color-border);
+    border-radius: 9999px;
+    background: none;
+    cursor: pointer;
+    color: var(--color-muted-foreground);
+  }
+  .gallery-prev:hover,
+  .gallery-next:hover {
+    background: var(--color-accent);
+    color: var(--color-primary);
+  }
+  .gallery-dot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+  .gallery-dot span {
+    width: 1.125rem;
+    height: 0.375rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-border);
+  }
+  .gallery-dot:hover span {
+    background: var(--color-muted-foreground);
+  }
+  .gallery-dot[aria-current="true"] span {
+    background: var(--color-primary);
+  }
+</style>

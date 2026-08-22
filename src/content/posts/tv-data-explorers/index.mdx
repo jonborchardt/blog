@@ -8,17 +8,27 @@ tags: [retrospective, adtech, data-viz]
 authority: 'E:\github2\Labs'
 hero:
   src: ./hero.png
-  alt: A 2x2 grid of four dashboard screenshots — a wizard scoring TV ads for targeting fit, an annotated media-package comparison tool, age/education/income charts of total people versus total buyers, and a campaign-pacing bar chart against an expected line
+  alt: A 2x2 grid of four dashboard screenshots from small internal ad-data exploration tools
 draft: false
 ---
 
 import Callout from "@/components/blog/Callout.astro";
 import Figure from "@/components/blog/Figure.astro";
-import adsplore from "./adsplore1.png";
+import Gallery from "@/components/blog/Gallery.astro";
+import MuseumEmbed from "@/components/blog/MuseumEmbed.astro";
+import adsploreBrands from "./adsplore-brand-breakdowns.png";
+import adsploreTRatios from "./adsplore-tratios.png";
+import adsploreTvAds from "./adsplore-tv-ads.png";
 import comparer from "./comparer_WithCallouts.png";
-import personReporting from "./personReporting7.png";
+import prCurves from "./person-reporting-curves.png";
+import prCurvesTable from "./person-reporting-curves-table.png";
+import prDemographics from "./person-reporting-demographics.png";
+import prPmicLife from "./person-reporting-pmic-life.png";
+import prTargetPlanner from "./person-reporting-target-planner.png";
+import prVehicle from "./person-reporting-vehicle.png";
 import proposal from "./proposal.gif";
 import proposalStill from "./proposal-still.png";
+import sodaWarTeaser from "./teaser-soda-war.png";
 
 Not everything I built at PrecisionDemand and AOL was a product. Some of it was just me, handed a
 new pile of data, building the smallest interface that would let me look at it. None of these four
@@ -26,8 +36,8 @@ shipped to a customer. All four exist because I could not understand a dataset b
 of it, and building a small explorer was faster than not understanding it.
 
 <Callout variant="note" title="Every number below is demo data">
-  The ad counts, brands, package costs, audience counts, and pacing numbers in all four
-  screenshots below are demo data, built to exercise the tools — not a real campaign.
+  The ad counts, brands, package costs, audience counts, and pacing numbers in all four tools
+  below are demo data, built to exercise the tools — not a real campaign.
 </Callout>
 
 ## Adsplore: scoring 10,739 ads for fit
@@ -38,18 +48,23 @@ in the screenshots below pulled 10,739 ads. Crossfilter-style charts break the s
 daypart, network, market, program, genre, and where the ad sat in its commercial pod, and clicking
 any of them filters all the others live.
 
-<Figure
-  caption="Adsplore's TV Ads step: 10,739 ads scored for targeting fit, broken down by daypart, network, market, program, genre and pod position."
-  width="wide"
-  zoom
->
-  <img
-    src={adsplore.src}
-    width="932"
-    height="820"
-    alt="Adsplore wizard on the TV Ads step, showing 500 of 10,739 sampled ads with crossfilter charts for daypart, top network, top markets, ad length, top programs, top genres, pod group and pod position"
-  />
-</Figure>
+<Gallery
+  images={[
+    {
+      img: adsploreTvAds,
+      alt: "Adsplore's TV Ads step: 500 of 10,739 sampled ads with crossfilter charts",
+    },
+    {
+      img: adsploreBrands,
+      alt: "Daypart, station, program and genre rankings above spend, impressions and CPM over time",
+    },
+    {
+      img: adsploreTRatios,
+      alt: "Per-target tRatio histograms and time series, ad-length and pod donuts, and the underlying ad grid",
+    },
+  ]}
+  description="Adsplore's TV Ads step: 10,739 ads scored for targeting fit, broken down by daypart, network, market, program, genre and pod position."
+/>
 
 It was a demo, built to see whether we could actually make sense of a brand's TV buy at that
 granularity — not something a client clicked through themselves.
@@ -71,7 +86,7 @@ of charts at once.
     src={comparer.src}
     width="1746"
     height="854"
-    alt="Package Compare tool with hand-drawn annotation callouts: an inventory search panel on the left, two editable packages of programs in the middle each with cost and impression fields and notes, and eight comparison charts on the right covering impressions over time, targetedness, spend, and impressions by channel, daypart, CPM, eCPM and GRPs for all packages"
+    alt="Package Compare, annotated by hand: an inventory panel, two editable packages and comparison charts"
   />
 </Figure>
 
@@ -84,19 +99,40 @@ This one compares two curves across four demographic cuts — age in two-year in
 level, household income, and home market value — one line for how a population is distributed,
 another for how buyers of a given target are distributed against it. The field names underneath
 (`Income-EstimatedHouseh…`, `HomeMarketValue`) trace back to the same licensed consumer data,
-Acxiom-lineage, that powered targeting elsewhere in the platform.
+Acxiom-lineage, that powered targeting elsewhere in the platform. The other screens in the set are
+per-target reports — key totals and a tRatio distribution for a single target like PMIC Life — a
+Target Planner with gender and ethnicity donuts over an age histogram, and vehicle-ownership charts
+above the raw population table.
 
-<Figure
-  caption="Total People versus Total Buyers by age, education, household income and home value — same underlying consumer-data lineage as the rest of the targeting platform."
-  zoom
->
-  <img
-    src={personReporting.src}
-    width="962"
-    height="677"
-    alt="Four charts comparing Total People to Total Buyers on a right axis: by age in two-year increments from 18 to over 99, by education level from high school to grad school, by household income from under 15k to over 150k, and by home market value from 25k to over 1M"
-  />
-</Figure>
+<Gallery
+  images={[
+    {
+      img: prCurves,
+      alt: "Total People bars with a Total Buyers line by age, education, household income and home market value",
+    },
+    {
+      img: prCurvesTable,
+      alt: "Total People versus Total Buyers by party, marital status and vehicle, with a demographic table",
+    },
+    {
+      img: prPmicLife,
+      alt: "PMIC Life target report: key totals, tRatio 0.06 and a tRatio distribution",
+    },
+    {
+      img: prTargetPlanner,
+      alt: "Target Planner: total population with gender and ethnicity donuts and an age histogram",
+    },
+    {
+      img: prDemographics,
+      alt: "Population bar charts by education, household income, home value, political party and marital status",
+    },
+    {
+      img: prVehicle,
+      alt: "Vehicle and vehicle-value-index charts above a table of population counts per demographic",
+    },
+  ]}
+  description="Total People versus Total Buyers by age, education, household income and home value — same underlying consumer-data lineage as the rest of the targeting platform."
+/>
 
 Where the other three tools are about a campaign or a buy, this one is about the audience itself —
 a way to see whether a target population actually looks different from the general population, and
@@ -117,10 +153,31 @@ inside the ONE TV era at AOL.
       src={proposal.src}
       width="518"
       height="276"
-      alt="Bar chart of weekly impressions from May through late July 2017, stacked as confirmed, preliminary and projected bars tracking closely against a yellow expected-delivery line; successive report dates from 5/5/2017 to 8/4/2017 convert the projected bars to confirmed"
+      alt="Weekly impression bars stacked as confirmed, preliminary and projected against an expected line"
     />
   </picture>
 </Figure>
 
-None of these four were pitched to anyone outside the building. They were how I answered my own
-question — "what does this data actually look like?" — before building the thing that used it.
+## A detour, August 2014
+
+One more, from the same instinct but a different occasion. Right after AOL bought PrecisionDemand,
+there was an Adap.tv hackathon, and we built a thing called Soda War: a D3 map of the United States
+with a circle at every market, sized by spend, red for Coke and blue for Pepsi, and a slider that
+ran twenty-four hours of it forward. I did the front end; Sawin Lee, Dyng Au and Brendan Kitts did
+the data. Whether we won it, I genuinely do not remember. The page still runs, so rather than a
+screenshot, here is the page itself — press Play, or drag the slider yourself:
+
+<MuseumEmbed
+  demo="/museum/maphack/index.html"
+  title="The preserved 2014 Soda War map: press Play or drag the slider to sweep twenty-four hours of Coke and Pepsi TV ad spend"
+  label="Load the real 2014 demo (about 3 MB of data)"
+  teaser={sodaWarTeaser}
+  teaserAlt="A US map crowded with overlapping red Coke and blue Pepsi spend circles at prime time"
+  description="Soda War at prime time. The slider sweeps twenty-four hours of 28 April 2014; solid circles are local spend, transparent ones national airings."
+  height={750}
+  teaserHeight={300}
+/>
+
+None of these were pitched to anyone outside the building — the map included. The explorers were
+how I answered my own question, "what does this data actually look like?", before building the
+thing that used it; Soda War was the same instinct with a scoreboard and a deadline attached.

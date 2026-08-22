@@ -100,5 +100,5 @@ Verified before/after captures live in `_agent/screenshots/industry-rankings-{be
 ## The other eleven posts in the series, in order
 
 attenex-docmapper, bing-hover-preview, bunnypuddle-games, precisiondemand-audience-planner,
-media-foundry-watermarks, google-charts-to-d3, sell-side-targeting, tv-data-explorers,
+media-foundry-watermarks, drag-the-timeline-refilter-the-page, sell-side-targeting, tv-data-explorers,
 one-codebase-two-datasets, one-tv-upfront-scatter, one-tv-australia.

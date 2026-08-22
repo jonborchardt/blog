@@ -225,6 +225,39 @@ const image = ogImage ? new URL(ogImage.src, Astro.site).toString() : `/og/${pos
     </div>
   </article>
 
+  <button
+    id="back-to-top"
+    aria-label="Back to top"
+    hidden
+    class="bg-card text-muted-foreground hover:text-foreground fixed right-4 bottom-4 z-20 cursor-pointer rounded-full border p-3 shadow-md print:hidden"
+  >
+    <svg
+      aria-hidden="true"
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M10 16V4M4 10l6-6 6 6"></path>
+    </svg>
+  </button>
+  <script is:inline>
+    {
+      const toTop = document.getElementById("back-to-top");
+      addEventListener("scroll", () => (toTop.hidden = scrollY < 400), { passive: true });
+      toTop.addEventListener("click", () =>
+        scrollTo({
+          top: 0,
+          behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+        }),
+      );
+    }
+  </script>
+
   <!-- Figure lightbox (Figure.astro `zoom`): open on button click, any click inside closes. Inline
        to keep prose pages at zero external scripts (e2e/budget.spec.ts). -->
   <script is:inline>

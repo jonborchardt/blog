@@ -8,15 +8,15 @@ tags: [data-viz, d3, typescript, retrospective]
 authority: 'E:\github2\Labs'
 hero:
   src: ./hero.png
-  alt: A map of the United States covered in hundreds of translucent red squares, one per ZIP code with at least one record in the fatalencounters.org dataset, densest along both coasts and across the Southeast
+  alt: A US map covered in translucent red squares, one per ZIP code in the fatalencounters.org dataset
 draft: false
 ---
 
 import Callout from "@/components/blog/Callout.astro";
 import Comparison from "@/components/blog/Comparison.astro";
-import Figure from "@/components/blog/Figure.astro";
-import sweep from "./fatal-encounters-sweep.png";
-import rewards from "./giving-charts.png";
+import MuseumEmbed from "@/components/blog/MuseumEmbed.astro";
+import fatalTeaser from "./teaser-fatal-encounters.png";
+import rewardsTeaser from "./teaser-rewards.png";
 
 There are two projects in [my 2018 portfolio snapshot](/labs-2018-snapshot/) that are the same
 application. One of them plots people killed during encounters with police. The other one plots who
@@ -45,23 +45,21 @@ could see. What I can tell you is what I did with it: I gave the data
 the same treatment I gave everything else I was working on that year, which was to make every field
 filterable by clicking on it.
 
-<Figure
-  caption="The timeline mid-brush: I have swept out March 2008 to February 2013, and the map below has dropped to just the deaths in that window. The bars outside the brush go grey, and a reset filter chip appears next to the selected range."
-  width="wide"
-  zoom
->
-  <img
-    src={sweep.src}
-    width="1200"
-    height="911"
-    alt="A bar chart titled Filter by Month spanning 2000 to 2014 with a pale blue brush window covering March 2008 to February 2013; bars inside it are blue and bars outside are grey, and next to the title a red chip labelled reset filter sits beside grey text reading 03/08/2008 to 02/03/2013. Below it a US map shows a thinned scatter of red squares"
-  />
-</Figure>
+<MuseumEmbed
+  demo="/museum/fatal-encounters/index.html"
+  title="The preserved 2014 Fatal Encounters dashboard: drag the Filter by Month brush and the map and every chart refilter"
+  label="Load the real 2014 demo (about 3 MB of data)"
+  teaser={fatalTeaser}
+  teaserAlt="A Filter by Month bar chart, 2000 to 2014, deaths per month rising sharply toward the end"
+  description="The preserved page itself, served from this site. Drag a window across the Filter by Month strip and every chart refilters."
+  height={2720}
+/>
 
-That sweep is the whole interaction model. Drag a window across the time axis and every other chart
-on the page — the map, the age histogram, the state ranking, cause of death — recomputes against the
-filtered set. Click a bar in any of them and the rest refilter again, the timeline included. It is
-crossfilter underneath, dc.js on top, wrapped in AngularJS 1.3 directives.
+That sweep is the whole interaction model — the same crossfilter-under-dc.js machinery as [the D3
+demos](/drag-the-timeline-refilter-the-page/), wrapped here in AngularJS 1.3 directives. Drag a
+window across the time axis and every other chart on the page — the map, the age histogram, the
+state ranking, cause of death — recomputes against the filtered set; click a bar in any of them and
+the rest refilter again, the timeline included.
 
 ## The machine
 
@@ -110,25 +108,14 @@ the reason the second project exists at all.
 The other one is the Adap.tv Rewards Report, and it charts the company's peer-recognition program.
 Its subtitle is the whole spec: **who is rewarding who, when, how much, and why.**
 
-<Figure
-  caption="The Rewards Report, cropped to the aggregate charts. Its 'When' timeline takes the same brush as the Fatal Encounters one."
-  width="wide"
-  zoom
->
-  <img
-    src={rewards.src}
-    width="1200"
-    height="377"
-    alt="A dashboard header reading Adap.tv Rewards Report, who is rewarding who, when, how much, and why, above three charts: a When bar chart of dollars per period from October 2012 to January 2015, a How Much histogram of reward amounts, and an LTV Internal donut"
-  />
-</Figure>
-
-<Callout variant="warning" title="Why that screenshot is cropped">
-  The rewards data is real, and it is full of my former colleagues' names and the thank-you notes
-  they wrote each other. The full page shows a scrolling list of every giver by name, plus ranked
-  charts of top givers and top recipients. I cropped it to the aggregates. The underlying data is
-  not published anywhere and is not going to be.
-</Callout>
+<MuseumEmbed
+  demo="/museum/giving-charts/index.html"
+  title="The preserved 2015 Rewards Report: the same crossfilter dashboard pointed at peer-recognition data, with generated names"
+  label="Load the real 2015 demo (about 2 MB of data, names replaced)"
+  teaser={rewardsTeaser}
+  teaserAlt="Three small charts: a When timeline, a How Much histogram and an LTV donut"
+  description="The same chart engine pointed at the rewards dataset. Its When timeline takes the same brush as the Fatal Encounters one."
+/>
 
 Structurally it is the same page. Here are the chart slots each one defines, in source order:
 
@@ -166,29 +153,6 @@ and the build were untouched.
 
 That is the argument for declaring charts as data. Retargeting the dashboard was a data-modelling
 job, not a rewrite. I did not go near the rendering code.
-
-## What the fork left behind
-
-I did not do it cleanly. I copied the folder and deleted until it ran, and the archaeology is all
-still in there:
-
-- `GivingCharts/bower.json` still says `"name": "FatalEncounters.Web"`, byte for byte identical to
-  its parent's — including a dependency on `adap-charts` pulled from an internal SVN URL that has
-  not resolved for a decade.
-- `EncounterLoader.js` — all 2.9 MB of it — still sits in the rewards project next to the 1.7 MB
-  `RewardsLoader.js`. The rewards app ships the fatalities dataset it never reads.
-- The `rewardsReport/` feature folder still contains `encounterReportCharts.js` and
-  `encounterReportCtrl.js`, with their source maps, orphaned from the `.ts` files that produced
-  them.
-- There is a `bin (1)/` directory, empty, the way Windows names a folder you pasted twice.
-
-None of that is defensible. All of it is what a fork actually looks like a year later, and I would
-rather show it than tidy the archive into something I did not do.
-
-One more artifact they share: both `index.html` files ask for `encounterLoader.js` with a lowercase
-`e` while the file on disk is `EncounterLoader.js`. It worked fine on Windows and IIS, which is
-where it lived. On any case-sensitive host it is a 404, and the whole page is empty — the entire
-"database" is that one script tag.
 
 ## The habit
 

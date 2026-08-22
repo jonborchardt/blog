@@ -8,7 +8,7 @@ tags: [retrospective, adtech]
 authority: 'E:\github2\Labs\verification'
 hero:
   src: ./hero.png
-  alt: A Media Foundry screenshot for a Carfax campaign, showing four planned spot-block columns with times, day-of-week patterns and dollar totals, next to the Detected but not in plan column
+  alt: A Media Foundry grid for a Carfax campaign, planned spot-block columns beside watermark detections
 draft: false
 ---
 
@@ -43,14 +43,14 @@ The one screenshot that survives from Media Foundry is a single week of a Carfax
 on A&E, for a run of :30 spots. It's dense, so here's how to read it.
 
 <Figure
-  caption="Media Foundry: a week of planned Carfax spot blocks (columns) against detected watermark hits (rows), with a Detected but not in plan column on the right."
+  caption="Media Foundry, week of 10/13/2013: planned Carfax spot blocks (columns) against detected watermark hits (rows), with a Detected but not in plan column on the right."
   zoom
 >
   <img
     src={grid.src}
     width="731"
     height="865"
-    alt="The Media Foundry grid for a Carfax campaign, National market, week of 10/13/2013, station A&E. Four column headers show planned spot blocks with time windows, day-of-week patterns and dollar totals such as 3 at $12,000 and 5 at $0. Below them, individual watermark-detection rows list a timestamp and a spot ID, each with a row of circles marking which planned block it matched, and a fifth Detected but not in plan column on the far right. A note at the bottom reads: drag Verification Event here to generate a new Airing."
+    alt="Media Foundry grid for a Carfax week on A&E: planned spot-block columns above detection rows"
   />
 </Figure>
 
@@ -79,9 +79,8 @@ airing record on the spot: a way to correct the reconciliation by hand instead o
 sitting on the report. It's a small affordance, but it's the one that turns the grid from a status
 display into a tool someone actually used to close out a week.
 
-## Sole developer, one week at a time
+## One week at a time
 
-Media Foundry was PrecisionDemand-era work, built while I was the company's sole UI developer
-— every screen in the product, this one included, was mine to design and build. Reconciliation tools
-are not glamorous; they exist because a claim ("your ad ran") is worth nothing without a way to check
-it, week after week, campaign after campaign. This was PrecisionDemand's way of checking.
+Reconciliation tools are not glamorous; they exist because a claim ("your ad ran") is worth nothing
+without a way to check it, week after week, campaign after campaign. This was PrecisionDemand's way
+of checking, and one of the first screens I built there.

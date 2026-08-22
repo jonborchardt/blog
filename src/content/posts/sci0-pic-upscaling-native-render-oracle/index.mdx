@@ -9,7 +9,7 @@ tags: [engineering, graphics, gamedev, retrocomputing, typescript]
 authority: 'F:\github\sci.js'
 hero:
   src: ./hero.png
-  alt: A small pixel-grid diamond with a bisecting line, sealed, beside a 3x scaled copy of the same diamond where a one-pixel gap at the junction lets the fill colour spill into the other half, with an oracle badge between them asking whether the scaled fill area is nine times the native one
+  alt: A sealed pixel diamond beside a 3x copy where a one-pixel gap lets the fill spill past the line
 draft: false
 ---
 
@@ -43,7 +43,7 @@ This is the problem **snap-blend** solves.
 
 SCI0 PICs aren't rasterized images — they're programs. A PIC resource is a stream of drawing commands: draw a line here, fill this region there. The fill commands depend on boundaries being watertight. At native resolution, the integer-coordinate Bresenham lines form perfect barriers.
 
-![A PIC resource opened in an editor: a long list of Line commands with integer coordinates on the left, and the wireframe outline of a crashed spaceship those lines draw on the right](./pic-command-stream.png)
+![A PIC editor listing Line commands beside the crashed-spaceship wireframe those lines draw](./pic-command-stream.png)
 
 Scale everything up and suddenly there are fractional-pixel gaps where fill ink escapes into neighboring regions, corrupting the image. Scaling can also fragment boundaries, causing fills to terminate early or leave holes.
 
@@ -65,7 +65,7 @@ At 320x190, the rasterized lines happen to touch cleanly, so the shape remains s
 
 Scale the same geometry to 960x570, however, and the independently rounded midpoint coordinates may no longer land exactly on the scaled diagonal edges. That can create a one-pixel gap at the junction, allowing the flood fill to escape and flood the entire canvas.
 
-![Two cyan diamonds with a bisecting line on black. Left, at 320x190, the pixel lines meet cleanly so the fill stays inside. Right, scaled 3x to 960x570, an orange circle marks a one-pixel gap where the bisecting line misses the edge, so the fill leaks outside](./diamond-gap-native-vs-3x.png)
+![Two cyan diamonds: the native fill stays sealed, while at 3x a marked one-pixel gap lets it leak](./diamond-gap-native-vs-3x.png)
 
 Existing solutions don't help. ScummVM and SCI Companion render at native res. Pixel-art upscalers (Scale2x, hqx, xBR) operate on finished rasters — they can't fix a fill that leaked during rendering. The problem has to be solved _inside_ the renderer.
 
@@ -76,7 +76,7 @@ Upscaling after rasterization preserves correctness, but introduces uneven line 
     src={sweepOriginalScale6x.src}
     width="1920"
     height="1140"
-    alt="Sweep comparison of a Space Quest 3 room, a crashed ship in a blue hangar with junk piles: the original 320x190 render on the left, a Scale6x upscale on the right, with wobbly uneven outlines in the upscaled half"
+    alt="Sweep of a Space Quest 3 hangar room with a crashed ship: Scale6x gives wobbly uneven outlines"
   />
 </Figure>
 
@@ -87,7 +87,7 @@ Snap-blend fixes this by altering the rendering directly.
     src={sweepScale6xSnap.src}
     width="1920"
     height="1140"
-    alt="Sweep comparison of the same hangar room: Scale6x on the left with wobbly outlines, snap-blend on the right with clean straight one-pixel lines and identical fill regions"
+    alt="Sweep of the same hangar room: Scale6x wobbly outlines versus snap-blend's clean one-pixel lines"
   />
 </Figure>
 
@@ -235,7 +235,7 @@ Each comparison below sweeps between the two renders of one Space Quest 3 room; 
     src={sweepNativeSnap.src}
     width="1920"
     height="1140"
-    alt="Sweep comparison of a Space Quest 3 room, an alien landscape with a crashed ship: native render on the left, snap-blend at 6x on the right, with the same fill regions in both"
+    alt="Sweep of an alien landscape with a crashed ship: native render versus snap-blend at 6x"
   />
 </Figure>
 
@@ -244,7 +244,7 @@ Each comparison below sweeps between the two renders of one Space Quest 3 room; 
     src={roomJunkPile.src}
     width="1920"
     height="1140"
-    alt="Sweep comparison, original versus snap-blend: a scrap heap with a magenta hull section in the foreground, a cyan arch, and orange rock in the background"
+    alt="Sweep of a scrap heap with a magenta hull section, a cyan arch and orange rock behind"
   />
 </Figure>
 
@@ -253,7 +253,7 @@ Each comparison below sweeps between the two renders of one Space Quest 3 room; 
     src={roomTunnels.src}
     width="1920"
     height="1140"
-    alt="Sweep comparison, original versus snap-blend: three cyan-ringed tunnel mouths in a red and blue cavern with a small ship in the corner"
+    alt="Sweep of three cyan-ringed tunnel mouths in a red and blue cavern with a small ship in the corner"
   />
 </Figure>
 
@@ -262,7 +262,7 @@ Each comparison below sweeps between the two renders of one Space Quest 3 room; 
     src={roomRobotHead.src}
     width="1920"
     height="1140"
-    alt="Sweep comparison, original versus snap-blend: a huge magenta and grey robot head with a green gem on the right, red and cyan hull pieces on the left"
+    alt="Sweep of a huge magenta and grey robot head with a green gem, hull pieces piled on the left"
   />
 </Figure>
 
@@ -271,7 +271,7 @@ Each comparison below sweeps between the two renders of one Space Quest 3 room; 
     src={roomHangar.src}
     width="1920"
     height="1140"
-    alt="Sweep comparison, original versus snap-blend: a green and cyan ship suspended in a blue-lit hangar with rubble on the floor"
+    alt="Sweep of a green and cyan ship suspended in a blue-lit hangar with rubble on the floor"
   />
 </Figure>
 
@@ -280,7 +280,7 @@ Each comparison below sweeps between the two renders of one Space Quest 3 room; 
     src={roomScrapyard.src}
     width="1920"
     height="1140"
-    alt="Sweep comparison, original versus snap-blend: a scrapyard littered with blue debris, a wrecked white pod, and yellow tubes and pipes"
+    alt="Sweep of a scrapyard littered with blue debris, a wrecked white pod, and yellow tubes and pipes"
   />
 </Figure>
 
@@ -289,7 +289,7 @@ Each comparison below sweeps between the two renders of one Space Quest 3 room; 
     src={roomCockpit.src}
     width="1920"
     height="1140"
-    alt="Sweep comparison, original versus snap-blend: a symmetrical spaceship cockpit in grey and magenta with a round viewport and a pilot chair"
+    alt="Sweep of a grey and magenta spaceship cockpit with a round viewport and a pilot chair"
   />
 </Figure>
 
@@ -298,7 +298,7 @@ Each comparison below sweeps between the two renders of one Space Quest 3 room; 
     src={roomAstroChicken.src}
     width="1920"
     height="1140"
-    alt="Sweep comparison, original versus snap-blend: an arcade screen reading Astro Chicken by ScumSoft with a cartoon chicken"
+    alt="Sweep of an arcade screen reading Astro Chicken by ScumSoft with a cartoon chicken"
   />
 </Figure>
 
@@ -307,7 +307,7 @@ Each comparison below sweeps between the two renders of one Space Quest 3 room; 
     src={roomBurgerInterior.src}
     width="1920"
     height="1140"
-    alt="Sweep comparison, original versus snap-blend: the interior of a space fast-food restaurant with a curved counter, magenta floor and stars outside the windows"
+    alt="Sweep of a space fast-food interior with a curved counter, magenta floor and stars outside"
   />
 </Figure>
 
@@ -316,7 +316,7 @@ Each comparison below sweeps between the two renders of one Space Quest 3 room; 
     src={roomBurgerExterior.src}
     width="1920"
     height="1140"
-    alt="Sweep comparison, original versus snap-blend: the exterior of Monolith Burger, a round brown space station with a red sign and a docking arm against stars"
+    alt="Sweep of the round brown Monolith Burger station with a red sign and docking arm against stars"
   />
 </Figure>
 
@@ -325,7 +325,7 @@ Each comparison below sweeps between the two renders of one Space Quest 3 room; 
     src={roomDesert.src}
     width="1920"
     height="1140"
-    alt="Sweep comparison, original versus snap-blend: rolling magenta sand dunes with green and blue rock outcrops under a dark striped sky"
+    alt="Sweep of rolling magenta dunes with green and blue rock outcrops under a dark striped sky"
   />
 </Figure>
 
@@ -348,9 +348,9 @@ The frame is a stack: the deterministic background and its masks stay exact, and
   <OverlayStackViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
 </VizFigure>
 
-![Eight-frame walk cycle of the Space Quest hero, Roger Wilco, as native pixel art on a blue background: brown hair, purple shirt, grey trousers, black boots](./walk-cycle-native.png)
+![Eight-frame walk cycle of Space Quest's Roger Wilco as native pixel art on a blue background](./walk-cycle-native.png)
 
-![The same eight-frame walk cycle drawn at higher resolution with smoother outlines and no background, ready to overlay on a snap-blend room](./walk-cycle-enhanced.png)
+![The same walk cycle redrawn at higher resolution with smoother outlines and no background](./walk-cycle-enhanced.png)
 
 ## The future
 
@@ -363,7 +363,7 @@ AI upscaling looks like an obvious shortcut. Take the original 320x190 output, r
     src={sweepAi.src}
     width="1920"
     height="1140"
-    alt="Sweep comparison of the crashed-ship hangar room: the original EGA render on the left, and a photorealistic AI-upscaled version on the right with a metal ship hull, rusted floor plates and a glowing cyan window"
+    alt="Sweep of the crashed-ship hangar: EGA render versus a photorealistic AI upscale with a metal hull"
   />
 </Figure>
 
@@ -373,15 +373,15 @@ SCI0 backgrounds are not just images, they are structured scenes with implicit g
 
 Different colors tell the engine if the avatar should be seen in front or behind them.
 
-![The priority map for the hangar room: flat regions in cyan, blue, magenta and red on black, one colour per depth band, marking which parts of the scene draw in front of or behind the player](./priority-map.png)
+![The hangar priority map: flat cyan, blue, magenta and red regions on black, one per depth band](./priority-map.png)
 
 White areas block the avatar. Black areas are walkable with no trigger. Any other colour is walkable _and_ triggers an event when walked over.
 
-![The control map for the same room: mostly white, with black bands marking the walkable floor and green patches marking areas that trigger events when walked over](./control-map.png)
+![The same room's control map: mostly white, with black walkable bands and green event-trigger patches](./control-map.png)
 
 AI upscaling works well for screenshots, but renderers require deterministic structural correctness. Walk masks, occlusion boundaries, and interaction zones depend on exact regions. Because generative models can shift those boundaries unpredictably, AI is better treated as a constrained enhancement layer on top of a deterministic renderer.
 
-![An AI-generated photorealistic scene: two red-skinned, red-mohawked alien guards in red uniforms and sunglasses facing a mustached man in a grey suit, with a forest behind them](./ai-upscaled-scene.png)
+![An AI-generated scene: two red-mohawked alien guards in sunglasses facing a mustached man in a suit](./ai-upscaled-scene.png)
 
 ## The road here
 

@@ -8,7 +8,7 @@ tags: [retrospective, adtech, data-viz]
 authority: 'E:\github2\Labs'
 hero:
   src: ./hero.png
-  alt: A grid of portfolio cards, each with a small screenshot thumbnail, for Audience Planner, Upfront Platform, Scatter Platform, MCN Demand Platform, Attenex DocMapper and a row of D3 demos
+  alt: A grid of portfolio cards with screenshot thumbnails for ad platforms, DocMapper and D3 demos
 draft: false
 ---
 
@@ -43,19 +43,34 @@ them — the live thing itself.
     src={landing.src}
     width="1440"
     height="900"
-    alt="A portfolio landing page headed Jonathan Borchardt, with a Products section of cards for Audience Planner, Upfront Platform, Scatter Platform, MCN Demand Platform, Campaign Reporting, a verification and reconciliation tool, Microsoft Bing, Bunny Puddle Games and Attenex DocMapper, above a Demos section starting with a demos overview video and three D3 demos"
+    alt="The portfolio landing page, a card grid of Products led by Audience Planner above a Demos section"
   />
 </Figure>
 
 The card copy is the pitch I was making to hiring managers in 2018, which is why it reads the way
 it does. "Explore the TV landscape." "What industries should a network target?" I was not writing
-for posterity. I was writing for a phone screen next Tuesday.
+for posterity. I was writing for a phone screen next Tuesday. The demos overview video sitting in
+the folder was recorded in 2018 for the same job hunt, which makes it the closest thing this
+archive has to a time capsule.
 
 <Callout variant="note" title="The data in every screenshot is fake">
   Advertisers, campaigns and ratings numbers throughout the portfolio — Verizon, YSL, Carfax, the
   Nielsen figures — are demo data, built for demos. Nothing in this series shows a real client's
   media plan.
 </Callout>
+
+## Some of this was the job, and some of it nobody asked for
+
+I want to be straight about which was which. The Bing work was my job. The ONE TV platform at
+AOL was my job. Plenty of what is in this folder was work somebody requested and I shipped.
+
+But the parts I would show you first were not assigned to anyone. DocMapper's visual ring, the
+crossfilter and dc.js filtering approach, the PivotViewer Audience Planner, the folder of D3
+demos — those I dreamt up and built in 20% time, and several of them stopped being side projects.
+The Audience Planner, DocMapper, and sell-side targeting all became flagship products for the
+company that employed me at the time. That is a strange ratio to look back on — a
+scratch-an-itch demo becoming the thing the sales team leads with — and it happened often enough
+here that I no longer think it was luck.
 
 ## Seventeen years, four employers
 
@@ -75,19 +90,6 @@ The through-line is not a technology. The early work is OpenGL and DirectX, the 
 Silverlight, the late work is D3 and AngularJS, and every one of those choices looks dated now.
 What actually persists is a habit of pointing a visualization at a pile of data nobody could read.
 
-## Some of this was the job, and some of it nobody asked for
-
-I want to be straight about which was which. The Bing work was my job. The ONE TV platform at
-AOL was my job. Plenty of what is in this folder was work somebody requested and I shipped.
-
-But the parts I would show you first were not assigned to anyone. DocMapper's visual ring, the
-crossfilter and dc.js filtering approach, the PivotViewer Audience Planner, the folder of D3
-demos — those I dreamt up and built in 20% time, and several of them stopped being side projects.
-The Audience Planner, DocMapper, and sell-side targeting all became flagship products for the
-company that employed me at the time. That is a strange ratio to look back on — a
-scratch-an-itch demo becoming the thing the sales team leads with — and it happened often enough
-here that I no longer think it was luck.
-
 ## Why it still runs in 2026
 
 Because it is all static files, and static files do not rot the way applications do. Serving the
@@ -101,46 +103,27 @@ Then open `default.htm`. Every internal link in the site is root-absolute, so th
 be the web root — opening a file directly off disk breaks the styling and the navigation, which is
 the only trap.
 
-Two things are genuinely dead. The Silverlight client with its WCF backend cannot run, because no
-browser has Silverlight any more. An ASP.NET MVC explorer needs an API that was switched off years
-ago, though a static equivalent of it survives in the D3 demo set. There is also a slow leak I did
-not design for: several pages load scripts over plain `http://` from CDNs, and one of them, Google's
-old `jsapi` charting library, has been retired outright — though when I checked while writing this
-series, Google's loader quietly forwards to a modern replacement and the pages still render.
-The galleries, the interactive dashboards and the videos all come up too, mostly as they did:
-some of the dashboard interactions are buggy now, one of the early trackers is missing its data,
-and any link whose filename disagrees with itself about capitalization would 404 on a host stricter
-than Windows.
-
-The demos overview video sitting in there was recorded in 2018 for the same job hunt, which makes
-it the closest thing this archive has to a time capsule.
+Two things are genuinely dead: the Silverlight client with its WCF backend, because no browser has
+Silverlight any more, and an ASP.NET MVC explorer whose API was switched off years ago, though a
+static equivalent of it survives in the D3 demo set. Everything else — the galleries, the
+interactive dashboards, the videos — comes up mostly as it did, with the kinds of rot you would
+expect of decade-old pages. Each post in this series covers its own project's damage.
 
 ## The map of the series
 
 Eleven posts follow this one, roughly chronological, one per project:
 
-- **[Attenex DocMapper](/attenex-docmapper/)** — a 3D map of an electronic-discovery document
-  collection, and the patents that came out of it.
-- **[Bing hover preview](/bing-hover-preview/)** — the hover preview panel, the quick-answer module
-  and the core results list, on the Bing UX team.
-- **[BunnyPuddle games](/bunnypuddle-games/)** — Android games shipped around 2010, including a
-  water simulation built because water simulations are fun.
-- **[Media Foundry](/media-foundry-watermarks/)** — verifying that a TV spot actually aired, using
-  watermarks and paid spotters across the country.
-- **[The Audience Planner](/precisiondemand-audience-planner/)** — the Silverlight app that became
-  PrecisionDemand's flagship.
-- **[Google Charts to D3](/google-charts-to-d3/)** — replacing off-the-shelf charts with our own,
-  one demo at a time.
-- **[Sell-side targeting](/sell-side-targeting/)** — the dashboard that told a network which
-  industries it should be chasing. Real customers, and eventually a patent.
-- **[TV data explorers](/tv-data-explorers/)** — the internal tools we built mostly to understand
-  the data we already had.
-- **[One codebase, two datasets](/one-codebase-two-datasets/)** — a personal project on public
-  data, and the fork of it that became an internal rewards report.
-- **[ONE TV: upfront and scatter](/one-tv-upfront-scatter/)** — the platform I spent my last years
-  at AOL and Oath on, in both its upfront and its scatter form.
-- **[ONE TV in Australia](/one-tv-australia/)** — the same system against a different currency,
-  different time zones and a different ratings body.
+- [Attenex DocMapper](/attenex-docmapper/)
+- [Bing hover preview](/bing-hover-preview/)
+- [BunnyPuddle games](/bunnypuddle-games/)
+- [Media Foundry](/media-foundry-watermarks/)
+- [The Audience Planner](/precisiondemand-audience-planner/)
+- [Drag the Timeline, Refilter the Page](/drag-the-timeline-refilter-the-page/)
+- [Sell-side targeting](/sell-side-targeting/)
+- [TV data explorers](/tv-data-explorers/)
+- [One codebase, two datasets](/one-codebase-two-datasets/)
+- [ONE TV: upfront and scatter](/one-tv-upfront-scatter/)
+- [ONE TV in Australia](/one-tv-australia/)
 
 Some of these I remember in detail. Some I am reconstructing from screenshots and my own
 eight-year-old card copy, and where my memory has a hole in it I would rather say so than fill it

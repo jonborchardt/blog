@@ -43,6 +43,11 @@ sequence.
 Global series UNKNOWNs (tRatio's origin, a crisp "what was ONE TV" summary, Soda War hackathon
 outcome, best scatter/drive-download video) do not intersect this post's four tools; none invoked.
 
+Update 2026-08-21: the Soda War section (video + poster, `./soda-war.webm` / `./soda-war.png`) was
+moved into this post from `one-tv-upfront-scatter`. Its hackathon outcome stays UNKNOWN ("i dont
+recall" — the prose hedges accordingly); the domain facts for it live in the
+`one-tv-upfront-scatter` brief.
+
 ## Assets used by this post
 
 - `E:\github2\Labs\adsplore\adsplore1.PNG` (932x820) → `./adsplore1.png`

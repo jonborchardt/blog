@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { describe, expect, it } from "vitest";
-import { checkDist, collectExternalLinks } from "./dist-checks";
+import { checkDist, collectExternalLinks, hoistBodyStyles } from "./dist-checks";
 
 const BASE = "/blog";
 const SITE = "https://example.test";
@@ -78,6 +78,14 @@ describe("checkDist", () => {
     ]);
   });
 
+  it("flags alt text over 100 characters", () => {
+    const r = run(
+      [page("index.html", `<img src="a.png" alt="${"x".repeat(101)}" width="1" height="1">`)],
+      ["a.png"],
+    );
+    expect(r.errors).toEqual([expect.stringMatching(/alt is 101 chars \(max 100\) .* caption/)]);
+  });
+
   it("flags img srcs that do not resolve to a dist file", () => {
     const r = run(
       [
@@ -121,6 +129,16 @@ describe("checkDist", () => {
   it("flags admin output", () => {
     const r = run([page("index.html", "")], ["admin/index.html"]);
     expect(r.errors[0]).toMatch(/admin\/index\.html: dev-only admin output/);
+  });
+});
+
+describe("hoistBodyStyles", () => {
+  it("moves body styles to the end of head, in order, leaving svg styles alone", () => {
+    const html = `<html><head><title>t</title></head><body><div><style>.a{}</style></div><svg><style>.s{}</style></svg><style>.b{}</style></body></html>`;
+    expect(hoistBodyStyles(html)).toBe(
+      `<html><head><title>t</title><style>.a{}</style><style>.b{}</style></head><body><div></div><svg><style>.s{}</style></svg></body></html>`,
+    );
+    expect(hoistBodyStyles("<p>no head</p>")).toBe("<p>no head</p>");
   });
 });
 

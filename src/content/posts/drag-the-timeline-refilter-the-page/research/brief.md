@@ -1,4 +1,4 @@
-# Domain brief — `google-charts-to-d3`
+# Domain brief — `drag-the-timeline-refilter-the-page` (formerly `google-charts-to-d3`)
 
 Authority repo: `E:\github2\Labs` (Jon Borchardt's 2018 portfolio snapshot). Investigated
 2026-08-20 by reading the repo's `CLAUDE.md` files and its source, and by serving the site locally

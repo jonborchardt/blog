@@ -8,7 +8,7 @@ export const series = {
       "How a coding agent built this site in an afternoon — and the contracts, authoring primitives, and repo-as-expert system that let it keep publishing.",
     hero: {
       src: "series/agent-built.png",
-      alt: "A tall cursor caret on a baseline between solid built structures behind it and dashed blueprint outlines of the same structures ahead of it on a drafting grid",
+      alt: "A cursor caret between built structures behind it and blueprint outlines ahead on a drafting grid",
     },
   },
   finances: {
@@ -17,7 +17,7 @@ export const series = {
       "Replaying one retirement plan across every start year since 1928: the simulator, the agent pipeline behind it, and 98 lives ending broke or on $5.8 million.",
     hero: {
       src: "series/finances.png",
-      alt: "A grid of small tiles, one per retirement start year from 1928 to 2025, most pale blue with rising strokes and one warm streak of falling tiles where the same plan went broke",
+      alt: "A tile grid of retirement start years since 1928, with one warm streak where the plan went broke",
     },
   },
   worldlock: {
@@ -26,7 +26,7 @@ export const series = {
       "A native Android AR app pinning city towers, the Earth and the live ISS to where they actually are — built by an agent-driven workflow, no IDE and no cable.",
     hero: {
       src: "series/worldlock.png",
-      alt: "A gridded globe with padlock markers pinned to three coordinates, two of them projecting glowing towers into the sky, while the ISS rides a dashed orbital ring",
+      alt: "A gridded globe with padlock markers projecting glowing towers, while the ISS rides a dashed orbit",
     },
   },
   "past-work": {
@@ -35,7 +35,7 @@ export const series = {
       "Seventeen years of screens, 2001 to 2018 — courtroom document maps, search results, TV ad dashboards — frozen as a static portfolio and reopened in 2026.",
     hero: {
       src: "series/past-work.png",
-      alt: "A timeline from 2001 to 2018 lined with small chart-icon tiles, four of them highlighted as dial glyphs marking flagship products",
+      alt: "A timeline from 2001 to 2018 of small chart-icon tiles, four highlighted as flagship products",
     },
   },
   "sierra-games": {
@@ -44,7 +44,7 @@ export const series = {
       "Upscaling Sierra's SCI0 vector backgrounds 6× without breaking them: flood fills that leak, a native-resolution render as the oracle, an anchor-graph rewrite.",
     hero: {
       src: "series/sierra-games.png",
-      alt: "A blocky Sierra-style vector landscape of mountains, sun and water at native resolution, with a magnifier loupe over one slope revealing the same edge redrawn smooth on a fine 6x grid",
+      alt: "A blocky Sierra-style landscape with a loupe revealing one edge redrawn smooth on a fine 6x grid",
     },
   },
 } as const satisfies SeriesRegistry;

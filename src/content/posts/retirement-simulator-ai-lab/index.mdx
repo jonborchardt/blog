@@ -9,7 +9,7 @@ tags: [engineering, ai-assisted-coding, personal-finance, simulation]
 authority: 'F:\github\retire-sim'
 hero:
   src: ./hero.png
-  alt: A chart of many overlaid wealth-over-time lines, one per historical start year from 1928 onward, most rising and two sinking to zero after retirement, with a lab flask and a JSON experiment tag beside them
+  alt: Overlaid wealth-over-time lines, one per start year since 1928, beside a lab flask and a JSON tag
 draft: false
 ---
 
@@ -24,7 +24,7 @@ import ExperimentRoundViz from "./experiment-round-viz.svg";
 Every year I sit down and answer one question: **what's the earliest age I can stop working without ever running out of money?** Instead of a spreadsheet, I have retire-sim, a small deterministic historical-replay simulator that's become something more interesting: a lab, with a lab protocol, and an AI lab assistant that follows it. (The repo is private, so no link — the code described below is real, just not public.)
 
 <Figure caption="An earlier season's results grid. The 'deep guardrail 10y/25%' row beating the honest guardrail is exactly the dishonest-guardrail trap described below — that row, the micro-cap tilt, and the golden-butterfly rows have since been deleted from the committed catalog (the bans are now enforced by the validator), so a fresh clone won't show those rows.">
-  ![Results grid from retire-sim on the synthetic national-average dataset: strategies as rows, four candidate retirement ages (62, 65, 67, 70) as columns at Social Security claim age 62, each cell showing survival percentage then median and worst-case terminal wealth in today's dollars, with cells clearing the 85 percent survival bar in bold](./strategy-grid.png)
+  ![Results grid: strategy rows by retirement-age columns, each cell with survival and terminal wealth](./strategy-grid.png)
 
 </Figure>
 
@@ -69,7 +69,7 @@ The two inputs stay separate all the way through; only the run joins them:
 </VizFigure>
 
 <Figure caption="The wealth fan chart on the synthetic dataset. Screenshot from an earlier dataset revision with a longer horizon; the committed dataset has since shortened the horizon and added a two-person survivor model, so a fresh run ends in 2067.">
-  ![Fan chart of household wealth in today's dollars from 2026 to 2071: 98 faint paths, one per historical start year from 1928 to 2025, with a shaded 10th to 90th percentile band and a median line, and a hover readout for 2032 showing 10th to 90th percentile 117,332 to 329,437 and median 231,387](./wealth-fan-chart.png)
+  ![Fan chart of wealth to 2071: 98 faint paths, a percentile band, a median line and a hover readout](./wealth-fan-chart.png)
 
 </Figure>
 
@@ -159,7 +159,7 @@ The lab notebook lives _with the data_: each experiment id gets a hypothesis-bef
 
 The whole thing is built to be picked up once a year: open the config tab (every field has "here's where to find this number" help text), refresh the real numbers, add last year's row to the history table, re-run, read the results. The question changes yearly: 2024's edition compared house prices; the house is now bought and its costs are just dated events in the timeline. The code is _expected_ to be reshaped every year, because the decision it serves changes.
 
-![The retire-sim config tab on the synthetic dataset: labeled parts for wealth (401k, IRA, brokerage, cash) and wage, then base spending, three insurance cost fields and death age, each with a paragraph of help text saying where to find that number](./config-tab.png)
+![The retire-sim config tab: wealth, wage, spending, insurance and death-age fields with help text](./config-tab.png)
 
 ## Takeaway
 

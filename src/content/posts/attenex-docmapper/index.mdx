@@ -8,7 +8,7 @@ tags: [retrospective, data-viz, graphics, patents]
 authority: 'E:\github2\Labs'
 hero:
   src: ./hero.png
-  alt: The DocMapper cluster view, rings of blue document dots strung along pale spokes inside a dark compass arc, with the concept label ring and a yellow carat set around the edge
+  alt: The DocMapper cluster view, rings of blue document dots on pale spokes inside a dark compass arc
 draft: false
 ---
 
@@ -70,7 +70,7 @@ to.
     src={screen.src}
     width="814"
     height="643"
-    alt="A black cluster view showing rings of blue dots on pale spokes with concept labels ring, stone, carat and parking, beside a Cluster Folders tree listing folder groups such as ring (13), stone (15), carat (6) and Not Clustered (86)"
+    alt="A black cluster view of ringed blue dots on pale spokes, beside a Cluster Folders tree with counts"
   />
 </Figure>
 
@@ -110,7 +110,7 @@ done yet.
 <Figure caption="Set-aside trays: decided documents, out of the way but not gone.">
   <Image
     src={trays}
-    alt="Three small trays holding stacked dots in cyan, white and magenta, beside two spine labels reading network and coffee"
+    alt="Three small trays of stacked dots in cyan, white and magenta, beside two spine labels"
   />
 </Figure>
 
@@ -171,6 +171,58 @@ knew the case got to turn it.
   plainly than let the word do work it did not do.
 </Callout>
 
+## More ways to look at the same pile
+
+The cluster view was the centrepiece, but a document collection has more than one shape, and the
+product eventually grew a view for each of them. All of them shared highlighting: search or select
+in one, and the matching documents lit up yellow in all the others at once.
+
+**Cluster Folders** is the panel filling the right half of the first screenshot, and it is the same
+map again as a folder tree: each folder group a spine, each folder inside it one cluster, labelled
+with its top three concepts and a count — "ring, engagement ring, wedding band (4)". A _layout_
+sort walks the tree in roughly the order the spines sit on the map, so the list and the picture
+agree with each other.
+
+**Bird's Eye** was the small always-whole-map inset, with a rectangle marking your current
+viewport. Click anywhere in it to jump. Unglamorous, and the piece I would keep if I could only
+keep one.
+
+<Figure caption="Bird's Eye, over a zoomed-in view of three clusters on a single spine.">
+  <Image
+    src={birdsEye}
+    alt="A Bird's Eye panel of the whole map in miniature, beside three ringed clusters on a thin spine"
+  />
+</Figure>
+
+**Timeline** laid the same documents out by date — sent, received, or last modified. Drag across a
+range of months and those documents highlight everywhere else. It is the view that answers "what
+happened in May", which in litigation is very often the actual question.
+
+<Figure caption="The Timeline, with a range highlighted in yellow at the base of the later bars.">
+  <Image
+    src={timeline}
+    alt="A Timeline panel of purple monthly bars of document counts, spiking sharply in May and June 2005"
+  />
+</Figure>
+
+**Social Network View** drew the participants instead of the documents: every sender and recipient
+a circle sized by volume, every pair who exchanged mail joined by a line — grey for one-way, green
+for two-way. It had three searches I remember with real fondness, because they encode a piece of
+domain knowledge directly into the UI. *Find Zero Received* highlights people who send but never
+receive, which is mostly automated mail. *Find Zero Sent* highlights people who only ever receive,
+which is mostly distribution lists. *Find Single Exchanges* highlights the one-off blasts copied to
+everybody. One menu, and each item on it deletes a large category of noise from a review.
+
+## One email, three documents
+
+One piece of the data model deserves its own section because it took real arguing to get right. An
+email with two attachments is not one document. Patterns split it into three, so the body and each
+attachment clustered on their own concepts and landed wherever they actually belonged — which was
+often three different places on the map. But you cannot *produce* half an email in litigation, so
+DocMapper computed a separate **production mark** for the compound item from the marks on its
+components, and that is what governed the export. The reviewer worked at the level that made sense
+for reading; the export worked at the level that made sense for the law.
+
 ## Building it
 
 The first version was raw OpenGL. Not a scene graph, not a framework — every document in an
@@ -199,69 +251,6 @@ either — the kind where a reviewer opens an assignment of a size nobody tested
 in a database profiler. The résumé line for that period is "profiled and tuned application and
 database performance", which is a tidy way of saying that the difference between a tool people love
 and a tool people are forced to use is usually a few hundred milliseconds wide.
-
-In July 2006 I moved from Software Engineer to Senior, and the job changed shape: I owned the
-DocMapper client outright — architecture, features, performance, quality — specified features
-end to end, and started mentoring other engineers on visualization. When I left in October 2007 my
-VP of engineering wrote a reference that I have kept ever since:
-
-<Quote cite="Skip Walter, VP Engineering, Attenex">
-  Jon has matured during his six years evolving from a competent programmer to a senior software
-  engineer... I highly recommend Jon for senior software engineering positions.
-</Quote>
-
-## More ways to look at the same pile
-
-The cluster view was the centrepiece, but a document collection has more than one shape, and the
-product eventually grew a view for each of them. All of them shared highlighting: search or select
-in one, and the matching documents lit up yellow in all the others at once.
-
-**Cluster Folders** is the panel filling the right half of the first screenshot, and it is the same
-map again as a folder tree. Each folder group is a spine, labelled with its spine concept and a
-document count; each folder inside it is one cluster, labelled with its top three concepts and a
-count — "ring, engagement ring, wedding band (4)". You can sort the tree alphabetically or in
-*layout* order, which walks the folders in roughly the order the spines sit on the map, so the list
-and the picture agree with each other. At the bottom sit the groups that are not spines: Other, for
-clusters that never landed on one; Not Clustered, which holds the three squares of unmappable
-documents and is where that 86 comes from; and Set-Aside Trays, for everything already decided.
-
-**Bird's Eye** was the small always-whole-map inset, with a rectangle marking your current
-viewport. Click anywhere in it to jump. Unglamorous, and the piece I would keep if I could only
-keep one.
-
-<Figure caption="Bird's Eye, over a zoomed-in view of three clusters on a single spine.">
-  <Image
-    src={birdsEye}
-    alt="A small Bird's Eye panel showing the whole cluster map in miniature with a white viewport rectangle, next to a zoomed view of three ringed clusters of blue dots joined by a thin spine"
-  />
-</Figure>
-
-**Timeline** laid the same documents out by date — sent, received, or last modified. Drag across a
-range of months and those documents highlight everywhere else. It is the view that answers "what
-happened in May", which in litigation is very often the actual question.
-
-<Figure caption="The Timeline, with a range highlighted in yellow at the base of the later bars.">
-  <Image
-    src={timeline}
-    alt="A Timeline panel spanning May 2004 to June 2005 as purple bars of document counts, low through most of the period and spiking in May and June 2005, with yellow highlighted segments at the base of several later bars"
-  />
-</Figure>
-
-**Social Network View** drew the participants instead of the documents: every sender and recipient
-a circle sized by volume, every pair who exchanged mail joined by a line — grey for one-way, green
-for two-way. It had three searches I remember with real fondness, because they encode a piece of
-domain knowledge directly into the UI. *Find Zero Received* highlights people who send but never
-receive, which is mostly automated mail. *Find Zero Sent* highlights people who only ever receive,
-which is mostly distribution lists. *Find Single Exchanges* highlights the one-off blasts copied to
-everybody. One menu, and each item on it deletes a large category of noise from a review.
-
-One more piece of the model deserves a mention because it took real arguing to get right. An email
-with two attachments is not one document. Patterns split it into three, so the body and each
-attachment clustered on their own concepts and landed wherever they actually belonged — which was
-often three different places on the map. But you cannot *produce* half an email in litigation, so
-DocMapper computed a separate **production mark** for the compound item from the marks on its
-components, and that is what governed the export. The reviewer worked at the level that made sense
-for reading; the export worked at the level that made sense for the law.
 
 ## Five patents
 
@@ -300,7 +289,7 @@ There is one more file in the folder, and it is the one I am least certain about
 <Figure caption="A clipping I saved to the portfolio folder. I filed it under DocMapper; I cannot prove from the file alone that it is.">
   <Image
     src={nbc}
-    alt="A screenshot of NBC's video player showing a Nightly News story headed White House says e-mails missing, dated April 13 2007, about the Senate Judiciary Committee questioning the White House over missing e-mails; the video thumbnail shows a monitor displaying a dark interface with a green arc and rings of blue dots"
+    alt="NBC's video player showing a 2007 Nightly News story headed White House says e-mails missing"
   />
 </Figure>
 

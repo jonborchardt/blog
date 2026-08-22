@@ -8,7 +8,7 @@ tags: [retrospective, adtech, data-viz]
 authority: 'E:\github2\Labs'
 hero:
   src: ./hero.png
-  alt: A ONE TV scenario comparison grid listing scenarios named Current, Sara 1, Shift Test and Olga shift regress with columns for objective, budget, spend, average demo CPM, total demo impressions and three scoring columns, beside a filter rail of checkboxes with bar gauges
+  alt: A ONE TV scenario grid comparing budget, spend, CPM and scores, beside a filter rail of checkboxes
 draft: false
 ---
 
@@ -21,8 +21,6 @@ import upfrontShipped from "./upfront-shipped.png";
 import scatterWireframe from "./scatter-wireframe-2012.png";
 import scatterSilverlight from "./scatter-silverlight-2013.png";
 import scatterShipped from "./scatter-shipped-2018.png";
-import sodaWar from "./soda-war.png";
-import sodaWarVideo from "./soda-war.webm";
 
 AOL bought PrecisionDemand in May 2014, and I spent the four years after that on one product. First
 as the senior engineer leading the migration off Silverlight and onto AngularJS, then, from June
@@ -63,7 +61,7 @@ put them side by side.
     src={upfrontShipped.src}
     width="1426"
     height="988"
-    alt="A ONE TV screen headed Optimize Upfront with fields for campaign Verizon Q2 2018, dates 3/26/2018 to 6/25/2018, network group Univision Upfront, demographic A18-49 and total spend $2,651,066, above a scenarios grid comparing objective, budget, spend, average demo CPM, total demo impressions and MVS, MQS and SMC scoring columns, with a summary section of score and impressions charts below"
+    alt="The Optimize Upfront screen: campaign fields above a scenario grid and a row of summary charts"
   />
 </Figure>
 
@@ -80,7 +78,28 @@ and the grid ranks the results by what they cost and how well they hit the targe
 three scoring columns on that grid — MVS, MQS, SMC — three ways of scoring the same plan. I could
 not tell you today what all three of those initialisms stood for.
 
-### The wireframe it came from
+## Scatter: the tactical half
+
+Scatter is the other half of the year. The upfront market sells a quarter or a season in advance;
+scatter is the tactical buying that happens inside the quarter, once budgets have moved and there
+is inventory left over to place against.
+
+<Figure caption="The shipped scatter screen, 2018." width="wide" zoom>
+  <img
+    src={scatterShipped.src}
+    width="1390"
+    height="657"
+    alt="The Black Opium campaign screen: tactic settings, a forecasted plan strip and a network table"
+  />
+</Figure>
+
+A tactic group inside a campaign, a budget of \$390,000, a forecast of \$387,003 against it, and a
+headline targeting score of 1.26. Underneath, the plan broken out by network with a score
+each: USA at 1.13, Oxygen at 1.86, E! at 1.38, Bravo at 1.21, and CNBC and NBC both down at 0.58 —
+a ranking of two completely different pieces of inventory on how efficiently they reach the people
+you are paying to reach.
+
+## The same dialog, three generations deep
 
 Balsamiq first, then code. That was how I worked at PrecisionDemand and it was still how I worked
 at AOL: draw the whole screen, annotate the behaviour on it in callouts, argue about the drawing,
@@ -95,7 +114,7 @@ then build the drawing.
     src={upfrontWireframe.src}
     width="2036"
     height="1661"
-    alt="A large hand-annotated Balsamiq wireframe of the upfront screen for a Q3 Verizon campaign on FOX Networks Group, showing an airings grid with per-scenario buy columns, a column of small bar charts, a Scenario Editor dialog of optimizer constraints and target bias values, and a printable Scenario Order Report, with yellow callout notes explaining each behaviour"
+    alt="A hand-annotated Balsamiq wireframe of the upfront screen with yellow callout notes on each panel"
   />
 </Figure>
 
@@ -108,32 +127,9 @@ The wireframe is a Q3 campaign against FOX Networks Group at \$1.25M, 21% of the
 screen is a Q2 campaign against Univision at \$2.65M. Different quarter, different networks, same
 screen.
 
-## Scatter: the same words, three generations deep
-
-Scatter is the other half of the year. The upfront market sells a quarter or a season in advance;
-scatter is the tactical buying that happens inside the quarter, once budgets have moved and there
-is inventory left over to place against.
-
-The scatter folder is the interesting one, because it did not get cleaned out either. It has the
-2018 product in it, and it also has the drawings and dialogs it grew out of, sitting in the same
-directory listing as if no time had passed.
-
-<Figure caption="The shipped scatter screen, 2018." width="wide" zoom>
-  <img
-    src={scatterShipped.src}
-    width="1390"
-    height="657"
-    alt="A ONE TV screen for a campaign called Black Opium Valentine's Day 2018 with a tactic group NBCU $390K, basic settings for budget, inventory source NBCUniversal National Networks, flight dates and spot lengths, a forecasted plan strip showing spend $387,003 and a target impact score of 1.26, and an impression distribution table listing USA, OXYG, E!, BRAV, CNBC and NBC with per-network scores"
-  />
-</Figure>
-
-A tactic group inside a campaign, a budget of \$390,000, a forecast of \$387,003 against it, and a
-headline targeting score of 1.26. Underneath, the plan broken out by network with a score
-each: USA at 1.13, Oxygen at 1.86, E! at 1.38, Bravo at 1.21, and CNBC and NBC both down at 0.58 —
-a ranking of two completely different pieces of inventory on how efficiently they reach the people
-you are paying to reach.
-
-Now go back to the start of the same folder.
+The scatter folder did not get cleaned out either: alongside the 2018 product it still holds the
+drawings and dialogs it grew out of, sitting in the same directory listing as if no time had
+passed. Go back to the start of that folder.
 
 <Figure
   caption="Three campaign-planner dialogs from the PrecisionDemand era, wireframed in Balsamiq. The mock milestone log inside is dated January 2012."
@@ -144,7 +140,7 @@ Now go back to the start of the same folder.
     src={scatterWireframe.src}
     width="3074"
     height="1399"
-    alt="Three large Balsamiq wireframes side by side for Edit Campaign, Edit Cell and Edit Cell Week dialogs, each with constraint fields, cluster and daypart bias sliders, an example plan table listing programs with station and score columns, and yellow callout notes such as EVERYTHING has a tooltip"
+    alt="Three Balsamiq wireframes: Edit Campaign, Edit Cell and Edit Cell Week dialogs with callout notes"
   />
 </Figure>
 
@@ -160,7 +156,7 @@ product, with a real edit timestamp on it:
     src={scatterSilverlight.src}
     width="479"
     height="371"
-    alt="A Silverlight dialog titled Edit Campaign Constraints, Campaign #1, Last Edit 1/29/2013, with numeric fields for minimum and maximum gross rating points, minimum cluster and blended targeting scores, maximum single program buy percentage and count, maximum single cable and broadcast buy percentages, maximum program buy per hour and minimum program CPM"
+    alt="A Silverlight dialog titled Edit Campaign Constraints with numeric fields for each optimizer limit"
   />
 </Figure>
 
@@ -197,29 +193,6 @@ I do not think anyone decided this. Nobody wrote down a design language and made
 vocabulary was just load-bearing enough that every rewrite carried it forward rather than paying to
 re-derive it — and by 2017 I was drawing wireframes against a list of constraints I had first drawn
 in 2012, mostly out of muscle memory.
-
-## A detour, August 2014
-
-Right after the acquisition there was an Adap.tv hackathon, and we built a thing called Soda War: a
-D3 map of the United States with a circle at every market, sized by spend, red for Coke and blue for
-Pepsi, and a slider that ran twenty-four hours of it forward. I did the front end; Sawin Lee, Dyng
-Au and Brendan Kitts did the data. Whether we won it, I genuinely do not remember. The page still
-runs, so rather than a screenshot, here it is playing — recorded from the revived archive this
-month:
-
-<Figure caption="Soda War, the August 2014 hackathon entry, playing its twenty-four hours of Coke against Pepsi." width="wide">
-  <video
-    src={sodaWarVideo}
-    controls
-    muted
-    playsinline
-    preload="metadata"
-    poster={sodaWar.src}
-    width="1280"
-    height="800"
-    aria-label="Screen recording of the Soda War page: a time slider sweeps twenty-four hours of 28 April 2014 while red Coke and blue Pepsi circles grow and shrink at each market on a US map, solid for local spend and transparent for national airings"
-  ></video>
-</Figure>
 
 ## What happened to it
 
