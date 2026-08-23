@@ -353,7 +353,7 @@ Explicitly out of scope were polished visual design, sophisticated search, the f
 
 <Details summary="Actual artifact: full Prompt 1 sent to Claude">
 
-# Build the initial scaffold for **Always Shippable**
+### Build the initial scaffold for **Always Shippable**
 
 Create the initial working repository and architectural scaffold for a personal technical blog called **Always Shippable**.
 
@@ -380,7 +380,7 @@ Build the foundation. Do not prematurely build the rest of the product.
 
 ---
 
-# Product identity
+### Product identity
 
 Site name:
 
@@ -411,7 +411,7 @@ Do not design or invent a logo or favicon. Those will be provided later.
 
 ---
 
-# Deployment model
+### Deployment model
 
 This will be deployed as a GitHub Pages **project site** at:
 
@@ -438,7 +438,7 @@ Avoid fragile absolute paths.
 
 ---
 
-# Core technology
+### Core technology
 
 Use:
 
@@ -470,7 +470,7 @@ Do not add a library merely because it might be useful later.
 
 ---
 
-# Architectural principle
+### Architectural principle
 
 This is primarily a **statically generated publishing system**.
 
@@ -506,7 +506,7 @@ An MDX article must nevertheless be able to embed a React component and selectiv
 
 ---
 
-# Content model
+### Content model
 
 Use Astro content collections for blog content.
 
@@ -571,7 +571,7 @@ The eventual authoring workflow will fill most of this metadata agentically.
 
 ---
 
-# Draft behavior
+### Draft behavior
 
 Drafts are development-only.
 
@@ -590,7 +590,7 @@ Do not implement a production `?includedrafts` mechanism.
 
 ---
 
-# Series
+### Series
 
 Create a central typed series registry.
 
@@ -622,7 +622,7 @@ Establish whatever foundation is sensible now.
 
 ---
 
-# Tags
+### Tags
 
 Create a central typed tag registry rather than allowing uncontrolled free-form tags forever.
 
@@ -634,7 +634,7 @@ Establish the contract now without building a complex tag-management system.
 
 ---
 
-# Public routes
+### Public routes
 
 The production site will ultimately expose routes conceptually equivalent to:
 
@@ -687,7 +687,7 @@ Do not build the finished page designs yet.
 
 ---
 
-# About content
+### About content
 
 Use two layers:
 
@@ -698,7 +698,7 @@ Set up both.
 
 ---
 
-# Shared components
+### Shared components
 
 Establish a sensible location for reusable blog components, for example:
 
@@ -731,7 +731,7 @@ Do not create speculative abstractions.
 
 ---
 
-# SVG and visualization philosophy
+### SVG and visualization philosophy
 
 Prefer:
 
@@ -747,7 +747,7 @@ Agent-authored SVG visualizations are expected to be common.
 
 ---
 
-# Styling foundation
+### Styling foundation
 
 Set up:
 
@@ -775,7 +775,7 @@ For now, establish a clean neutral foundation only.
 
 ---
 
-# Accessibility
+### Accessibility
 
 The finished site will target **WCAG 2.2 AA**.
 
@@ -791,7 +791,7 @@ Do not attempt a comprehensive accessibility implementation of unfinished pages 
 
 ---
 
-# Performance
+### Performance
 
 The finished site should target Lighthouse scores of at least approximately:
 
@@ -808,7 +808,7 @@ Do not optimize prematurely beyond establishing good defaults.
 
 ---
 
-# SEO foundation
+### SEO foundation
 
 The finished site will require:
 
@@ -837,7 +837,7 @@ Do not create per-tag or per-series feeds.
 
 ---
 
-# Homepage behavior
+### Homepage behavior
 
 The eventual homepage should contain:
 
@@ -857,7 +857,7 @@ Create enough minimal UI to prove the data flow.
 
 ---
 
-# Archive
+### Archive
 
 `/archive/` will eventually combine:
 
@@ -879,7 +879,7 @@ Create the route and architecture needed for it.
 
 ---
 
-# Local admin
+### Local admin
 
 There will eventually be a local-development-only admin interface at:
 
@@ -915,7 +915,7 @@ Do not accidentally ship `/admin/`.
 
 ---
 
-# Repository as an agent-authored publishing system
+### Repository as an agent-authored publishing system
 
 This repository is not merely a blog codebase.
 
@@ -947,7 +947,7 @@ Avoid clever architecture that an agent will have difficulty maintaining.
 
 ---
 
-# Claude repository structure
+### Claude repository structure
 
 Create:
 
@@ -977,7 +977,7 @@ Leave a clean structure for them.
 
 Responsibility should be:
 
-### README.md
+##### README.md
 
 Documentation for humans:
 
@@ -990,7 +990,7 @@ Documentation for humans:
 - deployment
 - high-level architecture
 
-### CLAUDE.md
+##### CLAUDE.md
 
 Repository invariants and rules for coding agents:
 
@@ -1010,7 +1010,7 @@ Procedural workflows belong in skills rather than growing CLAUDE.md indefinitely
 
 ---
 
-# Testing and quality
+### Testing and quality
 
 Set up the basic quality toolchain.
 
@@ -1045,7 +1045,7 @@ Do not build an enormous test suite around placeholder functionality.
 
 ---
 
-# Build validation
+### Build validation
 
 Design the validation layer with the expectation that production builds should ultimately fail for:
 
@@ -1066,7 +1066,7 @@ If some validations would require disproportionate implementation during scaffol
 
 ---
 
-# GitHub Actions and Pages
+### GitHub Actions and Pages
 
 Configure GitHub Actions to:
 
@@ -1087,7 +1087,7 @@ Do not require secrets unless GitHub Pages itself genuinely requires one.
 
 ---
 
-# Security and privacy constraints
+### Security and privacy constraints
 
 This is a static site.
 
@@ -1110,7 +1110,7 @@ Support modern evergreen browsers.
 
 ---
 
-# Initial example content
+### Initial example content
 
 Create a minimal example series and a minimal example post.
 
@@ -1130,7 +1130,7 @@ Do not spend time writing a real article.
 
 ---
 
-# Expected repository shape
+### Expected repository shape
 
 You may refine this structure to follow current Astro conventions, but the architecture should remain recognizable:
 
@@ -1184,7 +1184,7 @@ Preserve the architectural intent.
 
 ---
 
-# Implementation approach
+### Implementation approach
 
 Before changing files:
 
@@ -1321,7 +1321,7 @@ Explicitly out of scope
 
 <Details summary="Actual artifact: full Prompt 2 sent to a fresh Claude session">
 
-# Plan the remaining implementation of **Always Shippable**
+### Plan the remaining implementation of **Always Shippable**
 
 The initial architectural scaffold for **Always Shippable** has already been built.
 
@@ -1341,7 +1341,7 @@ We want a sequence that keeps the repository working and shippable after every m
 
 ---
 
-# First: inspect, do not assume
+### First: inspect, do not assume
 
 Read:
 
@@ -1382,11 +1382,11 @@ Do not casually rewrite sound architecture merely because you would personally s
 
 ---
 
-# Product we're ultimately building
+### Product we're ultimately building
 
 The finished site is:
 
-# Always Shippable
+### Always Shippable
 
 **Thoughts on engineering systems, product design, AI tooling, and keeping things always shippable.**
 
@@ -1408,7 +1408,7 @@ It should feel carefully designed, fast, readable, accessible, and technically c
 
 ---
 
-# Core architectural constraints
+### Core architectural constraints
 
 These are intentional and should remain true:
 
@@ -1437,7 +1437,7 @@ These are intentional and should remain true:
 
 ---
 
-# Final route model
+### Final route model
 
 Conceptual application routes:
 
@@ -1464,7 +1464,7 @@ Do not add `/posts/`.
 
 ---
 
-# Homepage
+### Homepage
 
 The finished homepage needs:
 
@@ -1484,7 +1484,7 @@ Keep the homepage editorial and restrained rather than dashboard-like.
 
 ---
 
-# Archive and search
+### Archive and search
 
 `/archive/` is the central content discovery experience.
 
@@ -1516,7 +1516,7 @@ Search/filter state should be representable in URL query parameters when practic
 
 ---
 
-# Posts
+### Posts
 
 Posts live in colocated directories and may contain:
 
@@ -1557,7 +1557,7 @@ Do not require every bespoke post component to enter the global component librar
 
 ---
 
-# Shared article primitives
+### Shared article primitives
 
 Create a coherent reusable component vocabulary for agent-authored MDX.
 
@@ -1595,7 +1595,7 @@ Shared components should:
 
 ---
 
-# Series
+### Series
 
 A post belongs to zero or one series.
 
@@ -1634,7 +1634,7 @@ Do not support:
 
 ---
 
-# Tags
+### Tags
 
 Tags come from a central registry.
 
@@ -1659,7 +1659,7 @@ Tags support:
 
 ---
 
-# Drafts
+### Drafts
 
 Drafts:
 
@@ -1676,7 +1676,7 @@ There is no production draft query flag.
 
 ---
 
-# About
+### About
 
 Short author metadata belongs in typed configuration.
 
@@ -1686,7 +1686,7 @@ About page should include the author's GitHub and LinkedIn links.
 
 Current profile copy:
 
-## Jonathan Borchardt
+#### Jonathan Borchardt
 
 **Always shippable, always improving**
 
@@ -1701,7 +1701,7 @@ The user will provide the real logo and favicon separately.
 
 ---
 
-# Visual system
+### Visual system
 
 Use the existing Tailwind + shadcn/ui + Radix foundation.
 
@@ -1735,7 +1735,7 @@ Avoid making the site look like a generic SaaS dashboard.
 
 ---
 
-# Theme
+### Theme
 
 Support:
 
@@ -1750,7 +1750,7 @@ All site and article primitives must work correctly in both themes.
 
 ---
 
-# Accessibility
+### Accessibility
 
 Target WCAG 2.2 AA.
 
@@ -1771,7 +1771,7 @@ Use automated testing where useful, but do not treat automated accessibility tes
 
 ---
 
-# Responsive behavior
+### Responsive behavior
 
 The site must work intentionally across:
 
@@ -1787,7 +1787,7 @@ Do not simply stack desktop layouts and call them responsive.
 
 ---
 
-# SEO
+### SEO
 
 The finished site should have excellent static SEO.
 
@@ -1815,7 +1815,7 @@ The deployment base path must be handled correctly in all absolute/canonical URL
 
 ---
 
-# Social preview images
+### Social preview images
 
 A post may provide a bespoke OG image.
 
@@ -1832,7 +1832,7 @@ Do not require a runtime service.
 
 ---
 
-# RSS
+### RSS
 
 Provide one primary RSS feed containing published posts.
 
@@ -1840,7 +1840,7 @@ Do not add per-series or per-tag feeds.
 
 ---
 
-# Image handling
+### Image handling
 
 Post images should remain authored next to the post.
 
@@ -1860,7 +1860,7 @@ Avoid making authoring cumbersome.
 
 ---
 
-# 404
+### 404
 
 Provide a custom 404 page consistent with the rest of the site.
 
@@ -1868,7 +1868,7 @@ It should help recovery with useful navigation and potentially recent content or
 
 ---
 
-# Local admin
+### Local admin
 
 Build a useful **development-only** `/admin/` UI.
 
@@ -1900,7 +1900,7 @@ It is a convenience interface over configuration, not a CMS product.
 
 ---
 
-# Validation
+### Validation
 
 Production validation should fail for important invalid states, including where appropriate:
 
@@ -1921,7 +1921,7 @@ Validation messages should tell an agent exactly how to correct the problem.
 
 ---
 
-# Agent-authored repository
+### Agent-authored repository
 
 A major design requirement is that Claude will create and maintain much of this content.
 
@@ -1943,7 +1943,7 @@ Avoid relying on unwritten human knowledge.
 
 ---
 
-# Claude skills
+### Claude skills
 
 We expect to create workflows approximately corresponding to:
 
@@ -1970,19 +1970,19 @@ Plan them.
 
 ---
 
-# Documentation responsibilities
+### Documentation responsibilities
 
 Maintain the intended separation:
 
-### README.md
+##### README.md
 
 Human-facing operational information.
 
-### CLAUDE.md
+##### CLAUDE.md
 
 Persistent architectural rules and invariants for coding agents.
 
-### `.claude/skills/*`
+##### `.claude/skills/*`
 
 Procedural workflows.
 
@@ -1990,7 +1990,7 @@ Avoid duplicating the same large instructions in all three.
 
 ---
 
-# Performance
+### Performance
 
 Target representative Lighthouse scores around 95+ across:
 
@@ -2009,7 +2009,7 @@ The rest of the site should remain lightweight.
 
 ---
 
-# Planning methodology
+### Planning methodology
 
 Do not organize the work simply according to the order features appear in this prompt.
 
@@ -2025,7 +2025,7 @@ Prefer vertical slices where they produce useful working software, but do not fo
 
 ---
 
-# Produce implementation plans
+### Produce implementation plans
 
 Create a sequence of implementation plans.
 
@@ -2035,47 +2035,47 @@ Aim for plans that are substantial enough to produce meaningful progress but sma
 
 For every plan include:
 
-## Goal
+#### Goal
 
 What becomes possible or materially better after this plan.
 
-## Why this comes now
+#### Why this comes now
 
 Its dependency relationship to earlier and later work.
 
 Keep this brief.
 
-## Scope
+#### Scope
 
 Specific things to implement.
 
-## Key files/areas
+#### Key files/areas
 
 Likely areas of the current repository that will change.
 
 Base this on what actually exists, not merely on the hypothetical structure above.
 
-## Important implementation constraints
+#### Important implementation constraints
 
 Architecture or product rules the implementing agent must preserve.
 
-## Acceptance criteria
+#### Acceptance criteria
 
 Concrete observable conditions establishing that the plan is complete.
 
 Prefer things that can be tested.
 
-## Validation
+#### Validation
 
 Commands, tests, or manual checks the implementation agent should run.
 
-## Explicitly out of scope
+#### Explicitly out of scope
 
 Prevent the agent from wandering into later plans.
 
 ---
 
-# Also identify cross-cutting risks
+### Also identify cross-cutting risks
 
 Before presenting the plan sequence, identify a small number of meaningful risks discovered from inspecting the repository.
 
@@ -2095,7 +2095,7 @@ Do not manufacture risks merely to fill a section.
 
 ---
 
-# Planning standard
+### Planning standard
 
 The resulting sequence should be good enough that we can subsequently say:
 
