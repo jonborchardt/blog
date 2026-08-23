@@ -2,11 +2,13 @@
 title: How I Code with Agents Today
 description: The process I use to turn an idea into application code with agents, shown end to end on a real case study — this blog.
 publishedAt: 2026-08-21
+series: agent-built
+seriesOrder: 4
 tags: [ai-assisted-coding, engineering, llm]
 hero:
   src: ./hero.png
-  alt: "A tangled idea unwinds through a two-model conversation and a written plan into a repository of ordered blocks behind a validation check"
-draft: true
+  alt: "A tangled idea unwinds through conversation and a plan into ordered repository blocks behind a check"
+draft: false
 ---
 
 import Details from "@/components/blog/Details.astro";
@@ -21,9 +23,16 @@ Agentic coding isn't "write a giant prompt and hope." It's an engineering proces
 
 The main shift isn't that Claude writes more code. It's that I'm designing a system in which future agent sessions are less likely to do the wrong thing, because the repo itself pushes back.
 
-The rest of this post walks that process end to end on one real case study: this blog. It starts from a rough idea and a conversation, goes through a bootstrap prompt, a scaffold, a repository-aware plan, an agent run, and the short sessions that extended it afterwards, and ends with a static site that scores Lighthouse 100/100/100/100 on representative pages, passes an axe WCAG 2.2 AA audit and the W3C Nu markup validator on every page, ships zero JavaScript on prose pages, and fails its own build on a broken link, a missing alt, an unknown tag, or any admin output in `dist/`. Every one of those checks runs in CI on every push, so the quality described at the end is a floor the repo enforces.
+The rest of this post walks that process end to end on one real case study: this blog, the site you are reading. The process has three beats: decide before you prompt, let the repository replace the prompt, and treat validation as the real output. The result is a static site where, on every push, CI proves that:
 
-Each section opens with this rail of the process, and the bold stage is the one we're in.
+- **Lighthouse scores 100/100/100/100** on representative pages
+- **every page passes an axe WCAG 2.2 AA audit** and the W3C Nu markup validator
+- **prose pages ship zero JavaScript**
+- **the build fails** on a broken link, a missing alt, an unknown tag, or any admin output in `dist/`
+
+Those are not goals. They are a floor the repo enforces, and a red check blocks the deploy.
+
+Each section opens with this rail of the process: the three beats, the eleven stages inside them, and the bold stage is the one we're in.
 
 <ProcessMarker step={1} />
 
@@ -322,7 +331,7 @@ The important component rule is not to force bespoke MDX React components into t
 
 ## Prompt 1: build the skeleton, not the product
 
-Now that we had some idea of the architecture, it was time to start building, but not the features. I always split project setup from implementation. The first prompt on any project is about the skeleton only: architecture, dependencies, file structure, contracts, tooling, and validation, with no features. Features come later, in separate prompts, once the foundation is in place and the agent has something solid to build on. So the first Claude prompt explicitly said the goal was **not** to build the finished blog. The opening constraint read:
+Now that we had some idea of the architecture, it was time to start building, but not the features. For projects like this, I split project setup from implementation. The first prompt on any project is about the skeleton only: architecture, dependencies, file structure, contracts, tooling, and validation, with no features. Features come later, in separate prompts, once the foundation is in place and the agent has something solid to build on. So the first Claude prompt explicitly said the goal was **not** to build the finished blog. The opening constraint read:
 
 > The goal of this task is not to build the finished blog.
 >
@@ -2148,9 +2157,9 @@ Before running the plans, I brought them back to ChatGPT for an independent revi
 
 ## Claude builds and reports
 
-With the plan reviewed, I opened a fresh Claude session and pointed it at the repo. Then it ran, largely unattended, for about 70 minutes. It read the plan, inspected the repo, and worked through the tasks: the foundation fixes, the design system, the article page, the MDX primitives, build-time diagrams, OG cards, validation checks, search, the dev-only admin, etc. Each stage ran the validation and build before moving on, so the repo stayed shippable the whole way through.
+With the plan reviewed, I opened a fresh Claude session and pointed it at the repo. Then it ran, largely unattended, for about 80 minutes. It read the plan, inspected the repo, and worked through the tasks: the foundation fixes, the design system, the article page, the MDX primitives, build-time diagrams, OG cards, validation checks, search, the dev-only admin, etc. Each stage ran the validation and build before moving on, so the repo stayed shippable the whole way through. 
 
-When it stopped, it produced the same kind of report as the scaffold session: what it verified, where it deviated from the plan and why, and what it marked as a deliberate shortcut.
+When it finished, I reviewed the resulting diff, architecture, behavior, and validation results myself. Claude also produced the same kind of report as the scaffold session: what it verified, where it deviated from the plan and why, and what it marked as a deliberate shortcut.
 
 <ProcessMarker step={9} />
 
@@ -2277,11 +2286,11 @@ When an agent discovers a class of mistake, do not just fix the instance. Ask wh
 
 ## The initial run was not the end
 
-The plans did not produce a finished site, and I did not expect them to. Over the next several sessions I went back in and added what the program had not covered: a redesigned logo, skill authority and sourcing rules, next-reading suggestions, a table of contents, read time, this post's process rail, an `llms.txt` index, an external link checker, an image lightbox, git-derived last-updated dates, a print stylesheet, a legal page, a WCAG target-size fix for tag pills, etc.
+The plans did not produce a finished site, and I did not expect them to. Over the next several sessions I went back in and added what the program had not covered: a redesigned logo, skill authority and sourcing rules, next-reading suggestions, a table of contents, read time, this post's process rail, an `llms.txt` index, an external link checker, an image lightbox, git-derived last-updated dates, a print stylesheet, a legal page, a WCAG target-size fix for tag pills, abandonment of Mermaid, etc.
 
-None of it was challenging, and none of it caused an issue. That is the point. Each feature was a short session against a repository that already knew how to reject a broken state: the schema caught bad frontmatter, the dist checks caught a missing alt or a link outside the base path, the e2e suite caught a layout regression, and the skills routed each change through the same validate-and-build sequence as the original plans. The cost of the validation work in the first session was paid back on every one of these additions, because I could ask for a feature, read the diff, and trust the green build for everything I did not read.
+These additions were comparatively routine because the repository already encoded most of the constraints they needed to preserve. That is the point. Each feature was a short session against a repository that already knew how to reject a broken state: the schema caught bad frontmatter, the dist checks caught a missing alt or a link outside the base path, the e2e suite caught a layout regression, and the skills routed each change through the same validate-and-build sequence as the original plans. The cost of the validation work in the first session was paid back on every one of these additions, because I could focus my review on the important architectural and behavioral changes, while relying on the validation suite to cover the mechanical invariants it was designed to enforce.
 
-None of them needed a long prompt either. Each was one or two sentences against a repo that already knew its own rules, and in hindsight any of them could have been appended to Prompt 1 as-is.
+None of them needed a long prompt either. Each was one or two sentences against a repo that already knew its own rules. That is not an argument for a bigger Prompt 1; it is the opposite. Once the constraints live in the repo, when a feature gets asked for stops mattering, because the same schema, checks, and skills police it whether it arrives in the first plan or the fortieth session.
 
 <Details summary="The prompts, one per feature">
 
