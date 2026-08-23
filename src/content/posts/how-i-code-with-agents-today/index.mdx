@@ -2146,11 +2146,17 @@ Before running the plans, I brought them back to ChatGPT for an independent revi
 
 <ProcessMarker step={8} />
 
-## Claude builds, reports, and ChatGPT reviews the report
+## Claude builds and reports
 
 With the plan reviewed, I opened a fresh Claude session and pointed it at the repo. Then it ran, largely unattended, for about 70 minutes. It read the plan, inspected the repo, and worked through the tasks: the foundation fixes, the design system, the article page, the MDX primitives, build-time diagrams, OG cards, validation checks, search, the dev-only admin, etc. Each stage ran the validation and build before moving on, so the repo stayed shippable the whole way through.
 
-When it stopped, it produced the same kind of report as the scaffold session: what it verified, where it deviated from the plan and why, and what it marked as a deliberate shortcut. I did not read that report alone. I pasted it back into the ChatGPT thread that had reviewed the plans, so the model that knew the product intent could judge the outcome against it. That is the same loop as before, just one turn later: Claude does the work, the report carries the reasons, and a second model with product context checks whether the work still matches the plan.
+When it stopped, it produced the same kind of report as the scaffold session: what it verified, where it deviated from the plan and why, and what it marked as a deliberate shortcut.
+
+<ProcessMarker step={9} />
+
+## ChatGPT reviews the report
+
+I did not read that report alone. I pasted it back into the ChatGPT thread that had reviewed the plans, so the model that knew the product intent could judge the outcome against it. That is the same loop as before, just one turn later: Claude does the work, the report carries the reasons, and a second model with product context checks whether the work still matches the plan.
 
 <Details summary="Actual conversation: ChatGPT's review of the result">
 
@@ -2173,9 +2179,9 @@ When it stopped, it produced the same kind of report as the scaffold session: wh
 
 </Details>
 
-<ProcessMarker step={9} />
+<ProcessMarker step={10} />
 
-## The final implementation was strong
+## What the run delivered
 
 The resulting repo was close to complete and had a strong validation posture. Here is what each plan delivered:
 
@@ -2267,7 +2273,7 @@ Every agent session should leave behind stronger constraints, not just more code
 When an agent discovers a class of mistake, do not just fix the instance. Ask whether it can become a test, a validation rule, a repo instruction, a skill step, or a generator default.
 
 
-<ProcessMarker step={10} />
+<ProcessMarker step={11} />
 
 ## The initial run was not the end
 
