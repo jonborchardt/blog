@@ -1,0 +1,35 @@
+---
+/**
+ * SpeakerNote — talking points for presenting this post live, rendered as a
+ * shared <Aside> (in the right margin on ≥xl screens, inline block below).
+ * Hidden unless the URL carries `?notes` (any value), e.g.
+ * `/how-i-code-with-agents-today/?notes=1`. The reveal is a one-line inline
+ * script (same pattern as the theme toggle), so the page still ships zero
+ * script *files* and the JS-budget e2e stays green.
+ */
+import Aside from "@/components/blog/Aside.astro";
+---
+
+<div class="speaker-note">
+  <Aside>
+    <span class="eyebrow text-warning block">Speaker note</span>
+    <slot />
+  </Aside>
+</div>
+
+<script is:inline>
+  if (new URLSearchParams(location.search).has("notes"))
+    document.documentElement.classList.add("show-notes");
+</script>
+
+<style>
+  .speaker-note {
+    display: none;
+  }
+  :global(html.show-notes) .speaker-note {
+    display: contents;
+  }
+  .speaker-note :global(p + p) {
+    margin-top: 0.5rem;
+  }
+</style>
