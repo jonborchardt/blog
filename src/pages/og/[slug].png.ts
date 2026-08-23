@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+import { readFile } from "node:fs/promises";
 import { site } from "@/config/site";
 import { author } from "@/config/author";
 import { getPosts, getSeriesContext, postSlug, type Post } from "@/lib/posts";
@@ -13,6 +14,12 @@ export async function getStaticPaths() {
     .map((post) => ({ params: { slug: postSlug(post) }, props: { post } }));
 }
 
+/** Content-collection image metadata carries the absolute source path (not in the public type). */
+async function heroDataUri(post: Post): Promise<string> {
+  const { fsPath, format } = post.data.hero.src as ImageMetadata & { fsPath: string };
+  return `data:image/${format};base64,${(await readFile(fsPath)).toString("base64")}`;
+}
+
 export const GET: APIRoute<{ post: Post }> = async ({ props }) => {
   const { post } = props;
   const ctx = await getSeriesContext(post);
@@ -22,6 +29,7 @@ export const GET: APIRoute<{ post: Post }> = async ({ props }) => {
     date: formatDate(post.data.publishedAt, "long"),
     siteName: site.name,
     byline: author.name,
+    hero: await heroDataUri(post),
   });
   return new Response(new Uint8Array(png), { headers: { "Content-Type": "image/png" } });
 };

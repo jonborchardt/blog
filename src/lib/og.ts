@@ -18,6 +18,8 @@ export interface OgCard {
   siteName: string;
   /** Author line shown next to the site name. */
   byline?: string;
+  /** Hero image as a data: URI; shown as a centre-cropped band between title and footer. */
+  hero?: string;
 }
 
 // Resolved from the project root (astro build runs there); import.meta.url points at the bundle.
@@ -52,7 +54,7 @@ export function clampTitle(title: string, maxChars = 90): string {
 export async function renderOgCard(card: OgCard): Promise<Buffer> {
   const { regular, bold, logo } = await loadAssets();
   const title = clampTitle(card.title);
-  const titleSize = title.length > 60 ? 52 : 64;
+  const titleSize = card.hero ? 48 : title.length > 60 ? 52 : 64;
 
   const svg = await satori(
     h(
@@ -64,7 +66,7 @@ export async function renderOgCard(card: OgCard): Promise<Buffer> {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          padding: "64px 72px",
+          padding: card.hero ? "40px 72px" : "64px 72px",
           background: theme.bg,
           color: theme.fg,
           fontFamily: "IBM Plex Sans",
@@ -102,6 +104,12 @@ export async function renderOgCard(card: OgCard): Promise<Buffer> {
           title,
         ),
       ),
+      card.hero
+        ? h("img", {
+            src: card.hero,
+            style: { width: "100%", height: 220, objectFit: "cover", borderRadius: 12 },
+          })
+        : null,
       h(
         "div",
         {
