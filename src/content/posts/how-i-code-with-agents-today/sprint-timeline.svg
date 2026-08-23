@@ -1,0 +1,53 @@
+<svg viewBox="0 0 380 412" width="380" height="412" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <!-- Panel A: the sprint, 12:35-14:04, 4 px/min -->
+  <text x="8" y="18" font-size="14" font-weight="700" fill="currentColor">The sprint — 11 plans in 79 minutes</text>
+
+  <line x1="70" y1="40" x2="70" y2="396" stroke="currentColor" stroke-opacity="0.35" stroke-width="2" />
+
+  <!-- scaffold -->
+  <text x="62" y="44" font-size="12" text-anchor="end" fill="currentColor" fill-opacity="0.75">12:35</text>
+  <circle cx="70" cy="40" r="5" fill="currentColor" />
+  <text x="82" y="44" font-size="13" fill="currentColor">scaffold + 751-line program</text>
+
+  <!-- plans -->
+  <g fill="#006a90">
+    <circle cx="70" cy="80" r="4" />
+    <circle cx="70" cy="112" r="4" />
+    <circle cx="70" cy="132" r="4" />
+    <circle cx="70" cy="184" r="4" />
+    <circle cx="70" cy="204" r="4" />
+    <circle cx="70" cy="236" r="4" />
+    <circle cx="70" cy="260" r="4" />
+    <circle cx="70" cy="304" r="4" />
+    <circle cx="70" cy="348" r="4" />
+    <circle cx="70" cy="368" r="4" />
+    <circle cx="70" cy="396" r="4" />
+  </g>
+  <g font-size="12" text-anchor="end" fill="currentColor" fill-opacity="0.75">
+    <text x="62" y="84">12:45</text>
+    <text x="62" y="116">12:53</text>
+    <text x="62" y="136">12:58</text>
+    <text x="62" y="188">13:11</text>
+    <text x="62" y="208">13:16</text>
+    <text x="62" y="240">13:24</text>
+    <text x="62" y="264">13:30</text>
+    <text x="62" y="308">13:41</text>
+    <text x="62" y="352">13:52</text>
+    <text x="62" y="372">13:57</text>
+    <text x="62" y="400">14:04</text>
+  </g>
+  <g font-size="13" fill="currentColor">
+    <text x="82" y="84">P1 · trustworthy tests</text>
+    <text x="82" y="116">P2 · tokens, chrome, home</text>
+    <text x="82" y="136">P3 · article page, images</text>
+    <text x="82" y="188">P4 · MDX primitives</text>
+    <text x="82" y="208">P5 · diagrams + math</text>
+    <text x="82" y="240">P6 · SEO + social cards</text>
+    <text x="82" y="264">P7 · build validation</text>
+    <text x="82" y="308">P8 · archive explorer</text>
+    <text x="82" y="352">P9 · dev-only admin</text>
+    <text x="82" y="372">P10 · agent skills</text>
+    <text x="82" y="400">P11 · launch QA</text>
+  </g>
+
+</svg>

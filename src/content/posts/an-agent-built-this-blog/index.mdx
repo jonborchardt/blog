@@ -18,7 +18,7 @@ import Details from "@/components/blog/Details.astro";
 import Figure from "@/components/blog/Figure.astro";
 import VizFigure from "@/components/blog/VizFigure.astro";
 import Timeline from "./day-one-timeline.svg";
-import GatesViz from "./gates-viz.svg";
+import GatesViz from "@/assets/diagrams/gates-viz.svg";
 
 This site was written by a coding agent: the code, the styles, the tests, the prose you're
 reading now. Lots of people say that lately, so this series comes with the git log attached.
@@ -26,7 +26,10 @@ The git history is public and it says: initial commit at 12:35 on a Sunday after
 planned feature commits between 12:45 and 14:04, and a deployed, tested, accessibility-audited
 site by evening. This first post is about how that afternoon went and why it worked. The short
 answer isn't "the model is magic." It's that the repository was designed so that a worker with
-no memory and no ego can't leave it in a broken state.
+no memory and no ego can't leave it in a broken state. The log also hides something: the
+architecture was argued out and the eleven plans were written and reviewed *before* 12:35. That
+half of the story, the human's half, is in
+[How I Code with Agents Today](/how-i-code-with-agents-today/); this post is the receipts.
 
 ## Seventy-nine minutes of history
 
@@ -67,7 +70,7 @@ a site that passed its own launch checklist.
       ],
     }}
   >
-    <Timeline class="h-auto w-full max-w-md" aria-hidden="true" />
+    <Timeline class="mx-auto h-auto w-full max-w-md" aria-hidden="true" />
   </VizFigure>
 </Figure>
 
@@ -164,8 +167,10 @@ posts still use it, the admin refuses and lists them.
 ## What "an agent built this" means
 
 Precision matters on a claim like this, so: the agent wrote all of the code and all of the prose.
-A human, the site's owner, wrote the product brief, directed the work, and made the taste
-calls. Every commit carries the human's git identity. The four logo redesigns in thirty-eight
+A human, the site's owner, decided the invariants (static HTML, flat URLs, no drafts in
+production, WCAG 2.2 AA), wrote the scaffold and planning prompts, had a second model review
+the plans before the agent ran them, and made the taste calls. Every commit carries the human's
+git identity. The four logo redesigns in thirty-eight
 minutes are what direction looks like in the log: an agent proposing, a human saying "again."
 One social-card image was hand-made. A handful of commit messages ("gitignor", "fixes") are
 plainly human-typed. And the one same-day publish got reverted fifteen minutes later. The
