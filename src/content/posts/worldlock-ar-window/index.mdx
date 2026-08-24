@@ -26,11 +26,11 @@ import GeoregStatesViz from "./georeg-states-viz.svg";
 
 Point your phone west from Seattle and there's a glowing tower rising out of Tacoma, labeled `Tacoma 42.4 km`. Pan up and the night side of the Earth curves away from you, city lights and all, with NYC's tower readable 3,815 km over the horizon. A white dash crosses the sky where the ISS actually is, right now.
 
-That's WorldLock: a native Android AR app that georegisters content to the real world using ARCore's Geospatial API. Not "AR" as in a dinosaur on your coffee table; AR as in the phone knows where it is and which way it's pointing to within a few meters and degrees, so a tower drawn over a city 3,800 km away lines up with where that city actually is.
+That's WorldLock: a native Android AR app that georegisters content to the real world using ARCore's Geospatial API. The phone knows where it is and which way it's pointing, to within a few meters and degrees, so a tower drawn over a city 3,800 km away lines up with where that city actually is.
 
 Source: [github.com/jonborchardt/worldlock](https://github.com/jonborchardt/worldlock)
 
-<Figure caption="Left to right: the night side of the Earth with towers on the horizon; Tacoma and Seattle towers at ground level; the data-pillar tower style.">
+<Figure caption="Three screenshots taken from Capitol Hill in Seattle: what you'd see if each of those cities had a 20-mile-high tower and you could see through the Earth. Left to right: Spokane, Missoula, Tacoma, Seattle.">
   <div class="not-prose grid grid-cols-3 gap-3">
     <Image
       src={globe}
@@ -67,7 +67,7 @@ Source: [github.com/jonborchardt/worldlock](https://github.com/jonborchardt/worl
 
 ## The one hard rule
 
-Everything interesting in this app is a coordinate-precision problem wearing a trench coat. Earth-centered coordinates are ~6.4 million meters from the origin; 32-bit floats have ~7 significant digits; do the math and your geometry jitters by meters. So the rule is: authoritative positions are ECEF in **doubles**, converted to camera-relative ENU in doubles, and only the final origin-relative meters ever touch a GL float. The render origin stays pinned near you, where float precision is millimeters. The geodetic math even polices itself: a startup self-check verifies the conversions against exact WGS84 reference points and crashes the app at launch if they ever break.
+Everything interesting in this app is a coordinate-precision problem. Earth-centered coordinates are ~6.4 million meters from the origin; 32-bit floats have ~7 significant digits; do the math and your geometry jitters by meters. So the rule is: authoritative positions are ECEF in **doubles**, converted to camera-relative ENU in doubles, and only the final origin-relative meters ever touch a GL float. The render origin stays pinned near you, where float precision is millimeters. The geodetic math even polices itself: a startup self-check verifies the conversions against exact WGS84 reference points and crashes the app at launch if they ever break.
 
 The pipeline, with the one place a double becomes a float:
 
@@ -114,7 +114,7 @@ There's a looser render gate in front of that (yaw < 25°, with 2× hysteresis s
   <GeoregStatesViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
 </VizFigure>
 
-The globe follows the same rule. Tessellating a planet-sized sphere near the camera is a precision disaster; a ray that solves the quadratic in the fragment shader is analytic at every distance. The constant term is precomputed in doubles on the CPU, leaving only a possible float shimmer right at the horizon. The sphere passes through local sea level, deliberately not the true ellipsoid; the upgrade path lives in a `ponytail:` comment.
+The globe follows the same rule. Tessellating a planet-sized sphere near the camera is a precision disaster; a ray that solves the quadratic in the fragment shader is analytic at every distance. The constant term is precomputed in doubles on the CPU, leaving only a possible float shimmer right at the horizon. The sphere passes through local sea level, deliberately not the true ellipsoid.
 
 ## The stats that matter
 

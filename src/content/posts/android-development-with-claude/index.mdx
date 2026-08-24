@@ -47,7 +47,7 @@ Put together, the loop is a text pipeline with a phone in the middle of it. The 
   <DevLoopViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
 </VizFigure>
 
-The human's job shrinks to the three things an agent genuinely can't do: physically pointing the phone at the sky, judging whether the ember particles _look_ right, and occasionally re-running `adb connect` when the wireless link drops (`pair` and `connect` are deliberately not pre-approved).
+The human's job shrinks to the three things an agent genuinely can't do: physically pointing the phone at the sky, judging whether the ember particles _look_ right, and running `adb connect` at startup for the wireless link (`pair` and `connect` are deliberately not pre-approved).
 
 One guardrail worth copying: the phone is reachable only through a wrapper script (`.\adb.cmd`), plain `adb` isn't on PATH, and the permission rules key off the wrapper's name. Three tiers:
 
@@ -66,7 +66,7 @@ The agent can iterate freely on the app without ever holding a blank check to th
 
 ## The part that makes it work: wireless debugging
 
-Here's the thing about developing an AR app: **you have to walk around.** Geospatial localization wants you outside, pointing the camera at buildings. A phone tethered to a desktop by a USB cable is a phone that can't do its job.
+When developing an AR app, **you have to walk around.** Geospatial localization wants you outside, pointing the camera at buildings. A phone tethered to a desktop by a USB cable is a phone that can't do its job.
 
 Android's wireless debugging (Android 11+) fixes this and takes about ninety seconds to set up:
 

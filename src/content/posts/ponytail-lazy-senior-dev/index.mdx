@@ -19,7 +19,7 @@ import LensReach from "./lens-reach.svg";
 import LadderViz from "./ladder-viz.svg";
 import PrReplayViz from "./pr-replay-viz.svg";
 
-[WorldLock](/worldlock-ar-window/) was written with Claude Code running a mode called **ponytail**. The pitch: the AI role-plays a lazy senior developer. Lazy meaning efficient, not careless: the kind of engineer who has been paged at 3am for someone else's clever abstraction and now believes the best code is the code never written.
+[WorldLock](/worldlock-ar-window/) was written with Claude Code running a mode called **<a href="https://github.com/DietrichGebert/ponytail" target="_blank" rel="noopener">ponytail</a>**. The pitch: the AI role-plays a lazy senior developer. Lazy meaning efficient, not careless: the kind of engineer who has been paged at 3am for someone else's clever abstraction and now believes the best code is the code never written.
 
 ## How it works
 
@@ -100,4 +100,4 @@ Caveat one: **laziness needs a floor.** The mode's own rules carve out exception
 
 Caveat two: **it optimizes for now.** A single 900-line activity is the right call for this app today. If WorldLock grew a second activity, multiplayer, or a test suite, some of these decisions would need revisiting, and the `ponytail:` comments and the "until it hurts" rule are a bet that refactoring later, with real information, beats architecting earlier with guesses. For a hobby app, that bet is nearly always right. For a ten-person codebase, you'd want the mode's leash a lot shorter.
 
-Verdict: on a project this shape, it's the difference between an app that exists and a half-finished architecture, and the PR replay suggests the lens earns its keep as a reviewer even on codebases it didn't write. I'd use it again.
+Verdict: it's the difference between an app that exists and a half-finished architecture, and the PR replay suggests the lens earns its keep as a reviewer even on codebases it didn't write. I've been running it for a while now, across every project, and I haven't turned it off.
