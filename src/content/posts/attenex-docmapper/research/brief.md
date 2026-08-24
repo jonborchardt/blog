@@ -15,7 +15,7 @@ disagree, or where an artifact is ambiguous, the post says so in the prose.
 ## The story
 
 A new CS graduate joins a Seattle startup in August 2001 as one of its first engineers and spends
-six years building one screen: a 3D map of a legal document collection. It ends up being the
+six years building a 3D map of a legal document collection. It ends up being the
 company's flagship and its market differentiator, and it produces five granted patents with his
 name on them. The interesting part is not the graphics. It is that the map changed the *unit of
 work* in document review — from "read one document, decide" to "look at a cluster's concepts,

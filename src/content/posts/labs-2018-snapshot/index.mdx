@@ -1,4 +1,4 @@
----
+﻿---
 title: The Portfolio I Froze in 2018
 description: In 2018 I copied seventeen years of side projects onto one static site and went job hunting. It still runs. Here is the map of what is in it.
 publishedAt: 2026-08-20
@@ -18,6 +18,17 @@ import Figure from "@/components/blog/Figure.astro";
 import VizFigure from "@/components/blog/VizFigure.astro";
 import ArcViz from "./arc-viz.svg";
 import landing from "./labs-landing.png";
+import heroDocmapper from "../attenex-docmapper/hero.png";
+import heroBing from "../bing-hover-preview/hero.png";
+import heroBunny from "../bunnypuddle-games/hero.png";
+import heroFoundry from "../media-foundry-watermarks/hero.png";
+import heroPlanner from "../precisiondemand-audience-planner/hero.png";
+import heroTimeline from "../drag-the-timeline-refilter-the-page/hero.png";
+import heroSellSide from "../sell-side-targeting/hero.png";
+import heroTvData from "../tv-data-explorers/hero.png";
+import heroTwoDatasets from "../one-codebase-two-datasets/hero.png";
+import heroUpfront from "../one-tv-upfront-scatter/hero.png";
+import heroAustralia from "../one-tv-australia/hero.png";
 
 I left Oath in March 2018 and started at the Allen Institute for AI in May. In the gap I did what
 you do: I went looking for the work I was proudest of, so I could show it to strangers. It was
@@ -110,20 +121,16 @@ expect of decade-old pages. Each post in this series covers its own project's da
 
 ## The map of the series
 
-Eleven posts follow this one, roughly chronological, one per project:
-
-- [Attenex DocMapper](/attenex-docmapper/)
-- [Bing hover preview](/bing-hover-preview/)
-- [BunnyPuddle games](/bunnypuddle-games/)
-- [Media Foundry](/media-foundry-watermarks/)
-- [The Audience Planner](/precisiondemand-audience-planner/)
-- [Drag the Timeline, Refilter the Page](/drag-the-timeline-refilter-the-page/)
-- [Sell-side targeting](/sell-side-targeting/)
-- [TV data explorers](/tv-data-explorers/)
-- [One codebase, two datasets](/one-codebase-two-datasets/)
-- [ONE TV: upfront and scatter](/one-tv-upfront-scatter/)
-- [ONE TV in Australia](/one-tv-australia/)
-
-Some of these I remember in detail. Some I'm reconstructing from screenshots and my own
-eight-year-old card copy, and where my memory has a hole in it I would rather say so than fill it
-in. Everything I couldn't verify gets flagged as such.
+<ul class="my-6 list-none ps-0">
+  <li class="my-0 flex items-center gap-3"><Image src={heroDocmapper} alt="" aria-hidden="true" width={240} height={96} class="not-prose aspect-card m-0 w-24 shrink-0 rounded-md border object-cover" /> [Attenex DocMapper](/attenex-docmapper/)</li>
+  <li class="my-0 flex items-center gap-3"><Image src={heroBing} alt="" aria-hidden="true" width={240} height={96} class="not-prose aspect-card m-0 w-24 shrink-0 rounded-md border object-cover" /> [Bing hover preview](/bing-hover-preview/)</li>
+  <li class="my-0 flex items-center gap-3"><Image src={heroBunny} alt="" aria-hidden="true" width={240} height={96} class="not-prose aspect-card m-0 w-24 shrink-0 rounded-md border object-cover" /> [BunnyPuddle games](/bunnypuddle-games/)</li>
+  <li class="my-0 flex items-center gap-3"><Image src={heroFoundry} alt="" aria-hidden="true" width={240} height={96} class="not-prose aspect-card m-0 w-24 shrink-0 rounded-md border object-cover" /> [Media Foundry](/media-foundry-watermarks/)</li>
+  <li class="my-0 flex items-center gap-3"><Image src={heroPlanner} alt="" aria-hidden="true" width={240} height={96} class="not-prose aspect-card m-0 w-24 shrink-0 rounded-md border object-cover" /> [The Audience Planner](/precisiondemand-audience-planner/)</li>
+  <li class="my-0 flex items-center gap-3"><Image src={heroTimeline} alt="" aria-hidden="true" width={240} height={96} class="not-prose aspect-card m-0 w-24 shrink-0 rounded-md border object-cover" /> [Drag the Timeline, Refilter the Page](/drag-the-timeline-refilter-the-page/)</li>
+  <li class="my-0 flex items-center gap-3"><Image src={heroSellSide} alt="" aria-hidden="true" width={240} height={96} class="not-prose aspect-card m-0 w-24 shrink-0 rounded-md border object-cover" /> [Sell-side targeting](/sell-side-targeting/)</li>
+  <li class="my-0 flex items-center gap-3"><Image src={heroTvData} alt="" aria-hidden="true" width={240} height={96} class="not-prose aspect-card m-0 w-24 shrink-0 rounded-md border object-cover" /> [TV data explorers](/tv-data-explorers/)</li>
+  <li class="my-0 flex items-center gap-3"><Image src={heroTwoDatasets} alt="" aria-hidden="true" width={240} height={96} class="not-prose aspect-card m-0 w-24 shrink-0 rounded-md border object-cover" /> [One codebase, two datasets](/one-codebase-two-datasets/)</li>
+  <li class="my-0 flex items-center gap-3"><Image src={heroUpfront} alt="" aria-hidden="true" width={240} height={96} class="not-prose aspect-card m-0 w-24 shrink-0 rounded-md border object-cover" /> [ONE TV: upfront and scatter](/one-tv-upfront-scatter/)</li>
+  <li class="my-0 flex items-center gap-3"><Image src={heroAustralia} alt="" aria-hidden="true" width={240} height={96} class="not-prose aspect-card m-0 w-24 shrink-0 rounded-md border object-cover" /> [ONE TV in Australia](/one-tv-australia/)</li>
+</ul>

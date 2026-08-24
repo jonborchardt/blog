@@ -17,7 +17,6 @@ import Figure from "@/components/blog/Figure.astro";
 import VizFigure from "@/components/blog/VizFigure.astro";
 import LineThickness from "./line-thickness.svg";
 import JunctionSeal from "./junction-seal.svg";
-import SealPipelineViz from "./seal-pipeline-viz.svg";
 
 I've been working on a TypeScript reimplementation of the Sierra SCI0 engine. One piece that keeps giving me trouble is upscaling the 320×190 PIC backgrounds to a modern resolution (1920×1140, 6× scale) without flood-fill leaks. I have a lineage of rendering strategies, snap through snap-v8, that chip away at the problem from different angles, and snap-v5 in its blend variant (`snap-v5-blend`) is still the one I ship for game rendering. [The native render oracle post](/sci0-pic-upscaling-native-render-oracle/) covers how they are measured.
 
@@ -50,11 +49,9 @@ The block expansion constraint turned out to matter more than expected. My v6 ex
 
 These form a chain of additive defenses, validated by a metric I call "flagged fills": how many fill commands in a PIC produce a pixel count more than 25% off from the native render, with a 75-pixel absolute floor so small deviations never flag. Across 11 representative PICs, v5 reduced flagged fills from 534 to 193, a 64% improvement. But v5's own docstring is blunt about the wall: **92% of the remaining flagged fills are undershoots from thick upscaled lines stealing fill area. Gap closure cannot fix that.**
 
-That's the context I was bringing into this.
-
 ## What drew me to the agi-up code
 
-The reference does something my lineage doesn't: it tracks which draw command rasterized each pixel (`ref_cmd_buf`) and what kind of command it was (line vs fill, via `cmd_type_buf`). It uses that to build an anchor graph (each cell's anchor is projected onto the nearest line segment of its owning command) and then connects anchors with geometrically reasoned rules, like "don't connect a diagonal if both flanking cardinals are line cells." It's a coherent model. The anchor graph and the enhancement passes both express ideas I hadn't seen elsewhere.
+The reference does something my repo doesn't: it tracks which draw command rasterized each pixel (`ref_cmd_buf`) and what kind of command it was (line vs fill, via `cmd_type_buf`). It uses that to build an anchor graph (each cell's anchor is projected onto the nearest line segment of its owning command) and then connects anchors with geometrically reasoned rules, like "don't connect a diagonal if both flanking cardinals are line cells." It's a coherent model. The anchor graph and the enhancement passes both express ideas I hadn't seen elsewhere.
 
 What I hoped I could borrow:
 
@@ -65,13 +62,6 @@ What I hoped I could borrow:
 I built two new strategies: `snap-v9` (v4 + the structural rule applied as a barrier seal) and `snap-v10` (v5 + the same seal, stacked).
 
 Here is where the borrowed piece slots into the existing chain: a single extra pass, fed by the two new provenance buffers, that runs at the start of the per-fill work, before gap closure and the flood fill.
-
-<VizFigure
-  name="Where the borrowed junction seal fits in the snap pipeline"
-  summary="The pipeline runs block expansion with endpoint snapping at line-draw time, then for each fill command a new junction-seal pass, then diagonal gap closure, then seed nudging and the flood fill with a per-fill leak guard, falling back to the native mask when a fill produces zero pixels. The agi-up ideas add two provenance buffers, command id and command type per pixel, which feed the junction-seal pass placed before gap closure. Stacked on v5 this is snap-v10."
->
-  <SealPipelineViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
-</VizFigure>
 
 ## What the numbers said
 
@@ -134,10 +124,8 @@ The one rule I borrowed (diagonal-flanking suppression) is solid, just too narro
 
 If you're reading this: thank you for putting agi-up and the [walkthrough video](https://www.youtube.com/watch?v=z9Yp9S23ICo) out there. Your diagonal-flanking suppression rule gave me a geometric condition I hadn't articulated before, and, tightened to true X-junctions, it directly improved my own renderer.
 
-I'd genuinely like to find places to collaborate where the constraints overlap. A dual-layer renderer, native-resolution debug tooling, or command-provenance-driven editor tooling all seem like promising areas to compare notes.
-
 ## The takeaway for anyone else trying this
 
-If you're borrowing ideas from a renderer built around different assumptions, do the constraint check first. Identify which parts of the reference depend on assumptions your pipeline has already ruled out and which parts don't. Most of the time, the genuinely transferable insight from a different-paradigm reference is small and surgical (a specific rule or observation), not the architectural skeleton. That's no criticism of either codebase; it's just what cross-paradigm porting looks like when both designs are well-thought-out within their own constraints.
+If you're borrowing ideas from a renderer built around different assumptions, do the constraint check first. Identify which parts of the reference depend on assumptions your pipeline has already ruled out and which parts don't. Most of the time, the transferable insight from a different-paradigm reference is small and surgical (a specific rule or observation), not the architectural skeleton. That's no criticism of either codebase; it's just what cross-paradigm porting looks like when both designs are well-thought-out within their own constraints.
 
 V5's blend variant is still the strategy I ship for game rendering: omyac renders only the visible layer, so it can't replace snap for the priority and control layers the game logic needs. But the next real move turned out not to be the dual-layer split this experiment pointed at: it was [porting the whole anchor graph](/omyac-upscaler-anchor-graph/), which now beats snap-blend on every PIC I've tested as a visible-layer upscaler.

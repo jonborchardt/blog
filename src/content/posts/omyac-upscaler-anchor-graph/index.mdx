@@ -52,8 +52,6 @@ This post documents the SCI0 port, the five engine-specific fixes that made it v
 
 `snap-v5-blend` already ships and renders. The omyac upscaler was initially registered alongside it as a separate strategy so the pic-dev sweep page could compare them side-by-side on the same PICs, a hedge in case omyac didn't pan out. The hedge wasn't needed. Once the five fixes below were in, omyac was better on every PIC I've put it against. The project is moving to it as the default PIC upscaler and snap-blend is on its way out of that path.
 
-Two scope caveats before the enthusiasm: omyac renders the **visible layer only**, at a fixed 320×190 → 6×. Game runtime also needs the priority and control layers (collision and depth sorting), which the snap lineage still provides. "Default upscaler" here means the PIC visual path, not the whole renderer.
-
 What omyac-upscaler buys at the algorithmic level, and what every snap-v\* iteration was trying to recover heuristically from a pixel-only representation:
 
 - **Lines at sub-cell precision.** Two adjacent native cells owned by the same polyline command project their anchors onto the segment between them at sub-cell precision. The Bresenham stroke between those anchors traces the actual line geometry, not a block-expansion of the line's cell mask. Diagonals stop looking staircased.
@@ -314,12 +312,6 @@ With all five fixes applied the upscaler produces output that:
 
 Diagonals are clean. Dithered regions are smooth. Background whites are white. Junctions where multiple polylines meet produce continuous geometry rather than stair-stepped block expansions. Solid-fill regions match the existing perceptual dither rendering for the same input bytes, with cleaner line geometry layered on top. On every PIC the sweep page can show, the omyac output looks like it was rendered by an engine that _understood_ the picture rather than one that was trying its best with the pixels it got. I'm committing to it as the default for the PIC visual path.
 
-## Still to validate: line weight against animated views
-
-PICs are only half the visual surface. Views (sprites, characters, props) come in as upscaled GIFs and composite on top of the PIC at runtime. snap-blend's line strokes are visibly thicker than omyac's, and the existing views were authored implicitly against that thicker line weight. omyac's cleaner, thinner lines may look out-of-balance next to the views in motion, even though the PIC itself is unambiguously better.
-
-If that turns out to be a problem the fix is shallow: widen omyac's stroke by planting larger anchor dots, drawing thicker Bresenham strokes, or post-thickening line-type pixels in a final pass. None of those are deep algorithmic changes; they're tuning knobs against a chosen target weight. But the right value can only be picked by eyeballing the composite of PIC + views in motion, which is the eval that's still to come. If the answer is "thinner lines are fine" we ship as-is; if it's "thinner lines clash" we add a stroke-width parameter and tune until the composite reads right. Either way it isn't a blocker for the migration, just the last tuning step in front of it.
-
 ## What still doesn't work: small highlights at 6× upscale
 
 One limitation: **isolated single-cell highlights don't fully expand at 6× scale.**
@@ -369,7 +361,7 @@ The port stayed shippable from the first compile. Each fix was a few lines in a 
 
 That worked because the algorithm's structure (provenance, anchors, topology, voting) is decoupled from its encoding (how a colour fits in a byte). Encoding fixes only touched the encoding boundary. Algorithm fidelity was never up for negotiation: the C reference passes intact, with adapter logic at the surface.
 
-The two strategies coexisted on purpose. Both registered through the same strategy interface, consumed the same SCI0 PIC bytestream, and produced the same RGBA output shape, so the sweep page could show omyac and snap-blend on the same PICs at the same time. Adding the port was a strict superset of existing functionality; nothing was replaced or torn out while the port was in flight. The verdict on PIC rendering is in: omyac wins and becomes the default. snap-blend stays registered as the comparison through the views-against-line-weight eval, and once that and any stroke-width tuning settle, it retires from the visible-layer PIC path (game runtime keeps snap for the priority and control layers omyac doesn't render).
+The two strategies coexisted on purpose. Both registered through the same strategy interface, consumed the same SCI0 PIC bytestream, and produced the same RGBA output shape, so the sweep page could show omyac and snap-blend on the same PICs at the same time. Adding the port was a strict superset of existing functionality; nothing was replaced or torn out while the port was in flight. The verdict on PIC rendering is in: omyac wins and becomes the default, and snap-blend retires from the visible-layer PIC path (game runtime keeps snap for the priority and control layers omyac doesn't render).
 
 The tempting alternative is a big-bang rewrite: branch the renderer pipeline and merge it back when "everything works." Every one of fixes 1–5 would then have surfaced during the merge instead of during development, argued about in aggregate rather than understood one at a time. A small, registered, side-by-side strategy makes it impossible to confuse "the algorithm is broken" with "this specific encoding boundary is broken," because the artefact is visible against a known-good comparison every time.
 
