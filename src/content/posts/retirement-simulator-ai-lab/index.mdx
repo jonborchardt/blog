@@ -21,9 +21,9 @@ import ExperimentCellViz from "./experiment-cell-viz.svg";
 import TheoryTestViz from "./theory-test-viz.svg";
 import ExperimentRoundViz from "./experiment-round-viz.svg";
 
-Every year I sit down and answer one question: **what's the earliest age I can stop working without ever running out of money?** Instead of a spreadsheet, I have retire-sim, a small deterministic historical-replay simulator that's become something more interesting: a lab, with a lab protocol, and an AI lab assistant that follows it. (The repo is private, so no link; the code described below is real, just not public.)
+Every year I sit down and answer one question: **what's the earliest age I can stop working without ever running out of money?** Instead of a spreadsheet, I have retire-sim, a small deterministic historical-replay simulator that's become something more interesting: a lab, with a lab protocol, and an AI lab assistant that follows it.
 
-<Figure caption="An earlier season's results grid. The 'deep guardrail 10y/25%' row beating the honest guardrail is exactly the guardrail trap described below; that row, the micro-cap tilt, and the golden-butterfly rows have since been deleted from the committed catalog (the bans are now enforced by the validator), so a fresh clone won't show those rows.">
+<Figure caption="An earlier season's results grid. The 'deep guardrail 10y/25%' row beating the honest guardrail is exactly the guardrail trap described below.">
   ![Results grid: strategy rows by retirement-age columns, each cell with survival and terminal wealth](./strategy-grid.png)
 
 </Figure>
@@ -32,7 +32,7 @@ Every year I sit down and answer one question: **what's the earliest age I can s
 
 Most retirement calculators sample random returns each year. That quietly erases the thing that actually kills retirements: _sequence-of-returns risk_, bad years arriving in the wrong order, right when you start withdrawing.
 
-retire-sim instead replays **every actual historical start year since 1928** (Damodaran's yearly data: inflation plus seven asset classes, from the S&P 500 and T-bills to home prices and gold, plus a silver column added later from a separate source). Retiring "into 1966" is one complete run, lived year by year in the order it really happened. 98 start years, 98 runs, exhaustively, not a random sample. I call each start year a cohort. Only the earlier half have a full lifetime of real data behind them: a run that outlives the dataset finishes on the dataset's own compound-growth year rather than wrapping around. Bad decades stay bad decades.
+retire-sim instead replays **every actual historical start year since 1928** (Damodaran's yearly data: inflation plus seven asset classes, from the S&P 500 and T-bills to home prices and gold, plus a silver column added later from a separate source). Retiring "into 1966" is one complete run, lived year by year in the order it really happened. 98 start years, 98 runs, exhaustively, not a random sample. I call each start year a **cohort**. Only the earlier half have a full lifetime of real data behind them: a run that outlives the dataset finishes on the dataset's own compound-growth year rather than wrapping around. Bad decades stay bad decades.
 
 ## A goal most tools don't have: never hit zero
 
@@ -68,12 +68,12 @@ The two inputs stay separate all the way through; only the run joins them:
   <ExperimentCellViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
 </VizFigure>
 
-<Figure caption="The wealth fan chart on the synthetic dataset. Screenshot from an earlier dataset revision with a longer horizon; the committed dataset has since shortened the horizon and added a two-person survivor model, so a fresh run ends in 2067.">
+<Figure caption="The wealth fan chart on the synthetic dataset.">
   ![Fan chart of wealth to 2071: 98 faint paths, a percentile band, a median line and a hover readout](./wealth-fan-chart.png)
 
 </Figure>
 
-## What twenty-seven rounds of experiments found
+## What twenty-seven (and counting) rounds of experiments found
 
 The single most useful move was diagnosing the **failure mode** before picking strategies. Which historical start years fail? There were two. Below a certain age the binding constraint wasn't markets at all, it was front-loaded school bills, which no allocation change fixes. Above it, the failing start years were the **1966–79 inflation cohorts**, not market crashes. That second fact predicted almost everything about which strategies worked:
 

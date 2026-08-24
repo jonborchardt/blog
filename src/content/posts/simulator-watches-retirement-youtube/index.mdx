@@ -14,12 +14,17 @@ draft: false
 ---
 
 import Figure from "@/components/blog/Figure.astro";
+import Quote from "@/components/blog/Quote.astro";
 import VizFigure from "@/components/blog/VizFigure.astro";
 import VerdictSets from "./verdict-set-arithmetic.svg";
 import PipelineViz from "./pipeline-viz.svg";
 import TriageViz from "./triage-viz.svg";
 
-Here's the problem. YouTube knows I'm interested in finances and retirement, so it feeds me a twenty-minute video every day: "If You're 55 With $2.5M, Watch This BEFORE You Retire." Some of them are genuinely good. Some are confidently wrong in ways that would cost years. And there's no way to tell which from the thumbnail: the production quality of the good ones and the bad ones is identical, and they all say "sequence-of-returns risk" in the first ninety seconds.
+Here's the problem. YouTube knows I'm interested in finances and retirement, so it feeds me a twenty-minute video every day:
+
+<Quote>If You're 55 With $2.5M, Watch This BEFORE You Retire</Quote>
+
+Some of them are genuinely good. Some are confidently wrong in ways that would cost years. And there's no way to tell which from the thumbnail: the production quality of the good ones and the bad ones is identical, and they all say "sequence-of-returns risk" in the first ninety seconds.
 
 I used to watch them. Now I paste the URL into a text file in [my simulator](/retirement-simulator-ai-lab/) and walk away. Dozens of videos later, I've watched none of them, and I know more about what's in them than I would have if I had.
 
@@ -41,7 +46,7 @@ The whole thing is a short pipeline from a text file to a scoreboard, and the sc
 
 `videos.md` is one YouTube URL per line. That's the whole interface. When there are a few, I tell Claude Code "run the queue" and a skill called **theory-queue** takes over: it works down the file, runs each pending URL through the full pipeline, and appends `DONE` to the line the moment its verdict lands, not in a batch at the end, so an interrupted session loses nothing.
 
-Two cheap checks happen before any real work. It dedupes on the 11-character video id (I paste the same video twice more often than I'd like to admit). And it fetches just the transcript header to get the channel name and looks it up in the scoreboard: if that channel already has two videos rated _harmful_, the queue marks the line `SKIPPED-CHANNEL` and moves on. One bad video is never enough to skip a channel; everyone has an off day. The second one earns it.
+Two cheap checks happen before any real work. It dedupes on the 11-character video id. And it fetches just the transcript header to get the channel name and looks it up in the scoreboard: if that channel already has two videos rated _harmful_, the queue marks the line `SKIPPED-CHANNEL` and moves on. One bad video is never enough to skip a channel; everyone has an off day. The second one earns it.
 
 ## Captions, not video
 
@@ -102,7 +107,7 @@ That last question is the tell. The cash-bucket video's story was "protects you 
   </VizFigure>
 </Figure>
 
-The last section of every report is the steelman: what did the source get _right_? Even a losing video usually names a real risk or a discipline worth keeping, and I want that residue on record rather than "video bad, next."
+The last section of every report is the steelman: what did the source get _right_? Even a losing video usually names a real risk or a discipline worth keeping, and I want that residue on record rather than "video bad."
 
 ## Where it all lands
 
