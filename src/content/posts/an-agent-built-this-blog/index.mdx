@@ -1,6 +1,6 @@
 ---
 title: An Agent Built This Blog
-description: Eleven planned commits in 79 minutes, a shippable site the same afternoon — and the validation gauntlet that makes agent publishing safe.
+description: Eleven planned commits in 79 minutes, a shippable site the same afternoon, and the validation gauntlet that makes agent publishing safe.
 publishedAt: 2026-08-19
 series: agent-built
 seriesOrder: 1
@@ -20,13 +20,13 @@ import VizFigure from "@/components/blog/VizFigure.astro";
 import Timeline from "./day-one-timeline.svg";
 import GatesViz from "@/assets/diagrams/gates-viz.svg";
 
-This site was written by a coding agent: the code, the styles, the tests, the prose you're
-reading now. Lots of people say that lately, so this series comes with the git log attached.
+This site was built by a coding agent: the code, the styles, the tests, and much of the prose
+you're reading now. Lots of people say that lately, so this series comes with the git log attached.
 The git history is public and it says: initial commit at 12:35 on a Sunday afternoon, eleven
 planned feature commits between 12:45 and 14:04, and a deployed, tested, accessibility-audited
 site by evening. This first post is about how that afternoon went and why it worked. The short
 answer isn't "the model is magic." It's that the repository was designed so that a worker with
-no memory and no ego can't leave it in a broken state. The log also hides something: the
+no memory and no ego can't leave it in a broken state. The log also leaves something out: the
 architecture was argued out and the eleven plans were written and reviewed *before* 12:35. That
 half of the story, the human's half, is in
 [How I Code with Agents Today](/how-i-code-with-agents-today/); this post is the receipts.
@@ -48,17 +48,17 @@ a site that passed its own launch checklist.
       columns: ["Time", "Commit"],
       rows: [
         ["12:35", "Scaffold + 751-line implementation program"],
-        ["12:45", "Plan 1 — foundation fixes, trustworthy tests"],
-        ["12:53", "Plan 2 — design tokens, chrome, homepage, 404"],
-        ["12:58", "Plan 3 — article page, images, series nav"],
-        ["13:11", "Plan 4 — shared MDX primitives, reference posts"],
-        ["13:16", "Plan 5 — build-time diagrams and math"],
-        ["13:24", "Plan 6 — SEO, social cards, feeds"],
-        ["13:30", "Plan 7 — build-output validation"],
-        ["13:41", "Plan 8 — archive explorer island"],
-        ["13:52", "Plan 9 — dev-only admin"],
-        ["13:57", "Plan 10 — agent skills and docs"],
-        ["14:04", "Plan 11 — launch QA and performance"],
+        ["12:45", "Plan 1: foundation fixes, trustworthy tests"],
+        ["12:53", "Plan 2: design tokens, chrome, homepage, 404"],
+        ["12:58", "Plan 3: article page, images, series nav"],
+        ["13:11", "Plan 4: shared MDX primitives, reference posts"],
+        ["13:16", "Plan 5: build-time diagrams and math"],
+        ["13:24", "Plan 6: SEO, social cards, feeds"],
+        ["13:30", "Plan 7: build-output validation"],
+        ["13:41", "Plan 8: archive explorer island"],
+        ["13:52", "Plan 9: dev-only admin"],
+        ["13:57", "Plan 10: agent skills and docs"],
+        ["14:04", "Plan 11: launch QA and performance"],
         ["Session 2, 14:22–20:49", "Logo redesigned, added first content"],
         [
           "Session 3, 15:07–00:10",
@@ -74,18 +74,6 @@ a site that passed its own launch checklist.
   </VizFigure>
 </Figure>
 
-The gaps between plan commits ran five to thirteen minutes; the median was about eight. The
-longest, Plan 4 at thirteen minutes, built the entire shared MDX component library *and* two real
-posts to exercise it. The rest of the day (six and a half more hours, thirty-four commits in
-total) was everything the sprint wasn't: logo taste loops, first content, CI polish, one
-publish that got reverted fifteen minutes later.
-
-<Aside>
-  The implementation program itself was deleted from the working tree at 14:54, once its job was
-  done. It still exists in git history, which is the right place for a spec that has been fully
-  absorbed into code and tests.
-</Aside>
-
 ## What the eleven plans were
 
 The ordering is the interesting part. Plan 1 wasn't a feature. It fixed four latent defects in
@@ -95,17 +83,17 @@ later claim the suite makes is untrustworthy. Validation you can fool is worse t
 
 <Details summary="All eleven plans, one line each">
 
-1. **Foundation fixes and trustworthy tests** — four latent scaffold bugs fixed; e2e moved to a dedicated port so a stray dev server can never be tested by mistake.
-2. **Design system, chrome, homepage, 404** — every colour, size and width as a token in one file; header, footer and theme toggle in plain Astro, zero React.
-3. **Article page, images, series navigation** — hero, table of contents, heading anchors, reading time, responsive image pipeline.
-4. **Shared MDX primitives and reference posts** — Callout, Figure, Tabs, Steps and friends as static components; real published posts double as permanent e2e fixtures.
-5. **Diagrams and math** — diagrams as hand-drawn inline SVG, math via KaTeX rendered to static markup at build time; zero client scripts.
-6. **SEO, social cards, feeds** — a generated Open Graph card for every post, JSON-LD, RSS.
-7. **Build-output validation** — parse every built HTML page; fail the build on broken links, missing alt text, missing metadata, leaked dev pages.
-8. **Archive explorer** — the one React island in site chrome: search, filters, URL state.
-9. **Dev-only admin** — forms that rewrite the typed config registries; never in a production build.
-10. **Agent skills and docs** — the post scaffold command and the procedural skills agents follow.
-11. **Launch QA and performance** — Lighthouse targets, a JavaScript budget test, keyboard and screen-reader passes.
+1. **Foundation fixes and trustworthy tests**: four latent scaffold bugs fixed; e2e moved to a dedicated port so a stray dev server can never be tested by mistake.
+2. **Design system, chrome, homepage, 404**: every colour, size and width as a token in one file; header, footer and theme toggle in plain Astro, zero React.
+3. **Article page, images, series navigation**: hero, table of contents, heading anchors, reading time, responsive image pipeline.
+4. **Shared MDX primitives and reference posts**: Callout, Figure, Tabs, Steps and friends as static components; real published posts double as permanent e2e fixtures.
+5. **Diagrams and math**: diagrams as hand-drawn inline SVG, math via KaTeX rendered to static markup at build time; zero client scripts.
+6. **SEO, social cards, feeds**: a generated Open Graph card for every post, JSON-LD, RSS.
+7. **Build-output validation**: parse every built HTML page; fail the build on broken links, missing alt text, missing metadata, leaked dev pages.
+8. **Archive explorer**: the one React island in site chrome (search, filters, URL state).
+9. **Dev-only admin**: forms that rewrite the typed config registries; never in a production build.
+10. **Agent skills and docs**: the post scaffold command and the procedural skills agents follow.
+11. **Launch QA and performance**: Lighthouse targets, a JavaScript budget test, keyboard and screen-reader passes.
 
 </Details>
 
@@ -117,8 +105,8 @@ suite. "Always shippable" was the execution discipline before it was the site's 
 
 ## Six gates between an agent and a published page
 
-Here is the actual thesis. Agents are fast, tireless, and amnesiac — every session starts from
-zero. You don't fix that with vigilance; you fix it by making the repository refuse invalid
+Agents are fast, tireless, and amnesiac: every session starts from zero. You don't fix that
+with vigilance; you fix it by making the repository refuse invalid
 states. A post on this site passes through six layers of validation, each at a different stage,
 each failing loudly:
 
@@ -138,7 +126,7 @@ dimensions, or a missing canonical URL. Finally Playwright runs against the prod
 its own port, with an axe WCAG 2.2 AA audit of every page in the sitemap and a hard budget of
 zero external scripts on prose pages.
 
-What makes the gauntlet agent-friendly is the error messages, not the failing. House
+What makes the gauntlet agent-friendly is the error messages, not the failures. House
 rule: every message says what is wrong *and* what to change. Real examples:
 
 - `description must be 40-160 characters for search/social previews (got 187)`
@@ -166,18 +154,21 @@ posts still use it, the admin refuses and lists them.
 
 ## What "an agent built this" means
 
-Precision matters on a claim like this, so: the agent wrote all of the code and all of the prose.
-A human, the site's owner, decided the invariants (static HTML, flat URLs, no drafts in
-production, WCAG 2.2 AA), wrote the scaffold and planning prompts, had a second model review
-the plans before the agent ran them, and made the taste calls. Every commit carries the human's
-git identity. The four logo redesigns in thirty-eight
-minutes are what direction looks like in the log: an agent proposing, a human saying "again."
-One social-card image was hand-made. A handful of commit messages ("gitignor", "fixes") are
-plainly human-typed. And the one same-day publish got reverted fifteen minutes later. The
-process isn't infallible; it's arranged so failures are cheap and visible.
+Precision matters on a claim like this. The agent wrote all of the code; the prose was joint
+work, with the human writing plenty of it and editing the rest. The human, the site's owner,
+also decided the invariants (static HTML, flat URLs, no drafts in production, WCAG 2.2 AA),
+wrote the scaffold and planning prompts, and had a second model review the plans before the
+agent ran them.
 
-The division of labour: the human was the product owner and editor; the agent was the
-entire engineering and writing staff. The rest of this series covers what that staff can do:
+The division of labour: the human was the product owner, the editor, and a writer; the agent
+was the engineering staff and the other writer. The human decided what the site is for, which
+posts exist, and what each one is allowed to claim; drafted and rewrote prose; and rejected
+work that missed the mark. The agent implemented every feature, built the validation gates
+that police its own future sessions, drew the diagrams, and drafted the passages the human
+then shaped. Every commit carries the human's git identity, because the human is the one
+accountable for what ships.
+
+The rest of this series covers what this arrangement can do:
 [the authoring vocabulary](/the-authoring-surface/) this post is written in, and
 [the editorial pipeline](/repos-as-experts/) that turns other repositories into consulted
 experts for their own posts.
