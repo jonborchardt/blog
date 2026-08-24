@@ -13,7 +13,10 @@ hero:
 draft: false
 ---
 
+import { Image } from "astro:assets";
 import Callout from "@/components/blog/Callout.astro";
+import priorityMap from "./priority-map.png";
+import controlMap from "./control-map.png";
 import Figure from "@/components/blog/Figure.astro";
 import VizFigure from "@/components/blog/VizFigure.astro";
 import GapClosure from "./gap-closure.svg";
@@ -35,7 +38,7 @@ import roomBurgerExterior from "./sweep-room-burger-exterior.svg";
 import roomDesert from "./sweep-room-desert.svg";
 import sweepAi from "./sweep-original-vs-ai-upscale.svg";
 
-Sierra On-Line's SCI0 engine draws backgrounds as vector commands: lines, patterns, and flood fills executed in sequence at 320x190. It works perfectly at native resolution. But render those same commands at 2x, 3x, or higher? Fills leak through hairline gaps that didn't exist at 320 pixels wide, and your pristine space bar becomes a watercolor disaster.
+Sierra On-Line's SCI0 engine draws backgrounds as vector commands: lines, patterns, and flood fills executed in sequence at 320x190. It works perfectly at native resolution. But render those same commands at 2x, 3x, or higher? Fills leak through hairline gaps that didn't exist at 320 pixels wide.
 
 This is the problem **snap-blend** solves.
 
@@ -226,7 +229,7 @@ Across the test corpus at 6x, snap-blend produced no catastrophic fill floods: e
 
 It's the production strategy (registered as `snap-v5-blend`) for my sci.js project, a TypeScript reimplementation of the SCI0 engine focused on making Space Quest 3 playable in the browser with upscaled visuals, built on [32bitkid's `@4bitlabs` decoding libraries](https://github.com/32bitkid/sci.js).
 
-Each comparison below sweeps between the two renders of one Space Quest 3 room; the labels in the bottom corners say which is which.
+Each comparison below sweeps between the two renders of one Space Quest 3 room.
 
 <Figure caption="Native 320x190 render versus snap-blend at 6x: identical regions, cleaner lines." zoom>
   <img
@@ -361,21 +364,29 @@ That works for screenshots. It breaks down for a renderer.
 
 SCI0 backgrounds are not just images, they are structured scenes with implicit gameplay constraints. Walkable areas, object boundaries, and interaction zones all depend on the exact shape of regions. Because generative models can shift those boundaries unpredictably, AI is better treated as a constrained enhancement layer on top of a deterministic renderer.
 
-Different colors tell the engine if the avatar should be seen in front or behind them.
+**The priority map, below:** different colors tell the engine if the avatar should be seen in front or behind them.
 
-![The hangar priority map: flat cyan, blue, magenta and red regions on black, one per depth band](./priority-map.png)
+<Image
+  src={priorityMap}
+  alt="The hangar priority map: flat cyan, blue, magenta and red regions on black, one per depth band"
+  class="rounded-md border"
+/>
 
-White areas block the avatar. Black areas are walkable with no trigger. Any other colour is walkable _and_ triggers an event when walked over.
+**The control map, below:** white areas block the avatar. Black areas are walkable with no trigger. Any other colour is walkable _and_ triggers an event when walked over.
 
-![The same room's control map: mostly white, with black walkable bands and green event-trigger patches](./control-map.png)
-
-![An AI-generated scene: two red-mohawked alien guards in sunglasses facing a mustached man in a suit](./ai-upscaled-scene.png)
+<Image
+  src={controlMap}
+  alt="The same room's control map: mostly white, with black walkable bands and green event-trigger patches"
+  class="rounded-md border"
+/>
 
 ## The road here
 
 This was strategy v5 out of ten attempts. Strategies v1 through v4 each solved part of the problem (better line expansion, smarter gap detection) but none handled the full space of edge cases. The native render oracle was the breakthrough: instead of trying to predict where gaps would form, just render at native res first and let the result tell you what's correct. v6 through v10 explored alternatives; v10 even improved the metric slightly, but not visibly enough to earn a switch; that detour has [its own write-up](/agi-up-as-a-reference-renderer/). And one successor isn't a snap variant at all: [the anchor-graph upscaler](/omyac-upscaler-anchor-graph/), a separate paradigm that has since won the PIC visual path. `snap-v5-blend` remains the game-runtime strategy, because the anchor-graph renderer doesn't produce the priority and control layers the engine needs.
 
 Sometimes the best algorithm is "do it twice (or ten times) and compare."
+
+![An AI-generated scene: two red-mohawked alien guards in sunglasses facing a mustached man in a suit](./ai-upscaled-scene.png)
 
 <Callout variant="note">
   All original background assets are the property of [Sierra On-Line](https://www.sierragames.com/). Their exact copyright status varies by title and jurisdiction, and this project does not attempt to reinterpret or redistribute those assets beyond rendering them in a different form. If you are interested in these games, the right move is to support the original creators and rights holders wherever those titles are available today.
