@@ -7,7 +7,7 @@ tags: [engineering, ai-assisted-coding, llm, nlp, knowledge-graph, data-viz]
 authority: 'E:\github2\captions'
 hero:
   src: ./hero.png
-  alt: Episode reels feeding a claim graph with a highlighted contradiction edge and transcript tethers
+  alt: "Why Files Database share card: a UFO beams down over dark mountains beside the site title and moon"
 draft: false
 ---
 
@@ -81,7 +81,7 @@ The **Why Files Database** is a public, read-only research index of every public
   <Image src={counterfactualSlider} alt="A claim card with its slider pinned to false; a related claim drops from 0.90 to 0.54" />
 </Figure>
 
-The rule, in one line: **no claim without evidence**. Every relationship, truth judgment, and contradiction carries a transcript id and character span.
+Everything above obeys one rule: **no claim without evidence**. Every relationship, truth judgment, and contradiction carries a transcript id and character span.
 
 ![The about page walking from story-arc chart to claim to transcript evidence to contradiction card](./about-page-claim-to-tape.png)
 
@@ -110,8 +110,6 @@ The current version uses two zero-shot neural models running as Python sidecars:
 - **GLiREL** for relation extraction. Twenty-nine typed predicates, with a confidence threshold tuned against the corpus; the config supports per-predicate thresholds, though today all 29 share one value. Every edge carries the exact sentence span it was extracted from.
 
 Node spawns the Python sidecars per transcript, one batched call each, and parses the JSON back. If Python is missing or a sidecar errors, the pipeline logs a warning and keeps going: graceful degradation.
-
-There's no regex in the extraction path anymore. The old `src/nlp/` module was deleted.
 
 ### 3. Cross-transcript canonicalization
 
@@ -204,7 +202,7 @@ A few things that were not at all obvious when I started:
 
 **Zero-shot beats a regex table for everything except artifacts.** GLiNER and GLiREL handle the entity and relation cases that used to need hundreds of lines of pattern code, and they generalize to new topics for free. Where they fail is the predictable junk: `[music]` cue tags, "the narrator," role nouns like "host" or "guest" that the model treats as person mentions. Those go in a code-level deletion list that auto-applies on every rebuild. Neural for content, hard-coded filters for noise; neither worked alone.
 
-**Stance is more important than truth.** Initially I had every claim get a `directTruth` score and that was it. The result was a mess of 0.3-confidence "factoids" where the host was clearly _rejecting_ the claim (he'd just laid out a fringe theory in order to debunk it), but the extractor scored it as low-confidence assertion. Adding `hostStance: "denies"` made the cross-video reasoning coherent — now if episode 80 rejects "the moon landing was faked" and episode 12 presupposes it, the contradiction surfaces correctly. Across the corpus today: 2,609 asserts, 234 denies, 91 uncertain, 73 steelman (and 83 unset) of 3,090 claims.
+**Stance is more important than truth.** Initially I had every claim get a `directTruth` score and that was it. The result was a mess of 0.3-confidence "factoids" where the host was clearly _rejecting_ the claim (he'd just laid out a fringe theory in order to debunk it), but the extractor scored it as low-confidence assertion. Adding `hostStance: "denies"` made the cross-video reasoning coherent: now if episode 80 rejects "the moon landing was faked" and episode 12 presupposes it, the contradiction surfaces correctly. Across the corpus today: 2,609 asserts, 234 denies, 91 uncertain, 73 steelman (and 83 unset) of 3,090 claims.
 
 **Single-sentence evidence beats paragraph evidence.** The first claims prompt let the model pick "evidence" of any length. The model picked paragraphs. The result was a UI where every claim had a very long evidence quote that you couldn't actually verify: too much to cross-check, too much to skim. Forcing 60–150 character target evidence cleaned this up dramatically. Multiple narrow quotes per claim turned out to be much more useful than one long one; you could see _the specific sentences_ the extractor was keying on.
 
@@ -212,7 +210,7 @@ A few things that were not at all obvious when I started:
 
 **Cross-video contradictions need a verification pass.** Embedding-cosine similarity is _good_ at finding "two claims that talk about Tesla" and _bad_ at finding "two claims that disagree about Tesla." The first version of the contradictions page was mostly noise. Adding an AI verification step that assigns every candidate pair a verdict of one of seven kinds before anything surfaces took the false-positive rate from "embarrassing" to "low single digits." The verdicts themselves make the point: of 141 candidate pairs the embeddings proposed, the single biggest bucket was two episodes _agreeing_.
 
-<Figure caption="What 141 embedding-proposed candidate pairs actually turned out to be. Only the four contradiction classes — one strict logical contradiction, 7 debunks, 18 undercuts, 8 alternatives — are allowed to surface as contradictions; the biggest bucket, same-claim, is agreement and feeds the consonance page; complementary and irrelevant are dropped. A verdict only takes effect while its pair is still in the current candidate pool, so the live site shows fewer: 17 cross-video contradictions and 50 agreements today.">
+<Figure caption="What 141 embedding-proposed candidate pairs actually turned out to be. Only the four contradiction classes (one strict logical contradiction, 7 debunks, 18 undercuts, 8 alternatives) are allowed to surface as contradictions; the biggest bucket, same-claim, is agreement and feeds the consonance page; complementary and irrelevant are dropped. A verdict only takes effect while its pair is still in the current candidate pool, so the live site shows fewer: 17 cross-video contradictions and 50 agreements today.">
   <VizFigure
     name="AI verdicts on 141 cross-video candidate pairs"
     summary="A bar chart of the seven verdict classes: same-claim 63, complementary 34, undercuts 18, irrelevant 10, alternative 8, debunks 7, and just one strict logical contradiction. Only 34 of the 141 pairs are contradiction-class; embeddings find topical overlap, and most overlap is agreement or noise."
@@ -234,7 +232,7 @@ A few things that were not at all obvious when I started:
   </VizFigure>
 </Figure>
 
-**Operator corrections are high-value feedback.** Every time a human (me, mostly) hits "dismiss this contradiction" or "override this claim's truth" or "merge these two entities," that's signal. The aliases file stores it all, the metrics module counts it all, and the calibration bundle script feeds the most-confirmed examples back as few-shot context for future AI sessions. There's no training step involved, just example injection. The signal so far is almost entirely entity-level — over a thousand not-the-same rulings and hundreds of merges — and it noticeably improves new extractions.
+**Operator corrections are high-value feedback.** Every time a human hits "dismiss this contradiction" or "override this claim's truth" or "merge these two entities," that's signal. The aliases file stores it all, the metrics module counts it all, and the calibration bundle script feeds the most-confirmed examples back as few-shot context for future AI sessions. There's no training step involved, just example injection. The signal so far is almost entirely entity-level (over a thousand not-the-same rulings and hundreds of merges), and it noticeably improves new extractions.
 
 **Local-first was the right call.** Transcripts and the derived index live on disk under `data/`, committed alongside the code, and the Pages deploy copies them straight into the static site. Builds are fast, extraction is offline, and the whole thing works without an internet connection once the transcripts are fetched.
 
@@ -262,7 +260,3 @@ All transcripts belong to [The Why Files](https://thewhyfiles.com) and AJ Gentil
 The point of this project is to make the show _more_ fun to engage with, not to summarize it away. If you find a contradiction that's interesting, the most rewarding thing you can do is click through to the transcript span and watch the moment in the actual episode.
 
 That was the goal from day one. **Trace claims back to the tape.**
-
----
-
-_Built with TypeScript, Node, GLiNER, GLiREL, sentence-transformers, React, Vite, and Claude Code. Source on [GitHub](https://github.com/jonborchardt/wfd)._
