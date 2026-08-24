@@ -39,7 +39,7 @@ The ladder is a chain of early exits: the first rung that holds ends the climb, 
 
 <VizFigure
   name="The ponytail ladder as a chain of early exits"
-  summary="Seven questions asked in order before writing code, drawn as a ladder. Each rung that holds exits immediately — skipping the work entirely, or reusing what the codebase, standard library, platform, or an installed dependency already provides, down to a one-liner. Only when every rung fails does the model write the minimum code that works, and any deliberate corner it cuts there gets a ponytail comment naming the ceiling."
+  summary="Seven questions asked in order before writing code, drawn as a ladder. Each rung that holds exits immediately, skipping the work entirely or reusing what the codebase, standard library, platform, or an installed dependency already provides, down to a one-liner. Only when every rung fails does the model write the minimum code that works, and any deliberate corner it cuts there gets a ponytail comment naming the ceiling."
 >
   <LadderViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
 </VizFigure>
@@ -68,7 +68,7 @@ Fingerprints on one hobby codebase are suggestive, not proof. So I've also been 
 
 <VizFigure
   name="How the PR replay was run"
-  summary="For each issue in a merged PR's history, the repository is checked out at the commit just before that issue was raised or fixed. Each review lens — ponytail, Superpowers, and a generic AI review — is run cold on that snapshot with the same underlying model and no hint of the expected finding. Its output is then compared with what the generic AI review and the human reviewers actually recorded at the time."
+  summary="For each issue in a merged PR's history, the repository is checked out at the commit just before that issue was raised or fixed. Each review lens (ponytail, Superpowers, and a generic AI review) is run cold on that snapshot with the same underlying model and no hint of the expected finding. Its output is then compared with what the generic AI review and the human reviewers actually recorded at the time."
 >
   <PrReplayViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
 </VizFigure>

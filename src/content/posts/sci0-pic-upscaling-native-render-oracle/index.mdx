@@ -95,7 +95,7 @@ Snap-blend fixes this by altering the rendering directly.
 
 <VizFigure
   name="The snap-blend rendering pipeline"
-  summary="The PIC command stream is rendered once at native resolution to record how many pixels each FILL touches. The same commands are then rendered at the target scale: lines get snapped endpoints, and before each fill a micro-gap pass closes diagonal gaps. Each fill runs under a guard — if it exceeds five times its native count times scale squared, or forty percent of the screen, it is rolled back mid-fill. A fill that ends with zero pixels while its native count is non-zero is recovered by blitting the nearest-neighbour scaled native mask; undershoots pass through untouched. A final dither-to-RGBA blend runs over the whole canvas."
+  summary="The PIC command stream is rendered once at native resolution to record how many pixels each FILL touches. The same commands are then rendered at the target scale: lines get snapped endpoints, and before each fill a micro-gap pass closes diagonal gaps. Each fill runs under a guard: if it exceeds five times its native count times scale squared, or forty percent of the screen, it is rolled back mid-fill. A fill that ends with zero pixels while its native count is non-zero is recovered by blitting the nearest-neighbour scaled native mask; undershoots pass through untouched. A final dither-to-RGBA blend runs over the whole canvas."
 >
   <SnapBlendPipelineViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
 </VizFigure>
@@ -172,7 +172,7 @@ If a fill blows far past its native-predicted area, it's a leak; the guard unwin
 
 ### 4. Native-mask fallback
 
-When a fill ends with zero pixels — rolled back by the guard, or its seed never produced one — while the native render says the region should have some, the corresponding region from the native render is nearest-neighbor-scaled and composited in. Correctness is preserved at the cost of sharpness in that region, but in practice, fallback fires rarely.
+When a fill ends with zero pixels (rolled back by the guard, or its seed never produced one) while the native render says the region should have some, the corresponding region from the native render is nearest-neighbor-scaled and composited in. Correctness is preserved at the cost of sharpness in that region, but in practice, fallback fires rarely.
 
 ```plaintext
 function blitNativeMask(scaledCanvas, nativeCanvas, fillCmd, scale):
@@ -198,7 +198,7 @@ A cosmetic post-process. SCI0 uses dithered patterns to simulate colors beyond t
 //   C L C L        perceptual mix of the pair
 //   L C L C
 
-// No pattern detection needed — the byte itself names both colours.
+// No pattern detection needed; the byte itself names both colours.
 for each pixel byte in output:
     rgba = BLEND_TABLE[byte]   // precomputed okLab mix of the pair
 ```

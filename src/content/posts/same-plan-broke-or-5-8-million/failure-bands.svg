@@ -4,15 +4,15 @@
     <line x1="81" y1="36" x2="81" y2="196"/><line x1="138" y1="36" x2="138" y2="196"/><line x1="195" y1="36" x2="195" y2="196"/><line x1="251" y1="36" x2="251" y2="196"/><line x1="308" y1="36" x2="308" y2="196"/><line x1="365" y1="36" x2="365" y2="196"/><line x1="422" y1="36" x2="422" y2="196"/><line x1="478" y1="36" x2="478" y2="196"/><line x1="535" y1="36" x2="535" y2="196"/><line x1="592" y1="36" x2="592" y2="196"/>
   </g>
   <!-- row 1: textbook plan -->
-  <text x="70" y="48" fill="currentColor">textbook plan — 60/40, 4% spending · fails 1964–68 · 5 of 98 (94.9%)</text>
+  <text x="70" y="48" fill="currentColor">textbook plan: 60/40, 4% spending · fails 1964–68 · 5 of 98 (94.9%)</text>
   <rect x="70" y="54" width="550" height="18" fill="currentColor" fill-opacity="0.06"/>
   <rect x="274.1" y="54" width="27.7" height="18" fill="#f0b35a"/>
   <!-- row 2: bond-heavier -->
-  <text x="70" y="104" fill="currentColor">bond-heavier — 40/60, same spending · fails 1961–68 · 8 of 98 (91.8%)</text>
+  <text x="70" y="104" fill="currentColor">bond-heavier: 40/60, same spending · fails 1961–68 · 8 of 98 (91.8%)</text>
   <rect x="70" y="110" width="550" height="18" fill="currentColor" fill-opacity="0.06"/>
   <rect x="257.1" y="110" width="44.7" height="18" fill="#f0b35a"/>
   <!-- row 3: higher spending -->
-  <text x="70" y="160" fill="currentColor">higher spending — 60/40, 5% · fails 1928–29, 1936, 1956, 1959–73, 1999–2000 · 21 of 98 (78.6%)</text>
+  <text x="70" y="160" fill="currentColor">higher spending: 60/40, 5% · fails 1928–29, 1936, 1956, 1959–73, 1999–2000 · 21 of 98 (78.6%)</text>
   <rect x="70" y="166" width="550" height="18" fill="currentColor" fill-opacity="0.06"/>
   <rect x="70" y="166" width="10.7" height="18" fill="#f0b35a"/>
   <rect x="115.4" y="166" width="5" height="18" fill="#f0b35a"/>

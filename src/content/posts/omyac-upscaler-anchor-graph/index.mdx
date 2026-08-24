@@ -1,6 +1,6 @@
 ---
 title: "omyac-upscaler: all the way into the anchor graph"
-description: Porting agi-up's anchor-graph upscaler to SCI0 PICs — four colour-model fixes, one convention fix, and why snap-blend is leaving the PIC path.
+description: "Porting agi-up's anchor-graph upscaler to SCI0 PICs: four colour-model fixes, one convention fix, and why snap-blend is leaving the PIC path."
 publishedAt: 2026-08-18
 updatedAt: 2026-08-19
 series: sierra-games
@@ -63,7 +63,7 @@ The pixel-space approach was always going to hit a ceiling. Reasoning about comm
 
 ## Step 1: port to TypeScript first, fix the gaps after
 
-The first commit was the algorithm pass-for-pass: types ported, control flow ported, no semantic changes. It compiled and produced output immediately, and that output was _almost_ right — clear diagonal lines, recognisable shapes, plausible fills. Most of the image looked correct enough to feel like the port was done.
+The first commit was the algorithm pass-for-pass: types ported, control flow ported, no semantic changes. It compiled and produced output immediately, and that output was _almost_ right: clear diagonal lines, recognisable shapes, plausible fills. Most of the image looked correct enough to feel like the port was done.
 
 Almost-right images are dangerous because they hide structural problems behind partial correctness. The wrongness was concentrated in regions where SCI0's colour conventions diverge from AGI's, and most of it could be made visible only by checking the algorithm against PICs that exercised those conventions.
 
@@ -132,11 +132,11 @@ Fill (and background) anchors connect to same-colour neighbours, with one struct
 
 At the upscaled resolution, draw a Bresenham line between each pair of connected anchors. The stroke uses a half-A / half-B colour scheme: the first half is the source cell's colour, the second half is the destination cell's. Two same-colour cells produce a uniform line; two different-colour cells produce a half-and-half transition at the midpoint.
 
-After all anchor-to-anchor connections, run a pass for connections that leave the canvas (so lines trail off cleanly at the boundary). Finally plant anchor dots — single-pixel writes at each anchor position — so they appear on top of any Bresenham line that crossed through them.
+After all anchor-to-anchor connections, run a pass for connections that leave the canvas (so lines trail off cleanly at the boundary). Finally plant anchor dots (single-pixel writes at each anchor position) so they appear on top of any Bresenham line that crossed through them.
 
 The output at this point is a sparse wireframe: anchors connected by Bresenham strokes against a mostly-empty background.
 
-<Figure caption="The wireframe stage on the spacecraft PIC, before any enhance pass. The hot pink is every pixel not yet written — expected here, mid-pipeline, unlike pink in final output.">
+<Figure caption="The wireframe stage on the spacecraft PIC, before any enhance pass. The hot pink is every pixel not yet written, expected here, mid-pipeline, unlike pink in final output.">
   ![Pre-enhance hybrid render: anchor strokes and dots trace the scene over a hot-pink unwritten field](./wireframe-pre-enhance.png)
 
 </Figure>
@@ -171,10 +171,10 @@ All four symptoms had the same shape of cause: assumptions baked into the C refe
 
 AGI stores pixel colour as a raw 4-bit palette index: one byte per pixel, and the byte _is_ the colour. SCI0 uses the same byte width but **packs two 4-bit colours into it**: `(high << 4) | low`. Solid colours have matching nibbles (`0xff` = white); dithered colours don't (`0x3b` = a cyan + light cyan pair, rendered as alternating-pixel checkerboard at native).
 
-<Figure caption="One byte per pixel in both engines, but SCI0 packs two nibbles into it — and its white byte is also its “never painted” sentinel.">
+<Figure caption="One byte per pixel in both engines, but SCI0 packs two nibbles into it, and its white byte is also its “never painted” sentinel.">
   <VizFigure
     name="AGI versus SCI0 pixel byte layout"
-    summary="AGI uses only the low nibble of the byte, so 0xff is out of range and unambiguously means untouched. SCI0 uses both nibbles: matching nibbles are a solid (0x33), differing nibbles are a dither pair (0x3b), and 0xff is both solid white and the untouched sentinel — the collision that fixes 2 and 5 resolve."
+    summary="AGI uses only the low nibble of the byte, so 0xff is out of range and unambiguously means untouched. SCI0 uses both nibbles: matching nibbles are a solid (0x33), differing nibbles are a dither pair (0x3b), and 0xff is both solid white and the untouched sentinel, the collision that fixes 2 and 5 resolve."
   >
     <BytePacking class="h-auto w-full max-w-2xl" aria-hidden="true" />
   </VizFigure>
@@ -316,7 +316,7 @@ Diagonals are clean. Dithered regions are smooth. Background whites are white. J
 
 ## Still to validate: line weight against animated views
 
-PICs are only half the visual surface. Views — sprites, characters, props — come in as upscaled GIFs and composite on top of the PIC at runtime. snap-blend's line strokes are visibly thicker than omyac's, and the existing views were authored implicitly against that thicker line weight. omyac's cleaner, thinner lines may look out-of-balance next to the views in motion, even though the PIC itself is unambiguously better.
+PICs are only half the visual surface. Views (sprites, characters, props) come in as upscaled GIFs and composite on top of the PIC at runtime. snap-blend's line strokes are visibly thicker than omyac's, and the existing views were authored implicitly against that thicker line weight. omyac's cleaner, thinner lines may look out-of-balance next to the views in motion, even though the PIC itself is unambiguously better.
 
 If that turns out to be a problem the fix is shallow: widen omyac's stroke by planting larger anchor dots, drawing thicker Bresenham strokes, or post-thickening line-type pixels in a final pass. None of those are deep algorithmic changes; they're tuning knobs against a chosen target weight. But the right value can only be picked by eyeballing the composite of PIC + views in motion, which is the eval that's still to come. If the answer is "thinner lines are fine" we ship as-is; if it's "thinner lines clash" we add a stroke-width parameter and tune until the composite reads right. Either way it isn't a blocker for the migration, just the last tuning step in front of it.
 
@@ -329,7 +329,7 @@ The C reference's enhance kernel has an isolated-pixel pass that floods a colour
 <Figure caption="How much of one native cell's upscaled territory the 3×3 isolated-pixel splat covers, by upscale factor. Above each bar, the splat drawn inside a cell of that size.">
   <VizFigure
     name="Share of a cell covered by the 3×3 isolated-pixel splat, 2× to 6×"
-    summary="At 2× and 3× the nine-pixel splat covers the whole cell. Coverage then falls to 56% at 4×, 36% at 5× and 25% at 6× — the factor this port runs at — which is why single-cell highlights come out as small dots."
+    summary="At 2× and 3× the nine-pixel splat covers the whole cell. Coverage then falls to 56% at 4×, 36% at 5× and 25% at 6×, the factor this port runs at, which is why single-cell highlights come out as small dots."
     data={{
       caption: "Cell territory covered by a 3×3 splat, by upscale factor",
       columns: ["Upscale factor", "Cell size (px)", "Covered by 3×3 splat"],

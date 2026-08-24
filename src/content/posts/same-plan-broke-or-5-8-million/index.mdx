@@ -37,7 +37,7 @@ Four of those ninety-eight lives, all in today's dollars:
 
 **Retire in 1929.** The worst possible timing, on paper: the market loses most of its value in the first three years, then the Depression, then a world war. And yet the first decade barely hurts: prices are _falling_, so the \$40k gets cheaper to fund every year and the bonds hold up; the portfolio is still at \$800k in 1934 and \$900k in 1939. The one real scare comes late, when the postwar inflation of the late 1940s bites and the balance sags to about \$520k around 1949. Then it recovers. This household dies in 1959 with **\$690,000**, a comfortable retirement that began in the single worst year of the century.
 
-**Retire in 1966.** Nothing dramatic ever happens. Stocks go sideways for a decade and a half; inflation goes 3, 5, 6, 11, 9, 13 percent. Year by year the withdrawals get bigger in nominal terms and the portfolio doesn't. It's \$875k in 1971 — fine — then \$612k in 1976 — hm — then \$319k in 1981, and now the math is obvious to anyone who does it. The great bull market finally arrives in 1982 and it doesn't matter, because there's too little left to ride it: \$291k in 1986, \$156k in 1991, and the account hits zero in 1996, at age 94, in the last year of the plan. Two decades of watching it come.
+**Retire in 1966.** Nothing dramatic ever happens. Stocks go sideways for a decade and a half; inflation goes 3, 5, 6, 11, 9, 13 percent. Year by year the withdrawals get bigger in nominal terms and the portfolio doesn't. It's \$875k in 1971 (fine), then \$612k in 1976 (hm), then \$319k in 1981, and now the math is obvious to anyone who does it. The great bull market finally arrives in 1982 and it doesn't matter, because there's too little left to ride it: \$291k in 1986, \$156k in 1991, and the account hits zero in 1996, at age 94, in the last year of the plan. Two decades of watching it come.
 
 **Retire in 1982.** Sixteen years after that household, and same everything. Inflation is finally breaking, and stocks and bonds both take off. It's \$1.6 million by 1987, \$2.2 million by 1992, \$3.5 million by 1997; the dot-com bust and 2008 are dents in a line going up. This household dies in 2012 with **\$5.8 million**, five times what it started with, after taking \$40k out every year for thirty years. It never had a worried moment.
 
@@ -54,9 +54,9 @@ Four of those ninety-eight lives, all in today's dollars:
         ["0", "$1,000k", "$1,000k", "$1,000k", "$1,000k"],
         ["5", "$800k", "$875k", "$1,600k", "$815k"],
         ["10", "$900k", "$612k", "$2,200k", "$690k"],
-        ["15", "—", "$319k", "$3,500k", "$740k"],
-        ["20", "≈$520k", "$291k", "—", "$870k"],
-        ["25", "—", "$156k", "—", "—"],
+        ["15", "n/a", "$319k", "$3,500k", "$740k"],
+        ["20", "≈$520k", "$291k", "n/a", "$870k"],
+        ["25", "n/a", "$156k", "n/a", "n/a"],
         ["30", "$690k", "$0", "$5,800k", "≈$740k"],
       ],
     }}
@@ -95,7 +95,7 @@ The household did nothing differently in any of these. It didn't panic-sell, it 
 
 Every retirement calculator mentions sequence-of-returns risk. Most of them then model it as _volatility_ (random good and bad years), which quietly turns it into something averages can tame. The point is that returns arrive in an _order_, you can't choose the order, and the order in the first decade of withdrawals matters more than the average over all thirty.
 
-Look at the failures. The 1929 retiree, who ate a 90% stock crash across the first three years, is fine, because the crash came with _deflation_: \$40k of spending got cheaper, bonds held their real value, and the portfolio only had to survive a few terrible years before a long recovery. The 1966 retiree ate no crash at all. What they got instead was fourteen years of stocks going nowhere while inflation ran 5, 7, 11, 13 percent, so the "\$40k" they were withdrawing was \$100k in nominal terms by the end, from a portfolio that hadn't grown. There was no year in which anything dramatic happened. There was just a slow, unremarkable, unrecoverable grind, and by the time it stopped (1982 — the year the _luckiest_ retiree in the dataset was just getting started) the money that would have compounded through the greatest bull market in history had already been spent on groceries.
+Look at the failures. The 1929 retiree, who ate a 90% stock crash across the first three years, is fine, because the crash came with _deflation_: \$40k of spending got cheaper, bonds held their real value, and the portfolio only had to survive a few terrible years before a long recovery. The 1966 retiree ate no crash at all. What they got instead was fourteen years of stocks going nowhere while inflation ran 5, 7, 11, 13 percent, so the "\$40k" they were withdrawing was \$100k in nominal terms by the end, from a portfolio that hadn't grown. There was no year in which anything dramatic happened. There was just a slow, unremarkable, unrecoverable grind, and by the time it stopped (1982, the year the _luckiest_ retiree in the dataset was just getting started) the money that would have compounded through the greatest bull market in history had already been spent on groceries.
 
 Two retirees, sixteen years apart, identical in every decision, one broke and one rich. Nothing either of them did in retirement could have swapped their outcomes. That's the risk. Not "markets go down." _Your retirement date is a lottery ticket and you draw it once._
 
@@ -105,10 +105,10 @@ Two retirees, sixteen years apart, identical in every decision, one broke and on
 
 **Ruin is mostly luck too, but which years ruin _you_ is not.** The textbook household fails in 1964–68. A more aggressive household (earlier retirement, higher spending) fails in a wider band around the same years plus a few others; a bond-heavier one fails the same inflation years harder. The identity of the killer cohorts is a property of _your_ plan, and it's discoverable: the simulator lists the failing start years for every plan it runs. Once you know your failure family, you know what you're actually insuring against, and it's very often not the thing the advice industry is selling insurance for. (Cash buckets and bond tents insure against 1929. That was never the problem.)
 
-<Figure caption="Which start years ruin you is a property of your plan. The textbook household fails only 1964–68. Making it bond-heavier widens that same inflation band — it never adds a crash-era failure. Overspending widens the band and admits new failure families: the Depression era and the dot-com top.">
+<Figure caption="Which start years ruin you is a property of your plan. The textbook household fails only 1964–68. Making it bond-heavier widens that same inflation band; it never adds a crash-era failure. Overspending widens the band and admits new failure families: the Depression era and the dot-com top.">
   <VizFigure
     name="Failing start years for three variants of the same plan"
-    summary="Three rows on a shared 1928-to-2025 axis of retirement start years, failing years marked as filled blocks. The textbook 60/40 plan at 4% spending fails 1964 through 1968, five of 98. The bond-heavier 40/60 variant fails 1961 through 1968, eight of 98. The 5%-spending variant fails 1928, 1929, 1936, 1956, 1959 through 1973, 1999 and 2000 — twenty-one of 98."
+    summary="Three rows on a shared 1928-to-2025 axis of retirement start years, failing years marked as filled blocks. The textbook 60/40 plan at 4% spending fails 1964 through 1968, five of 98. The bond-heavier 40/60 variant fails 1961 through 1968, eight of 98. The 5%-spending variant fails 1928, 1929, 1936, 1956, 1959 through 1973, 1999 and 2000, twenty-one of 98."
     data={{
       caption: "Failing start years by plan variant (98 start years each)",
       columns: ["Plan variant", "Failing start years", "Count", "Success"],
@@ -139,7 +139,7 @@ And the third is time: below the plateau where every start year survives, one mo
 
 ## The one chart
 
-If you take one thing from this series, make it the fan chart: your plan, run once per historical start year, one line each. Not the average. Not a percentile band from random draws. The actual ninety-odd lives your plan would have lived, side by side, so you can see with your own eyes that the same choices land everywhere from zero to five times what you started with — and then ask, calmly, which of those lines you're willing to accept, and what would move the bottom ones.
+If you take one thing from this series, make it the fan chart: your plan, run once per historical start year, one line each. Not the average. Not a percentile band from random draws. The actual ninety-odd lives your plan would have lived, side by side, so you can see with your own eyes that the same choices land everywhere from zero to five times what you started with, and then ask, calmly, which of those lines you're willing to accept, and what would move the bottom ones.
 
 ---
 

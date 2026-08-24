@@ -46,6 +46,6 @@
     <circle cx="360" cy="243" r="3.5"/><circle cx="420" cy="232" r="3.5"/><circle cx="480" cy="225" r="3.5"/><circle cx="540" cy="232" r="3.5"/><circle cx="600" cy="243" r="3.5"/>
   </g>
   <text x="480" y="80" fill="currentColor" fill-opacity="0.75" text-anchor="middle">every pixel solves the ray–sphere quadratic</text>
-  <text x="480" y="98" fill="currentColor" fill-opacity="0.75" text-anchor="middle">in the fragment shader — analytic at any distance</text>
+  <text x="480" y="98" fill="currentColor" fill-opacity="0.75" text-anchor="middle">in the fragment shader: analytic at any distance</text>
   <text x="480" y="316" fill="currentColor" fill-opacity="0.75" text-anchor="middle" font-size="12">no vertices, nothing to jitter</text>
 </svg>

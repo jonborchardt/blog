@@ -1,6 +1,6 @@
 ---
 /**
- * SweepDemo — candidate presentation for "the sweep": the real crossfilter + dc.js
+ * SweepDemo: candidate presentation for "the sweep": the real crossfilter + dc.js
  * focus/range interaction, rebuilt small over synthetic data, running in the page.
  * Client-only; the <noscript> and surrounding prose carry the content without JS.
  */
@@ -18,9 +18,9 @@
     >This live demo needs JavaScript; the captured frames above show the same interaction.</noscript
   >
   <figcaption class="text-muted-foreground mt-3 text-center text-sm">
-    Crossfilter and dc.js — the same libraries, current versions — over 2,000 synthetic rotation
-    buys. Drag across the lower strip and watch the line rescale and the network ranking reorder
-    while the mouse is still down. Every number is generated; none of it is client data.
+    Crossfilter and dc.js (the same libraries, current versions) over 2,000 synthetic rotation buys.
+    Drag across the lower strip and watch the line rescale and the network ranking reorder while the
+    mouse is still down. Every number is generated; none of it is client data.
   </figcaption>
 </figure>
 
@@ -94,7 +94,7 @@
       dc.config.disableTransitions = true;
     }
 
-    // deterministic synthetic data — mulberry32, fixed seed
+    // deterministic synthetic data: mulberry32, fixed seed
     const rand = ((a: number) => () => {
       a |= 0;
       a = (a + 0x6d2b79f5) | 0;

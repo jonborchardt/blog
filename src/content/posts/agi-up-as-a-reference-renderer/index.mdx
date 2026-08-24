@@ -79,7 +79,7 @@ On a 5-PIC sample (PICs 2–6), V10 improved or tied v5 on every PIC (no per-PIC
 
 | Strategy            | Leaks | Undershoots | Total flagged | Δ vs v5    |
 | ------------------- | ----- | ----------- | ------------- | ---------- |
-| v5 (baseline)       | 6     | 40          | 46            | —          |
+| v5 (baseline)       | 6     | 40          | 46            | n/a        |
 | v9 (v4 + seal)      | 8     | 42          | 50            | +8.7%      |
 | **v10 (v5 + seal)** | **5** | **36**      | **41**        | **−10.9%** |
 
@@ -91,7 +91,7 @@ One specific thing transferred cleanly: **the diagonal-flanking suppression rule
 
 In the agi-up code, this rule lives inside the anchor-graph logic and decides whether to draw a connection between adjacent anchors. I lifted it out and used it as a pre-fill barrier seal, tightened in the port to fire only on true X-junctions: "for each native fill-fill diagonal flanked by two _different_ line commands, plant a single pixel at the upscaled junction corner before the flood fill runs." The total change was only a few dozen pixels per PIC.
 
-<Figure caption="The one rule that transferred. Left: the native-resolution test — a fill–fill diagonal whose two flanking cells belong to different line commands. Right: the same four cells at 6×, with the single seal pixel planted at the junction corner before the fill runs.">
+<Figure caption="The one rule that transferred. Left: the native-resolution test, a fill–fill diagonal whose two flanking cells belong to different line commands. Right: the same four cells at 6×, with the single seal pixel planted at the junction corner before the fill runs.">
   <VizFigure
     name="The diagonal-flanking junction seal, native condition and 6× result"
     summary="Two-panel schematic. On the left a 2-by-2 block of native cells: line A top-left, line B bottom-right, fill cells on the other diagonal, with the tested diagonal dashed between the two fills. On the right the same cells drawn on a 6-by-6 pixel grid per native cell, with one dark pixel planted at the corner where the four cells meet."

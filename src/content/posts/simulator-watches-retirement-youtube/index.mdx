@@ -23,7 +23,7 @@ Here's the problem. YouTube knows I'm interested in finances and retirement, so 
 
 I used to watch them. Now I paste the URL into a text file in [my simulator](/retirement-simulator-ai-lab/) and walk away. Dozens of videos later, I've watched none of them, and I know more about what's in them than I would have if I had.
 
-<Figure caption="The Vetted Videos insights panel — a snapshot from an earlier queue run; the counts grow with every batch.">
+<Figure caption="The Vetted Videos insights panel, a snapshot from an earlier queue run; the counts grow with every batch.">
   ![The Vetted Videos insights panel: score mix, topics, and the claims most often right and wrong](./vetted-videos-insights.png)
 
 </Figure>
@@ -41,7 +41,7 @@ The whole thing is a short pipeline from a text file to a scoreboard, and the sc
 
 `videos.md` is one YouTube URL per line. That's the whole interface. When there are a few, I tell Claude Code "run the queue" and a skill called **theory-queue** takes over: it works down the file, runs each pending URL through the full pipeline, and appends `DONE` to the line the moment its verdict lands, not in a batch at the end, so an interrupted session loses nothing.
 
-Two cheap checks happen before any real work. It dedupes on the 11-character video id (I paste the same video twice more often than I'd like to admit). And it fetches just the transcript header to get the channel name and looks it up in the scoreboard: if that channel already has two videos rated _harmful_, the queue marks the line `SKIPPED-CHANNEL` and moves on. One bad video is never enough to skip a channel — everyone has an off day. The second one earns it.
+Two cheap checks happen before any real work. It dedupes on the 11-character video id (I paste the same video twice more often than I'd like to admit). And it fetches just the transcript header to get the channel name and looks it up in the scoreboard: if that channel already has two videos rated _harmful_, the queue marks the line `SKIPPED-CHANNEL` and moves on. One bad video is never enough to skip a channel; everyone has an off day. The second one earns it.
 
 ## Captions, not video
 
@@ -53,11 +53,11 @@ That's the entire "watching" step. Twenty minutes of talking head becomes about 
 
 This is where the **theory-test** skill starts, and it's the part I care about most, because it's the part I was worst at when I watched the videos myself. Every claim in the transcript gets sorted into one of three piles, and the analysis names the piles explicitly:
 
-1. **Mechanism claims** — an allocation, a glide path, a withdrawal rule, a timing window. These map onto things the engine can actually express, so they get _tested_.
+1. **Mechanism claims**: an allocation, a glide path, a withdrawal rule, a timing window. These map onto things the engine can actually express, so they get _tested_.
 
-2. **Assumption claims** — "8% returns," "4% is safe," a particular inflation number. These get fact-checked against history and flagged when sunny, but nobody builds an experiment for them, because replaying every real start year already supersedes any point assumption.
+2. **Assumption claims**: "8% returns," "4% is safe," a particular inflation number. These get fact-checked against history and flagged when sunny, but nobody builds an experiment for them, because replaying every real start year already supersedes any point assumption.
 
-3. **Framing and behavioral content** — mental accounting, "permission to spend," discipline aids. Not testable. The skill's job is to say what real mechanism, if any, the framing is a proxy for. (The bucket strategy is the canonical example: it's a rising-equity glide path plus withdrawal discipline, and both halves already have names in the engine.)
+3. **Framing and behavioral content**: mental accounting, "permission to spend," discipline aids. Not testable. The skill's job is to say what real mechanism, if any, the framing is a proxy for. (The bucket strategy is the canonical example: it's a rising-equity glide path plus withdrawal discipline, and both halves already have names in the engine.)
 
 Only the first pile reaches the engine; the other two still get an answer, just not an experiment:
 
@@ -74,15 +74,15 @@ The rule is _translate faithfully or say you can't_. If a video's central rule i
 
 For anything testable, three experiment rows go into the committed `experiments.json`, alongside the untouched baseline and the reigning champion (my current best plan):
 
-- **Faithful** — the video's own numbers, translated. Answers "is the video right?"
+- **Faithful**: the video's own numbers, translated. Answers "is the video right?"
 
-- **Half dose** — same idea, half strength. Dose-response separates _wrong idea_ from _right idea, wrong dose_.
+- **Half dose**: same idea, half strength. Dose-response separates _wrong idea_ from _right idea, wrong dose_.
 
-- **Hybrid** — the video's distinctive mechanism grafted onto my current best plan. This is the row that matters, because it answers the only question I actually have: **does this add anything I don't already have?**
+- **Hybrid**: the video's distinctive mechanism grafted onto my current best plan. This is the row that matters, because it answers the only question I actually have: **does this add anything I don't already have?**
 
 Then the normal experiment machinery runs: every row against every historical start year at every candidate retirement age. Same resolution discipline as everything else in the lab: one percentage point of success is one flipped cohort, under two points is a tie, not a finding.
 
-<Figure caption="Theory rows beside the baseline and champion, on the synthetic textbook dataset. On this well-funded household at 65 everything clears the success bar, so the bucket rows' losses show up in the worst-case column instead — the verdicts against buckets come from tighter runs where those rows failed real cohorts. Strategies tuned on a well-funded dataset don't transfer.">
+<Figure caption="Theory rows beside the baseline and champion, on the synthetic textbook dataset. On this well-funded household at 65 everything clears the success bar, so the bucket rows' losses show up in the worst-case column instead; the verdicts against buckets come from tighter runs where those rows failed real cohorts. Strategies tuned on a well-funded dataset don't transfer.">
   ![Strategy table at retire-at-65: baseline 94.9% success; bucket and cash-bridge rows all at 100%](./strategy-comparison-rows.png)
 
 </Figure>
@@ -106,9 +106,9 @@ The last section of every report is the steelman: what did the source get _right
 
 ## Where it all lands
 
-- `theories.md` — one row per video: source, one-line testable claim, one-line verdict. The public scoreboard.
+- `theories.md`: one row per video: source, one-line testable claim, one-line verdict. The public scoreboard.
 
-- `sources.json` — one entry per video: id, channel, host, a score from −1 to 2, plus `right` and `wrong` claim _tags_ using shared wording ("spending guardrails," "bonds as the sequence-risk hedge") so channels can be compared per topic. A rollup script aggregates it into a per-channel table: mean score, video count, unioned tags.
+- `sources.json`: one entry per video: id, channel, host, a score from −1 to 2, plus `right` and `wrong` claim _tags_ using shared wording ("spending guardrails," "bonds as the sequence-risk hedge") so channels can be compared per topic. A rollup script aggregates it into a per-channel table: mean score, video count, unioned tags.
 
 - **The Vetted Videos tab** in the app itself, which renders that rollup (a calibre table by channel and a per-video list) plus a hand-curated _insights_ block at the top: things that were right but nobody says, things everybody says that are wrong, the most-repeated claims, channels worth more of, engine gaps the videos surfaced.
 

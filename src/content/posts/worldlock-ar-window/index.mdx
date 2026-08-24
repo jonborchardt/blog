@@ -56,7 +56,7 @@ Source: [github.com/jonborchardt/worldlock](https://github.com/jonborchardt/worl
 - **The whole Earth.** A per-fragment ray-cast against a sphere, not a mesh, drawn as one fullscreen triangle, with Blue Marble day and night textures blended at the real solar terminator computed from the current time.
 - **The live ISS.** Position fetched every 3 seconds from wheretheiss.at, linearly extrapolated between fixes, drawn as a little truss-and-solar-wings model that scales with distance so it stays visible at 400+ km.
 
-<Figure caption="Why the globe is a ray-cast, not a mesh. Left: a tessellated sphere seen from its own surface — huge flat facets, and every vertex is 6.4 million metres from the origin, so it snaps to a half-metre float grid. Right: one fullscreen triangle; each fragment intersects its own ray with the analytic sphere.">
+<Figure caption="Why the globe is a ray-cast, not a mesh. Left: a tessellated sphere seen from its own surface: huge flat facets, and every vertex is 6.4 million metres from the origin, so it snaps to a half-metre float grid. Right: one fullscreen triangle; each fragment intersects its own ray with the analytic sphere.">
   <VizFigure
     name="Tessellated sphere versus per-fragment sphere ray-cast"
     summary="Side-by-side schematic. On the left a coarse triangle mesh approximates the curve under a camera standing on the surface, with vertices marked as jittering. On the right the same camera looks through a single fullscreen triangle and one ray per pixel hits a smooth analytic sphere, so there are no vertices to jitter."

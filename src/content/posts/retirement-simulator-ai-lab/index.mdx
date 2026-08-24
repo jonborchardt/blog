@@ -23,7 +23,7 @@ import ExperimentRoundViz from "./experiment-round-viz.svg";
 
 Every year I sit down and answer one question: **what's the earliest age I can stop working without ever running out of money?** Instead of a spreadsheet, I have retire-sim, a small deterministic historical-replay simulator that's become something more interesting: a lab, with a lab protocol, and an AI lab assistant that follows it. (The repo is private, so no link; the code described below is real, just not public.)
 
-<Figure caption="An earlier season's results grid. The 'deep guardrail 10y/25%' row beating the honest guardrail is exactly the guardrail trap described below — that row, the micro-cap tilt, and the golden-butterfly rows have since been deleted from the committed catalog (the bans are now enforced by the validator), so a fresh clone won't show those rows.">
+<Figure caption="An earlier season's results grid. The 'deep guardrail 10y/25%' row beating the honest guardrail is exactly the guardrail trap described below; that row, the micro-cap tilt, and the golden-butterfly rows have since been deleted from the committed catalog (the bans are now enforced by the validator), so a fresh clone won't show those rows.">
   ![Results grid: strategy rows by retirement-age columns, each cell with survival and terminal wealth](./strategy-grid.png)
 
 </Figure>
@@ -84,7 +84,7 @@ The single most useful move was diagnosing the **failure mode** before picking s
 
 What each piece buys, measured one at a time at the frontier age (the earliest retirement age that clears the 85% bar) on the way to the final plan:
 
-<Figure caption="The pieces ladder: what each decision adds, in success percentage across all 98 historical start years at the frontier retirement age. The spending guardrail is worth about 2 points, holding gold at all is worth 12, timing it into the window is worth another 8, and the enough ratchet is free. The taper alone clears the 85% bar — no piece is essential for the frontier except the gold window itself.">
+<Figure caption="The pieces ladder: what each decision adds, in success percentage across all 98 historical start years at the frontier retirement age. The spending guardrail is worth about 2 points, holding gold at all is worth 12, timing it into the window is worth another 8, and the enough ratchet is free. The taper alone clears the 85% bar; no piece is essential for the frontier except the gold window itself.">
   <VizFigure
     name="Success rate gained by each piece of the plan"
     summary="A waterfall from a 76.5% baseline of 100% stock, up 2 points for the spending guardrail, 12 points for gold as a static asset, and 8 points for the window timing, ending at 99.0% for the full plan; the enough ratchet adds zero. A dashed line marks the 85% target and a marker shows the taper alone reaches 94.9%."

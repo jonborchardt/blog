@@ -33,7 +33,7 @@
       <text x="125" y="19">l</text><text x="151" y="19">l</text><text x="177" y="19">l</text><text x="203" y="19">l</text>
     </g>
   </g>
-  <text x="352" y="112" fill="currentColor">(high &lt;&lt; 4) | low — two colours per byte</text>
+  <text x="352" y="112" fill="currentColor">(high &lt;&lt; 4) | low: two colours per byte</text>
   <text x="352" y="130" fill="currentColor" fill-opacity="0.7">alternating pixels at native resolution</text>
 
   <!-- examples -->
@@ -61,7 +61,7 @@
     </g>
     <rect x="306" y="-4" width="36" height="36" fill="none" stroke="#f0b35a" stroke-width="3" rx="3"/>
     <text x="348" y="12" fill="currentColor">0xff</text>
-    <text x="348" y="28" fill="currentColor" fill-opacity="0.7" font-family="system-ui, sans-serif">solid white — and the untouched sentinel</text>
+    <text x="348" y="28" fill="currentColor" fill-opacity="0.7" font-family="system-ui, sans-serif">solid white, and the untouched sentinel</text>
   </g>
   <text x="16" y="222" fill="currentColor" fill-opacity="0.7">Same byte, two meanings: the fix keeps the byte for colour and a separate cmdType buffer for “was this ever painted?”</text>
 </svg>

@@ -66,7 +66,7 @@
   <line x1="200" y1="512" x2="280" y2="512" stroke="#006a90" stroke-width="3.5" stroke-linecap="round"/>
   <circle cx="200" cy="512" r="13" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
   <text x="200" y="517" fill="#11171d" text-anchor="middle" font-size="12" font-weight="600">7</text>
-  <text x="175" y="516" fill="currentColor" text-anchor="end" font-weight="600">nothing held —</text>
+  <text x="175" y="516" fill="currentColor" text-anchor="end" font-weight="600">nothing held:</text>
 
   <!-- code sheet at the foot of the ladder -->
   <path d="M240 540 L240 556" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" marker-end="url(#ladv-fg)"/>

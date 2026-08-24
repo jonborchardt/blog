@@ -35,7 +35,7 @@ memory; files do.
 
 <VizFigure
   name="The editorial pipeline as skills"
-  summary="write-post invokes create-visual and create-hero, then hands a draft to review-post; findings loop back to write-post, and a clean review goes to publish-post — the only place a draft flips to published."
+  summary="write-post invokes create-visual and create-hero, then hands a draft to review-post; findings loop back to write-post, and a clean review goes to publish-post, the only place a draft flips to published."
 >
   <PipelineViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
 </VizFigure>
@@ -125,7 +125,6 @@ The limits, in order of sharpness:
 - **The expert can be wrong.** Its own repo disagreed with itself over a threshold. The contract buys an accountable, evidence-cited process, not truth.
 - **Briefs go stale.** The corrected post's ending was true when written and false months later. A brief is a snapshot with an append rule.
 - **Nothing enforces brief quality.** A lazy investigation gives a thin brief and a green build. The backstops are the validation pass and the fact that briefs are public.
-- **Coverage is partial.** The system was adopted after ten technical posts were live. A temporary retrofit skill is backfilling briefs onto them (three of ten done as this publishes) and deletes itself when finished.
 
 One design seam worth noticing: `authority` is optional in the frontmatter schema but required by
 the writing skill. That split is deliberate. The Zod schema enforces what a machine can check:

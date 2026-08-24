@@ -1,6 +1,6 @@
 ---
 title: The Authoring Surface
-description: Every primitive this blog is written with — static MDX components, build-time diagrams and math, and the one React island that earns its JavaScript.
+description: "Every primitive this blog is written with: static MDX components, build-time diagrams and math, and the one React island that earns its JavaScript."
 publishedAt: 2026-08-19
 series: agent-built
 seriesOrder: 2
@@ -8,7 +8,7 @@ tags: [astro, mdx, react, design-system]
 authority: 'E:\github2\blog'
 hero:
   src: ./hero.png
-  alt: Stacked authoring blocks — callout, tabs, code — with one island widget marked by a lightning bolt
+  alt: Stacked authoring blocks (callout, tabs, code) with one island widget marked by a lightning bolt
 draft: false
 ---
 
@@ -20,6 +20,7 @@ import Aside from "@/components/blog/Aside.astro";
 import Comparison from "@/components/blog/Comparison.astro";
 import Steps from "@/components/blog/Steps.astro";
 import Details from "@/components/blog/Details.astro";
+import ListGrid from "@/components/blog/ListGrid.astro";
 import Tabs from "@/components/blog/Tabs.astro";
 import Tab from "@/components/blog/Tab.astro";
 import CodeBlock from "@/components/blog/CodeBlock.astro";
@@ -35,8 +36,10 @@ easiest thing for an agent is a small, explicit vocabulary with a validator that
 what went wrong, not a big flexible one with conventions you have to remember.
 [Part 1](/an-agent-built-this-blog/) covered the validators; this part is the vocabulary. Every
 component the site's posts are written with appears below, in the order an author reaches for
-them, doing its actual job — this page is its own demo. It ends at the top of the ladder: the one
-place JavaScript earns its way into a post.
+them, doing its actual job; this page is its own demo. Nearly all of them ship no script beyond
+a few inline lines; the post ends with the one real exception, a React island, and the case a
+component has to make before it's allowed to be one: the reader genuinely needs to interact
+with it.
 
 <Aside>
   Posts are MDX files in their own directories, next to their images and any post-specific
@@ -47,7 +50,7 @@ place JavaScript earns its way into a post.
 
 A blog post is a document. Documents don't need a JavaScript framework to be read, and every
 kilobyte of script is a kilobyte the reader downloads before the text settles. So the rule: a
-prose, code, or diagram post ships **zero external scripts** — no React, no framework runtime,
+prose, code, or diagram post ships **zero external scripts**: no React, no framework runtime,
 nothing but a few lines of inline script for the theme toggle, the table of contents, and a
 couple of the primitives below. The e2e suite enforces it as a budget: `script[src]` count on a
 prose page must be exactly zero.
@@ -70,8 +73,6 @@ prose page must be exactly zero.
 
   </Fragment>
 </Comparison>
-
-Everything until the last section is in the first column.
 
 ## Prose, code, and images
 
@@ -102,6 +103,9 @@ When an image needs a caption or a wider measure than the text column, it goes i
   />
 </Figure>
 
+`Figure` also takes a `zoom` flag: it wraps a plain `<img>` in a button that opens a full-size
+lightbox, for screenshots whose fine print matters.
+
 Tables are plain Markdown too. Every table is automatically wrapped so that on narrow screens it
 scrolls sideways inside its own box instead of pushing the page wider; the author does nothing:
 
@@ -113,13 +117,28 @@ scrolls sideways inside its own box instead of pushing the page wider; the autho
 | axe WCAG 2.2 AA           | e2e             | yes              |
 | Horizontal overflow @360w | e2e             | yes              |
 
+When a list is an inventory of short items rather than an argument, `ListGrid` turns the tall
+bullet column into a grid of boxes. It wraps a plain Markdown `-` list, so like `Steps` it
+degrades to exactly that. Everything that lives in one post's directory:
+
+<ListGrid>
+
+- `index.mdx`
+- `hero.png`
+- diagram SVGs
+- screenshots
+- `components/*.tsx`
+- component tests
+
+</ListGrid>
+
 ## Emphasis without shouting
 
 Two components handle "the reader should notice this", and they are deliberately different.
 
 <Callout variant="tip" title="When to use which">
-  A **Callout** interrupts the flow — use it for things a reader will regret skipping. An **Aside**
-  steps out of the flow — use it for context that is interesting but optional.
+  A **Callout** interrupts the flow: use it for things a reader will regret skipping. An **Aside**
+  steps out of the flow: use it for context that is interesting but optional.
 </Callout>
 
 <Callout variant="warning">
@@ -138,14 +157,14 @@ Quotations get attribution and, when there is one, a source link:
 
 ## Procedures and alternatives
 
-Steps are an ordered list with a connector line. The Markdown stays a plain `1.` list, so it
+`Steps` is an ordered list with a connector line. The Markdown stays a plain `1.` list, so it
 degrades to exactly that anywhere else the text is shown.
 
 <Steps>
 
 1. Create `src/content/posts/<slug>/index.mdx` with valid frontmatter (a scaffold script does this).
 2. Write the post using the primitives on this page. Put images and any components next to it.
-3. Run `npm run validate` and `npm run build`. If anything is off — an unknown tag, a duplicate series order, a missing alt — the build says what and where.
+3. Run `npm run validate` and `npm run build`. If anything is off (an unknown tag, a duplicate series order, a missing alt) the build says what and where.
 4. Set `draft: false` and push. CI builds, runs the accessibility suite, and deploys.
 
 </Steps>
@@ -176,12 +195,12 @@ Long, optional material folds away in a native `<details>` element, no script:
 
 <Details summary="The full frontmatter contract">
 
-  - `title` (≤ 60 characters — it is the post's entire `<title>`)
+  - `title` (≤ 60 characters; it is the post's entire `<title>`)
   - `description` (40–160 characters, used for search snippets and social previews)
   - `publishedAt`, optional `updatedAt` (never earlier than `publishedAt`)
   - `series` (must exist in the registry) and `seriesOrder` (unique within the series)
   - `tags` (each must exist in the registry)
-  - `authority` (the repository that owns this post's domain facts — see [part 3](/repos-as-experts/))
+  - `authority` (the repository that owns this post's domain facts; see [part 3](/repos-as-experts/))
   - `draft` (drafts are dev-only: never built, listed, fed, or indexed)
   - `hero { src, alt }` (required, 1500×600) and optional `ogImage`
 
@@ -190,7 +209,7 @@ Long, optional material folds away in a native `<details>` element, no script:
 ## Code that wants a name
 
 Bare fenced code is the default. When a snippet is a file, or long enough that someone will want
-to copy it, `CodeBlock` adds a header and a copy button — one small script for the whole page,
+to copy it, `CodeBlock` adds a header and a copy button: one small script for the whole page,
 not per block, and the "Copied" confirmation is announced to screen readers.
 
 <CodeBlock title="src/lib/url.ts">
@@ -204,6 +223,19 @@ export function href(path: string): string {
 ```
 
 </CodeBlock>
+
+## Heavier media
+
+Three primitives carry media too heavy to load unasked, and each makes the reader opt in.
+`Video` embeds a local file or a YouTube player, with a required accessible title. `Gallery`
+steps through a set of screenshots one at a time with prev/next arrows and a full-size escape
+hatch; [the TV data explorers post](/tv-data-explorers/) walks whole interfaces that way.
+`MuseumEmbed` is the click-to-load frame around this site's preserved live demos, so a
+multi-megabyte 2014 page costs nothing until the reader presses the button;
+[Drag the Timeline, Refilter the Page](/drag-the-timeline-refilter-the-page/) is built around
+one. None of them appear on this page — this post has no video, screenshot set, or museum demo.
+That absence is the rule in action: a primitive shows up when its content does, never for
+decoration.
 
 ## Diagrams and math
 
@@ -235,13 +267,14 @@ Neither diagrams nor math adds a byte of JavaScript to the page.
 
 ## The ladder
 
-There is no chart library on this site, no carousel, no embed component. Each would be a
-dependency and a maintenance promise, and nothing above needed one. When a post wants a visual,
+There is no chart library on this site and no third-party widget behind any of the primitives
+above — even the gallery and the museum embed are a few dozen lines of inline script, not a
+dependency and a maintenance promise. When a post wants a visual,
 the house rule is a ladder: stop at the first rung that holds.
 
 <VizFigure
   name="The visual ladder"
-  summary="Four rungs in order of preference — hand-drawn pictorial SVG, static SVG chart, HTML and CSS, React island. The first three cost zero script; only the island ships JavaScript, and only when the reader must manipulate the visual."
+  summary="Four rungs in order of preference: hand-drawn pictorial SVG, static SVG chart, HTML and CSS, React island. The first three cost zero script; only the island ships JavaScript, and only when the reader must manipulate the visual."
 >
   <VisualLadderViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
 </VizFigure>
@@ -297,7 +330,7 @@ Good reasons for an island:
 
 Bad reasons:
 
-- It was easier to write in React. (it usually isn't, once you count the hydration)
+- It was easier to write in React. (It usually isn't, once you count the hydration.)
 - A library exists for it. (The library is now the reader's download.)
 - Everything else on the site is React. (Almost nothing on this site is React.)
 

@@ -40,7 +40,7 @@
   <line x1="103" y1="430" x2="121" y2="430" stroke="#555f69" stroke-opacity="0.55" stroke-width="2" stroke-linecap="round"/>
   <line x1="136" y1="432" x2="160" y2="406" stroke="#006a90" stroke-width="5"/>
   <path d="M128 440 L138 436 L131 429 z" fill="#f0b35a"/>
-  <text x="176" y="424" fill="currentColor" fill-opacity="0.85" font-size="12" font-style="italic">write prose, visuals, hero — from the brief</text>
+  <text x="176" y="424" fill="currentColor" fill-opacity="0.85" font-size="12" font-style="italic">write prose, visuals, hero from the brief</text>
 
   <!-- 5: the finished draft flies out -->
   <text x="320" y="488" fill="currentColor" fill-opacity="0.75" text-anchor="middle" font-size="12">finished draft (call 2 of 2)</text>

@@ -1,6 +1,6 @@
 <svg viewBox="0 0 380 718" width="380" height="718" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
   <!-- Panel A: the sprint, 12:35-14:04, 4 px/min -->
-  <text x="8" y="18" font-size="14" font-weight="700" fill="currentColor">The sprint — 11 plans in 79 minutes</text>
+  <text x="8" y="18" font-size="14" font-weight="700" fill="currentColor">The sprint: 11 plans in 79 minutes</text>
 
   <line x1="70" y1="40" x2="70" y2="396" stroke="currentColor" stroke-opacity="0.35" stroke-width="2" />
 
@@ -51,7 +51,7 @@
   </g>
 
   <!-- Panel B: the days after, grouped by working day, not to scale -->
-  <text x="8" y="440" font-size="14" font-weight="700" fill="currentColor">The sessions after — features and polish</text>
+  <text x="8" y="440" font-size="14" font-weight="700" fill="currentColor">The sessions after: features and polish</text>
 
   <line x1="70" y1="458" x2="70" y2="682" stroke="currentColor" stroke-opacity="0.35" stroke-width="2" stroke-dasharray="2 4" />
 

@@ -22,7 +22,7 @@
   <circle cx="80" cy="318" r="5" fill="#006a90"/>
   <circle cx="556" cy="52" r="5" fill="#006a90"/>
   <text x="100" y="284" fill="currentColor">render origin: near you</text>
-  <text x="100" y="300" fill="currentColor" fill-opacity="0.75">step ≈ 0.1 µm — millimetre precision is free</text>
+  <text x="100" y="300" fill="currentColor" fill-opacity="0.75">step ≈ 0.1 µm: millimetre precision is free</text>
   <text x="548" y="26" fill="currentColor" text-anchor="end">Earth centre: 6,371 km away</text>
-  <text x="548" y="70" fill="currentColor" fill-opacity="0.75" text-anchor="end">step = 0.5 m — a few ops later, geometry jitters by metres</text>
+  <text x="548" y="70" fill="currentColor" fill-opacity="0.75" text-anchor="end">step = 0.5 m: a few ops later, geometry jitters by metres</text>
 </svg>

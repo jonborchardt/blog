@@ -5,7 +5,7 @@
   </defs>
 
   <!-- ============ panel A: buy side ============ -->
-  <text x="16" y="22" fill="currentColor" font-size="14" font-weight="600">Buy side — Industry Ratings</text>
+  <text x="16" y="22" fill="currentColor" font-size="14" font-weight="600">Buy side: Industry Ratings</text>
   <text x="16" y="41" fill="currentColor" fill-opacity="0.85" font-size="12" font-style="italic">Many airings in, one score per industry out.</text>
 
   <!-- grid of nine airings -->
@@ -65,11 +65,11 @@
 
   <!-- ============ the flip ============ -->
   <line x1="16" y1="206" x2="624" y2="206" stroke="currentColor" stroke-opacity="0.25" stroke-width="1.5" stroke-dasharray="6 5"/>
-  <text x="320" y="230" fill="currentColor" fill-opacity="0.85" font-size="12" font-style="italic" text-anchor="middle">same data — the question turns around</text>
+  <text x="320" y="230" fill="currentColor" fill-opacity="0.85" font-size="12" font-style="italic" text-anchor="middle">same data; the question turns around</text>
   <path d="M436 240 Q320 274 208 244" fill="none" stroke="#f0b35a" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#ssv-hi)"/>
 
   <!-- ============ panel B: sell side ============ -->
-  <text x="16" y="300" fill="currentColor" font-size="14" font-weight="600">Sell side — Sell Side Targeting</text>
+  <text x="16" y="300" fill="currentColor" font-size="14" font-weight="600">Sell side: Sell Side Targeting</text>
   <text x="16" y="319" fill="currentColor" fill-opacity="0.85" font-size="12" font-style="italic">One airing in, every industry ranked inside it out.</text>
 
   <!-- one airing, enlarged -->

@@ -1,6 +1,6 @@
 ---
 title: Android development with Claude, no IDE, no cable
-description: How WorldLock is built, deployed and debugged with three CLI commands, wireless adb and a coding agent that reads logcat and screenshots — no Android Studio.
+description: How WorldLock is built, deployed and debugged with three CLI commands, wireless adb and a coding agent that reads logcat and screenshots. No Android Studio.
 publishedAt: 2026-08-18
 updatedAt: 2026-08-19
 series: worldlock
@@ -59,7 +59,7 @@ The agent can iterate freely on the app without ever holding a blank check to th
 
 <VizFigure
   name="The adb wrapper as a three-tier permission boundary"
-  summary="Claude never calls adb directly; every device command goes through the adb.cmd wrapper. Pre-approved commands (install, launch, stop and uninstall of the WorldLock package, plus device listing and logcat) run unattended. Anything unlisted, such as shell access, pulling files or other packages, waits for a human to approve it. A deny list — reboot, root, sideload, push, shell rm, disabling packages, changing settings, and reading the file with the API key — is refused outright even with a human present."
+  summary="Claude never calls adb directly; every device command goes through the adb.cmd wrapper. Pre-approved commands (install, launch, stop and uninstall of the WorldLock package, plus device listing and logcat) run unattended. Anything unlisted, such as shell access, pulling files or other packages, waits for a human to approve it. A deny list (reboot, root, sideload, push, shell rm, disabling packages, changing settings, and reading the file with the API key) is refused outright even with a human present."
 >
   <AdbTiersViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
 </VizFigure>
@@ -84,7 +84,7 @@ The pairing dance is the only fiddly part (the pairing port is different from th
 
 <VizFigure
   name="Wireless adb states, from unpaired to connected"
-  summary="A phone starts unpaired. A one-time adb pair with the six-digit code and the pairing port moves it to paired; adb connect with the separate connect port makes it connected, which is where the whole build, install and logcat loop runs. A reboot or wifi drop sends it back to paired with a new port, and one more adb connect brings it back — pairing itself never has to be repeated."
+  summary="A phone starts unpaired. A one-time adb pair with the six-digit code and the pairing port moves it to paired; adb connect with the separate connect port makes it connected, which is where the whole build, install and logcat loop runs. A reboot or wifi drop sends it back to paired with a new port, and one more adb connect brings it back; pairing itself never has to be repeated."
 >
   <WirelessAdbViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
 </VizFigure>
@@ -93,4 +93,4 @@ In exchange, the test loop for an app whose whole premise is _stand somewhere re
 
 ## The takeaway
 
-The stack for this project is: a phone, wifi, gradle, adb, and an agent that reads logs and screenshots. No IDE, no emulator, no cable. For a certain shape of app — small, native, hardware-in-the-loop — this is not a compromise workflow. It's just better.
+The stack for this project is: a phone, wifi, gradle, adb, and an agent that reads logs and screenshots. No IDE, no emulator, no cable. For a certain shape of app (small, native, hardware-in-the-loop) this is not a compromise workflow. It's just better.
