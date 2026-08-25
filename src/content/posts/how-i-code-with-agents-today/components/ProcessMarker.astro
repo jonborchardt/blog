@@ -11,14 +11,18 @@ const { step } = Astro.props;
 const beats = [
   {
     title: "Decide before you prompt",
-    stages: ["fuzzy idea", "reason about product + architecture", "bootstrap prompt"],
+    stages: [
+      "fuzzy idea",
+      "reason about product + architecture",
+      "surface the assumptions I didn't specify",
+      "bootstrap prompt",
+    ],
   },
   {
-    title: "Reality replaces the prompt",
+    title: "Scaffold, then plan against it",
     stages: [
       "working repository scaffold",
-      "repository becomes source of truth",
-      "repository-aware implementation plan",
+      "plans with validation baked into every stage",
       "plan review / steering",
     ],
   },
@@ -26,9 +30,9 @@ const beats = [
     title: "Validation is the real output",
     stages: [
       "agent execution",
-      "report review / steering",
       "quality becomes a floor",
-      "extend it in short sessions",
+      "every issue becomes a permanent check",
+      "extend it in short sessions, each one shippable",
     ],
   },
 ];

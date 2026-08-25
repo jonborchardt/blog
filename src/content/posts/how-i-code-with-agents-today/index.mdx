@@ -48,7 +48,7 @@ Agentic coding isn't "write a giant prompt and hope." It's an engineering proces
 
 The main shift isn't that Claude writes more code. It's that I'm designing a system in which future agent sessions are less likely to do the wrong thing, because the repo itself pushes back.
 
-The rest of this post walks that process end to end on one real case study: this blog, the site you are reading. The process has three beats: decide before you prompt, let reality replace the prompt, and treat validation as the real output. The result is a static site where, on every push, CI proves that:
+The rest of this post walks that process end to end on one real case study: this blog, the site you are reading. The process has three beats: decide before you prompt, scaffold and then plan against it, and treat validation as the real output. The result is a static site where, on every push, CI proves that:
 
 - **Lighthouse scores 100/100/100/100** on representative pages
 - **every page passes an axe WCAG 2.2 AA audit** and the W3C Nu markup validator
@@ -108,6 +108,8 @@ I did **not** ask for the final Claude prompt immediately. Instead I asked ChatG
 > First, I want you to ask more questions that may be helpful in crafting the startup project prompt for Claude.
 
 </Details>
+
+<ProcessMarker step={3} />
 
 ## The first model exposed the real forks
 
@@ -381,7 +383,7 @@ The important component rule is not to force bespoke MDX React components into t
 
 </Details>
 
-<ProcessMarker step={3} />
+<ProcessMarker step={4} />
 
 ## Prompt 1: build the skeleton, not the product
 
@@ -1294,7 +1296,7 @@ Stop once the scaffold is sound, runnable, documented, and verified.
 
 Checkable acceptance criteria cause the agent to verify; vague quality goals cause it to guess. This applies to any prompt that hands work to an agent. From the agent's side, "build me a great blog" forces it to silently make dozens of decisions and hope, whereas "MDX must statically render, a React island must hydrate, URLs must work under `/blog/`, the build must pass" gives it checkable truths. It can run commands and know whether it is done. 
 
-<ProcessMarker step={4} />
+<ProcessMarker step={5} />
 
 ## Running the scaffold prompt, and reading the report
 
@@ -1335,25 +1337,6 @@ The reasons are what matter. "Skipped jsx-a11y" is ambiguous. "Skipped jsx-a11y 
 > That last sentence matters. For example, **Node 24 is an implementation choice, not a product requirement**.
 
 </Details>
-
-<ProcessMarker step={5} />
-
-## Source of truth moves to the repo
-
-After the scaffold existed, I stopped treating the prompt as authoritative and made the repository authoritative. Before the scaffold exists, the product conversation plus the architectural prompt is the source of truth. After it exists, the repository is. The product intent still matters, but now the next agent must reconcile that intent with real files, real tests, real dependencies, and real constraints. The key instruction in Prompt 2 made this explicit:
-
-> Do not assume the first scaffold task implemented everything perfectly.
->
-> Treat the repository itself as the source of truth.
->
-> Identify:
->
-> - what exists
-> - what works
-> - what is placeholder
-> - what is missing
-> - what is architecturally questionable
-> - what should be corrected before layering features on top
 
 ## Fresh planning found real bugs
 
@@ -2203,6 +2186,8 @@ Claude did not invent the planning methodology from scratch; it used the plugins
 
 The project goal and the process skills aligned neatly. The product wanted an agent-authored repository with explicit contracts and validation, and the planning skill produced explicit contracts for future agent sessions. It is the same philosophy at two levels: repo contracts help agents maintain code, and plan contracts help agents execute work.
 
+<ProcessMarker step={7} />
+
 ## The plan had to survive beyond the chat
 
 <SpeakerNote>
@@ -2218,8 +2203,6 @@ Anything future agents need has to move out of ephemeral chat context and into d
 Claude found a gap: the plan referenced the planning prompt itself, which was unsafe because a future session might receive only "Implement Plan 4" and never see the original product prompt. 
 
 The fix was to add a condensed product spec into the plan document itself, plus a subagent briefing rule that subagent prompts must quote, not summarize, the global constraints, execution notes, product spec, and full plan text. Quote, not summarize. Summarization is where invariants are quietly lost.
-
-<ProcessMarker step={7} />
 
 ## I reviewed the plan with ChatGPT
 
@@ -2297,8 +2280,6 @@ With the plan reviewed, I opened a fresh Claude session and pointed it at the re
 
 When it finished, I reviewed the resulting diff, architecture, behavior, and validation results myself. Claude also produced the same kind of report as the scaffold session: what it verified, where it deviated from the plan and why, and what it marked as a deliberate shortcut.
 
-<ProcessMarker step={9} />
-
 ## ChatGPT reviews the report
 
 I did not read that report alone. I pasted it back into the ChatGPT thread that had reviewed the plans, so the model that knew the product intent could judge the outcome against it. That is the same loop as before, just one turn later: Claude does the work, the report carries the reasons, and a second model with product context checks whether the work still matches the plan.
@@ -2323,8 +2304,6 @@ I did not read that report alone. I pasted it back into the ChatGPT thread that 
 > I would also do one quick real-content smoke test before launch.
 
 </Details>
-
-<ProcessMarker step={10} />
 
 ## What the run delivered
 
@@ -2360,6 +2339,8 @@ The resulting repo was close to complete and had a strong validation posture. He
 | QA | Lighthouse 100/100/100/100 on representative pages, JS budget, keyboard e2e |
 
 The deviations were the interesting part. Prettier ignores `*.mdx` because the MDX formatter mangled JSX-embedded lists and fences. Markdown plugins moved to Astro 7's actual processor mechanism. Admin routing stayed structured to guarantee no production output. And additional support dependencies were added where required.
+
+<ProcessMarker step={9} />
 
 ## Validation became the highest-leverage output
 
@@ -2469,6 +2450,8 @@ My review attention moved up: did the architecture survive, did validation get s
 </SpeakerNote>
 
 My review target moves up from local code style to architecture, scope, validation, and maintainability. The first question is whether the architecture survived: static content stayed static, React remained narrow, the `/blog/` base path stayed correct, no backend crept in, etc. Then, did validation get stronger? If the agent added features but weakened validation, that is a bad trade. Did JavaScript stay justified, with normal articles not turning into interactive applications? Were the deviations reasonable, meaning they preserved invariants while adapting to reality? And did scope stay bounded? Correct code outside the requested boundary is still a process failure.
+
+<ProcessMarker step={10} />
 
 ## Make future mistakes harder to commit
 
