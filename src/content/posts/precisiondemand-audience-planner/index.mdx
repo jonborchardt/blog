@@ -33,25 +33,19 @@ The Audience Planner is the one I'd show you first. It started as a 20% time ide
 the company's flagship product, and it's one of the three things in [the portfolio I froze in
 2018](/labs-2018-snapshot/) that I'm proudest of. It's also completely dead: it was a Silverlight
 application, and no browser has run Silverlight for years. What survives is a folder of screenshots
-and a walkthrough video. That turns out to be enough to reconstruct it, because the product was
-never complicated. It was four moves.
+and a walkthrough video.
 
 ## What PrecisionDemand sold
 
-TV ad-spend optimization. The pitch, more or less as I'd have said it in an elevator: we could
-tell you what market your ad dollars would convert into real sales.
+TV ad-spend optimization. The pitch: we could
+tell you, for every market, what your TV ad dollars would convert into real sales.
 
 That's a harder claim than it sounds. Television inventory is sold on audience size: a rating, a
 CPM, how many eyeballs. The thing an advertiser actually cares about is whether the people watching
 are the people who might buy a mid-size SUV. Our whole business was the gap between those two
 things, and the Audience Planner was the interface where a buyer got to see the gap and act on it.
 
-<Callout variant="note" title="Every number in these screenshots is fake">
-  The advertisers, the programs, the ratings, the dollar figures: all of it is demo data, built to
-  show the product. Nothing here is a real client's media plan.
-</Callout>
-
-## The whole product is four moves
+## What it Does
 
 Explore, filter, optimize, export. You open every program we had data on as one visual collection,
 you narrow it with facets until you're looking at the inventory you care about, you hand the
@@ -64,7 +58,7 @@ survivors to the optimizer, and you leave with a spreadsheet.
   <FlowViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
 </VizFigure>
 
-Nothing about that flow was novel in 2011 and nothing about it is novel now. What made it work was
+What made it work was
 that all four moves lived in one window, over the same collection, with the counts and the averages
 updating in the status bar as you went. You never left to run a report.
 
@@ -82,8 +76,10 @@ histogram binned by targeting score.
   />
 </Figure>
 
-The status bar along the bottom is the part I still like best. Program Count: 2473.
-Average Impressions: 241,772. Average Cost: $1,022.77. Average CPM: $4.23. Average tCPM: $112.12.
+The status bar along the bottom is the part I still like best.
+
+> Program Count: 2473. Average Impressions: 241,772. Average Cost: \$1,022.77. Average CPM: \$4.23. Average tCPM: \$112.12.
+
 Whatever you'd filtered down to, those five numbers described it, and they moved the instant you
 touched anything. It's the cheapest possible feedback loop and it did more work than any chart on
 the screen.
@@ -107,13 +103,6 @@ The `t` prefix elsewhere in the UI means "targeted": you get `CPM` and `tCPM` as
 `Imps per Air` and `tImps per Air` as a pair. A program with a good CPM and a terrible tCPM is
 cheap for a general audience and expensive for yours. Most of the product is about noticing that.
 
-<Callout variant="note" title="What was Microsoft's and what was mine">
-  The directory this lives in is called `PivotViewer`, after the Silverlight control for exploring
-  large card collections with facet filters. I couldn't tell you now which parts of this
-  chrome came out of that box and which parts I wrote. The archive kept the screenshots, not the
-  source.
-</Callout>
-
 ## Filter: the treemap
 
 Tick one box in the Genre facet and the collection redraws. This is the view I'd put on a
@@ -132,7 +121,7 @@ Every tile is a program, sized by whatever the sort dropdown is pointed at (impr
 here), coloured by targeting score, with its network's logo drawn on it. The genre facet on the left is showing its counts (762 documentary, 191
 instructions and advice, 149 general drama, 95 feature film, 62 news, 55 popular music, 45 situation
 comedy, 31 sports) and `INSTRUCTIONS, ADVICE` is the one that's ticked, so the status bar now
-reads 191 programs at an average of $1,632.80 an airing.
+reads 191 programs at an average of \$1,632.80 an airing.
 
 The logos were a deliberate choice and I'd make it again. A buyer doesn't think in program
 identifiers; they think "the Food Network block is cheap and the Travel Channel block is orange".
@@ -158,7 +147,7 @@ don't try to reconcile its numbers with the two screenshots above.
 Three things worth pointing at here.
 
 The four metrics on the card each carry a tiny bar showing where that value sits in the whole
-distribution. tCPM $48.02 is meaningless on its own; tCPM $48.02 with a marker near the good end of
+distribution. tCPM \$48.02 is meaningless on its own; tCPM \$48.02 with a marker near the good end of
 the range is a decision. That pattern (never show a number without showing its context) is the one
 idea on this screen that hasn't dated at all.
 
@@ -203,7 +192,7 @@ of the grid stay at zero was how you knew the run had actually solved something.
 
 I checked the arithmetic again while writing this, more than a decade later, and it survives: on all
 six rows, optimal spend is optimal airings times cost per airing. Not exactly (fifty airings of The
-Tonight Show at the displayed $19,893.62 comes to $994,681.00, and the cell says $994,681.10), but
+Tonight Show at the displayed \$19,893.62 comes to \$994,681.00, and the cell says \$994,681.10), but
 every row lands within fifteen cents, which is what you get when the per-airing cost on screen is
 itself rounded to the penny and the real one is not.
 
@@ -298,7 +287,7 @@ port straight into anything I build tomorrow:
   than any dashboard and more trusted than all of them.
 - **Sort and colour as independent, user-chosen dimensions.** Two dropdowns turned one view into
   every view.
-- **Never a number without its distribution.** The little bar next to $48.02 is what made the $48.02
+- **Never a number without its distribution.** The little bar next to \$48.02 is what made the \$48.02
   actionable.
 - **An export button.** The tool isn't where the decision gets made. Let the work leave.
 

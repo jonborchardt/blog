@@ -32,4 +32,17 @@ import Aside from "@/components/blog/Aside.astro";
   .speaker-note :global(p + p) {
     margin-top: 0.5rem;
   }
+  /* The shared Aside is not-prose, which strips list styling; restore it for notes. */
+  .speaker-note :global(ul) {
+    margin-top: 0.5rem;
+    padding-left: 1.25rem;
+    list-style: disc;
+  }
+  .speaker-note :global(ul ul) {
+    margin-top: 0;
+    list-style: circle;
+  }
+  .speaker-note :global(li + li) {
+    margin-top: 0.25rem;
+  }
 </style>

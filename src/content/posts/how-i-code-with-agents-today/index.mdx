@@ -25,19 +25,22 @@ import GatesViz from "@/assets/diagrams/gates-viz.svg";
 
 I want to share with you a project I did a few weekends ago. I used a pattern that turned out really well.
 
-~ Interrogate the AI until a fuzzy idea becomes decisions.
+None of this is revolutionary. You are likely already doing this, but I think its importasnt that we all share what works and what does not work.
 
-~ Build scaffolding before product.
+For this repo:
 
-~ Let the coded repo dictate plan changes.
-
-~ Hand the plan to the agent; review reports and reasons.
-
-~ Design checks directly into the build.
-
-~ Make almost free extensions to finish up.
-
-Every stage ends with something the repo can enforce that it could not before.
+- I use LLMs to generate prompts to generate plans.
+  - Using LLMs to figure out what assumptions will be made if I don't specify them.
+  - Using LLMs to make plans that have validation baked in at every step.
+  - Using LLMs to have validation failures explain the why, not just the what.
+- I use superpowers for plan shape.
+- I use ponytail for simplicity.
+- I build scaffolding before any product code.
+- I adapt my plans based on what building scaffolding uncovered.
+- I use fresh context or other LLMs to gut check that plans are complete.
+- When I hit an issue, I bake in validation to prevent any issue I hit.
+- I make every stage end with running validation.
+- I have every plan a single shippable chunk of work.
 
 </SpeakerNote>
 
@@ -64,7 +67,7 @@ Each section opens with this rail of the process: the three beats, the eleven st
 
 So we start with a fuzzy idea. This is the point of maximum ambiguity. Everything about this project lives in my head and nowhere else.
 
-The blog is just a convenient product; the real product is a repo that agents can maintain without me babysitting. Everything that follows is moving ambiguity out of my head into something checkable.
+Whatever the project is; the real product is a repo that agents can maintain without me babysitting. Everything that follows is moving ambiguity out of my head into something checkable.
 
 </SpeakerNote>
 
@@ -80,7 +83,10 @@ The blog was just a convenient product. The real object being built was an agent
 
 I start with an interrogation. The trick is to not ask for a prompt, ask what questions need answering first. In this case 45 came back; about ten were decisions I did not know I needed to make.
 
-One problem with AI-assisted coding is invisible decisions; they get baked into the first code pass before you notice. In this example I worked through MDX vs Markdown, SPA vs static, etc.
+One problem with AI-assisted coding is invisible decisions; they get baked into the first code pass before you notice. Do we want 
+- MDX or Markdown
+- SPA or static site
+- etc...
 
 </SpeakerNote>
 
@@ -193,10 +199,8 @@ If I had skipped this step, Claude would have silently made those choices, some 
 I decide invariants, the agent decides implementation mechanics. "/admin/ must not exist in production" is mine; how Astro guarantees it is not. 
 
 By the end of this conversation the fuzzy idea is a decision list. And that is something I can build prompts from.
-
-~ One prompt for building the scaffolding.
-
-~ One prompt for building the plan for the product.
+- One prompt for building the scaffolding.
+- One prompt for building the plan for the product.
 
 </SpeakerNote>
 
@@ -385,7 +389,9 @@ The important component rule is not to force bespoke MDX React components into t
 
 I build scaffolding before, and separately from, the product. The first prompt explicitly refuses to build the blog, skeleton only, and has written non-goals, because agents drift toward finishing whatever looks unfinished.
 
-I bake in acceptance criteria that are all checkable ("MDX renders, an island hydrates, URLs work under the base path"), so the agent can verify itself instead of guessing. First checks are locked in before any product exists.
+The prompt bakes in acceptance criteria that are all checkable ("MDX renders, an island hydrates, URLs work under the base path"), so the agent can verify itself instead of guessing. 
+
+First checks are locked in before any product exists.
 
 </SpeakerNote>
 
@@ -1292,16 +1298,6 @@ Checkable acceptance criteria cause the agent to verify; vague quality goals cau
 
 ## Running the scaffold prompt, and reading the report
 
-<SpeakerNote>
-
-I run the scaffold prompt and get back a report based on reality. The report is not a status update, it is input to the next reasoning step, so what I want is deviations with reasons.
-
-"skipped it" is useless; "skipped because it does not support ESLint 10, and axe covers it" tells the next agent when to revisit.
-
-I paste the report back to ChatGPT or a fresh Claude context to see if the plan building prompt needs updating based on the actual repo choices.
-
-</SpeakerNote>
-
 With the prompt written, I handed it to Claude and let it run. It installed Astro, wrangled the dependency conflicts, set up the routes, tooling, and deployment config, ran the build and checks, and came back with the scaffold working and a report of what it had done.
 
 The final report mattered because it became input to the next reasoning step, and the next model needs reasons, not just a status. The report had three useful categories. Verified facts: which commands ran, what passed, what was generated. Deviations with reasons: Node 24 because Astro 7 required newer Node, no jsx-a11y because of the ESLint 10 incompatibility, a system font stack instead of Geist, and a repo that was initialized but uncommitted. Explicitly deferred work: search, the full admin, OG images, rich primitives, and polished design.
@@ -1344,14 +1340,6 @@ The reasons are what matter. "Skipped jsx-a11y" is ambiguous. "Skipped jsx-a11y 
 
 ## Source of truth moves to the repo
 
-<SpeakerNote>
-
-Up to here, authority lived in my head and the prompt. From here on, the repo is the source of truth and nothing trusts memory again.
-
-I started a brand new session to audit the scaffold, because the session that built it would defend its own assumptions. Fresh eyes found defects: typography plugin never registered, dates off by one, etc.
-
-</SpeakerNote>
-
 After the scaffold existed, I stopped treating the prompt as authoritative and made the repository authoritative. Before the scaffold exists, the product conversation plus the architectural prompt is the source of truth. After it exists, the repository is. The product intent still matters, but now the next agent must reconcile that intent with real files, real tests, real dependencies, and real constraints. The key instruction in Prompt 2 made this explicit:
 
 > Do not assume the first scaffold task implemented everything perfectly.
@@ -1369,6 +1357,15 @@ After the scaffold existed, I stopped treating the prompt as authoritative and m
 
 ## Fresh planning found real bugs
 
+<SpeakerNote>
+
+I started a brand new session to audit the scaffold, because the session that built it would defend its own assumptions. Fresh eyes found defects: 
+- typography plugin never registered
+- dates off by one
+- etc...
+
+</SpeakerNote>
+
 Prompt 2 did not go to the session that built the scaffold. I closed that one and started a new Claude session with an empty context, so the only things it knew were the prompt and whatever it could read from the repo. That was deliberate: the scaffold session had just spent its whole context building this thing, and asking it to audit its own work would mostly get back its own assumptions.
 
 The clean inspection pass found silent defects that green tests did not catch. `@tailwindcss/typography` was installed but not registered, the Shiki dark-mode CSS hook did not exist, UTC dates rendered one day early in local time, etc.
@@ -1381,11 +1378,7 @@ This worked because the fresh session had no memory of building the scaffold, an
 
 <SpeakerNote>
 
-Now I run the plan building prompt to generate eleven ordered plans, each independently shippable. The checks thread continues here: every plan carries its own acceptance criteria and validation section, so "done" stays checkable at every stage, not just at the end.
-
-The test I always run: "can each plan execute in a brand new context with zero memory of this chat?" If it cannot, fix it by embedding the spec and a quote-don't-summarize rule. Summarization is where invariants quietly die.
-
-Here I lean on superpowers for plan shape and ponytail for simplicity.
+Now I run the plan building prompt to generate eleven ordered plans, each independently shippable. Every plan carries its own acceptance criteria and validation section, so "done" stays checkable at every stage, not just at the end.
 
 </SpeakerNote>
 
@@ -2200,11 +2193,25 @@ Inspect, reason, and produce the ordered implementation program only.
 
 ## The plan used an existing skill system
 
+<SpeakerNote>
+
+I lean heavily on superpowers for plan shape and ponytail for simplicity.
+
+</SpeakerNote>
+
 Claude did not invent the planning methodology from scratch; it used the plugins I already had installed. [Superpowers](https://github.com/obra/superpowers) supplied the `writing-plans` skill, which prescribed that plans assume the executor has zero context, that file responsibilities are mapped before tasks, that tasks are sized to carry their own test cycle, that commits are frequent, and that plans are saved in a standard location. [Ponytail](https://github.com/DietrichGebert/ponytail) pushed the DRY/YAGNI side: the laziest solution that works, stdlib and native features before dependencies, no abstractions for imagined future needs (I wrote about it in [Ponytail: making the AI a lazy senior dev](/ponytail-lazy-senior-dev/)). Reusable process assets compound. Skills are process memory.
 
 The project goal and the process skills aligned neatly. The product wanted an agent-authored repository with explicit contracts and validation, and the planning skill produced explicit contracts for future agent sessions. It is the same philosophy at two levels: repo contracts help agents maintain code, and plan contracts help agents execute work.
 
 ## The plan had to survive beyond the chat
+
+<SpeakerNote>
+
+I ask the LLM: "can each plan execute in a brand new context with zero memory of this chat?" 
+
+If it cannot, I fix it by having the LLM embed the relevant parts of the spec as a quote not a summarization. Summarization is where your invariants quietly die.
+
+</SpeakerNote>
 
 Anything future agents need has to move out of ephemeral chat context and into durable repository or memory artifacts. So before closing the planning session, I asked it directly: do the plans you generated contain everything they need from this conversation, so that I can run each one in a brand new context? That question is a standard step for me at the end of any planning session, because the plans will be executed by sessions that never saw the chat that produced them. 
 
@@ -2253,9 +2260,11 @@ Before running the plans, I brought them back to ChatGPT for an independent revi
 
 <SpeakerNote>
 
-Then I run the plans. Eighty minutes, eleven commits, shippable after every one. Shippable is not a vibe: each plan ran the validation and build before its commit, and one entire plan added nothing but new build-output checks. The check suite was growing while the product was.
+Then I run the plans. Eighty minutes, eleven commits, shippable after every one. Shippable for real: each plan ran the validation and build before its commit. 
 
-Execution was boring because the stages before it were not. If the demo magic is the exciting part of your agent story, the prep was too thin.
+The test suite grows while the product does.
+
+Execution was boring because the stages before it were not. If coding is the exciting part of your agent story, the prep was too thin.
 
 </SpeakerNote>
 
@@ -2292,12 +2301,6 @@ When it finished, I reviewed the resulting diff, architecture, behavior, and val
 
 ## ChatGPT reviews the report
 
-<SpeakerNote>
-
-I feed the final report from Claude back to the model that did the first interrogation, and it judges the outcome against the original intent. The builder reports with reasons, the reviewer checks them against the plan.
-
-</SpeakerNote>
-
 I did not read that report alone. I pasted it back into the ChatGPT thread that had reviewed the plans, so the model that knew the product intent could judge the outcome against it. That is the same loop as before, just one turn later: Claude does the work, the report carries the reasons, and a second model with product context checks whether the work still matches the plan.
 
 <Details summary="Actual conversation: ChatGPT's review of the result">
@@ -2327,7 +2330,16 @@ I did not read that report alone. I pasted it back into the ChatGPT thread that 
 
 <SpeakerNote>
 
-The result was a high quality system. One run delivered most of the product: design system, article pages, MDX primitives, OG cards, search, the dev-only admin, and the skills. Walk the table; every row was one plan, one commit.
+The result was a high quality system. One run delivered most of the product: 
+- design system
+- article pages
+- MDX primitives
+- OG cards
+- search
+- dev-only admin
+- and the skills...
+
+Each was one plan, one commit.
 
 </SpeakerNote>
 
@@ -2353,7 +2365,11 @@ The deviations were the interesting part. Prettier ignores `*.mdx` because the M
 
 <SpeakerNote>
 
-Checks were never a phase: the scaffold prompt baked in the testing stack, every plan carried its own validation section, and one plan was nothing but build-output checks. For example tags compile to TypeScript unions, so tag drift is a type error, not next quarter's cleanup; and a validation error becomes an instruction for the fixing agent, not just a complaint.
+Checks were never a phase: the scaffold prompt baked in the testing stack and every plan carried its own validation section. 
+
+For example 
+- tags compile to TypeScript unions, so tag drift is a type error, not next quarter's cleanup
+- a validation error becomes an instruction for the fixing agent, not just a complaint.
 
 </SpeakerNote>
 
@@ -2411,7 +2427,18 @@ The layered model is that `CLAUDE.md` invariants say what must stay true, skills
 
 <SpeakerNote>
 
-By this point the checks have compounded into a floor: a green build MEANS Lighthouse 100s, axe-clean, zero JS on prose, no broken links. A red check blocks deploy. And the repo ended with operating procedures, not just code: CLAUDE.md says what must stay true, skills say how recurring work is done, validation says what cannot be wrong.
+By this point, enough checks have accumulated that quality is a floor, not a target: a green build MEANS 
+- Lighthouse 100s
+- axe-clean 
+- no broken links
+- etc... 
+
+A red check blocks deploy. 
+
+And the repo ended with operating procedures, not just code: 
+- CLAUDE.md says what must stay true
+- skills say how recurring work is done
+- validation says what cannot be wrong
 
 </SpeakerNote>
 
@@ -2522,13 +2549,5 @@ Every one of those ran through the same skill, the same validation, and the same
 </Details>
 
 ## Final takeaway
-
-<SpeakerNote>
-
-Extension was cheap because validation was the real output; validation could accumulate because the repo replaced the prompt; the repo could replace the prompt because the deciding happened before any prompting. 
-
-The win was never a better giant prompt; it was knowledge leaving the chat and becoming code, schemas, tests, and skills.
-
-</SpeakerNote>
 
 Use conversation to reduce ambiguity, use a scaffold to discover reality, then plan from the repository instead of the original idea. The useful pattern is not a better giant prompt. The first prompt establishes architecture; the repository then replaces that prompt as the source of truth; the second planning pass turns the real repository into bounded, independently shippable changes. Over time, the important knowledge should leave chat and become code, schemas, tests, validation, repository instructions, and skills. That is what makes this feel less like prompting and more like software engineering.
