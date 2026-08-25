@@ -17,7 +17,6 @@ import Callout from "@/components/blog/Callout.astro";
 import Figure from "@/components/blog/Figure.astro";
 import VizFigure from "@/components/blog/VizFigure.astro";
 import FlowViz from "./flow-viz.svg";
-import StackViz from "./stack-viz.svg";
 import histogram from "./histogram.png";
 import treemap from "./treemap.png";
 import cardDetail from "./card-detail.png";
@@ -53,13 +52,13 @@ survivors to the optimizer, and you leave with a spreadsheet.
 
 <VizFigure
   name="Explore, filter, optimize, export"
-  summary="The four moves of the Audience Planner, narrowing top to bottom. A collection of about 2,473 program cards shaded by targeting score; a facet panel with a score range slider and a genre list (762 documentary, 191 instructions and advice ticked, 149 general drama) that cuts them down; a grid where a 'Re-calculate Optimal Plan' button assigns airings and spend per program, most rows staying at zero; and an 'Export to Excel' spreadsheet at the bottom. The two counts come from two different screenshots in different filter states; the 191 is not a filtering of the 2,473."
+  summary="Audience Planner, narrowing top to bottom. A collection of about 2,473 program cards shaded by targeting score; a facet panel with a score range slider and a genre list (762 documentary, 191 instructions and advice ticked, 149 general drama) that cuts them down; a grid where a 'Re-calculate Optimal Plan' button assigns airings and spend per program, most rows staying at zero; and an 'Export to Excel' spreadsheet at the bottom. The two counts come from two different screenshots in different filter states; the 191 is not a filtering of the 2,473."
 >
   <FlowViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
 </VizFigure>
 
 What made it work was
-that all four moves lived in one window, over the same collection, with the counts and the averages
+that it all lived in one window, over the same collection, with the counts and the averages
 updating in the status bar as you went. You never left to run a report.
 
 ## Explore: a card for every program
@@ -158,11 +157,7 @@ actually running, ready to be compared.
 
 The **Demographics** block is a list of household attributes (year the home was built, gender,
 income, marital status, and, my favourite, `Golf - True`), each with a small diverging bar showing
-whether this program's audience over- or under-indexes on it. The Silverlight-era backend that
-survives on disk connects to two databases, one called `Demographics` and one called `Acxiom`, and I'd
-bet this panel is reading the second. Either way it's exactly where the business was: the
-reason we could talk about sales instead of eyeballs is that somebody had joined TV viewing to
-household data, and this panel is where that join surfaced to a human.
+whether this program's audience over- or under-indexes on it.
 
 ## Optimize: "Re-calculate Optimal Plan"
 
@@ -177,11 +172,6 @@ The other end of the product is a grid, and it's deliberately boring.
   />
 </Figure>
 
-Columns: a lock checkbox, optimal airings as a numeric spinner with a bar beside it, the program's
-own airing count, its duration, its name, its network, cost per airing, optimal spend, impressions
-per airing. Twelve pages of it. Two buttons at the bottom: **Re-calculate Optimal Plan** on the
-left, **Export to Excel** on the right.
-
 The interesting thing about this screenshot is how much of it is zero. Of the twenty-eight rows
 visible, six have a non-zero optimal airing count. Property Virgins, NY Ink, How I Met Your Mother,
 Mutant Planet, My First Place: nothing. The plan puts fifty airings into The Tonight Show, eighteen
@@ -190,20 +180,14 @@ Think You Can Dance and twenty-six into 60 Minutes. An optimizer that concentrat
 an optimizer that spreads a little money over everything is just computing an average. Watching most
 of the grid stay at zero was how you knew the run had actually solved something.
 
-I checked the arithmetic again while writing this, more than a decade later, and it survives: on all
-six rows, optimal spend is optimal airings times cost per airing. Not exactly (fifty airings of The
-Tonight Show at the displayed \$19,893.62 comes to \$994,681.00, and the cell says \$994,681.10), but
-every row lands within fifteen cents, which is what you get when the per-airing cost on screen is
-itself rounded to the penny and the real one is not.
-
-The `Lock` column is the one piece here I'm reading rather than remembering. A checkbox next to an
-editable airing count, on a screen whose main verb is "re-calculate", is almost certainly there so a
+A checkbox next to an
+editable airing count, on a screen whose main verb is "re-calculate", is there so a
 buyer can pin the lines they've already committed to and let the solver move everything else
-around them. I think that's what it did.
+around them.
 
 ## Export, and the comparison charts
 
-The last move is a button labelled **Export to Excel**, and I've made peace with that.
+Lastly there is a button labelled **Export to Excel**.
 
 Nobody bought a media plan out of a Silverlight window. They bought it out of a spreadsheet that
 went to their agency, got argued over, and came back with changes. The most sophisticated part of
@@ -211,7 +195,7 @@ the product handed off to the least sophisticated format available, on purpose, 
 where the work continued. A visualization tool without an escape hatch is a tool that asks people to
 do their real work somewhere it can't see.
 
-Before the spreadsheet there was a comparison view.
+With the spreadsheet there was a comparison view.
 
 <Figure caption="Plan comparison charts: the recommended plan against the client's, on airings, targeted CPM, targeted impressions, and distribution across days and dayparts." zoom>
   <Image
@@ -224,49 +208,18 @@ Before the spreadsheet there was a comparison view.
 
 The headlines are written as comparisons rather than values: "Airings will be 417 % more than
 Client", "Targeted CPM will be 99 % less than Client", "Targeted impression will be 6,966 % more
-than Client". Those are demo numbers and they're shameless demo numbers (a real proposal didn't
-promise a 99% CPM cut), but the framing is right. A buyer doesn't need to know the targeted CPM.
+than Client". A buyer doesn't need to know the targeted CPM.
 They need to know whether it's better than what they're doing now.
-
-Each grouped chart has five bar series and no legend anywhere in the screenshot. The card detail
-panel lists exactly five airing rows, four campaigns plus `PrecisionDemand Optimal`. Probably those
-five, but I can't confirm it.
-
-The `Cable Impressions` card in the bottom right is drawing an empty axis: labelled, gridded, and
-carrying no bars at all. A demo dataset with nothing in one of its buckets, most likely. I'm leaving
-it in.
 
 ## Why Silverlight, and what is left of it
 
 Because the company started at the dawn of Silverlight. That's the whole answer. In 2010 it was a
 credible bet: you got a real widget toolkit, real data binding, a real type system and a control
 that already did faceted card browsing, at a time when doing any of that in a browser meant writing
-it yourself. We pivoted away later as other web technology became dominant. Not on a particular
-Tuesday when someone slammed a door, just steadily, the way a platform stops being a decision and
-starts being a liability.
-
-The Planner's own source didn't make it into the archive, but a sibling from the same period and
-the same hands did, and it's short enough to read in one sitting.
-
-<VizFigure
-  name="The surviving Silverlight-era stack"
-  summary="Three tiers and nothing else: a Silverlight .xap running as a browser plug-in, a single WCF endpoint called DalService.svc, and two SQL databases named Demographics and Acxiom on a server named baker. None of the three tiers can run today."
->
-  <StackViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
-</VizFigure>
-
-A `.xap` file (a Silverlight client, zipped assemblies, still sitting on disk and still perfectly
-decompilable), plus one WCF service, `DalService.svc`, plus a `Web.config` with Entity Framework
-connection strings hardcoded to `data source=baker` and the catalogues `Demographics` and `Acxiom`.
-
-The service contract is three operations wide: `GetClusterSources`, `GetClusters`, and
-`GetRelevantDemographicsOfCluster`. There's the whole thesis, in an interface definition. Pick
-a data source, get its clusters of households, ask which demographic attributes make a given cluster
-distinctive. Those clusters are the same word as the `tRatio Cluster 1`, `2` and `3` facets in the
-first screenshot, and that last method is the panel I just walked you through.
-
-Three tiers, and every one of them is unreachable now. No browser ships the plug-in. `baker` was
-decommissioned so long ago that I couldn't tell you what happened to it.
+it yourself. We pivoted away when TypeScript hit the web: once the browser had a real type
+system of its own, the last argument for the plug-in was gone. Not on a particular Tuesday when
+someone slammed a door, just steadily, the way a platform stops being a decision and starts being a
+liability.
 
 ## What happened to it
 

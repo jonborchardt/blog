@@ -92,14 +92,6 @@ this.charts["ageBarFilter"] = <Charts.IFilterBarChart<Models.IEncounter>>{
 the array and instantiates the dc.js charts; the page itself contains almost no chart code. That
 generic parameter is why the second project exists at all.
 
-<Callout variant="note" title="It is not an ASP.NET app">
-  Both projects ship as Visual Studio web projects, with a `.csproj`, a `Web.config` and DLLs in
-  `bin/`. None of that runs. The entire dataset is baked into `App/core/models/EncounterLoader.js`
-  as a 2.9 MB literal array, and the one function that would have called a server API is never
-  invoked. It's a folder of static files wearing a server's clothes, which is exactly why it still
-  opens in 2026 with nothing but a local file server.
-</Callout>
-
 ## The fork
 
 The other one is the Adap.tv Rewards Report, and it charts the company's peer-recognition program.
@@ -144,9 +136,28 @@ Structurally it's the same page. Here are the chart slots each one defines, in s
 </Comparison>
 
 Different words, identical shapes: a brushable time dimension, a couple of numeric histograms, a
-pie, and a stack of ranked row charts. Forking meant writing a new loader, a new key-metrics class
-and a new array of config objects. The chart engine, the crossfilter wiring, the layout directives
-and the build were untouched.
+pie, and a stack of ranked row charts. Here is the "How Much" histogram from the rewards config
+array, which is the age chart with the nouns swapped:
+
+```ts
+this.charts["amountBarFilter"] = <Charts.IFilterBarChart<Models.IReward>>{
+    title: "How Much",
+    chartType: Charts.ChartType.filterBarChart,
+    keyId: "amount",
+    metricIds: ["amount"],
+    sizeData: <Charts.ISizeData>{ width: quarterWidth, height: shortHeight, margin: baseMargin },
+    groupCountOverride: 20,
+    elasticY: true,
+    hideFilter: true,
+    minX: 0,
+    maxX: 101
+};
+```
+
+Same interface, different generic: `IEncounter` became `IReward`, ages 1 to 97 became dollar
+amounts 0 to 101, and the rest is field names. Forking meant writing a new loader, a new
+key-metrics class and a new array of config objects like this one. The chart engine, the
+crossfilter wiring, the layout directives and the build were untouched.
 
 That's the argument for declaring charts as data. Retargeting the dashboard was a data-modelling
 job, not a rewrite. I didn't go near the rendering code.

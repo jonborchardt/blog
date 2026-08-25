@@ -38,10 +38,6 @@ recompute, that turned out to matter far more than the charts did.
 
 ## The chart I was replacing
 
-Two files still sit unlinked at the root of the portfolio, `fordsuvindustry.htm` and
-`jonbtest.htm`. They are the "before" artifacts, and they are about as simple as a 2013 chart page
-got:
-
 ```html
 <script type="text/javascript" src="http://www.google.com/jsapi"></script>
 <script type="text/javascript">
@@ -71,15 +67,6 @@ It's a good chart. Two series, lettered annotations pinned to dates with a panel
 zoom presets, and a range selector along the bottom. In 2013 Google drew all of that with a Flash
 object, which is the detail that explains the headline on the page I replaced it with: "Replacement
 for existing Flash based Industry Tracker". The Flash in that sentence was Google's, not ours.
-
-<Callout variant="note" title="These pages were supposed to be dead">
-  I went in expecting a blank screen. The old `jsapi` loader is long deprecated and I had written
-  these two pages off. They render fine. `google.load` now forwards to
-  `gstatic.com/charts/51/loader.js`, which quietly draws the modern SVG `annotationchart` instead:
-  twelve `<svg>` elements on the page and not one `<object>` or `<embed>`. So the screenshot above is
-  Google's replacement for its own Flash chart, standing in for the thing I was actually looking at
-  in 2013.
-</Callout>
 
 ## Building the equivalent
 
@@ -125,19 +112,6 @@ smaller idea than "1h 1d 5d 1w 1m 3m 6m 1y max" and a much better one, because t
 continuous and you can slide it rather than pick it off a menu. The annotations stay pinned to
 their dates while the window closes around them:
 
-<Figure
-  caption="The tracker mid-sweep: the window has closed to mid-2010 through late 2011 and annotation C has come along for the ride."
-  width="wide"
-  zoom
->
-  <Image
-    src={trackerSwept}
-    width={1400}
-    height={789}
-    alt="The industry tracker rescaled to a mid-2010 through late 2011 window, with annotation C still pinned"
-  />
-</Figure>
-
 ## The sweep
 
 Here is the interaction the whole thing was really about.
@@ -178,10 +152,7 @@ The tracker and the rotations page were two pages of five. `demos/d3Demo` holds 
 `programExample`, `explorerExample` and `webSpike`, plus two hub pages. The hubs are the part I had
 forgotten and now like the most. `demos.html` is six escalating throwaways (hover, animation on
 click, more advanced animation, charting, animated charts, thousands of animated points), the
-sketchbook of somebody learning a library in public. And `index.html`, titled "Front-end data
-visualization examples", is not a demo at all. It is a page of links: d3js.org, nvd3.org,
-crossfilter, four New York Times interactives, Bostock's Wealth & Health of Nations. That page is
-the actual pitch. The demos underneath it are the evidence I could build that.
+sketchbook of somebody learning a library in public.
 
 The stack under the demos was D3 v3 with NVD3 for the chart models, Square's crossfilter for the
 filtering, dc.js on the explorer page, and topojson for the maps. The three pages not already
