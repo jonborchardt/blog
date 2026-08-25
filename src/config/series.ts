@@ -29,12 +29,12 @@ export const series = {
       alt: "A gridded globe with padlock markers projecting glowing towers, while the ISS rides a dashed orbit",
     },
   },
-  "past-work": {
-    title: "Seventeen Years of Side Projects",
+  "work-2001-2018": {
+    title: "Work from 2001 to 2018",
     description:
       "Seventeen years of screens, 2001 to 2018 — courtroom document maps, search results, TV ad dashboards — frozen as a static portfolio and reopened in 2026.",
     hero: {
-      src: "series/past-work.png",
+      src: "series/work-2001-2018.png",
       alt: "A timeline from 2001 to 2018 of small chart-icon tiles, four highlighted as flagship products",
     },
   },
