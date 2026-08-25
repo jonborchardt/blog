@@ -46,7 +46,7 @@ A statically generated technical blog (Astro 7 + React islands + MDX + Tailwind/
 
 ## Museum (preserved demos)
 
-- Preserved 2001–2018 demo pages live in `public/museum/<id>/`, served verbatim — no makeover, no rewrites beyond a minimal `<head>` patch (title, description, og:image, `noindex`) so they pass the dist checks. Lobby: `public/museum/index.html`, which links every demo.
+- Preserved 2001–2018 demo pages live in `public/museum/<id>/`, served verbatim — no makeover, no rewrites beyond a minimal `<head>` patch (title, description, og:image, `noindex`) so they pass the dist checks. Lobby: `public/museum/index.html`, which links every demo. One sanctioned exception: `fatal-encounters/` carries a clearly marked 2026 addendum (`update2021.js` + on-demand `encountersUpdate2021.js`, one script tag in `index.html`) that toggles the June-2014-to-2021 rows in and out of the live dashboard; the 2014 app files stay untouched.
 - `public/museum/` is exempt from ESLint and Prettier (see `eslint.config.js`, `.prettierignore`) but **not** from dist checks or the W3C markup gate.
 - Posts embed a demo with `MuseumEmbed` (`src/components/blog/MuseumEmbed.astro`): click-to-load teaser + iframe, so multi-MB baked-in datasets never load unasked.
 - Every demo (and its lobby link) has smoke coverage in `e2e/museum.spec.ts` — add an entry when adding a demo.

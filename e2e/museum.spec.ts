@@ -39,6 +39,25 @@ test("every museum page loads clean and renders its content", async ({ page }) =
   }
 });
 
+test("fatal-encounters update button toggles the 2015-2021 rows live", async ({ page }) => {
+  // ~12 MB of newer data plus a full dc.js re-render of every chart, twice.
+  test.setTimeout(120_000);
+  await page.goto("museum/fatal-encounters/index.html");
+  await page.getByRole("button", { name: "Load the 2015-2021 update" }).click();
+  await expect(page.getByText(/Updated: 13,499 encounters added/)).toBeVisible({
+    timeout: 60_000,
+  });
+  // the month timeline's x axis was rebuilt to reach the new extent
+  // (exact: a bar tooltip <title> also starts with the same date text)
+  await expect(page.getByText("12/01/2021", { exact: true })).toBeVisible();
+  // a second click removes the rows and restores the 2014 snapshot
+  await page.getByRole("button", { name: "Remove the 2015-2021 update" }).click();
+  await expect(page.getByText(/Back to the original 2014 snapshot/)).toBeVisible({
+    timeout: 60_000,
+  });
+  await expect(page.getByText("11/01/2014", { exact: true })).toBeVisible();
+});
+
 test("lobby links match the shipped demo pages exactly", async ({ page }) => {
   await page.goto("museum/index.html");
   const links = page.locator("ul li a");
