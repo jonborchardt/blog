@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="330" viewBox="0 0 640 330" font-family="system-ui, sans-serif" font-size="13" aria-hidden="true">
+  <!-- device body -->
+  <rect x="40" y="20" width="560" height="290" rx="22" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="2" />
+  <!-- Neo info strip -->
+  <rect x="150" y="266" width="340" height="24" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.5" />
+  <circle cx="118" cy="278" r="5" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.5" />
+  <circle cx="522" cy="278" r="5" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.5" />
+  <text x="320" y="282" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity="0.6">Stream Deck Neo · 4 x 2</text>
+
+  <!-- top row: session names -->
+  <g fill="#deeef5" stroke="#006a90" stroke-width="1.5">
+    <rect x="70" y="46" width="110" height="90" rx="12" />
+    <rect x="200" y="46" width="110" height="90" rx="12" />
+    <rect x="330" y="46" width="110" height="90" rx="12" />
+    <rect x="460" y="46" width="110" height="90" rx="12" />
+  </g>
+  <g fill="#11171d" text-anchor="middle" font-weight="600">
+    <text x="125" y="97">narrative</text>
+    <text x="255" y="97">website</text>
+    <text x="385" y="97">playground</text>
+    <text x="515" y="97">science</text>
+  </g>
+  <g fill="#555f69" text-anchor="middle" font-size="11">
+    <text x="125" y="122">~/repos/narrative</text>
+    <text x="255" y="122">~/repos/site</text>
+    <text x="385" y="122">~/repos/play</text>
+    <text x="515" y="122">~/repos/sci</text>
+  </g>
+
+  <!-- bottom row: session states -->
+  <!-- WORKING: featured chip with a three-dot pulse -->
+  <rect x="70" y="156" width="110" height="90" rx="12" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+  <g fill="#006a90">
+    <circle cx="109" cy="184" r="5" />
+    <circle cx="125" cy="184" r="5" fill-opacity="0.6" />
+    <circle cx="141" cy="184" r="5" fill-opacity="0.3" />
+  </g>
+  <text x="125" y="222" text-anchor="middle" font-weight="600" fill="#11171d">WORKING</text>
+
+  <!-- WAITING: dashed outline, cursor bar -->
+  <rect x="200" y="156" width="110" height="90" rx="12" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5" stroke-dasharray="5 4" />
+  <rect x="248" y="172" width="4" height="22" fill="currentColor" fill-opacity="0.75" />
+  <text x="255" y="222" text-anchor="middle" font-weight="600" fill="currentColor" fill-opacity="0.85">WAITING</text>
+
+  <!-- DONE: featured chip with a check -->
+  <rect x="330" y="156" width="110" height="90" rx="12" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+  <path d="M370 186 l10 10 l20 -22" fill="none" stroke="#006a90" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+  <text x="385" y="222" text-anchor="middle" font-weight="600" fill="#11171d">DONE</text>
+
+  <!-- APPROVAL: the one warm key -->
+  <rect x="460" y="156" width="110" height="90" rx="12" fill="#f0b35a" stroke="#11171d" stroke-width="1.5" />
+  <text x="515" y="196" text-anchor="middle" font-size="26" font-weight="700" fill="#11171d">?</text>
+  <text x="515" y="222" text-anchor="middle" font-weight="600" fill="#11171d">APPROVAL</text>
+
+  <!-- caption arrow to the warm key -->
+  <text x="515" y="322" text-anchor="middle" font-size="12" fill="currentColor" fill-opacity="0.75">press this one next</text>
+</svg>

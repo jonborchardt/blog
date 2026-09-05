@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 600" width="1500" height="600">
+  <title>A Stream Deck keypad whose eight lit keys show project names and session states, one glowing amber for a pending approval, in front of faded editor windows</title>
+  <rect width="1500" height="600" fill="#fafcfe"/>
+
+  <!-- faded editor windows behind, spilling into the flanks (non-essential) -->
+  <g fill="#fafcfe" stroke="#d9dfe3" stroke-width="4">
+    <rect x="40" y="70" width="420" height="300" rx="14"/>
+    <rect x="200" y="200" width="420" height="300" rx="14"/>
+    <rect x="880" y="60" width="420" height="300" rx="14"/>
+    <rect x="1040" y="220" width="420" height="300" rx="14"/>
+  </g>
+  <g stroke="#d9dfe3" stroke-width="4" stroke-linecap="round">
+    <line x1="40" y1="106" x2="460" y2="106"/>
+    <line x1="200" y1="236" x2="620" y2="236"/>
+    <line x1="880" y1="96" x2="1300" y2="96"/>
+    <line x1="1040" y1="256" x2="1460" y2="256"/>
+  </g>
+  <g stroke="#d9dfe3" stroke-width="8" stroke-linecap="round">
+    <line x1="70" y1="150" x2="250" y2="150"/><line x1="70" y1="184" x2="330" y2="184"/><line x1="70" y1="218" x2="200" y2="218"/>
+    <line x1="230" y1="280" x2="380" y2="280"/><line x1="230" y1="314" x2="440" y2="314"/>
+    <line x1="910" y1="140" x2="1110" y2="140"/><line x1="910" y1="174" x2="1200" y2="174"/><line x1="910" y1="208" x2="1050" y2="208"/>
+    <line x1="1070" y1="300" x2="1240" y2="300"/><line x1="1070" y1="334" x2="1400" y2="334"/><line x1="1070" y1="368" x2="1180" y2="368"/>
+  </g>
+
+  <!-- the deck body: ink, because the device is literally dark -->
+  <rect x="370" y="112" width="760" height="376" rx="34" fill="#11171d"/>
+  <rect x="384" y="126" width="732" height="348" rx="26" fill="none" stroke="#555f69" stroke-width="3"/>
+
+  <!-- top row: four session name keys -->
+  <g fill="#deeef5">
+    <rect x="434" y="160" width="140" height="110" rx="16"/>
+    <rect x="598" y="160" width="140" height="110" rx="16"/>
+    <rect x="762" y="160" width="140" height="110" rx="16"/>
+    <rect x="926" y="160" width="140" height="110" rx="16"/>
+  </g>
+  <!-- name bars on the name keys -->
+  <g stroke="#006a90" stroke-width="12" stroke-linecap="round">
+    <line x1="458" y1="200" x2="540" y2="200"/><line x1="458" y1="232" x2="510" y2="232"/>
+    <line x1="622" y1="200" x2="690" y2="200"/><line x1="622" y1="232" x2="700" y2="232"/>
+    <line x1="786" y1="200" x2="880" y2="200"/><line x1="786" y1="232" x2="840" y2="232"/>
+    <line x1="950" y1="200" x2="1020" y2="200"/><line x1="950" y1="232" x2="1040" y2="232"/>
+  </g>
+
+  <!-- bottom row: state keys -->
+  <!-- WORKING -->
+  <rect x="434" y="294" width="140" height="110" rx="16" fill="#deeef5"/>
+  <g fill="#006a90">
+    <circle cx="482" cy="332" r="9"/><circle cx="504" cy="332" r="9" fill-opacity="0.6"/><circle cx="526" cy="332" r="9" fill-opacity="0.3"/>
+  </g>
+  <text x="504" y="384" text-anchor="middle" font-family="IBM Plex Sans" font-size="20" font-weight="600" fill="#11171d">WORKING</text>
+
+  <!-- WAITING: dim key, cursor bar -->
+  <rect x="598" y="294" width="140" height="110" rx="16" fill="#11171d" stroke="#555f69" stroke-width="3"/>
+  <rect x="664" y="318" width="6" height="30" fill="#deeef5"/>
+  <text x="668" y="384" text-anchor="middle" font-family="IBM Plex Sans" font-size="20" font-weight="600" fill="#d9dfe3">WAITING</text>
+
+  <!-- DONE: check -->
+  <rect x="762" y="294" width="140" height="110" rx="16" fill="#deeef5"/>
+  <path d="M812 334 l14 14 l30 -32" fill="none" stroke="#006a90" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="832" y="384" text-anchor="middle" font-family="IBM Plex Sans" font-size="20" font-weight="600" fill="#11171d">DONE</text>
+
+  <!-- APPROVAL: the glowing amber key -->
+  <rect x="914" y="282" width="164" height="134" rx="22" fill="#f0b35a" fill-opacity="0.35"/>
+  <rect x="926" y="294" width="140" height="110" rx="16" fill="#f0b35a"/>
+  <text x="996" y="348" text-anchor="middle" font-family="IBM Plex Sans" font-size="44" font-weight="700" fill="#11171d">?</text>
+  <text x="996" y="384" text-anchor="middle" font-family="IBM Plex Sans" font-size="20" font-weight="600" fill="#11171d">APPROVE</text>
+
+  <!-- Neo info strip -->
+  <rect x="560" y="428" width="380" height="28" rx="10" fill="none" stroke="#555f69" stroke-width="3"/>
+  <circle cx="470" cy="442" r="8" fill="none" stroke="#555f69" stroke-width="3"/>
+  <circle cx="1030" cy="442" r="8" fill="none" stroke="#555f69" stroke-width="3"/>
+</svg>
