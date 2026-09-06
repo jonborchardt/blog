@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="300" viewBox="0 0 640 300" font-family="system-ui, sans-serif" font-size="12">
+  <!-- realized tax rate on spending draws by age band; y = 260 - rate * 6.286 (0..35%); groups of two bars: retire 55 (blue), retire 54 (grey) -->
+  <!-- legend -->
+  <rect x="60" y="14" width="14" height="14" fill="#006a90"/>
+  <text x="80" y="26" fill="currentColor" fill-opacity="0.85">retire at 55</text>
+  <rect x="170" y="14" width="14" height="14" fill="currentColor" fill-opacity="0.35"/>
+  <text x="190" y="26" fill="currentColor" fill-opacity="0.85">retire at 54</text>
+
+  <!-- reference lines -->
+  <g stroke="currentColor" stroke-opacity="0.45" stroke-width="1" stroke-dasharray="4 4">
+    <line x1="60" y1="228.6" x2="610" y2="228.6"/>
+    <line x1="60" y1="165.7" x2="245" y2="165.7"/>
+    <line x1="335" y1="165.7" x2="610" y2="165.7"/>
+    <line x1="60" y1="121.7" x2="610" y2="121.7"/>
+  </g>
+  <g fill="currentColor" fill-opacity="0.75" font-size="11">
+    <text x="64" y="224">5%: the hearsay</text>
+    <text x="64" y="161">15%: the knob setting</text>
+    <text x="64" y="117">22%: lifetime rate</text>
+  </g>
+
+  <!-- group 0: before 55 (centre 105.8) -->
+  <text x="88.8" y="252" fill="currentColor" fill-opacity="0.6" font-size="11" text-anchor="middle">n/a</text>
+  <rect x="107.8" y="253.1" width="30" height="6.9" fill="currentColor" fill-opacity="0.35"/>
+  <text x="122.8" y="248" fill="currentColor" fill-opacity="0.85" font-size="11" text-anchor="middle">1%</text>
+
+  <!-- group 1: 55-59 (centre 197.5) -->
+  <rect x="165.5" y="181.4" width="30" height="78.6" fill="#006a90"/>
+  <text x="180.5" y="176" fill="currentColor" fill-opacity="0.85" font-size="11" text-anchor="middle">12%</text>
+  <rect x="199.5" y="129.3" width="30" height="130.7" fill="currentColor" fill-opacity="0.35"/>
+  <text x="214.5" y="124" fill="currentColor" fill-opacity="0.85" font-size="11" text-anchor="middle">21%</text>
+
+  <!-- group 2: 60-64 (centre 289.2) -->
+  <rect x="257.2" y="174.5" width="30" height="85.5" fill="#006a90"/>
+  <text x="272.2" y="169" fill="currentColor" fill-opacity="0.85" font-size="11" text-anchor="middle">14%</text>
+  <rect x="291.2" y="175.1" width="30" height="84.9" fill="currentColor" fill-opacity="0.35"/>
+  <text x="306.2" y="169" fill="currentColor" fill-opacity="0.85" font-size="11" text-anchor="middle">14%</text>
+
+  <!-- group 3: 65-74 (centre 380.8) -->
+  <rect x="348.8" y="164.5" width="30" height="95.5" fill="#006a90"/>
+  <text x="363.8" y="159" fill="currentColor" fill-opacity="0.85" font-size="11" text-anchor="middle">15%</text>
+  <rect x="382.8" y="164.5" width="30" height="95.5" fill="currentColor" fill-opacity="0.35"/>
+  <text x="397.8" y="159" fill="currentColor" fill-opacity="0.85" font-size="11" text-anchor="middle">15%</text>
+
+  <!-- group 4: 75 and on (centre 472.5) -->
+  <rect x="440.5" y="67.7" width="30" height="192.3" fill="#006a90"/>
+  <text x="455.5" y="62" fill="currentColor" fill-opacity="0.85" font-size="11" text-anchor="middle">31%</text>
+  <rect x="474.5" y="62" width="30" height="198" fill="currentColor" fill-opacity="0.35"/>
+  <text x="489.5" y="56" fill="currentColor" fill-opacity="0.85" font-size="11" text-anchor="middle">31%</text>
+
+  <!-- group 5: lifetime (centre 564.2) -->
+  <rect x="532.2" y="119.8" width="30" height="140.2" fill="#006a90"/>
+  <text x="547.2" y="114" fill="currentColor" fill-opacity="0.85" font-size="11" text-anchor="middle">22%</text>
+  <rect x="566.2" y="113.6" width="30" height="146.4" fill="currentColor" fill-opacity="0.35"/>
+  <text x="581.2" y="108" fill="currentColor" fill-opacity="0.85" font-size="11" text-anchor="middle">23%</text>
+
+  <!-- axis -->
+  <line x1="60" y1="260" x2="610" y2="260" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5"/>
+  <g fill="currentColor" fill-opacity="0.85" text-anchor="middle">
+    <text x="105.8" y="278">before 55</text>
+    <text x="197.5" y="278">55 to 59</text>
+    <text x="289.2" y="278">60 to 64</text>
+    <text x="380.8" y="278">65 to 74</text>
+    <text x="472.5" y="278">75 and on</text>
+    <text x="564.2" y="278" font-weight="600">lifetime</text>
+  </g>
+  <text x="335" y="296" fill="currentColor" fill-opacity="0.7" text-anchor="middle" font-size="11">tax caused by draws, over dollars drawn to pay for spending, median of 98 histories</text>
+</svg>

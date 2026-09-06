@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="570" viewBox="0 0 640 570" font-family="system-ui, sans-serif" font-size="13">
+  <defs>
+    <marker id="efv-fg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="currentColor" fill-opacity="0.6"/></marker>
+  </defs>
+
+  <!-- ===== Panel A: the old engine ===== -->
+  <text x="20" y="24" fill="currentColor" font-weight="600">The old engine: one pile, one knob</text>
+  <rect x="40" y="42" width="150" height="70" rx="8" fill="#deeef5" stroke="#006a90" stroke-width="1.5"/>
+  <text x="115" y="72" fill="#11171d" text-anchor="middle" font-weight="600">one pile</text>
+  <text x="115" y="92" fill="#11171d" text-anchor="middle" font-size="12">of money</text>
+  <path d="M196 77 L410 77" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" marker-end="url(#efv-fg)"/>
+  <text x="300" y="66" fill="currentColor" fill-opacity="0.85" text-anchor="middle" font-size="12">draw</text>
+  <path d="M290 77 L310 77 L310 92 Z" fill="#f0b35a"/>
+  <text x="300" y="108" fill="currentColor" fill-opacity="0.85" text-anchor="middle" font-size="12">minus 5%, unmeasured</text>
+  <rect x="418" y="52" width="180" height="50" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-dasharray="4 3"/>
+  <text x="508" y="82" fill="currentColor" fill-opacity="0.85" text-anchor="middle">spent</text>
+
+  <line x1="20" y1="132" x2="620" y2="132" stroke="currentColor" stroke-opacity="0.25"/>
+
+  <!-- ===== Panel B: the plan engine ===== -->
+  <text x="20" y="158" fill="currentColor" font-weight="600">The plan engine: every account, every year, the real bill</text>
+
+  <!-- ribbons 55 to 60 -->
+  <path d="M74 180 L190 180 L190 297 L74 280 Z" fill="currentColor" fill-opacity="0.12"/>
+  <path d="M74 280 L190 460 L190 468 L74 293 Z" fill="currentColor" fill-opacity="0.4"/>
+  <path d="M74 297 L190 301 L190 345 L74 338 Z" fill="currentColor" fill-opacity="0.12"/>
+  <path d="M74 342 L190 349 L190 363 L74 354 Z" fill="currentColor" fill-opacity="0.12"/>
+  <path d="M74 358 L190 468 L190 482 L74 386 Z" fill="currentColor" fill-opacity="0.4"/>
+
+  <!-- ribbons 60 to 65 -->
+  <path d="M204 180 L320 180 L320 300 L204 285 Z" fill="currentColor" fill-opacity="0.12"/>
+  <path d="M204 285 L320 460 L320 472 L204 297 Z" fill="currentColor" fill-opacity="0.4"/>
+  <path d="M204 301 L320 304 L320 352 L204 345 Z" fill="currentColor" fill-opacity="0.12"/>
+  <path d="M204 349 L320 356 L320 372 L204 363 Z" fill="currentColor" fill-opacity="0.12"/>
+
+  <!-- ribbons 65 to 75 -->
+  <path d="M334 180 L450 180 L450 258 L334 245 Z" fill="currentColor" fill-opacity="0.12"/>
+  <path d="M334 245 L450 262 L450 302 L334 285 Z" fill="#006a90" fill-opacity="0.55"/>
+  <path d="M334 285 L450 460 L450 472 L334 300 Z" fill="currentColor" fill-opacity="0.4"/>
+  <path d="M334 304 L450 302 L450 352 L334 352 Z" fill="currentColor" fill-opacity="0.12"/>
+  <path d="M334 356 L450 356 L450 374 L334 372 Z" fill="currentColor" fill-opacity="0.12"/>
+
+  <!-- ribbons 75 to 90 -->
+  <path d="M464 180 L580 180 L580 218 L464 214 Z" fill="currentColor" fill-opacity="0.12"/>
+  <path d="M464 214 L580 460 L580 476 L464 258 Z" fill="currentColor" fill-opacity="0.4"/>
+  <path d="M464 262 L580 222 L580 340 L464 344 Z" fill="currentColor" fill-opacity="0.12"/>
+  <path d="M464 344 L580 476 L580 482 L464 352 Z" fill="currentColor" fill-opacity="0.4"/>
+  <path d="M464 356 L580 344 L580 354 L464 374 Z" fill="currentColor" fill-opacity="0.12"/>
+
+  <!-- columns: age 55 -->
+  <rect x="60" y="180" width="14" height="113" fill="#deeef5" stroke="#006a90" stroke-width="1.2"/>
+  <rect x="60" y="297" width="14" height="41" fill="#deeef5" stroke="#006a90" stroke-width="1.2"/>
+  <rect x="60" y="342" width="14" height="12" fill="#deeef5" stroke="#006a90" stroke-width="1.2"/>
+  <rect x="60" y="358" width="14" height="28" fill="#deeef5" stroke="#006a90" stroke-width="1.2"/>
+  <!-- age 60 -->
+  <rect x="190" y="180" width="14" height="117" fill="#deeef5" stroke="#006a90" stroke-width="1.2"/>
+  <rect x="190" y="301" width="14" height="44" fill="#deeef5" stroke="#006a90" stroke-width="1.2"/>
+  <rect x="190" y="349" width="14" height="14" fill="#deeef5" stroke="#006a90" stroke-width="1.2"/>
+  <!-- age 65 -->
+  <rect x="320" y="180" width="14" height="120" fill="#deeef5" stroke="#006a90" stroke-width="1.2"/>
+  <rect x="320" y="304" width="14" height="48" fill="#deeef5" stroke="#006a90" stroke-width="1.2"/>
+  <rect x="320" y="356" width="14" height="16" fill="#deeef5" stroke="#006a90" stroke-width="1.2"/>
+  <!-- age 75 -->
+  <rect x="450" y="180" width="14" height="78" fill="#deeef5" stroke="#006a90" stroke-width="1.2"/>
+  <rect x="450" y="262" width="14" height="90" fill="#deeef5" stroke="#006a90" stroke-width="1.2"/>
+  <rect x="450" y="356" width="14" height="18" fill="#deeef5" stroke="#006a90" stroke-width="1.2"/>
+  <!-- age 90 -->
+  <rect x="580" y="180" width="14" height="38" fill="#deeef5" stroke="#006a90" stroke-width="1.2"/>
+  <rect x="580" y="222" width="14" height="118" fill="#deeef5" stroke="#006a90" stroke-width="1.2"/>
+  <rect x="580" y="344" width="14" height="10" fill="#deeef5" stroke="#006a90" stroke-width="1.2"/>
+
+  <!-- lane labels on the age-55 column -->
+  <text x="54" y="240" fill="currentColor" text-anchor="end" font-size="12">pre-tax</text>
+  <text x="54" y="322" fill="currentColor" text-anchor="end" font-size="12">Roth</text>
+  <text x="54" y="352" fill="currentColor" text-anchor="end" font-size="12">HSA</text>
+  <text x="54" y="376" fill="currentColor" text-anchor="end" font-size="12">brokerage</text>
+
+  <!-- ribbon annotations -->
+  <text x="120" y="432" fill="currentColor" fill-opacity="0.85" text-anchor="middle" font-size="12">brokerage</text>
+  <text x="120" y="447" fill="currentColor" fill-opacity="0.85" text-anchor="middle" font-size="12">spent first</text>
+  <text x="392" y="230" fill="currentColor" fill-opacity="0.85" text-anchor="middle" font-size="12">gated</text>
+  <text x="392" y="245" fill="currentColor" fill-opacity="0.85" text-anchor="middle" font-size="12">conversion</text>
+  <text x="522" y="318" fill="currentColor" fill-opacity="0.85" text-anchor="middle" font-size="12">RMDs forced out</text>
+
+  <!-- spent band and the computed tax band -->
+  <rect x="60" y="460" width="534" height="22" fill="currentColor" fill-opacity="0.18"/>
+  <path d="M60 482 L190 482 L190 486 L60 486 Z" fill="#f0b35a"/>
+  <path d="M190 482 L320 482 L320 488 L190 488 Z" fill="#f0b35a"/>
+  <path d="M320 482 L450 482 L450 490 L320 490 Z" fill="#f0b35a"/>
+  <path d="M450 482 L594 482 L594 502 L450 502 Z" fill="#f0b35a"/>
+  <text x="68" y="500" fill="currentColor" fill-opacity="0.9" font-size="12">spent: the draws that pay for each year</text>
+  <rect x="68" y="508" width="10" height="10" fill="#f0b35a"/>
+  <text x="84" y="517" fill="currentColor" fill-opacity="0.9" font-size="12">the tax those draws cause, bracket by bracket, most of it late</text>
+
+  <!-- age axis -->
+  <line x1="60" y1="530" x2="594" y2="530" stroke="currentColor" stroke-opacity="0.4"/>
+  <text x="67" y="548" fill="currentColor" text-anchor="middle" font-size="12" font-weight="600">55</text>
+  <text x="67" y="563" fill="currentColor" fill-opacity="0.8" text-anchor="middle" font-size="11">retire</text>
+  <text x="197" y="548" fill="currentColor" text-anchor="middle" font-size="12" font-weight="600">60</text>
+  <text x="197" y="563" fill="currentColor" fill-opacity="0.8" text-anchor="middle" font-size="11">penalty-free</text>
+  <text x="327" y="548" fill="currentColor" text-anchor="middle" font-size="12" font-weight="600">65</text>
+  <text x="327" y="563" fill="currentColor" fill-opacity="0.8" text-anchor="middle" font-size="11">Medicare, Social Security</text>
+  <text x="457" y="548" fill="currentColor" text-anchor="middle" font-size="12" font-weight="600">75</text>
+  <text x="457" y="563" fill="currentColor" fill-opacity="0.8" text-anchor="middle" font-size="11">RMDs</text>
+  <text x="587" y="548" fill="currentColor" text-anchor="middle" font-size="12" font-weight="600">90</text>
+</svg>

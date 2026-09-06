@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="470" viewBox="0 0 640 470" font-family="system-ui, sans-serif" font-size="13">
+  <defs>
+    <marker id="acv-fg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="currentColor" fill-opacity="0.6"/></marker>
+  </defs>
+
+  <!-- header -->
+  <text x="20" y="24" fill="currentColor" font-weight="600">The age-55 column, opened up: nine lanes</text>
+  <text x="212" y="52" fill="currentColor" fill-opacity="0.8" font-size="12">taxed on the way out</text>
+  <text x="362" y="52" fill="currentColor" fill-opacity="0.8" font-size="12">reachable before 59½</text>
+  <text x="512" y="52" fill="currentColor" fill-opacity="0.8" font-size="12">raises MAGI</text>
+  <line x1="20" y1="60" x2="620" y2="60" stroke="currentColor" stroke-opacity="0.25"/>
+
+  <!-- lanes: one stacked column, same style as the flow -->
+  <rect x="40" y="68" width="160" height="28" fill="#deeef5" stroke="#006a90" stroke-width="1.2"/>
+  <text x="48" y="87" fill="#11171d" font-size="12" font-weight="600">brokerage</text>
+  <text x="212" y="87" fill="currentColor" font-size="12">gain only, lower rate</text>
+  <text x="362" y="87" fill="currentColor" font-size="12">any time</text>
+  <text x="512" y="87" fill="currentColor" font-size="12">the gain does</text>
+
+  <rect x="40" y="100" width="160" height="28" fill="#deeef5" stroke="#006a90" stroke-width="1.2"/>
+  <text x="48" y="119" fill="#11171d" font-size="12" font-weight="600">cash</text>
+  <text x="212" y="119" fill="currentColor" font-size="12">interest only</text>
+  <text x="362" y="119" fill="currentColor" font-size="12">any time</text>
+  <text x="512" y="119" fill="currentColor" font-size="12">interest does</text>
+
+  <rect x="40" y="132" width="160" height="28" fill="#deeef5" stroke="#006a90" stroke-width="1.2"/>
+  <text x="48" y="151" fill="#11171d" font-size="12" font-weight="600">pre-tax 401k</text>
+  <text x="212" y="151" fill="currentColor" font-size="12">ordinary income</text>
+  <text x="362" y="151" fill="currentColor" font-size="12">rule of 55</text>
+  <text x="512" y="151" fill="currentColor" font-size="12">yes</text>
+
+  <rect x="40" y="164" width="160" height="28" fill="#deeef5" stroke="#006a90" stroke-width="1.2"/>
+  <text x="48" y="183" fill="#11171d" font-size="12" font-weight="600">Roth 401k</text>
+  <text x="212" y="183" fill="currentColor" font-size="12">no, after 59½ + 5 years</text>
+  <text x="362" y="183" fill="currentColor" font-size="12">no</text>
+  <text x="512" y="183" fill="currentColor" font-size="12">no</text>
+
+  <rect x="40" y="196" width="160" height="28" fill="#deeef5" stroke="#006a90" stroke-width="1.2"/>
+  <text x="48" y="215" fill="#11171d" font-size="12" font-weight="600">traditional IRA</text>
+  <text x="212" y="215" fill="currentColor" font-size="12">ordinary income</text>
+  <text x="362" y="215" fill="currentColor" font-size="12">72(t) schedule only</text>
+  <text x="512" y="215" fill="currentColor" font-size="12">yes</text>
+
+  <rect x="40" y="228" width="160" height="28" fill="#deeef5" stroke="#006a90" stroke-width="1.2"/>
+  <text x="48" y="247" fill="#11171d" font-size="12" font-weight="600">spouse traditional IRA</text>
+  <text x="212" y="247" fill="currentColor" font-size="12">ordinary income</text>
+  <text x="362" y="247" fill="currentColor" font-size="12">72(t) schedule only</text>
+  <text x="512" y="247" fill="currentColor" font-size="12">yes</text>
+
+  <rect x="40" y="260" width="160" height="28" fill="#deeef5" stroke="#006a90" stroke-width="1.2"/>
+  <text x="48" y="279" fill="#11171d" font-size="12" font-weight="600">Roth IRA</text>
+  <text x="212" y="279" fill="currentColor" font-size="12">no, after 59½ + 5 years</text>
+  <text x="362" y="279" fill="currentColor" font-size="12">contribution basis</text>
+  <text x="512" y="279" fill="currentColor" font-size="12">no</text>
+
+  <rect x="40" y="292" width="160" height="28" fill="#deeef5" stroke="#006a90" stroke-width="1.2"/>
+  <text x="48" y="311" fill="#11171d" font-size="12" font-weight="600">spouse Roth IRA</text>
+  <text x="212" y="311" fill="currentColor" font-size="12">no, after 59½ + 5 years</text>
+  <text x="362" y="311" fill="currentColor" font-size="12">contribution basis</text>
+  <text x="512" y="311" fill="currentColor" font-size="12">no</text>
+
+  <rect x="40" y="324" width="160" height="28" fill="#deeef5" stroke="#006a90" stroke-width="1.2"/>
+  <text x="48" y="343" fill="#11171d" font-size="12" font-weight="600">HSA</text>
+  <text x="212" y="343" fill="currentColor" font-size="12">no, for medical</text>
+  <text x="362" y="343" fill="currentColor" font-size="12">medical only</text>
+  <text x="512" y="343" fill="currentColor" font-size="12">no</text>
+
+  <!-- the fixed-point loop -->
+  <line x1="20" y1="366" x2="620" y2="366" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="20" y="390" fill="currentColor" font-weight="600">Solved together each year until they agree</text>
+  <rect x="40" y="404" width="90" height="30" rx="6" fill="#deeef5" stroke="#006a90" stroke-width="1.2"/>
+  <text x="85" y="424" fill="#11171d" text-anchor="middle" font-size="12">draws</text>
+  <path d="M132 419 L176 419" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" marker-end="url(#acv-fg)"/>
+  <rect x="180" y="404" width="80" height="30" rx="6" fill="#deeef5" stroke="#006a90" stroke-width="1.2"/>
+  <text x="220" y="424" fill="#11171d" text-anchor="middle" font-size="12">MAGI</text>
+  <path d="M262 419 L306 419" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" marker-end="url(#acv-fg)"/>
+  <rect x="310" y="404" width="240" height="30" rx="6" fill="#deeef5" stroke="#006a90" stroke-width="1.2"/>
+  <text x="430" y="424" fill="#11171d" text-anchor="middle" font-size="12">tax, ACA credit, IRMAA surcharge</text>
+  <path d="M550 419 Q600 419 600 445 Q600 458 560 458 L120 458 Q85 458 85 445 L85 438" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" marker-end="url(#acv-fg)"/>
+  <text x="340" y="451" fill="currentColor" fill-opacity="0.85" text-anchor="middle" font-size="11">a bigger bill needs a bigger draw</text>
+</svg>
