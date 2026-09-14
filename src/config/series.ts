@@ -38,6 +38,15 @@ export const series = {
       alt: "A timeline from 2001 to 2018 of small chart-icon tiles, four highlighted as flagship products",
     },
   },
+  "strudel-bench": {
+    title: "Strudel Bench",
+    description:
+      "A language for describing music: why 59 bars of live-coded Strudel needed a layer on top, how the word darker becomes an edit, and what an agent did with it.",
+    hero: {
+      src: "series/strudel-bench.png",
+      alt: "Word pills feeding a stack of axis sliders that raise a strip of section blocks into an energy arc",
+    },
+  },
   "sierra-games": {
     title: "Sierra Games",
     description:

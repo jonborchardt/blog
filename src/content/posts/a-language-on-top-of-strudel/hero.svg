@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 600" width="1500" height="600">
+  <title>A small card of axis values fanning out into a tall stack of expanded code lines, with a return arrow</title>
+
+  <rect x="0" y="0" width="1500" height="600" fill="#fafcfe" />
+
+  <path
+    d="M50 0V600 M100 0V600 M150 0V600 M200 0V600 M250 0V600 M300 0V600 M350 0V600 M400 0V600 M450 0V600 M500 0V600 M550 0V600 M600 0V600 M650 0V600 M700 0V600 M750 0V600 M800 0V600 M850 0V600 M900 0V600 M950 0V600 M1000 0V600 M1050 0V600 M1100 0V600 M1150 0V600 M1200 0V600 M1250 0V600 M1300 0V600 M1350 0V600 M1400 0V600 M1450 0V600"
+    stroke="#d9dfe3" stroke-width="1" opacity="0.55" />
+
+  <!-- left flank: more sections behind, out of frame -->
+  <g opacity="0.28">
+    <rect x="60" y="268" width="260" height="104" rx="12" fill="#deeef5" stroke="#006a90" stroke-width="3" />
+    <rect x="150" y="252" width="260" height="104" rx="12" fill="#deeef5" stroke="#006a90" stroke-width="3" />
+  </g>
+
+  <!-- the declarative source: one small card of named values -->
+  <rect x="330" y="238" width="280" height="128" rx="12" fill="#deeef5" stroke="#006a90" stroke-width="4" />
+  <g fill="#006a90">
+    <rect x="356" y="262" width="72" height="14" rx="7" />
+    <rect x="440" y="262" width="40" height="14" rx="7" opacity="0.45" />
+    <rect x="356" y="294" width="92" height="14" rx="7" />
+    <rect x="460" y="294" width="36" height="14" rx="7" opacity="0.45" />
+    <rect x="356" y="326" width="60" height="14" rx="7" />
+    <rect x="428" y="326" width="48" height="14" rx="7" opacity="0.45" />
+  </g>
+
+  <!-- it fans out -->
+  <g stroke="#006a90" stroke-width="3" fill="none" opacity="0.65">
+    <path d="M618 302C648 302 652 168 682 168" />
+    <path d="M618 302C648 302 652 236 682 236" />
+    <path d="M618 302H682" />
+    <path d="M618 302C648 302 652 368 682 368" />
+    <path d="M618 302C648 302 652 436 682 436" />
+  </g>
+
+  <!-- the expanded chain: many short lines -->
+  <g fill="#006a90" opacity="0.85">
+    <rect x="694" y="132" width="300" height="12" rx="6" />
+    <rect x="712" y="156" width="186" height="12" rx="6" />
+    <rect x="712" y="180" width="242" height="12" rx="6" />
+    <rect x="712" y="204" width="150" height="12" rx="6" />
+    <rect x="712" y="228" width="270" height="12" rx="6" />
+    <rect x="712" y="252" width="198" height="12" rx="6" />
+    <rect x="712" y="276" width="228" height="12" rx="6" />
+    <rect x="712" y="300" width="162" height="12" rx="6" />
+    <rect x="712" y="324" width="288" height="12" rx="6" />
+    <rect x="712" y="348" width="174" height="12" rx="6" />
+    <rect x="712" y="372" width="252" height="12" rx="6" />
+    <rect x="712" y="396" width="204" height="12" rx="6" />
+    <rect x="712" y="420" width="144" height="12" rx="6" />
+    <rect x="712" y="444" width="264" height="12" rx="6" />
+  </g>
+
+  <!-- and it reads back: the return arrow -->
+  <path d="M1000 492H700" stroke="#f0b35a" stroke-width="6" fill="none" stroke-linecap="round" />
+  <path d="M712 476L676 492L712 508Z" fill="#f0b35a" />
+
+  <!-- right flank: the chain carries on past the frame -->
+  <g fill="#006a90">
+    <rect x="1014" y="180" width="180" height="12" rx="6" opacity="0.4" />
+    <rect x="1014" y="228" width="230" height="12" rx="6" opacity="0.32" />
+    <rect x="1014" y="276" width="150" height="12" rx="6" opacity="0.26" />
+    <rect x="1014" y="324" width="290" height="12" rx="6" opacity="0.2" />
+    <rect x="1014" y="372" width="196" height="12" rx="6" opacity="0.15" />
+  </g>
+</svg>

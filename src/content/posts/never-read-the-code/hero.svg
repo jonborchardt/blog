@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 600" width="1500" height="600">
+  <title>A stack of unread diffs crossed out, beside four open gates passing a change through to a sounding speaker</title>
+
+  <rect x="0" y="0" width="1500" height="600" fill="#fafcfe" />
+
+  <!-- a faint grid, the ruled ground the pipeline runs on -->
+  <path
+    d="M50 0V600 M100 0V600 M150 0V600 M200 0V600 M250 0V600 M300 0V600 M350 0V600 M400 0V600 M450 0V600 M500 0V600 M550 0V600 M600 0V600 M650 0V600 M700 0V600 M750 0V600 M800 0V600 M850 0V600 M900 0V600 M950 0V600 M1000 0V600 M1050 0V600 M1100 0V600 M1150 0V600 M1200 0V600 M1250 0V600 M1300 0V600 M1350 0V600 M1400 0V600 M1450 0V600"
+    stroke="#d9dfe3" stroke-width="1" opacity="0.55" />
+
+  <!-- left flank: more unread diffs stacked behind, out of frame -->
+  <g opacity="0.3">
+    <rect x="80" y="242" width="180" height="230" rx="10" fill="#deeef5" stroke="#006a90" stroke-width="3" />
+    <rect x="170" y="217" width="180" height="230" rx="10" fill="#deeef5" stroke="#006a90" stroke-width="3" />
+  </g>
+
+  <!-- the unread stack: a sheet of diff, crossed out -->
+  <rect x="320" y="192" width="200" height="250" rx="12" fill="#deeef5" stroke="#006a90" stroke-width="4" />
+  <path d="M320 236H520" stroke="#006a90" stroke-width="4" opacity="0.5" />
+  <g stroke="#006a90" stroke-width="4" opacity="0.4">
+    <path d="M352 286H488 M352 326H464 M352 366H488 M352 406H440" />
+  </g>
+  <g stroke="#f0b35a" stroke-width="14" stroke-linecap="round">
+    <path d="M342 214L498 420" />
+    <path d="M498 214L342 420" />
+  </g>
+
+  <!-- the rail the change travels along instead -->
+  <path d="M540 317H1078" stroke="#11171d" stroke-width="4" opacity="0.65" />
+
+  <!-- four gates it does pass through -->
+  <g>
+    <rect x="560" y="298" width="88" height="38" rx="8" fill="#deeef5" stroke="#006a90" stroke-width="4" />
+    <path d="M560 262V372 M648 262V372" stroke="#006a90" stroke-width="4" />
+  </g>
+  <g>
+    <rect x="690" y="298" width="88" height="38" rx="8" fill="#deeef5" stroke="#006a90" stroke-width="4" />
+    <path d="M690 262V372 M778 262V372" stroke="#006a90" stroke-width="4" />
+  </g>
+  <g>
+    <rect x="820" y="298" width="88" height="38" rx="8" fill="#deeef5" stroke="#006a90" stroke-width="4" />
+    <path d="M820 262V372 M908 262V372" stroke="#006a90" stroke-width="4" />
+  </g>
+  <g>
+    <rect x="950" y="298" width="88" height="38" rx="8" fill="#deeef5" stroke="#006a90" stroke-width="4" />
+    <path d="M950 262V372 M1038 262V372" stroke="#006a90" stroke-width="4" />
+  </g>
+
+  <!-- the terminus: it gets heard -->
+  <path d="M1080 286L1120 252V382L1080 348Z" fill="#deeef5" stroke="#006a90" stroke-width="4" stroke-linejoin="round" />
+  <g fill="none" stroke="#006a90" stroke-width="4" stroke-linecap="round">
+    <path d="M1142 280A36 36 0 0 1 1142 354" />
+    <path d="M1170 258A64 64 0 0 1 1170 376" />
+  </g>
+
+  <!-- right flank: the sound carries on past the frame -->
+  <g fill="none" stroke="#006a90" stroke-width="4" stroke-linecap="round" opacity="0.3">
+    <path d="M1240 224A100 100 0 0 1 1240 410" />
+    <path d="M1300 194A132 132 0 0 1 1300 440" />
+  </g>
+</svg>

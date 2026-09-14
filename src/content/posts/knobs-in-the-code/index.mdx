@@ -1,0 +1,289 @@
+---
+title: Knobs in the code
+description: I planned to work in a textarea. I built an editor that puts sliders on the literals instead, and the reason it was cheap is not the one I expected.
+publishedAt: 2026-09-13
+series: strudel-bench
+seriesOrder: 5
+tags: [ai-assisted-coding, developer-tools, music]
+authority: "E:\\github2\\strudle"
+hero:
+  src: ./hero.png
+  alt: Lines of code with sliders and a toggle sitting inline, and one line marked out as plain text
+draft: false
+---
+
+import SoundBite from "@/components/blog/SoundBite.astro";
+import StrudelEmbed from "@/components/blog/StrudelEmbed.astro";
+import Callout from "@/components/blog/Callout.astro";
+import Figure from "@/components/blog/Figure.astro";
+import VizFigure from "@/components/blog/VizFigure.astro";
+import GrowthViz from "./growth-viz.svg";
+import LiteralsViz from "./literals-viz.svg";
+import PathsViz from "./paths-viz.svg";
+import dragBefore from "./audio/drag-before.mp3";
+import dragAfter from "./audio/drag-after.mp3";
+import soloPad from "./audio/solo-pad.mp3";
+import dropFull from "./audio/drop-full.mp3";
+import clapAlone from "./audio/voice-clap-alone.mp3";
+import partNoClap from "./audio/part-no-clap.mp3";
+import partWithClap from "./audio/part-with-clap.mp3";
+
+The plan was a textarea.
+
+An agent edits song files, I press play, and the only interface is a box you can type in. Everything
+else happens on the command line, where the checker and the resolver and the renderer already lived.
+That plan held for **22 hours and 240 lines**, and then at midnight on the second day one commit
+called "added mixer" took the page from 556 lines to 891 and it was over. The textarea itself
+outlived the plan by another eighteen hours before an editor replaced it.
+
+What I want to explain is not the interface. It is why building it was cheap, because I had the
+reason wrong.
+
+## What actually happened, from the log
+
+<Figure caption="Line count of the page source at every commit that touched it, in hours since the project started. Counted 2026-09-13.">
+  <VizFigure
+    name="The size of the editor page over the life of the project"
+    summary="The page sits near 240 lines for the first 22 hours, then more than triples in a single midnight commit and keeps climbing. The inline-control editor arrives seventeen hours later and takes under two."
+    data={{
+      caption: "Lines in the page source",
+      columns: ["When", "Lines", "What landed"],
+      rows: [
+        ["hour 0", "100", "the textarea"],
+        ["hour 5", "233", "exports, render routes"],
+        ["hour 22", "240", "end of the textarea plan"],
+        ["hour 23", "337", "layout"],
+        ["hour 27", "556", "kits, packs"],
+        ["hour 28", "891", "the mixer"],
+        ["hour 43", "985", "auditioning"],
+        ["hour 45", "1023", "inline controls"],
+        ["hour 47", "1064", "controls everywhere"],
+      ],
+    }}
+  >
+    <GrowthViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+  </VizFigure>
+</Figure>
+
+The whole interface, from the first layout commit to controls being everywhere, is **37 commits over
+about nine hours of actual work**: two evenings, a morning, an afternoon, and one commit at midnight.
+So "a few evenings" is about right.
+
+What is not right is calling it a pivot.
+
+## Nothing was thrown away
+
+A pivot implies something was abandoned. Nothing was. Every command-line tool still works and is
+still the agent's entire interface. What happened was additive, and the reason it was cheap is
+sitting in plain sight in the code:
+
+**every control in the interface calls a function that already existed for the command line.**
+
+The knobs call the same source-editing function the resolver CLI calls. The word pills call the same
+planner. The before-and-after comparison calls the same analyser. And the thing that decides what you
+actually hear calls the same arranger that builds the song in the first place:
+
+```js
+export const arrange = (sections, total, patternOf = (s) => s.pattern) =>
+  S.stepcat(...sections.map((s) => [s.span, patternOf(s).fast(s.cycles)])).slow(total);
+```
+
+That default argument is the whole trick. The page passes a filter in place of `patternOf`, and gets
+solo and mute for free. There is no second mixer. There is one arranger, and the interface hands it a
+function.
+
+So the honest lesson is not "an agent makes pivots cheap". It is:
+
+> A change is cheap when it lands in a layer that was already factored to receive it.
+
+The engine got built first, with pure modules and no DOM anywhere near them, because that is what a
+command-line tool needs. The interface was cheap because it was a second caller, not a rewrite. If
+the engine had been written with the textarea baked into it, none of this would have been three
+evenings.
+
+## The schema decides what gets a knob
+
+Now the part I would actually steal for another project.
+
+The editor puts controls **inside the code**. A slider sits after a number, a menu after a sound
+name, a row of chord buttons after a progression. Holding alt and dragging a number changes it in
+place, at 200 pixels for its full range.
+
+But only for literals a schema describes. And the schema is a whitelist, which means the default is
+silence:
+
+> A literal without an entry here never gets a control, so a wrong range cannot be invented for it.
+
+<VizFigure
+  name="One line of a song, and which of its literals get a control"
+  summary="Eight of the nine literals on this line get a widget chosen from the schema. The hand-written note string gets nothing, because the schema lists it as free text with a written reason."
+  data={{
+    caption: "Controls on one melody line",
+    columns: ["Literal", "Control", "Why"],
+    rows: [
+      [".5", "slider", "an axis, bounded 0 to 1"],
+      ["saw", "menu", "a signal standing in for a number"],
+      [".3 and .7", "sliders", "bounds inherited from the axis"],
+      ["8", "spinner", "a floor but no ceiling"],
+      ["'piano'", "menu", "the sounds actually loaded"],
+      ["true", "toggle", "a boolean"],
+      ["2", "spinner", "a floor but no ceiling"],
+      ["the note string", "none", "free text, written by hand"],
+    ],
+  }}
+>
+  <LiteralsViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
+
+The distinction between a slider and a spinner is the same principle one level down. A number with a
+known ceiling gets a slider. A number with only a floor gets a spinner, because **a slider would have
+to invent a maximum**, and inventing a maximum is lying about the language at sixty frames a second
+under someone's cursor.
+
+Across a whole song, 51 of 58 literals get a control. The seven that do not are three section names
+and four hand-written melodic lines.
+
+And there is a test that keeps the schema honest in both directions: every key the language accepts
+must either have a spec or be listed as free **with a written reason**, and the reason has to be an
+actual sentence. Add a key to the language without deciding what its control is, and the build fails.
+
+<Callout variant="warning" title="Where this falls down, and it is my fault">
+  The schema matches on a key's name and nesting depth, not on whether the key is legal where it
+  appears. So the editor will happily offer a chord picker for a chord progression written on a drum
+  part, which the language rejects outright. "Nothing outside the schema gets a control" is enforced.
+  The converse, "everything with a control is legal here", is not. The build catches it; the
+  interface invited it.
+</Callout>
+
+## One number, and what it costs to be wrong about it
+
+Here is why this exists at all. The drum part in one section sits at `density: .9`. Drag it to `.84`,
+which is about twelve pixels of mouse movement:
+
+<SoundBite
+  label="Two bars of drums, one value apart"
+  note="density .9 against .84. The clap crosses its threshold and leaves the part."
+  clips={[
+    { src: dragBefore, label: "density .9" },
+    { src: dragAfter, label: "density .84" },
+  ]}
+/>
+
+Twenty-eight onsets per bar become twenty-six, and the section's energy drops from 59 to 57, because
+voices join a drum part as density rises and the clap's threshold is 0.85. Six hundredths of a knob
+is a voice appearing or disappearing.
+
+Fixing that from a chat message costs a full round trip. Fixing it with a drag costs nothing, and you
+hear it while the song is still playing. That is the entire argument for the interface, and it is
+worth exactly as much as the round trip cost.
+
+## What you hear and what is written
+
+The rule I am most pleased with, and the one that took the longest to see:
+
+**Solo, mute, and the compare-with-previous button change what you hear and never touch the file.**
+
+Everything else, every knob and every menu and every dragged number, is a source edit that goes
+through one undo stack.
+
+<VizFigure
+  name="Two paths out of one source file"
+  summary="Controls that change the song write through a single commit function into one undo stack. The four controls that change only what is audible read an evaluated copy and never write back, so the file stays a clean record of intent."
+>
+  <PathsViz class="mx-auto h-auto w-full max-w-xl" aria-hidden="true" />
+</VizFigure>
+
+Solo is a question about a mix, not a decision about a song. "Is the pad doing anything?" should not
+cost an edit, an undo, and a diff you have to remember to notice. Here it costs a click:
+
+<SoundBite
+  label="One part alone, then the same two bars with everything"
+  note="Soloing did not change the file. The isolated part is bit-identical to that part inside the song."
+  clips={[
+    { src: soloPad, label: "the pad alone" },
+    { src: dropFull, label: "the whole section" },
+  ]}
+/>
+
+That bit-identical claim is not a nice-to-have, it is structural: because the solo filter goes
+through the same arranger, the mixer **cannot** drift from the renderer. It is the renderer.
+
+There is one more payoff, and it only matters because of the rest of this series: the file stays a
+clean record of intent, which is what the agent reads. A mixer that wrote solo state into the source
+would be quietly lying to the next request.
+
+Six things bypass the undo stack. Four are what you hear: solo, mute, compare, and the preview
+volume. Two are where you are: pinning a section, and scrubbing the playhead. Nothing that changes
+the music escapes the stack.
+
+<Callout variant="note" title="One stack, on purpose">
+  The code editor ships with its own undo history. It was deliberately not installed. With three
+  editors on the page plus the knobs, the pills, the chord picker and the section operations, there
+  would have been four separate undo stacks and no way to step back through a session. Typing and
+  knob drags coalesce into one step per second; section operations and kit changes never coalesce.
+</Callout>
+
+## Why a drum voice previews alone
+
+A small thing that shows someone thought it through. When you audition a single drum voice from the
+menu, it plays on its own rather than inside the part. The comment says why: the whole part would
+drown it, or not even contain it.
+
+That second clause is literal. Voices join a drum part at thresholds, and the clap's is 0.85:
+
+<SoundBite
+  label="Why a voice is auditioned on its own"
+  note="The clap, the part that does not contain it, and the part that does. In the middle clip there is nothing to preview."
+  clips={[
+    { src: clapAlone, label: "the clap alone" },
+    { src: partNoClap, label: "the part at density .6" },
+    { src: partWithClap, label: "the part at density .9" },
+  ]}
+/>
+
+Preview the clap "in context" at `density: .6` and you would hear silence, and conclude the sample was
+broken.
+
+## What it cost
+
+Two things, and I would rather say them than not.
+
+**The interface is more than half the page's JavaScript and has no behavioural test of any kind.**
+The page is around 1,240 lines, of which about 1,110 are one inline script, of which roughly 635 are
+the mixer, its editors, the undo stack and the audition path. Exactly one test reads the page at all,
+and it does two regular-expression checks on the built output.
+
+The modules that were extracted are the exception and are properly covered: the control-finding, the
+widgets and the schema are 388 lines with eleven tests running against the editor state in Node with
+no DOM. That seam is deliberate and it is the right one. The DOM half is untested on purpose, which
+is a defensible trade and still a trade.
+
+So what holds it up? Three things: edits go through the same pure modules the command line uses, the
+checker runs on every song, and I was sitting there listening. Two of those are engineering. The
+third does not scale past one person.
+
+**And a feature that shipped and has never once fired.** The mixer records its own edits into the
+song's provenance file, so knob changes would show up alongside the agent's. I checked every
+provenance file in the repository. There are zero entries from the mixer. Every recorded change came
+from asking the agent.
+
+Partly that is because the recording only works against a local server. Mostly it is that even after
+building an interface for editing songs by hand, the song I made next I made by talking.
+
+<StrudelEmbed
+  song="demo.strudel"
+  section="drop"
+  title="The editor with inline controls: tick the controls box to put widgets on the literals"
+  label="Open the editor on that section"
+  description="The controls checkbox is off by default, so the code reads clean until you ask for it."
+/>
+
+The last post in this series is about the one piece of music I am actually proud of, and about four
+rounds of being confidently, specifically wrong.
+
+<Callout variant="info" title="Try it yourself">
+  Everything in this series runs in strudel-bench:
+  <a href="https://jonborchardt.github.io/strudel-bench/" target="_blank" rel="noopener">play with the live instrument</a>,
+  or read
+  <a href="https://github.com/jonborchardt/strudel-bench" target="_blank" rel="noopener">the source on GitHub</a>.
+</Callout>

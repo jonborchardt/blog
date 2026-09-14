@@ -1,0 +1,26 @@
+[
+  { "out": "say-darker/drop-0-base", "song": "darker0.strudel", "section": "drop", "cycles": 2 },
+  { "out": "say-darker/drop-1-darker", "song": "darker1.strudel", "section": "drop", "cycles": 2 },
+  { "out": "say-darker/drop-2-darker", "song": "darker2.strudel", "section": "drop", "cycles": 2 },
+  {
+    "out": "say-darker/pad-0-base",
+    "song": "darker0.strudel",
+    "section": "drop",
+    "layer": "pad",
+    "cycles": 2
+  },
+  {
+    "out": "say-darker/pad-1-darker",
+    "song": "darker1.strudel",
+    "section": "drop",
+    "layer": "pad",
+    "cycles": 2
+  },
+  {
+    "out": "say-darker/pad-2-darker",
+    "song": "darker2.strudel",
+    "section": "drop",
+    "layer": "pad",
+    "cycles": 2
+  }
+]

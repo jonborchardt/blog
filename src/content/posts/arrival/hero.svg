@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 600" width="1500" height="600">
+  <title>One melodic line climbing across four chords while a second line repeats the same three notes unchanged</title>
+
+  <rect x="0" y="0" width="1500" height="600" fill="#fafcfe" />
+
+  <path
+    d="M50 0V600 M100 0V600 M150 0V600 M200 0V600 M250 0V600 M300 0V600 M350 0V600 M400 0V600 M450 0V600 M500 0V600 M550 0V600 M600 0V600 M650 0V600 M700 0V600 M750 0V600 M800 0V600 M850 0V600 M900 0V600 M950 0V600 M1000 0V600 M1050 0V600 M1100 0V600 M1150 0V600 M1200 0V600 M1250 0V600 M1300 0V600 M1350 0V600 M1400 0V600 M1450 0V600"
+    stroke="#d9dfe3" stroke-width="1" opacity="0.55" />
+
+  <!-- bar lines -->
+  <g stroke="#d9dfe3" stroke-width="3">
+    <path d="M300 90V470 M520 90V470 M740 90V470 M960 90V470 M1180 90V470" />
+  </g>
+
+  <!-- the chord track along the bottom -->
+  <g fill="#deeef5" stroke="#006a90" stroke-width="4">
+    <rect x="308" y="486" width="204" height="48" rx="10" />
+    <rect x="528" y="486" width="204" height="48" rx="10" />
+    <rect x="748" y="486" width="204" height="48" rx="10" />
+    <rect x="968" y="486" width="204" height="48" rx="10" />
+  </g>
+
+  <!-- the alien line: identical in every bar -->
+  <g fill="#f0b35a">
+    <circle cx="330" cy="300" r="14" /><circle cx="386" cy="170" r="14" /><circle cx="442" cy="236" r="14" />
+    <circle cx="550" cy="300" r="14" /><circle cx="606" cy="170" r="14" /><circle cx="662" cy="236" r="14" />
+    <circle cx="770" cy="300" r="14" /><circle cx="826" cy="170" r="14" /><circle cx="882" cy="236" r="14" />
+    <circle cx="990" cy="300" r="14" /><circle cx="1046" cy="170" r="14" /><circle cx="1102" cy="236" r="14" />
+  </g>
+
+  <!-- the human line: the same shape, lifted onto each chord -->
+  <g fill="none" stroke="#006a90" stroke-width="7" stroke-linejoin="round" stroke-linecap="round">
+    <polyline points="330,432 386,396 442,344 498,358" />
+    <polyline points="550,380 606,344 662,292 718,306" />
+    <polyline points="770,330 826,294 882,242 938,256" />
+    <polyline points="990,272 1046,236 1102,184 1158,198" />
+  </g>
+  <g fill="#006a90">
+    <circle cx="330" cy="432" r="11" /><circle cx="386" cy="396" r="11" /><circle cx="442" cy="344" r="11" /><circle cx="498" cy="358" r="11" />
+    <circle cx="550" cy="380" r="11" /><circle cx="606" cy="344" r="11" /><circle cx="662" cy="292" r="11" /><circle cx="718" cy="306" r="11" />
+    <circle cx="770" cy="330" r="11" /><circle cx="826" cy="294" r="11" /><circle cx="882" cy="242" r="11" /><circle cx="938" cy="256" r="11" />
+    <circle cx="990" cy="272" r="11" /><circle cx="1046" cy="236" r="11" /><circle cx="1102" cy="184" r="11" /><circle cx="1158" cy="198" r="11" />
+  </g>
+
+  <!-- left flank: the piece before this -->
+  <g opacity="0.28">
+    <g fill="#f0b35a">
+      <circle cx="110" cy="300" r="14" /><circle cx="166" cy="170" r="14" /><circle cx="222" cy="236" r="14" />
+    </g>
+    <rect x="88" y="486" width="204" height="48" rx="10" fill="#deeef5" stroke="#006a90" stroke-width="4" />
+  </g>
+
+  <!-- right flank: and after -->
+  <g opacity="0.26">
+    <g fill="#f0b35a">
+      <circle cx="1210" cy="300" r="14" /><circle cx="1266" cy="170" r="14" /><circle cx="1322" cy="236" r="14" />
+      <circle cx="1430" cy="300" r="14" />
+    </g>
+    <g fill="none" stroke="#006a90" stroke-width="7" stroke-linejoin="round" stroke-linecap="round">
+      <polyline points="1210,222 1266,186 1322,134 1378,148" />
+    </g>
+    <rect x="1188" y="486" width="204" height="48" rx="10" fill="#deeef5" stroke="#006a90" stroke-width="4" />
+  </g>
+</svg>

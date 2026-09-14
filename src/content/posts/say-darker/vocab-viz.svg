@@ -1,0 +1,153 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="630" viewBox="0 0 640 630" font-family="system-ui, sans-serif" font-size="13">
+  <text x="10" y="20" font-size="12" fill="currentColor" fill-opacity="0.75">EVERY WORD IN THE LANGUAGE, AND THE AXES IT MOVES</text>
+  <g font-size="11" fill="currentColor" fill-opacity="0.75" text-anchor="middle">
+    <text x="151" y="50">dens</text>
+    <text x="189" y="50">driv</text>
+    <text x="227" y="50">brgt</text>
+    <text x="265" y="50">wght</text>
+    <text x="303" y="50">spce</text>
+    <text x="341" y="50">artc</text>
+    <text x="379" y="50">aggr</text>
+    <text x="417" y="50">grov</text>
+    <text x="455" y="50">vari</text>
+    <text x="493" y="50">orgc</text>
+    <text x="531" y="50">widt</text>
+    <text x="569" y="50">regr</text>
+  </g>
+  <line x1="132" y1="58" x2="588" y2="58" stroke="currentColor" stroke-opacity="0.35" stroke-width="1" />
+  <g fill="currentColor" text-anchor="end">
+    <text x="122" y="85" font-size="11">dreamy</text>
+    <text x="122" y="100" font-size="11">punchy</text>
+    <text x="122" y="115" font-size="11">massive</text>
+    <text x="122" y="130" font-size="11">frantic</text>
+    <text x="122" y="145" font-size="11" fill-opacity="0.55">delicate</text>
+    <text x="122" y="160" font-size="11" fill-opacity="0.55">heavy</text>
+    <text x="122" y="175" font-size="11">light</text>
+    <text x="122" y="190" font-size="11">dark</text>
+    <text x="122" y="205" font-size="11">bright</text>
+    <text x="122" y="220" font-size="11" fill-opacity="0.55">spacious</text>
+    <text x="122" y="235" font-size="11">dry</text>
+    <text x="122" y="250" font-size="11">human</text>
+    <text x="122" y="265" font-size="11">mechanical</text>
+    <text x="122" y="280" font-size="11" fill-opacity="0.55">tight</text>
+    <text x="122" y="295" font-size="11" fill-opacity="0.55">loose</text>
+    <text x="122" y="310" font-size="11">busy</text>
+    <text x="122" y="325" font-size="11">sparse</text>
+    <text x="122" y="340" font-size="11">wide</text>
+    <text x="122" y="355" font-size="11">narrow</text>
+    <text x="122" y="370" font-size="11" fill-opacity="0.55">driving</text>
+    <text x="122" y="385" font-size="11">floating</text>
+    <text x="122" y="400" font-size="11">swung</text>
+    <text x="122" y="415" font-size="11">straight</text>
+    <text x="122" y="430" font-size="11">aggressive</text>
+    <text x="122" y="445" font-size="11">smooth</text>
+    <text x="10" y="463" font-size="11" fill-opacity="0.75" text-anchor="start">mood words</text>
+    <text x="122" y="475" font-size="11" fill-opacity="0.55">sad</text>
+    <text x="122" y="490" font-size="11" fill-opacity="0.55">happy</text>
+    <text x="122" y="505" font-size="11" fill-opacity="0.55">ominous</text>
+    <text x="122" y="520" font-size="11" fill-opacity="0.55">euphoric</text>
+    <text x="122" y="535" font-size="11" fill-opacity="0.55">hypnotic</text>
+    <text x="122" y="550" font-size="11" fill-opacity="0.55">chaotic</text>
+    <text x="122" y="565" font-size="11" fill-opacity="0.55">playful</text>
+    <text x="122" y="580" font-size="11" fill-opacity="0.55">cinematic</text>
+  </g>
+  <g>
+    <rect x="185.5" y="78.0" width="7.0" height="7.0" rx="1.5" fill="#f0b35a" />
+    <rect x="224.5" y="79.0" width="5.0" height="5.0" rx="1.5" fill="#f0b35a" />
+    <rect x="297.5" y="76.0" width="11.0" height="11.0" rx="1.5" fill="#006a90" />
+    <rect x="337.0" y="77.5" width="8.0" height="8.0" rx="1.5" fill="#f0b35a" />
+    <rect x="452.0" y="78.5" width="6.0" height="6.0" rx="1.5" fill="#006a90" />
+    <rect x="185.0" y="92.5" width="8.0" height="8.0" rx="1.5" fill="#006a90" />
+    <rect x="261.5" y="93.0" width="7.0" height="7.0" rx="1.5" fill="#006a90" />
+    <rect x="299.5" y="93.0" width="7.0" height="7.0" rx="1.5" fill="#f0b35a" />
+    <rect x="335.0" y="90.5" width="12.0" height="12.0" rx="1.5" fill="#006a90" />
+    <rect x="146.0" y="106.5" width="10.0" height="10.0" rx="1.5" fill="#006a90" />
+    <rect x="259.5" y="106.0" width="11.0" height="11.0" rx="1.5" fill="#006a90" />
+    <rect x="300.0" y="108.5" width="6.0" height="6.0" rx="1.5" fill="#006a90" />
+    <rect x="526.0" y="106.5" width="10.0" height="10.0" rx="1.5" fill="#006a90" />
+    <rect x="145.5" y="121.0" width="11.0" height="11.0" rx="1.5" fill="#006a90" />
+    <rect x="183.0" y="120.5" width="12.0" height="12.0" rx="1.5" fill="#006a90" />
+    <rect x="337.5" y="123.0" width="7.0" height="7.0" rx="1.5" fill="#006a90" />
+    <rect x="450.5" y="122.0" width="9.0" height="9.0" rx="1.5" fill="#006a90" />
+    <rect x="147.0" y="137.5" width="8.0" height="8.0" rx="1.5" fill="#f0b35a" />
+    <rect x="260.5" y="137.0" width="9.0" height="9.0" rx="1.5" fill="#f0b35a" />
+    <rect x="338.0" y="138.5" width="6.0" height="6.0" rx="1.5" fill="#f0b35a" />
+    <rect x="374.0" y="136.5" width="10.0" height="10.0" rx="1.5" fill="#f0b35a" />
+    <rect x="259.5" y="151.0" width="11.0" height="11.0" rx="1.5" fill="#006a90" />
+    <rect x="375.5" y="153.0" width="7.0" height="7.0" rx="1.5" fill="#006a90" />
+    <rect x="565.5" y="153.0" width="7.0" height="7.0" rx="1.5" fill="#f0b35a" />
+    <rect x="148.0" y="168.5" width="6.0" height="6.0" rx="1.5" fill="#f0b35a" />
+    <rect x="260.0" y="166.5" width="10.0" height="10.0" rx="1.5" fill="#f0b35a" />
+    <rect x="566.0" y="168.5" width="6.0" height="6.0" rx="1.5" fill="#006a90" />
+    <rect x="222.0" y="181.5" width="10.0" height="10.0" rx="1.5" fill="#f0b35a" />
+    <rect x="566.0" y="183.5" width="6.0" height="6.0" rx="1.5" fill="#f0b35a" />
+    <rect x="222.0" y="196.5" width="10.0" height="10.0" rx="1.5" fill="#006a90" />
+    <rect x="566.5" y="199.0" width="5.0" height="5.0" rx="1.5" fill="#006a90" />
+    <rect x="297.5" y="211.0" width="11.0" height="11.0" rx="1.5" fill="#006a90" />
+    <rect x="527.0" y="212.5" width="8.0" height="8.0" rx="1.5" fill="#006a90" />
+    <rect x="297.5" y="226.0" width="11.0" height="11.0" rx="1.5" fill="#f0b35a" />
+    <rect x="528.0" y="228.5" width="6.0" height="6.0" rx="1.5" fill="#f0b35a" />
+    <rect x="414.0" y="243.5" width="6.0" height="6.0" rx="1.5" fill="#006a90" />
+    <rect x="487.5" y="241.0" width="11.0" height="11.0" rx="1.5" fill="#006a90" />
+    <rect x="413.5" y="258.0" width="7.0" height="7.0" rx="1.5" fill="#f0b35a" />
+    <rect x="452.0" y="258.5" width="6.0" height="6.0" rx="1.5" fill="#f0b35a" />
+    <rect x="487.5" y="256.0" width="11.0" height="11.0" rx="1.5" fill="#f0b35a" />
+    <rect x="336.5" y="272.0" width="9.0" height="9.0" rx="1.5" fill="#006a90" />
+    <rect x="413.5" y="273.0" width="7.0" height="7.0" rx="1.5" fill="#f0b35a" />
+    <rect x="490.0" y="273.5" width="6.0" height="6.0" rx="1.5" fill="#f0b35a" />
+    <rect x="337.5" y="288.0" width="7.0" height="7.0" rx="1.5" fill="#f0b35a" />
+    <rect x="412.5" y="287.0" width="9.0" height="9.0" rx="1.5" fill="#006a90" />
+    <rect x="489.5" y="288.0" width="7.0" height="7.0" rx="1.5" fill="#006a90" />
+    <rect x="145.5" y="301.0" width="11.0" height="11.0" rx="1.5" fill="#006a90" />
+    <rect x="452.0" y="303.5" width="6.0" height="6.0" rx="1.5" fill="#006a90" />
+    <rect x="145.5" y="316.0" width="11.0" height="11.0" rx="1.5" fill="#f0b35a" />
+    <rect x="525.5" y="331.0" width="11.0" height="11.0" rx="1.5" fill="#006a90" />
+    <rect x="525.5" y="346.0" width="11.0" height="11.0" rx="1.5" fill="#f0b35a" />
+    <rect x="183.5" y="361.0" width="11.0" height="11.0" rx="1.5" fill="#006a90" />
+    <rect x="338.0" y="363.5" width="6.0" height="6.0" rx="1.5" fill="#006a90" />
+    <rect x="183.5" y="376.0" width="11.0" height="11.0" rx="1.5" fill="#f0b35a" />
+    <rect x="299.5" y="378.0" width="7.0" height="7.0" rx="1.5" fill="#006a90" />
+    <rect x="411.5" y="391.0" width="11.0" height="11.0" rx="1.5" fill="#006a90" />
+    <rect x="411.5" y="406.0" width="11.0" height="11.0" rx="1.5" fill="#f0b35a" />
+    <rect x="338.0" y="423.5" width="6.0" height="6.0" rx="1.5" fill="#006a90" />
+    <rect x="373.0" y="420.5" width="12.0" height="12.0" rx="1.5" fill="#006a90" />
+    <rect x="337.5" y="438.0" width="7.0" height="7.0" rx="1.5" fill="#f0b35a" />
+    <rect x="373.5" y="436.0" width="11.0" height="11.0" rx="1.5" fill="#f0b35a" />
+    <line x1="10" y1="451" x2="588" y2="451" stroke="currentColor" stroke-opacity="0.35" stroke-width="1" />
+    <rect x="185.0" y="467.5" width="8.0" height="8.0" rx="1.5" fill="#f0b35a" />
+    <rect x="223.0" y="467.5" width="8.0" height="8.0" rx="1.5" fill="#f0b35a" />
+    <rect x="299.5" y="468.0" width="7.0" height="7.0" rx="1.5" fill="#006a90" />
+    <rect x="337.5" y="468.0" width="7.0" height="7.0" rx="1.5" fill="#f0b35a" />
+    <rect x="566.0" y="468.5" width="6.0" height="6.0" rx="1.5" fill="#f0b35a" />
+    <rect x="185.5" y="483.0" width="7.0" height="7.0" rx="1.5" fill="#006a90" />
+    <rect x="223.0" y="482.5" width="8.0" height="8.0" rx="1.5" fill="#006a90" />
+    <rect x="338.0" y="483.5" width="6.0" height="6.0" rx="1.5" fill="#006a90" />
+    <rect x="147.5" y="498.0" width="7.0" height="7.0" rx="1.5" fill="#f0b35a" />
+    <rect x="222.0" y="496.5" width="10.0" height="10.0" rx="1.5" fill="#f0b35a" />
+    <rect x="299.0" y="497.5" width="8.0" height="8.0" rx="1.5" fill="#006a90" />
+    <rect x="565.0" y="497.5" width="8.0" height="8.0" rx="1.5" fill="#f0b35a" />
+    <rect x="147.0" y="512.5" width="8.0" height="8.0" rx="1.5" fill="#006a90" />
+    <rect x="222.5" y="512.0" width="9.0" height="9.0" rx="1.5" fill="#006a90" />
+    <rect x="299.5" y="513.0" width="7.0" height="7.0" rx="1.5" fill="#006a90" />
+    <rect x="526.5" y="512.0" width="9.0" height="9.0" rx="1.5" fill="#006a90" />
+    <rect x="148.5" y="529.0" width="5.0" height="5.0" rx="1.5" fill="#f0b35a" />
+    <rect x="186.0" y="528.5" width="6.0" height="6.0" rx="1.5" fill="#006a90" />
+    <rect x="450.0" y="526.5" width="10.0" height="10.0" rx="1.5" fill="#f0b35a" />
+    <rect x="146.5" y="542.0" width="9.0" height="9.0" rx="1.5" fill="#006a90" />
+    <rect x="375.5" y="543.0" width="7.0" height="7.0" rx="1.5" fill="#006a90" />
+    <rect x="449.0" y="540.5" width="12.0" height="12.0" rx="1.5" fill="#006a90" />
+    <rect x="224.0" y="558.5" width="6.0" height="6.0" rx="1.5" fill="#006a90" />
+    <rect x="413.0" y="557.5" width="8.0" height="8.0" rx="1.5" fill="#006a90" />
+    <rect x="451.0" y="557.5" width="8.0" height="8.0" rx="1.5" fill="#006a90" />
+    <rect x="566.0" y="558.5" width="6.0" height="6.0" rx="1.5" fill="#006a90" />
+    <rect x="261.5" y="573.0" width="7.0" height="7.0" rx="1.5" fill="#006a90" />
+    <rect x="298.0" y="571.5" width="10.0" height="10.0" rx="1.5" fill="#006a90" />
+    <rect x="337.5" y="573.0" width="7.0" height="7.0" rx="1.5" fill="#f0b35a" />
+    <rect x="526.0" y="571.5" width="10.0" height="10.0" rx="1.5" fill="#006a90" />
+  </g>
+  <rect x="132" y="597" width="10" height="10" rx="1.5" fill="#006a90" />
+  <text x="148" y="606" font-size="11" fill="currentColor">raises the axis</text>
+  <rect x="252" y="597" width="10" height="10" rx="1.5" fill="#f0b35a" />
+  <text x="268" y="606" font-size="11" fill="currentColor">lowers it</text>
+  <text x="352" y="606" font-size="11" fill="currentColor" fill-opacity="0.75">square size is how far. Faded words never come back out.</text>
+</svg>

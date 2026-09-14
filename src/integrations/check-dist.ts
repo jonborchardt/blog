@@ -85,7 +85,9 @@ export function checkDist(): AstroIntegration {
           logger.error(`${errors.length} problem(s) in the built site:\n- ${errors.join("\n- ")}`);
           throw new Error(`check-dist: ${errors.length} problem(s) — see the list above.`);
         }
-        logger.info(`${stats.pages} pages, ${stats.links} links, ${stats.images} images OK`);
+        logger.info(
+          `${stats.pages} pages, ${stats.links} links, ${stats.images} images, ${stats.clips} clips OK`,
+        );
 
         if (process.env.SKIP_EXTERNAL_LINKS) {
           logger.info("external links: skipped (SKIP_EXTERNAL_LINKS is set)");

@@ -29,6 +29,9 @@ export const tags = {
   investing: { label: "Investing" },
   d3: { label: "D3" },
   adtech: { label: "AdTech" },
+  music: { label: "Music" },
+  "live-coding": { label: "Live Coding" },
+  dsl: { label: "DSL" },
   retrospective: { label: "Retrospective" },
   patents: { label: "Patents" },
 } as const satisfies TagRegistry;

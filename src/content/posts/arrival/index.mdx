@@ -1,0 +1,428 @@
+---
+title: arrival
+description: Eight sections, 62 parts, and four rounds of being confidently wrong about a whistle. One piece of music, examined honestly.
+publishedAt: 2026-09-13
+series: strudel-bench
+seriesOrder: 6
+tags: [music, ai-assisted-coding, live-coding]
+authority: "E:\\github2\\strudle"
+hero:
+  src: ./hero.png
+  alt: One line climbing across four chords while a second repeats the same three notes unchanged
+draft: false
+---
+
+import SoundBite from "@/components/blog/SoundBite.astro";
+import StrudelEmbed from "@/components/blog/StrudelEmbed.astro";
+import Callout from "@/components/blog/Callout.astro";
+import Figure from "@/components/blog/Figure.astro";
+import VizFigure from "@/components/blog/VizFigure.astro";
+import WillsViz from "./wills-viz.svg";
+import BalanceViz from "./balance-viz.svg";
+import RegisterViz from "./register-viz.svg";
+import walkVoid from "./audio/walk-1-void.mp3";
+import walkSignal from "./audio/walk-2-signal.mp3";
+import walkApproach from "./audio/walk-3-approach.mp3";
+import walkContact from "./audio/walk-4-contact.mp3";
+import walkWill from "./audio/walk-5-will.mp3";
+import walkPlea from "./audio/walk-6-plea.mp3";
+import walkThreshold from "./audio/walk-7-threshold.mp3";
+import walkAfter from "./audio/walk-8-after.mp3";
+import humanContact from "./audio/human-contact.mp3";
+import alienContact from "./audio/alien-contact.mp3";
+import alienPlea from "./audio/alien-plea.mp3";
+import popWillPiano from "./audio/pop-will-piano.mp3";
+import dryPiano from "./audio/dry-piano.mp3";
+import triangleClimax from "./audio/triangle-climax.mp3";
+
+The brief was one sentence: an epic orchestral score, aliens coming to earth, not a battle but an
+emotional battle of will, lots of instruments, designed rather than chaotic, fear and hope at once.
+
+What came back was 64 BPM in D minor, eight sections, 59 bars, 62 parts, 28 distinct instruments, and
+three minutes forty-one seconds. It is the piece I am proudest of out of this whole project, and it
+has two bugs in it right now that I am going to show you.
+
+<Callout variant="note" title="Everything here is one commit">
+  Every number, clip and figure below describes the file at commit `7a4d1b0`, read on 2026-09-13.
+  Two of the things I point at are live bugs, so if either gets fixed this post becomes a description
+  of a version rather than of the file.
+</Callout>
+
+## The idea that carries it
+
+Two wills, side by side, that never merge.
+
+The human side is a piano theme, with a harp and recorders behind it. It **follows the harmony**: the
+same scale degrees, re-rooted on whatever chord is underneath, so it moves when the music moves.
+
+The alien side is handchimes and tubular bells. They **do not follow**. The chimes play the same three
+notes and the bells the same two, in the same rhythm, bar after bar, indifferent to the chords going
+past.
+
+<VizFigure
+  name="The human theme against the alien signal over four bars and four chords"
+  summary="The piano line is the same shape transposed onto each new chord, so it climbs as the harmony moves. The handchime line is four identical copies. One boolean in the source is the entire difference."
+  data={{
+    caption: "MIDI note numbers, first four bars of the first climax",
+    columns: ["Bar", "Chord", "Piano (follows)", "Handchimes (does not)"],
+    rows: [
+      ["17", "Dm", "62, 65, 69, 70, 69", "74, 84, 79, 74, 84, 79"],
+      ["18", "Bb", "70, 74, 77, 82, 81", "74, 84, 79, 74, 84, 79"],
+      ["19", "F", "65, 69, 72, 74, 72", "74, 84, 79, 74, 84, 79"],
+      ["20", "C", "72, 76, 79, 84, 82", "74, 84, 79, 74, 84, 79"],
+    ],
+  }}
+>
+  <WillsViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
+
+The entire difference between following the harmony and ignoring it is one boolean:
+
+```js
+const theme  = { sound: 'piano',       follow: true,  notes: '0 ~ 2 4@2 ~ 5 4@2 0 ~ 2 4@2 ~ 7 6@2' };
+const signal = { sound: 'handchimes',  follow: false, notes: '0 ~ ~ 6 ~ ~ 3 ~ ~ 0 ~ ~ 6 3 ~ ~' };
+```
+
+Hear it. Same four bars, same chords underneath, one part at a time:
+
+<SoundBite
+  label="The two wills, one at a time"
+  note="Four bars of the first climax. The first climbs with the harmony; the second refuses to."
+  clips={[
+    { src: humanContact, label: "the theme, following" },
+    { src: alienContact, label: "the signal, not following" },
+  ]}
+/>
+
+The idea is implemented more than once. The human phrase is stretched over two bars and the alien
+phrase is one, so the human breathes slower. The human line carries timing jitter, which the alien
+line does not. And in the fifth section, where the key turns to D phrygian, the human theme shrinks to
+a half-step sigh that *bends with the chord*, while the chimes sit exactly where they always were.
+
+That jitter one is worth a caveat, because it is not really a second mechanism: the humanise control
+does nothing at all below its midpoint, so writing zero on the alien parts is identical to leaving it
+out. The checker still reports them as "very mechanical". The vocabulary can express an intention the
+engine has no way to act on.
+
+## Where the idea breaks, and it is a good break
+
+There is one section, `plea`, that modulates to F major. And `follow: false` turns out to mean
+something narrower than I thought.
+
+It means "do not track the chords within a section". It does **not** mean "do not transpose with the
+section's key". So when the key changed, the immovable signal moved. Its intervals, two stacked
+perfect fourths everywhere else in the piece, become a fourth and a tritone:
+
+<SoundBite
+  label="The signal that never changes, changing"
+  note="The same part in the first climax and then in the modulated section. Its interval is not the same."
+  clips={[
+    { src: alienContact, label: "in D minor: a stack of fourths" },
+    { src: alienPlea, label: "in F major: a fourth and a tritone" },
+  ]}
+/>
+
+Nothing in the system reported this, because nothing in the system knows the chimes were supposed to
+be immovable. There is no way to express "these three absolute pitches, always" in the language; there
+is only "these degrees, in this key". The composer's intent and the language's semantics come apart
+at exactly the one place the key changes.
+
+I am not going to fix it. It is the most alien-sounding moment in the piece, and it got there by
+accident.
+
+## The walk
+
+<SoundBite
+  label="All eight sections in order"
+  note="Two bars from each, except the first, which is only one bar long in total."
+  clips={[
+    { src: walkVoid, label: "1. void" },
+    { src: walkSignal, label: "2. signal" },
+    { src: walkApproach, label: "3. approach" },
+    { src: walkContact, label: "4. contact" },
+    { src: walkWill, label: "5. will" },
+    { src: walkPlea, label: "6. plea" },
+    { src: walkThreshold, label: "7. threshold" },
+    { src: walkAfter, label: "8. after" },
+  ]}
+/>
+
+`void` is one bar: an organ chord and a drone, and that is the whole section. `signal` is the alien
+alone, for eight bars, before anything human arrives. `approach` brings the theme in under a filter
+that opens across the section. `contact` is the first climax. `will` drops to D phrygian with the bass
+on a sustained didgeridoo. `plea` modulates to F major and is the one section the human side clearly
+wins. `threshold` is the peak, twelve bars, thirteen parts. `after` is six bars of leaving.
+
+### Who is winning
+
+The brief said neither side wins at the climaxes. That is close to true, and the more interesting
+thing is what happens in between.
+
+<Figure caption="Summed per-event gain is a balance measure, not loudness. The chimes sit an octave above the piano, where the ear is more sensitive, so a small gain lead is not necessarily a perceptual one.">
+  <VizFigure
+    name="The balance between the two sides across the eight sections"
+    summary="Measured this way the human side leads at both climaxes by around three to one, but the arc between them is the story: the alien side plays alone, wins the fifth section outright, loses the sixth by a factor of twelve, and has the last word in the closing section."
+    data={{
+      caption: "Summed event gain per side",
+      columns: ["Section", "Human", "Alien"],
+      rows: [
+        ["void", "0", "0"],
+        ["signal", "0", "8.4"],
+        ["approach", "22.1", "8.4"],
+        ["contact", "66.9", "22.3"],
+        ["will", "7.3", "20.2"],
+        ["plea", "63.2", "5.1"],
+        ["threshold", "129.2", "53.0"],
+        ["after", "3.3", "6.8"],
+      ],
+    }}
+  >
+    <BalanceViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+  </VizFigure>
+</Figure>
+
+Read per instrument rather than per side, the climaxes really are close: at the first, the piano leads
+the chimes and bells by about 17 percent; at the peak, the piano and glockenspiel together lead them
+by about 12. The human side wins on headcount,
+not on level, because by then it has four voices against two.
+
+But the arc between them is better than "neither wins". The alien opens alone. The human arrives.
+Parity. The alien takes the fifth section. The human takes the sixth. Parity again at the peak. And
+then the chimes get the last word.
+
+## Fear low, hope high
+
+The other half of the brief was a mixing instruction disguised as an image: fear in the low half, hope
+in the high half. It is in the numbers, as a clean separation between the two groups' medians.
+
+<VizFigure
+  name="The range of every instrument, sorted by its median pitch"
+  summary="The low group's medians all sit at or below G3 and the high group's all sit at or above F4, because the register control quantises to whole octaves. One voice, the bowed strings, spans both halves and moves between them section by section."
+  data={{
+    caption: "Median MIDI note per instrument",
+    columns: ["Instrument", "Median", "Range"],
+    rows: [
+      ["didgeridoo", "15", "14 to 15"],
+      ["pedal organ", "24", "14 to 45"],
+      ["quiet organ", "46", "38 to 57"],
+      ["loud organ", "48", "38 to 58"],
+      ["tubular bells", "55", "50 to 60"],
+      ["bowed strings", "65", "38 to 82"],
+      ["choir", "72", "62 to 82"],
+      ["piano", "72", "62 to 84"],
+      ["recorder", "77", "65 to 86"],
+      ["handchimes", "79", "74 to 88"],
+      ["bowed vibraphone", "83", "74 to 91"],
+      ["glockenspiel", "84", "74 to 96"],
+      ["harp", "86", "74 to 98"],
+    ],
+  }}
+>
+  <RegisterViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
+
+The separation is not luck, and it is not a hole in the pitch space either: plenty of individual
+notes span the middle, and the strings alone cover both halves. What is separated is the *centre of
+gravity* of each voice, because the register control moves a part by whole octaves rather than
+smoothly. The language pushed the two groups apart.
+
+The best detail in the piece is the one voice that crosses. The bowed strings start in the fear half,
+climb into the hope half as the piece opens up, drop back down for the standoff in `will`, and drop
+again at the finale. One part crossing the line eight times is the "both at once" idea living in a
+single instrument.
+
+Two corrections to my own header comment, though. The tubular bells are described as part of the
+alien signal in one sentence and part of the hope-high group in the next, and by register they are the
+**lowest** of the high voices: they alternate D3 and middle C, so half their notes sit below it. And
+the pedal organ plays a D at about 18
+hertz, from a sample library that bottoms out at 55. Every note is stretched down as much as
+nineteen semitones. On a laptop speaker you are not hearing the fundamental at all; you are hearing
+the harmonics and a very slow attack. Fear in the low half is partly fear below the speaker.
+
+## Four rounds of being confidently wrong
+
+After the first listen I reported a whistle at the start of the piece. What followed was four rounds
+of diagnosis, and every one of them was wrong about the whistle. Two of them were argued in detail.
+
+**Round one** blamed the wind bed and a bowed wineglass, and turned both down. Wrong.
+
+**Round two** removed the wind and space beds from the opening entirely. Wrong, and I came back with
+"the whistle you removed was wrong."
+
+**Round three** blamed the reverb. This one is worth dwelling on because it was *correct about a
+different bug*: the audio engine keeps one reverb per output and rebuilds its impulse response
+whenever an event arrives with a different room size, and the pads carried four different sizes, so
+the reverb buffer was being swapped under every piano strike. That got fixed, with a comment that is
+still in the file. The whistle survived.
+
+**Round four** rendered audio, ran a spectrum analysis, and produced the best paragraph in the entire
+provenance file:
+
+> rendered and measured, the void pair produced one naked 440 Hz line that each pad alone left faint
+> and both doubled in phase. It is the sixth harmonic of the shared D2, the one partial surviving the
+> 300 Hz lowpass. The psaltery sample map is an octave off and its strong third harmonic lands
+> exactly there
+
+That is specific, physically literate, internally coherent, and arrived at by measurement rather than
+guessing. It swapped the string sound and rebuilt the opening pad as a triad.
+
+It was also wrong.
+
+### What actually found it
+
+I said one thing that turned out to matter, and it was not about sound at all:
+
+> still whistles at the start; gone when a section is pinned or a pad is muted
+
+That is an architectural observation. Pinning a section and muting a part both rebuild the song from
+its declarative sections, which **drops the hand-written textures entirely**. So the whistle had to be
+in a texture, and no amount of spectrum analysis on the declarative parts was ever going to find it.
+
+It was one sample name. A drone was written as `didgeridoo`, which resolves to variant zero, which is
+a 0.7-second **bark**. Pitched down and repeated once a bar, a bark is a descending whoop.
+
+```js
+// :8 is a sustained note; :0 is a bark
+```
+
+Two minutes after the real cause was confirmed, a commit titled `song revert` undid the entire
+spectrum-analysis theory: strings back to what they were, the opening pad back to its single low note.
+Its recorded reason ends in five words that are exactly right: *those were not the whistle*.
+
+<Callout variant="note" title="What the failure actually was">
+  Not vagueness. The agent was *precise about the wrong thing* for four rounds, and the thing it never
+  questioned was whether a name told it what a sound was. A name says nothing about its variants. My
+  own diagnostic hint made it worse, because pin and mute drop the textures, so the two things I
+  offered as clues were actively pointing away from the culprit.
+</Callout>
+
+And then the part I keep coming back to. The fix was not "be more careful". The fix went into the
+tooling: the checker now prints the actual filename behind every sound it heard.
+
+```text
+  sounds
+    didgeridoo:8             Didgeridoo1_Sus2_Main.wav (12 variants)
+    timpani:0                Timpani1_Hit_v2_rr1_Sum.wav (30 variants)
+    sus_cymbal:0             susCymb1_bow_13.wav (25 variants)
+```
+
+Four rounds of debugging became a permanent widening of what the agent can see. That is the only kind
+of fix that compounds.
+
+## The bug that is still in there
+
+The reverb fix held. The other one did not, and I did it myself.
+
+There were two pops, not one. The second was the reverb. The first was simpler: the melody part sends
+to a delay line for any `space` value above 0.5, and the piano was at 0.75. At this tempo that echo
+lands three-quarters of a beat behind each note, at twenty percent wet. It reads as an extra attack
+that is not in the score.
+
+The fix consolidated the piano to one setting for the whole piece, and added a comment at the top of
+the file saying so. The comment is still there. The comment reads:
+
+> The piano keeps one setting for the whole song: space .5 (room only; anything above sends it to a
+> delay line, which reads as a pop behind each note)
+
+An hour later, a commit called `fixes`, with no recorded reason and a one-word message, put the
+per-section overrides back. In the shipped file the piano in two sections and the glockenspiel in a
+third are on the delay again. Eighteen piano events and forty-two glockenspiel events carry it.
+
+<SoundBite
+  label="The pop, in the file as it stands"
+  note="The piano in the section where the delay came back, then the same instrument where the fix held."
+  clips={[
+    { src: popWillPiano, label: "with the delay send" },
+    { src: dryPiano, label: "without it" },
+  ]}
+/>
+
+The comment and the code now disagree, and the comment is the one telling the truth about what was
+intended. The provenance file stops recording at round eight; the last two commits to this song have
+no entry at all.
+
+That same undocumented commit left a second thing behind. It cut the opening section from two bars to
+one and did not adjust the hand-written textures, which are sequenced separately and still add up to
+sixty bars against the score's fifty-nine. So every gong, swell and heartbeat now lands **one bar
+after** the section it was written for: the gong announcing the first climax fires a bar into it. And
+because the two halves are different lengths, they drift by another bar every time the piece loops.
+It is audible in the section clips above, and nothing in the system noticed, because nothing in the
+system knows the textures were meant to line up with anything.
+
+The session diary works right up until the moment a human opens the file and just fixes something.
+
+## What it cannot do
+
+I want to be clear-eyed about this, because the piece is better than my ability to defend it and
+overselling it would cost more than the honesty does.
+
+**There is no counterpoint.** The pads stack triads on the chord root and every voice moves in
+parallel, every time. Inversions and voice leading are explicitly not modelled. A trained ear hears
+parallel fifths across the whole piece, and the fifth section, where organ and strings and drone and
+piano all step together, is parallel motion as the entire dramatic device.
+
+**The development is one line, transposed, mostly unchanged.** One sixteen-step phrase carries the
+entire human side. There are three further hand-written versions of it: a truncated sigh in the
+phrygian section, a fragment in the closing bars, and the one that matters, the `answer`, which
+changes the second half so it descends and lands on the root instead of hanging. That last one is a
+single string edit, and it is the whole motivic argument the piece has.
+
+**The rhythm cannot really change.** Density on a melody is a dice roll: below the midpoint it drops
+notes at random, above it doubles them. In the fifth section it is set low enough that **two of the
+eight bars have no human theme in them at all**. The section named for the human will asserting itself
+has two bars where the human is simply absent, and that is a consequence of the undocumented revert.
+
+**There is no tempo flexibility.** 64 BPM, exactly, for 221 seconds. Film scores live on rubato. This
+has none.
+
+**And the loudest single voice in the finale is the triangle.**
+
+<SoundBite
+  label="The drums at the peak"
+  note="The triangle occupies the hi-hat slot, eight hits a bar, multiplied by the part's weight."
+  clips={[{ src: triangleClimax, label: "threshold, drums only" }]}
+/>
+
+By summed gain it beats the strings, the harp, the pedal organ and the piano. The part's `weight` is
+set high, weight multiplies every drum voice's gain, and the triangle is in the slot that fires most
+often. A word that means "low end" made a triangle the loudest thing in the climax.
+
+## What I actually think
+
+Almost every round of feedback I gave was about sound quality: a whistle, a reverb, a pop. Two asked
+for a section to be shorter and one asked for an architectural change. **Not one asked for different
+notes.** I never requested a different melody, a different harmony, or a different shape. The
+structure that came back from the first one-sentence brief is the structure that shipped.
+
+So the honest summary is this. A trained listener would say it is a well-voiced, convincingly
+orchestrated three and a half minutes with a real dramatic shape and one genuinely good idea about two
+incompatible musics coexisting, built from one melodic cell repeated without development over four
+chords repeated without variation, at one unwavering tempo. A very good sketch for a cue, played by a
+very good sample library, by someone who has not yet learned to write a second phrase.
+
+I still think the good idea is good. Two wills, in the same key, over the same chords, and neither one
+gives way. It is expressed as a boolean, it survived eight rounds of me complaining about everything
+except it, and it is audible to someone who cannot read music.
+
+Here is the whole thing, and the instrument it came out of.
+
+<StrudelEmbed
+  song="arrival.strudel"
+  section="threshold"
+  title="The live editor, open on the peak of arrival: change any value and hear it"
+  label="Open the editor on the peak"
+  description="Thirteen parts at once. Try muting the handchimes."
+/>
+
+That is the end of the series. It started with a claim that I never read the code, and it ends with a
+piece of music whose best idea is one word, whose worst bug I introduced myself in a commit called
+`fixes`, and whose file still carries a comment describing a state it is no longer in.
+
+All of which I found out by writing this.
+
+<Callout variant="info" title="Try it yourself">
+  Everything in this series runs in strudel-bench:
+  <a href="https://jonborchardt.github.io/strudel-bench/" target="_blank" rel="noopener">play with the live instrument</a>,
+  or read
+  <a href="https://github.com/jonborchardt/strudel-bench" target="_blank" rel="noopener">the source on GitHub</a>.
+</Callout>

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="340" viewBox="0 0 640 340" font-family="system-ui, sans-serif" font-size="13">
+  <defs>
+    <marker id="pth-fg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="currentColor" fill-opacity="0.6" />
+    </marker>
+    <marker id="pth-warm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#f0b35a" />
+    </marker>
+  </defs>
+
+  <!-- the source at the top -->
+  <rect x="230" y="18" width="180" height="34" rx="8" fill="#deeef5" stroke="#006a90" stroke-width="2" />
+  <text x="320" y="40" font-size="13" text-anchor="middle" fill="#11171d">the song file</text>
+
+  <!-- left path: writes -->
+  <path d="M270 52V78H130V96" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" fill="none" marker-end="url(#pth-fg)" />
+  <rect x="20" y="98" width="220" height="30" rx="6" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+  <text x="130" y="118" font-size="12" text-anchor="middle" fill="#11171d">a knob, a menu, a drag</text>
+  <path d="M130 128V150" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" fill="none" marker-end="url(#pth-fg)" />
+  <rect x="20" y="152" width="220" height="30" rx="6" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+  <text x="130" y="172" font-size="12" text-anchor="middle" fill="#11171d">one commit function</text>
+  <path d="M130 182V204" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" fill="none" marker-end="url(#pth-fg)" />
+  <rect x="20" y="206" width="220" height="30" rx="6" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+  <text x="130" y="226" font-size="12" text-anchor="middle" fill="#11171d">one undo stack</text>
+  <path d="M130 236V262H310V58" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" fill="none" marker-end="url(#pth-fg)" />
+  <text x="20" y="256" font-size="11" fill="currentColor" fill-opacity="0.75">writes back</text>
+
+  <!-- right path: hears -->
+  <path d="M370 52V78H510V96" stroke="#f0b35a" stroke-width="2" fill="none" marker-end="url(#pth-warm)" />
+  <rect x="400" y="98" width="220" height="30" rx="6" fill="none" stroke="#f0b35a" stroke-width="2" />
+  <text x="510" y="118" font-size="12" text-anchor="middle" fill="currentColor">solo, mute, compare, preview level</text>
+  <path d="M510 128V150" stroke="#f0b35a" stroke-width="2" fill="none" marker-end="url(#pth-warm)" />
+  <rect x="400" y="152" width="220" height="30" rx="6" fill="none" stroke="#f0b35a" stroke-width="2" />
+  <text x="510" y="172" font-size="12" text-anchor="middle" fill="currentColor">filter an evaluated copy</text>
+  <path d="M510 182V204" stroke="#f0b35a" stroke-width="2" fill="none" marker-end="url(#pth-warm)" />
+  <rect x="400" y="206" width="220" height="30" rx="6" fill="none" stroke="#f0b35a" stroke-width="2" />
+  <text x="510" y="226" font-size="12" text-anchor="middle" fill="currentColor">the scheduler</text>
+
+  <text x="400" y="258" font-size="11" fill="currentColor">no arrow comes back from here</text>
+  <text x="400" y="274" font-size="11" fill="currentColor" fill-opacity="0.75">the file never learns what was soloed</text>
+
+  <line x1="10" y1="296" x2="630" y2="296" stroke="currentColor" stroke-opacity="0.25" stroke-width="1" />
+  <text x="10" y="318" font-size="11" fill="currentColor" fill-opacity="0.75">Both sides use the same arranger, so a soloed part is bit-identical to that part inside the song.</text>
+  <text x="10" y="334" font-size="11" fill="currentColor" fill-opacity="0.75">The mixer cannot drift from the renderer, because it is the renderer.</text>
+</svg>

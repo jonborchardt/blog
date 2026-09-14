@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="330" viewBox="0 0 640 330" font-family="system-ui, sans-serif" font-size="13">
+  <!-- legend -->
+  <rect x="10" y="14" width="24" height="13" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" stroke-dasharray="3 3" />
+  <text x="42" y="25" font-size="12" fill="currentColor">first pass</text>
+  <rect x="130" y="14" width="24" height="13" rx="3" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+  <text x="162" y="25" font-size="12" fill="currentColor">final</text>
+
+  <!-- bars: 13 slots across 20..620, slot width 46 -->
+  <!-- scale: energy 0..72 over 190 px -> 2.64 px per unit; baseline y=250 -->
+  <g>
+    <!-- intro 2/2 -->
+    <rect x="24" y="245" width="18" height="5" rx="1" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" stroke-dasharray="3 3" />
+    <rect x="44" y="245" width="18" height="5" rx="1" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+    <!-- arrive 18/18 -->
+    <rect x="70" y="202" width="18" height="48" rx="1" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" stroke-dasharray="3 3" />
+    <rect x="90" y="202" width="18" height="48" rx="1" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+    <!-- verse 20.6/18 -->
+    <rect x="116" y="196" width="18" height="54" rx="1" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" stroke-dasharray="3 3" />
+    <rect x="136" y="202" width="18" height="48" rx="1" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+    <!-- build 28.5/28.5 -->
+    <rect x="162" y="175" width="18" height="75" rx="1" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" stroke-dasharray="3 3" />
+    <rect x="182" y="175" width="18" height="75" rx="1" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+    <!-- chorus 42.3/42.1 -->
+    <rect x="208" y="138" width="18" height="112" rx="1" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" stroke-dasharray="3 3" />
+    <rect x="228" y="139" width="18" height="111" rx="1" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+    <!-- breakdown 4/4 -->
+    <rect x="254" y="239" width="18" height="11" rx="1" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" stroke-dasharray="3 3" />
+    <rect x="274" y="239" width="18" height="11" rx="1" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+    <!-- rebuild 19/19 -->
+    <rect x="300" y="200" width="18" height="50" rx="1" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" stroke-dasharray="3 3" />
+    <rect x="320" y="200" width="18" height="50" rx="1" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+    <!-- verse2 23.5/20 -->
+    <rect x="346" y="188" width="18" height="62" rx="1" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" stroke-dasharray="3 3" />
+    <rect x="366" y="197" width="18" height="53" rx="1" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+    <!-- chorus2 43/44 -->
+    <rect x="392" y="136" width="18" height="114" rx="1" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" stroke-dasharray="3 3" />
+    <rect x="412" y="134" width="18" height="116" rx="1" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+    <!-- breakdown2 8/cut -->
+    <rect x="438" y="229" width="18" height="21" rx="1" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" stroke-dasharray="3 3" />
+    <!-- chaos 72/cut -->
+    <rect x="484" y="60" width="18" height="190" rx="1" fill="none" stroke="#f0b35a" stroke-width="2.5" stroke-dasharray="4 3" />
+    <!-- chorus3 n/a/45.8 -->
+    <rect x="550" y="129" width="18" height="121" rx="1" fill="#f0b35a" stroke="#006a90" stroke-width="1.5" />
+    <!-- burnout 3/3 -->
+    <rect x="596" y="242" width="18" height="8" rx="1" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" stroke-dasharray="3 3" />
+    <rect x="614" y="242" width="18" height="8" rx="1" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+  </g>
+
+  <!-- peak annotations -->
+  <text x="493" y="52" font-size="12" text-anchor="middle" fill="currentColor">72</text>
+  <text x="559" y="121" font-size="12" text-anchor="middle" fill="currentColor">45.8</text>
+  <text x="421" y="126" font-size="12" text-anchor="middle" fill="currentColor">44</text>
+
+  <line x1="10" y1="250" x2="636" y2="250" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5" />
+
+  <!-- section names, rotated to fit -->
+  <g font-size="11" fill="currentColor" text-anchor="end">
+    <text transform="translate(46,262) rotate(-45)">intro</text>
+    <text transform="translate(92,262) rotate(-45)">arrive</text>
+    <text transform="translate(138,262) rotate(-45)">verse</text>
+    <text transform="translate(184,262) rotate(-45)">build</text>
+    <text transform="translate(230,262) rotate(-45)">chorus</text>
+    <text transform="translate(276,262) rotate(-45)">breakdown</text>
+    <text transform="translate(322,262) rotate(-45)">rebuild</text>
+    <text transform="translate(368,262) rotate(-45)">verse2</text>
+    <text transform="translate(414,262) rotate(-45)">chorus2</text>
+    <text transform="translate(456,262) rotate(-45)">breakdown2</text>
+    <text transform="translate(502,262) rotate(-45)">chaos</text>
+    <text transform="translate(568,262) rotate(-45)">chorus3</text>
+    <text transform="translate(624,262) rotate(-45)">burnout</text>
+  </g>
+
+  <text x="438" y="318" font-size="11" fill="currentColor" fill-opacity="0.75">cut</text>
+  <text x="484" y="318" font-size="11" fill="currentColor" fill-opacity="0.75">cut</text>
+  <text x="546" y="318" font-size="11" fill="currentColor" fill-opacity="0.75">added</text>
+</svg>

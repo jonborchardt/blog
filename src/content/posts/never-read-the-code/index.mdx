@@ -1,0 +1,323 @@
+---
+title: I never read the code
+description: I built a live-coding music system in about twenty hours and never read a line of it. What replaced the code review, and what that cost.
+publishedAt: 2026-09-13
+series: strudel-bench
+seriesOrder: 1
+tags: [ai-assisted-coding, engineering, music, live-coding]
+authority: "E:\\github2\\strudle"
+hero:
+  src: ./hero.png
+  alt: A crossed-out sheet of unread diffs beside four open gates passing a change through to a speaker
+draft: false
+---
+
+import SoundBite from "@/components/blog/SoundBite.astro";
+import StrudelEmbed from "@/components/blog/StrudelEmbed.astro";
+import Callout from "@/components/blog/Callout.astro";
+import Figure from "@/components/blog/Figure.astro";
+import VizFigure from "@/components/blog/VizFigure.astro";
+import PhasesViz from "./phases-viz.svg";
+import LoopTiersViz from "./loop-tiers-viz.svg";
+import GatesViz from "./gates-viz.svg";
+import arrivalFull from "./audio/arrival-full.mp3";
+import hookContact from "./audio/hook-arrival-contact.mp3";
+import contactDrums from "./audio/arrival-contact-drums.mp3";
+import euclidDayOne from "./audio/euclid-day-one.mp3";
+
+This is four bars from a third of the way into a piece called `arrival`: an orchestral score in D minor, 59
+bars long, eleven parts sounding at once. Timpani, a pedal organ, bowed strings, piano,
+handchimes, tubular bells, harp.
+
+<SoundBite
+  label="arrival, the first climax"
+  clips={[{ src: hookContact, label: "arrival: contact" }]}
+/>
+
+It came out of a system I built in about twenty hours of work spread over three days, and I have
+never read a line of that system's source. Not the diffs, not the pull requests, not the file that
+holds the thing you just heard.
+
+That sentence is the whole post, but not in the way it first sounds. I did not skip the work of
+verifying what got built. I moved it somewhere else, and the repository turns out to be a clean
+record of exactly where.
+
+<Callout variant="note" title="What Strudel is, in one sentence">
+  [Strudel](https://strudel.cc) is a live-coding music language that runs in a browser: you type
+  code, it makes sound, and you can edit it while it plays. The next post in this series is about why
+  59 bars of it needed a language on top. This post is about how the tooling around it got built.
+</Callout>
+
+## Every ritual at one end, none at the other
+
+I started this project with the full ceremony, and I ended it with none.
+
+The first stretch ran everything. A design spec. An implementation plan several hundred lines long.
+Twenty numbered task briefs, each one containing the test source written out in full *before* the
+implementation it was meant to fail against. A written ledger recording every ruling and its cost if
+wrong. That material is still on my machine, gitignored so it never reached the public repo, and it
+comes to roughly 6,700 lines of briefs, reports and ledgers.
+
+The workflow also captured a diff of every change as it went, which is another 12,500 lines sitting
+in the same folder. **I never opened any of it.** That was the deliberate part, and it was true from
+the first hour to the last: the ceremony existed to make the work correct, not to make me informed
+about it.
+
+Then, partway through the second day, I dropped the rest of it too. The entire back half of the
+project, which is most of what a visitor to the site actually touches, was built with no planning
+documents at all. Not fewer. None.
+
+So the repository is not an argument for working without ceremony. It is something better: the same
+codebase, the same tools, the same person, built two ways in the same week, with the boundary between
+them recorded to the minute.
+
+The second phase started from a
+finished engine, and a lot of what it added was interface rather than semantics, which is genuinely
+easier to build and genuinely harder to unit test. The honest claim is not "the ceremony was
+wasted." It is narrower and more useful: *the method changed, the second phase shipped more surface,
+the test density went down by 3x, and the gates that decide what ships held anyway.*
+
+That last clause is the part I was most prepared to be wrong about.
+
+## Every step shippable, checked rather than trusted
+
+The thing I actually believe about this project is that it was never broken. Every commit was a
+working page you could open and press play on.
+
+That is an easy thing to believe about your own work and a hard thing to be right about, so it got
+verified properly: every commit in the history checked out into a clean worktree, with the repo's
+own two gates run against each one.
+
+| Gate | What it does | Result across the history |
+| --- | --- | --- |
+| `npm run check` | Evaluates every song in Node, fails on a syntax error, an unknown sound, or an unknown key | Passed everywhere it existed. It did not exist for the first three minutes. |
+| `npm run pages` | Builds the actual static site that gets deployed | Passed everywhere it existed. It arrived about twelve hours in, along with the GitHub repo. |
+
+Zero failures in either. The claim holds.
+
+What complicates it is continuous integration, which is the honest arbiter because it runs whether
+or not I am paying attention. On two occasions the shared branch went red *after* a merge. Once a
+golden fingerprint had drifted and its stored hash was stale. Once a test left a temporary fixture
+behind and a sibling test that scans the same directory tripped over it, because they were running
+in parallel.
+
+Both were fixed inside about a quarter of an hour. More importantly, neither one shipped, because
+the deploy step depends on the test step and simply does not run when tests fail.
+
+So the precise version of "every step was shippable" is: *the working tree was not always green, and
+the gate caught it both times it mattered.* That is a weaker claim than the one I set out to make,
+and a much more interesting one, because it is the gate doing the work rather than me.
+
+The fix for the second failure is three files, seven lines
+added, two removed:
+
+- the test runner gained `--test-concurrency=1`
+- `CLAUDE.md` gained two paragraphs about what to do when a test fails
+- the project's skill file gained three lines about never regenerating a golden file to make it pass
+
+When the tests broke, most of the diff went into the instructions rather than the code. That is the
+entire method in one commit.
+
+## The loop that made it work is 1.3 seconds long
+
+I said I invested less in testing, and I have been saying "faster tests" as though those were the
+same claim. They are not, and the numbers pulled me up short.
+
+The full suite takes about 67 seconds. That is not fast.
+
+The trick is that the full suite is deliberately kept off the loop I actually work in.
+
+<VizFigure
+  name="How long each verification step takes, on a log scale"
+  summary="The three checks that run on every song edit finish in one to six seconds. The full suite, which runs only when the engine changes, takes 67 seconds: roughly fifty times the inner loop."
+  data={{
+    caption: "Verification steps by wall-clock time",
+    columns: ["Step", "Seconds", "When it runs"],
+    rows: [
+      ["check, one song", "1.3", "every song edit"],
+      ["check, arrival (59 bars)", "3.1", "every song edit"],
+      ["check, all six songs", "6.2", "before a commit"],
+      ["the full test suite (142 tests)", "67", "only when the engine changes"],
+    ],
+  }}
+>
+  <LoopTiersViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
+
+Editing a song runs one command that takes a little over a second. It evaluates the piece, refuses
+any sound or key it does not recognise, and prints the entire musical state: every section, every
+part, every value, the chords each section resolves to, and a line showing the energy of each
+section as a bar glyph so you can see whether the climax is actually the peak.
+
+The 67-second suite only runs when the change reaches the engine. That is not a habit, it is a
+written rule in the instructions file, and rules like that are the reason the fast path stayed fast.
+
+The generalisation I would take to any project: **feedback loops should be tiered explicitly, and
+the tiering should be written down where the person or agent doing the work will read it.** An
+undifferentiated "run the tests" collapses a 1.3-second loop and a 67-second one into the slower of
+the two.
+
+## What actually replaced reading the diff
+
+Three things, in increasing order of how hard they are to ignore.
+
+<VizFigure
+  name="The gates a change passes through, with the one that was removed"
+  summary="A change meets four automated gates on its way to being deployed, from an instant type refusal to a two-minute integration run. The gate a human would normally staff, reading the diff, is the one missing, and the person rejoins at the end by listening."
+>
+  <GatesViz class="mx-auto h-auto w-full max-w-xl" aria-hidden="true" />
+</VizFigure>
+
+**The instructions file.** Prose, enforced by nothing, trusted to be followed. The rule doing the
+most work there is not "tests must pass." It is that a failing test gets fixed in the same turn
+rather than handed back to me as a question. The done criterion is partly about who is allowed to be
+stuck.
+
+**A workflow with a required report shape.** The project's skill file lays out a sequence that ends
+in a report with fixed headings, so a report cannot be vague. Its rules are mostly epistemic:
+never invent a sound name, because the checker fails on unknown sounds; "verified directionally" is
+the strongest claim available; never say it sounds better. And the line that divides the labour in
+fourteen words:
+
+> The user hears the page; you read the checker and the analyzer. Keep it that way.
+
+Its vocabulary reference is generated from the source, so the documentation cannot drift from the
+implementation, because it *is* the implementation printed out.
+
+**Code that refuses invalid states and names both lists.** This is the one that genuinely substitutes
+for a human reading a diff. Misspell a key and you do not get a silent no-op, you get a build error
+that tells you everything it would have accepted:
+
+```text
+unknown key "brightnes" on drums in section "a" (axes: density, drive, brightness, weight,
+space, articulation, aggression, groove, variation, organicness, width, register;
+material: template, sounds, fill, level)
+```
+
+Both lists, in the message, at the point of failure. There are tests whose only job is to pin those
+error messages, which is to say the repository tests its own legibility.
+
+The same instinct shows up everywhere once you look. The resolver that edits songs will rewrite a
+plain number but refuses to touch a hand-written expression. The deploy build refuses to ship a
+sample pack with no licence, and re-checks every song against exactly the sounds that shipped, so a
+missing file fails the build rather than playing silence on the live site.
+
+And the best example of a criterion being born, which took four minutes start to finish. A sample
+named `didgeridoo` has twelve variants; one is a short bark and another is a sustained drone, and the
+name says nothing about which is which. Something picked the wrong one, and it took several rounds to
+find. The fix was not "be more careful": four minutes after the real cause was confirmed, the checker
+gained a block that prints the actual filename behind every sound, so the entire class of mistake is
+visible from then on.
+
+```text
+didgeridoo:8    Didgeridoo1_Sus2_Main.wav (12 variants)
+timpani:0       Timpani1_Hit_v2_rr1_Sum.wav (30 variants)
+sus_cymbal:0    susCymb1_bow_13.wav (25 variants)
+```
+
+That is what the loop is for. A mistake becomes a permanent check for its whole category, and the
+next hundred changes get that check for free.
+
+## The addressable unit is smaller than a song
+
+One structural thing that makes all of this cheap, and which I did not design so much as discover I
+had: nothing in this system addresses "the song" as a unit.
+
+Here are two bars of that same climax with every part muted except the drums, which are a timpani
+where the kick would be, a low rope snare, triangles, and a bowed cymbal.
+
+<SoundBite
+  label="One part of one section, alone"
+  note="The same passage, drums only, two bars. Levelled up to hear it: in the mix it sits far below this."
+  clips={[{ src: contactDrums, label: "contact: drums only" }]}
+/>
+
+That slice is not a special feature. It is the same address the renderer, the checker, the
+before-and-after measurement and the mixer's solo button all operate on: a song, a section within
+it, a part within that. Once the smallest addressable thing is that small, a one-second check can
+say something specific enough to act on, and so can a correction.
+
+## What it cost
+
+Two things, and they are both about method rather than bugs.
+
+**The instructions file became the code review, and it shows.** It grew from about 5 KB to about
+32 KB in 48 hours. Over the same window the source grew too, but the instructions grew faster.
+It has a single bullet in it that runs past two thousand words, describing one page of the
+application in one unbroken paragraph.
+
+Nobody writes a two-thousand-word sentence for a human being. It exists to be loaded into a context
+window. That file is where my understanding of this system lives, and it grew every time a feature
+landed because that is *where the reading happened*. If I had been reading diffs, the reading would
+have gone into my head instead, and the file would be a tenth the size and far less useful to the
+next agent that opens the repo. I am not sure that trade is bad. I am sure it is a trade.
+
+There is also a small pile of things in there that a review conversation would have surfaced. The
+offline renderer replaces a JavaScript builtin globally to stop an audio library handing it nodes
+from the wrong context. Those are reasonable solutions, carefully documented in comments, and not one
+of them is covered by a test. I did not know they existed until I went looking for this post.
+
+**The gates that encode judgment never got run.** This is the one that actually bothers me.
+
+The repository has a linter that turns musical judgment into static analysis: no climax, the climax
+is not the peak, two consecutive sections that are identical, a bass line left on its generated
+default. It is conceptually the most interesting thing in the project and it was written last.
+
+It is not in continuous integration. Run it across the catalogue today and there are close to thirty
+outstanding warnings, mostly the same two rules repeating.
+
+Two songs pass clean, and neither is the good news it looks like. One has no sections at all, so the
+linter simply has no opinion about it: clean and silent print identically. The other is `arrival`,
+and the causality there runs backwards from what I assumed. The linter was written about four hours
+*after* `arrival` was finished, largely from it. So the only song with sections that passes the taste
+linter is the one the rules were derived from.
+
+So the shape of the cost is specific: **the correctness gates are airtight and mechanically
+enforced, and the taste gates were written down and then never wired up.** A gate that is not in
+continuous integration is a document, and documents do not fail builds. Everything in this post
+about done criteria working is a claim about the gates that ran.
+
+## Day one still plays
+
+The fourth minute of this project produced a song file from a small generator script. Three
+Euclidean drum patterns and a sawtooth line, deliberately crude.
+
+<SoundBite
+  label="The fourth minute of the project"
+  note="Generated on day one from a seed, and never edited since."
+  clips={[{ src: euclidDayOne, label: "euclid, day one" }]}
+/>
+
+It has one commit in its entire history. In everything that followed, the declarative language was
+invented and then rewritten, harmony and meter and materials were added, and a whole editing
+interface was built on top. That file was never touched and it still checks clean and still plays.
+
+That is what "every step shippable" buys, and it is worth more than it sounds. It is not a claim
+about discipline. It is a claim about a contract that held, which means that at no point did anyone
+have to go back.
+
+Here is the whole piece, and the instrument it came out of.
+
+<SoundBite
+  label="The full arrival track"
+  note="Three minutes forty-one seconds, 1.7 MB, and nothing downloads until you press it."
+  clips={[{ src: arrivalFull, label: "arrival, the whole piece" }]}
+/>
+
+<StrudelEmbed
+  song="arrival.strudel"
+  section="contact"
+  title="The live editor, open on the first climax of arrival: change a value and hear it change"
+  label="Open the live editor on those four bars"
+  description="Drag a slider or edit the source. Nothing you do here is saved."
+/>
+
+The next post is about the part I have been carefully not explaining: what Strudel actually is, and
+why 59 bars of it needed a language on top before any of the above could work.
+
+<Callout variant="info" title="Try it yourself">
+  Everything in this series runs in strudel-bench:
+  <a href="https://jonborchardt.github.io/strudel-bench/" target="_blank" rel="noopener">play with the live instrument</a>,
+  or read
+  <a href="https://github.com/jonborchardt/strudel-bench" target="_blank" rel="noopener">the source on GitHub</a>.
+</Callout>

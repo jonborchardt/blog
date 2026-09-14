@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="300" viewBox="0 0 640 300" font-family="system-ui, sans-serif" font-size="13">
+  <defs>
+    <marker id="satv-fg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="currentColor" fill-opacity="0.6" />
+    </marker>
+    <marker id="satv-warm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#f0b35a" />
+    </marker>
+  </defs>
+
+  <!-- the three states -->
+  <g font-size="12" fill="currentColor" text-anchor="middle">
+    <text x="86" y="26">the section</text>
+    <text x="330" y="26">say "much darker"</text>
+    <text x="545" y="26">say it again</text>
+  </g>
+  <line x1="10" y1="38" x2="630" y2="38" stroke="currentColor" stroke-opacity="0.25" stroke-width="1" />
+
+  <!-- row 1: what was asked for -->
+  <text x="10" y="70" font-size="11" fill="currentColor" fill-opacity="0.75">ASKED FOR</text>
+  <rect x="248" y="80" width="164" height="26" rx="5" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+  <text x="330" y="98" font-size="12" text-anchor="middle" fill="#11171d">brightness -0.60</text>
+  <rect x="470" y="80" width="150" height="26" rx="5" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+  <text x="545" y="98" font-size="12" text-anchor="middle" fill="#11171d">the same, -0.60</text>
+
+  <!-- row 2: what landed -->
+  <text x="10" y="136" font-size="11" fill="currentColor" fill-opacity="0.75">LANDED</text>
+  <rect x="248" y="146" width="164" height="26" rx="5" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+  <text x="330" y="164" font-size="12" text-anchor="middle" fill="#11171d">-0.50 to -0.60</text>
+  <rect x="470" y="146" width="150" height="26" rx="5" fill="none" stroke="#f0b35a" stroke-width="2" />
+  <text x="545" y="164" font-size="12" text-anchor="middle" fill="currentColor">0 to -0.10</text>
+  <text x="545" y="186" font-size="11" text-anchor="middle" fill="currentColor" fill-opacity="0.75">already at the floor</text>
+
+  <!-- row 3: what it measures -->
+  <line x1="10" y1="204" x2="630" y2="204" stroke="currentColor" stroke-opacity="0.25" stroke-width="1" />
+  <text x="10" y="230" font-size="11" fill="currentColor" fill-opacity="0.75">MEASURED IN THE AUDIO</text>
+
+  <rect x="30" y="246" width="112" height="30" rx="6" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+  <text x="86" y="266" font-size="13" text-anchor="middle" fill="#11171d">1406 Hz</text>
+  <path d="M152 261H262" stroke="currentColor" stroke-opacity="0.6" stroke-width="2" fill="none" marker-end="url(#satv-fg)" />
+  <text x="207" y="254" font-size="12" text-anchor="middle" fill="currentColor">-89%</text>
+
+  <rect x="274" y="246" width="112" height="30" rx="6" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+  <text x="330" y="266" font-size="13" text-anchor="middle" fill="#11171d">149 Hz</text>
+  <path d="M396 261H478" stroke="#f0b35a" stroke-width="2" fill="none" marker-end="url(#satv-warm)" />
+  <text x="437" y="254" font-size="12" text-anchor="middle" fill="currentColor">-5%</text>
+
+  <rect x="489" y="246" width="112" height="30" rx="6" fill="none" stroke="#f0b35a" stroke-width="2" />
+  <text x="545" y="266" font-size="13" text-anchor="middle" fill="currentColor">141 Hz</text>
+
+  <text x="10" y="294" font-size="11" fill="currentColor" fill-opacity="0.75">spectral centroid of the same two bars, rendered three times</text>
+</svg>

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="300" viewBox="0 0 640 300" font-family="system-ui, sans-serif" font-size="13">
+  <text x="10" y="20" font-size="12" fill="currentColor" fill-opacity="0.75">ONE LINE OF A SONG</text>
+
+  <!-- the code line, split over three rows, monospace-ish via letter spacing -->
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="currentColor">
+    <text x="10" y="52">melody: {</text>
+    <text x="28" y="76">density: <tspan fill="#006a90" font-weight="bold">.5</tspan>,</text>
+    <text x="28" y="100">brightness: <tspan fill="#006a90" font-weight="bold">saw</tspan>.range(<tspan fill="#006a90" font-weight="bold">.3</tspan>, <tspan fill="#006a90" font-weight="bold">.7</tspan>).slow(<tspan fill="#006a90" font-weight="bold">8</tspan>),</text>
+    <text x="28" y="124">sound: <tspan fill="#006a90" font-weight="bold">'piano'</tspan>, follow: <tspan fill="#006a90" font-weight="bold">true</tspan>, phrase: <tspan fill="#006a90" font-weight="bold">2</tspan>,</text>
+    <text x="28" y="148">notes: <tspan fill="#f0b35a">'0 2 3@2 ~ 4 3 2 0 2 3@2 ~ 5@2 4'</tspan></text>
+    <text x="10" y="172">}</text>
+  </g>
+
+  <!-- underlines on the controlled literals -->
+  <g stroke="#006a90" stroke-width="1.5" stroke-dasharray="2 2">
+    <line x1="96" y1="80" x2="112" y2="80" />
+    <line x1="115" y1="104" x2="140" y2="104" />
+    <line x1="192" y1="104" x2="209" y2="104" />
+    <line x1="218" y1="104" x2="235" y2="104" />
+    <line x1="288" y1="104" x2="297" y2="104" />
+    <line x1="80" y1="128" x2="140" y2="128" />
+    <line x1="215" y1="128" x2="248" y2="128" />
+    <line x1="320" y1="128" x2="329" y2="128" />
+  </g>
+  <!-- the one that stays plain: a solid warm rule, not a dotted control underline -->
+  <line x1="80" y1="152" x2="344" y2="152" stroke="#f0b35a" stroke-width="2" />
+
+  <line x1="10" y1="188" x2="630" y2="188" stroke="currentColor" stroke-opacity="0.25" stroke-width="1" />
+
+  <!-- the widget key -->
+  <g font-size="12" fill="currentColor">
+    <rect x="10" y="202" width="120" height="22" rx="4" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+    <text x="70" y="217" text-anchor="middle" fill="#11171d">slider</text>
+    <text x="138" y="217" font-size="11" fill-opacity="0.75">bounded, so a range is known</text>
+
+    <rect x="10" y="232" width="120" height="22" rx="4" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+    <text x="70" y="247" text-anchor="middle" fill="#11171d">spinner</text>
+    <text x="138" y="247" font-size="11" fill-opacity="0.75">a floor but no ceiling, so nothing is invented</text>
+
+    <rect x="10" y="262" width="120" height="22" rx="4" fill="none" stroke="#f0b35a" stroke-width="2" />
+    <text x="70" y="277" text-anchor="middle" fill="currentColor">no control</text>
+    <text x="138" y="277" font-size="11" fill-opacity="0.75">free text: "a line in mini-notation, written by hand"</text>
+  </g>
+</svg>

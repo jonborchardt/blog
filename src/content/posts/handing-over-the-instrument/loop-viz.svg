@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="340" viewBox="0 0 640 340" font-family="system-ui, sans-serif" font-size="13">
+  <defs>
+    <marker id="lpv-warm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#f0b35a" />
+    </marker>
+    <marker id="lpv-fg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="currentColor" fill-opacity="0.6" />
+    </marker>
+  </defs>
+
+  <!-- headers -->
+  <text x="130" y="22" font-size="12" text-anchor="middle" fill="currentColor">CAN HEAR</text>
+  <text x="510" y="22" font-size="12" text-anchor="middle" fill="currentColor">CANNOT HEAR</text>
+  <path d="M320 30V262" stroke="#f0b35a" stroke-width="2.5" stroke-dasharray="8 6" />
+
+  <!-- left column -->
+  <g>
+    <rect x="20" y="44" width="220" height="30" rx="6" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+    <rect x="20" y="104" width="220" height="30" rx="6" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+    <rect x="20" y="164" width="220" height="30" rx="6" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+  </g>
+  <g font-size="12" fill="#11171d" text-anchor="middle">
+    <text x="130" y="64">press play, listen once</text>
+    <text x="130" y="124">pin a note at that bar</text>
+    <text x="130" y="184">one line per section</text>
+  </g>
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" fill="none">
+    <path d="M130 74V102" marker-end="url(#lpv-fg)" />
+    <path d="M130 134V162" marker-end="url(#lpv-fg)" />
+  </g>
+
+  <!-- right column -->
+  <g>
+    <rect x="400" y="44" width="220" height="30" rx="6" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+    <rect x="400" y="94" width="220" height="30" rx="6" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+    <rect x="400" y="144" width="220" height="30" rx="6" fill="#deeef5" stroke="#006a90" stroke-width="1.5" stroke-dasharray="5 3" />
+    <rect x="400" y="194" width="220" height="30" rx="6" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+  </g>
+  <g font-size="12" fill="#11171d" text-anchor="middle">
+    <text x="510" y="64">edit the source</text>
+    <text x="510" y="114">read the event table</text>
+    <text x="510" y="164">measure, if it can</text>
+    <text x="510" y="214">record why, commit</text>
+  </g>
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" fill="none">
+    <path d="M510 74V92" marker-end="url(#lpv-fg)" />
+    <path d="M510 124V142" marker-end="url(#lpv-fg)" />
+    <path d="M510 174V192" marker-end="url(#lpv-fg)" />
+  </g>
+  <text x="400" y="242" font-size="11" fill="currentColor" fill-opacity="0.75">the dashed step needs a browser open</text>
+
+  <!-- the crossing, rightward -->
+  <path d="M244 179H396" stroke="#f0b35a" stroke-width="2.5" fill="none" marker-end="url(#lpv-warm)" />
+  <g font-size="11" fill="currentColor" text-anchor="middle">
+    <text x="320" y="200">a bar number,</text>
+    <text x="320" y="214">a section,</text>
+    <text x="320" y="228">one sentence</text>
+  </g>
+
+  <!-- the crossing, leftward: routed under everything -->
+  <path d="M510 224V284H10V59H16" stroke="#f0b35a" stroke-width="2.5" fill="none" marker-end="url(#lpv-warm)" />
+  <text x="320" y="302" font-size="11" text-anchor="middle" fill="currentColor">audio, which is the only thing that crosses back</text>
+
+  <text x="10" y="330" font-size="11" fill="currentColor" fill-opacity="0.75">One song took five rounds in sixteen minutes. Another took seven rounds over two hours.</text>
+</svg>

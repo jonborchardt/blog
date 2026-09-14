@@ -1,0 +1,39 @@
+[
+  {
+    "out": "knobs-in-the-code/drag-before",
+    "song": "knobs0.strudel",
+    "section": "drop",
+    "layer": "drums",
+    "cycles": 2
+  },
+  {
+    "out": "knobs-in-the-code/drag-after",
+    "song": "knobs1.strudel",
+    "section": "drop",
+    "layer": "drums",
+    "cycles": 2
+  },
+  {
+    "out": "knobs-in-the-code/solo-pad",
+    "song": "demo.strudel",
+    "section": "drop",
+    "layer": "pad",
+    "cycles": 2
+  },
+  { "out": "knobs-in-the-code/drop-full", "song": "demo.strudel", "section": "drop", "cycles": 2 },
+  { "out": "knobs-in-the-code/voice-clap-alone", "song": "knobs-cp.strudel", "cycles": 2 },
+  {
+    "out": "knobs-in-the-code/part-no-clap",
+    "song": "demo.strudel",
+    "section": "verse",
+    "layer": "drums",
+    "cycles": 2
+  },
+  {
+    "out": "knobs-in-the-code/part-with-clap",
+    "song": "demo.strudel",
+    "section": "drop",
+    "layer": "drums",
+    "cycles": 2
+  }
+]

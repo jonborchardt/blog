@@ -43,7 +43,35 @@ describe("checkDist", () => {
     expect(r.errors).toEqual([
       expect.stringContaining('resume/index.html: link "/blog/#top" points to #top'),
     ]);
-    expect(r.stats).toEqual({ pages: 3, links: 4, images: 1 });
+    expect(r.stats).toEqual({ pages: 3, links: 4, images: 1, clips: 0 });
+  });
+
+  it("passes audio clips that resolve and are labelled", () => {
+    const r = run(
+      [
+        page(
+          "post/index.html",
+          `<audio src="/blog/_astro/a.mp3"></audio>
+           <button data-src="/blog/_astro/b.mp3" aria-label="Play contact, drums only">x</button>`,
+        ),
+      ],
+      ["_astro/a.mp3", "_astro/b.mp3"],
+    );
+    expect(r.errors).toEqual([]);
+    expect(r.stats.clips).toBe(2);
+  });
+
+  it("flags an audio clip that is not in dist and a play button with no name", () => {
+    const r = run([
+      page(
+        "post/index.html",
+        `<audio src="./missing.mp3"></audio><button data-src="/blog/_astro/b.mp3"></button>`,
+      ),
+    ]);
+    expect(r.errors).toHaveLength(3);
+    expect(r.errors[0]).toMatch(/audio src="\.\/missing\.mp3" does not resolve .* import the clip/);
+    expect(r.errors[1]).toMatch(/audio data-src=.* does not resolve/);
+    expect(r.errors[2]).toMatch(/play button for ".*b\.mp3" has no accessible name .* aria-label/);
   });
 
   it("flags hardcoded root links outside the base with a fix", () => {

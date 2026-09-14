@@ -1,0 +1,39 @@
+[
+  {
+    "out": "a-language-on-top-of-strudel/intro-declarative",
+    "song": "demo.strudel",
+    "section": "intro",
+    "cycles": 4
+  },
+  {
+    "out": "a-language-on-top-of-strudel/intro-raw-strudel",
+    "song": "demo-intro-raw.strudel",
+    "cycles": 4
+  },
+  {
+    "out": "a-language-on-top-of-strudel/arrival-void",
+    "song": "arrival.strudel",
+    "section": "void",
+    "cycles": 1
+  },
+  {
+    "out": "a-language-on-top-of-strudel/arrival-threshold",
+    "song": "arrival.strudel",
+    "section": "threshold",
+    "cycles": 4
+  },
+  {
+    "out": "a-language-on-top-of-strudel/threshold-melody-alone",
+    "song": "arrival.strudel",
+    "section": "threshold",
+    "layer": "melody",
+    "cycles": 4
+  },
+  {
+    "out": "a-language-on-top-of-strudel/threshold-melody2-alone",
+    "song": "arrival.strudel",
+    "section": "threshold",
+    "layer": "melody2",
+    "cycles": 4
+  }
+]

@@ -1,6 +1,6 @@
 # Shared MDX primitives
 
-Static `.astro` components for use inside posts. All use design tokens, work in both themes, are responsive and axe-clean, and ship no framework JavaScript (only `Tabs`, `CodeBlock`, `MuseumEmbed` and `Gallery` include a tiny inline script). Import them at the top of a post's `index.mdx`:
+Static `.astro` components for use inside posts. All use design tokens, work in both themes, are responsive and axe-clean, and ship no framework JavaScript (only `Tabs`, `CodeBlock`, `MuseumEmbed`, `SoundBite` and `Gallery` include a tiny inline script). Import them at the top of a post's `index.mdx`:
 
 ```mdx
 import Callout from "@/components/blog/Callout.astro";
@@ -21,6 +21,8 @@ import Callout from "@/components/blog/Callout.astro";
 | `Video`        | `src`+`poster?` or `youtube`, `title` (required), `caption?`                                               | local video files or YouTube embeds                                                                                 |
 | `MuseumEmbed`  | `demo`, `title`, `label`, `teaser`+`teaserAlt`, `description?`, `height?`, `nativeWidth?`, `teaserHeight?` | click-to-load embed of a live preserved `/museum/` demo: teaser strip, load button, full-size link                  |
 | `Gallery`      | `images: {img, alt}[]`, `description?`                                                                     | a set of screenshots stepped through one at a time with prev/next arrows                                            |
+| `SoundBite`    | `clips: {src, label}[]`, `label?`, `note?`                                                                 | play buttons for short audio clips, so a figure's claim about sound can be heard                                    |
+| `StrudelEmbed` | `song`, `title`, `label`, `section?`, `play?`, `description?`, `height?`, `base?`                          | click-to-load embed of the live strudel-bench editor on one song (links out instead under 60rem)                    |
 | `CodeBlock`    | `title?`                                                                                                   | a fenced block that needs a filename header or a copy button                                                        |
 | `TableWrapper` | — (applied automatically to every Markdown table by `[slug].astro`)                                        | never imported directly                                                                                             |
 
@@ -195,6 +197,43 @@ import teaser from "./teaser-my-demo.png";
 ```
 
 Closed it shows the teaser (a flat strip with no clickable-looking widgets, `teaserHeight` px tall — default 170, raise toward ~300 when the teaser must carry the demo's content on its own) above the load button; open it renders the demo at its native desktop width (`nativeWidth`, default 1280) and scales it down to fit the column. `height` is the demo page's height at that width (default 1500). The caption always ends with an "Open it full size ↗" link, which is the escape hatch on small screens where the scaled demo is too tiny to read. Use it only for live demos — for a set of static screenshots use `Gallery`.
+
+### SoundBite
+
+```mdx
+import SoundBite from "@/components/blog/SoundBite.astro";
+import before from "./drop-before.mp3";
+import after from "./drop-after.mp3";
+
+<SoundBite
+  label="The drop, before and after much darker"
+  note="Two bars each, drums and bass only."
+  clips={[
+    { src: before, label: "before" },
+    { src: after, label: "after: much darker" },
+  ]}
+/>
+```
+
+For figures that make a claim about sound: the diagram says what changed, the buttons prove it. Clips are imported from the post directory (so they get a hashed, cacheable URL) and nothing is fetched until a button is pressed. One clip sounds at a time across the page, and each button is a toggle whose accessible name says what it plays, so the labels have to describe the sound ("contact, drums only"), not its position ("clip 2"). Inside a `VizFigure`, set `interactive` on the figure: these are controls, not picture internals.
+
+Render the clips with strudel-bench's `npm run snippets` (small mono MP3s, a few bars each). Keep them short: a page carrying six clips should still be well under a megabyte.
+
+### StrudelEmbed
+
+```mdx
+import StrudelEmbed from "@/components/blog/StrudelEmbed.astro";
+
+<StrudelEmbed
+  song="arrival.strudel"
+  section="contact"
+  title="The live editor, open on the climax of arrival: change a value and hear it"
+  label="Open the live editor on this section"
+  description="Drag any slider, or edit the source directly."
+/>
+```
+
+The live instrument, for the one moment in a post where playing with it is the point. Closed it is just a button, so nobody loads several MB of sample packs unasked; the reader's click is also the user activation the browser wants before `?play` may start audio. The bench refuses to lay out under 60rem, so on a narrow screen this renders as a link rather than an iframe: pair it with a `SoundBite` whenever the sound itself matters, so a phone reader still hears the thing being discussed.
 
 ### Gallery
 

@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 600" width="1500" height="600">
+  <title>Lines of code with sliders and a toggle sitting inline among them, and one line left as plain text</title>
+
+  <rect x="0" y="0" width="1500" height="600" fill="#fafcfe" />
+
+  <path
+    d="M50 0V600 M100 0V600 M150 0V600 M200 0V600 M250 0V600 M300 0V600 M350 0V600 M400 0V600 M450 0V600 M500 0V600 M550 0V600 M600 0V600 M650 0V600 M700 0V600 M750 0V600 M800 0V600 M850 0V600 M900 0V600 M950 0V600 M1000 0V600 M1050 0V600 M1100 0V600 M1150 0V600 M1200 0V600 M1250 0V600 M1300 0V600 M1350 0V600 M1400 0V600 M1450 0V600"
+    stroke="#d9dfe3" stroke-width="1" opacity="0.55" />
+
+  <!-- left flank: the code continues off frame -->
+  <g fill="#006a90" opacity="0.28">
+    <rect x="60" y="164" width="210" height="16" rx="8" />
+    <rect x="60" y="236" width="150" height="16" rx="8" />
+    <rect x="60" y="308" width="186" height="16" rx="8" />
+    <rect x="60" y="380" width="120" height="16" rx="8" />
+  </g>
+
+  <!-- row 1: code, then a slider inline -->
+  <g fill="#006a90">
+    <rect x="330" y="164" width="150" height="16" rx="8" />
+  </g>
+  <path d="M512 172H660" stroke="#d9dfe3" stroke-width="12" stroke-linecap="round" />
+  <path d="M512 172H590" stroke="#006a90" stroke-width="12" stroke-linecap="round" />
+  <circle cx="590" cy="172" r="17" fill="#f0b35a" stroke="#11171d" stroke-width="4" />
+  <g fill="#006a90">
+    <rect x="694" y="164" width="96" height="16" rx="8" opacity="0.45" />
+  </g>
+
+  <!-- row 2: code, a toggle, code -->
+  <g fill="#006a90">
+    <rect x="330" y="236" width="116" height="16" rx="8" />
+  </g>
+  <rect x="478" y="226" width="68" height="36" rx="18" fill="#deeef5" stroke="#006a90" stroke-width="4" />
+  <circle cx="528" cy="244" r="12" fill="#006a90" />
+  <g fill="#006a90">
+    <rect x="580" y="236" width="140" height="16" rx="8" opacity="0.45" />
+    <rect x="740" y="236" width="88" height="16" rx="8" opacity="0.45" />
+  </g>
+
+  <!-- row 3: code, then a second slider further along -->
+  <g fill="#006a90">
+    <rect x="330" y="308" width="184" height="16" rx="8" />
+  </g>
+  <path d="M546 316H694" stroke="#d9dfe3" stroke-width="12" stroke-linecap="round" />
+  <path d="M546 316H648" stroke="#006a90" stroke-width="12" stroke-linecap="round" />
+  <circle cx="648" cy="316" r="17" fill="#f0b35a" stroke="#11171d" stroke-width="4" />
+  <g fill="#006a90">
+    <rect x="728" y="308" width="124" height="16" rx="8" opacity="0.45" />
+  </g>
+
+  <!-- row 4: the line that stays plain text, marked by an absence -->
+  <g fill="#006a90">
+    <rect x="330" y="380" width="104" height="16" rx="8" />
+  </g>
+  <rect x="458" y="368" width="404" height="40" rx="10" fill="none" stroke="#f0b35a" stroke-width="4" stroke-dasharray="14 10" />
+  <g fill="#006a90" opacity="0.5">
+    <rect x="480" y="380" width="52" height="16" rx="8" />
+    <rect x="548" y="380" width="34" height="16" rx="8" />
+    <rect x="598" y="380" width="62" height="16" rx="8" />
+    <rect x="676" y="380" width="40" height="16" rx="8" />
+    <rect x="732" y="380" width="56" height="16" rx="8" />
+    <rect x="804" y="380" width="40" height="16" rx="8" />
+  </g>
+
+  <!-- right flank: more rows past the frame -->
+  <g fill="#006a90">
+    <rect x="900" y="164" width="180" height="16" rx="8" opacity="0.3" />
+    <rect x="900" y="236" width="230" height="16" rx="8" opacity="0.24" />
+    <rect x="900" y="308" width="150" height="16" rx="8" opacity="0.18" />
+    <rect x="900" y="380" width="200" height="16" rx="8" opacity="0.12" />
+  </g>
+</svg>

@@ -1,0 +1,137 @@
+---
+/**
+ * StrudelEmbed — click-to-load embed of the live strudel-bench page, on one song.
+ *
+ * Closed it is a labelled button: nothing loads, and the reader does not pay for several MB of
+ * sample packs unasked. Open it is the real instrument in an iframe, editable, on the song (and
+ * optionally the section) the surrounding text is about. The reader's click is also the user
+ * activation the browser needs before `?play` is allowed to start audio.
+ *
+ * The bench refuses to lay out under 60rem, so on a narrow screen this renders as a link instead of
+ * an iframe. Pair it with a `SoundBite` whenever the sound itself is the point, so a phone reader
+ * still hears the thing being discussed.
+ *
+ * Props:
+ * - `song` — file name in the bench's songs list, e.g. "arrival.strudel".
+ * - `title` — accessible name for the iframe: what the reader can do in it.
+ * - `label` — text on the load button.
+ * - `section?` — section to open pinned and looping (`?section=`).
+ * - `play?` — start playing on load (default true).
+ * - `description?` — one short caption sentence.
+ * - `height?` — iframe height in px (default 820).
+ * - `base?` — deployed bench URL, for a fork or a local run.
+ *
+ * ```mdx
+ * import StrudelEmbed from "@/components/blog/StrudelEmbed.astro";
+ *
+ * <StrudelEmbed
+ *   song="arrival.strudel"
+ *   section="contact"
+ *   title="The live editor, open on the climax of arrival: change a value and hear it"
+ *   label="Open the live editor on this section"
+ *   description="Drag any slider, or edit the source directly."
+ * />
+ * ```
+ */
+interface Props {
+  song: string;
+  title: string;
+  label: string;
+  section?: string;
+  play?: boolean;
+  description?: string;
+  height?: number;
+  base?: string;
+}
+const {
+  song,
+  title,
+  label,
+  section,
+  play = true,
+  description,
+  height = 820,
+  base = "https://jonborchardt.github.io/strudel-bench/",
+} = Astro.props;
+
+// Query for the flags (the hash is the song name, so it cannot carry them).
+const params = new URLSearchParams();
+if (play) params.set("play", "1");
+if (section) params.set("section", section);
+const query = params.size ? `?${params}` : "";
+const url = `${base}${query}#${song}`;
+const what = section ? `${song}, section ${section}` : song;
+---
+
+<figure class="figure strudel-embed my-8">
+  <details>
+    <summary>
+      <span class="label"
+        ><span class="when-closed">{label}</span><span class="when-open">Hide the editor</span
+        ></span
+      >
+    </summary>
+    <iframe src={url} title={title} loading="lazy" height={height} allow="autoplay"></iframe>
+  </details>
+  <p class="narrow-note text-muted-foreground rounded-md border px-4 py-3 text-sm">
+    The live editor needs a wider screen than this one.{" "}
+    <a href={url} target="_blank" rel="noopener">Open it in a new tab ↗</a>
+  </p>
+  <figcaption class="text-muted-foreground mt-3 text-center text-sm">
+    {description && <span>{description}</span>}{" "}
+    <a href={url} target="_blank" rel="noopener">Open {what} in strudel-bench ↗</a>
+  </figcaption>
+</figure>
+
+<style>
+  .strudel-embed summary {
+    cursor: pointer;
+    list-style: none;
+  }
+  .strudel-embed summary::-webkit-details-marker {
+    display: none;
+  }
+  .strudel-embed .label {
+    display: block;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 0.5rem 1rem;
+    text-align: center;
+    color: var(--color-primary);
+  }
+  .strudel-embed summary:hover .label {
+    background: var(--color-accent);
+  }
+  .strudel-embed details[open] .when-closed,
+  .strudel-embed details:not([open]) .when-open {
+    display: none;
+  }
+  .strudel-embed details[open] .label {
+    margin-bottom: 0.75rem;
+  }
+  .strudel-embed iframe {
+    display: block;
+    width: 100%;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+  .strudel-embed .narrow-note {
+    display: none;
+  }
+  /* The bench itself says it is desktop-only under 60rem: link to it instead of framing it. */
+  @media (max-width: 60rem) {
+    .strudel-embed details {
+      display: none;
+    }
+    .strudel-embed .narrow-note {
+      display: block;
+    }
+  }
+  /* Same breakout as Figure.astro's .figure-full, so the editor gets the page measure. */
+  @media (min-width: 64rem) {
+    .strudel-embed {
+      width: min(var(--container-page), calc(100vw - 3rem));
+      margin-inline: calc((var(--container-prose) - min(var(--container-page), 100vw - 3rem)) / 2);
+    }
+  }
+</style>

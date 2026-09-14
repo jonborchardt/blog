@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="330" viewBox="0 0 640 330" font-family="system-ui, sans-serif" font-size="13">
+  <text x="10" y="20" font-size="12" fill="currentColor" fill-opacity="0.75">FOUR BARS, FOUR CHORDS, TWO LINES</text>
+
+  <!-- plot area: x 60..620, y 40..230 ; MIDI 60..86 over 190px -> 7.31 px per semitone, y = 230 - (m-60)*7.31 -->
+  <g stroke="currentColor" stroke-opacity="0.2" stroke-width="1">
+    <line x1="60" y1="230" x2="620" y2="230" />
+    <line x1="60" y1="142" x2="620" y2="142" />
+    <line x1="60" y1="55" x2="620" y2="55" />
+  </g>
+  <g font-size="11" fill="currentColor" fill-opacity="0.75" text-anchor="end">
+    <text x="52" y="234">C4</text>
+    <text x="52" y="146">C5</text>
+    <text x="52" y="59">C6</text>
+  </g>
+
+  <!-- bar separators -->
+  <g stroke="currentColor" stroke-opacity="0.3" stroke-width="1" stroke-dasharray="3 3">
+    <line x1="200" y1="40" x2="200" y2="230" />
+    <line x1="340" y1="40" x2="340" y2="230" />
+    <line x1="480" y1="40" x2="480" y2="230" />
+  </g>
+
+  <!-- alien: identical in every bar. notes 74,84,79,74,84,79 at fractions .000 .188 .375 .563 .750 .813 -->
+  <g fill="#f0b35a">
+    <circle cx="62" cy="128" r="5" /><circle cx="88" cy="55" r="5" /><circle cx="113" cy="91" r="5" /><circle cx="139" cy="128" r="5" /><circle cx="165" cy="55" r="5" /><circle cx="174" cy="91" r="5" />
+    <circle cx="202" cy="128" r="5" /><circle cx="228" cy="55" r="5" /><circle cx="253" cy="91" r="5" /><circle cx="279" cy="128" r="5" /><circle cx="305" cy="55" r="5" /><circle cx="314" cy="91" r="5" />
+    <circle cx="342" cy="128" r="5" /><circle cx="368" cy="55" r="5" /><circle cx="393" cy="91" r="5" /><circle cx="419" cy="128" r="5" /><circle cx="445" cy="55" r="5" /><circle cx="454" cy="91" r="5" />
+    <circle cx="482" cy="128" r="5" /><circle cx="508" cy="55" r="5" /><circle cx="533" cy="91" r="5" /><circle cx="559" cy="128" r="5" /><circle cx="585" cy="55" r="5" /><circle cx="594" cy="91" r="5" />
+  </g>
+
+  <!-- human: climbs with the chords. bar1 62,65,69,70,69 ; bar2 70,74,77,82,81 ; bar3 65,69,72,74,72 ; bar4 72,76,79,84,82
+       positions .000 .222 .333 .667 .778 within each 140px bar -->
+  <polyline points="62,215 93,193 108,164 155,157 170,164" fill="none" stroke="#006a90" stroke-width="2.5" />
+  <polyline points="202,157 233,128 248,106 295,69 310,77" fill="none" stroke="#006a90" stroke-width="2.5" />
+  <polyline points="342,193 373,164 388,142 435,128 450,142" fill="none" stroke="#006a90" stroke-width="2.5" />
+  <polyline points="482,142 513,113 528,91 575,55 590,69" fill="none" stroke="#006a90" stroke-width="2.5" />
+  <g fill="#006a90">
+    <circle cx="62" cy="215" r="4.5" /><circle cx="93" cy="193" r="4.5" /><circle cx="108" cy="164" r="4.5" /><circle cx="155" cy="157" r="4.5" /><circle cx="170" cy="164" r="4.5" />
+    <circle cx="202" cy="157" r="4.5" /><circle cx="233" cy="128" r="4.5" /><circle cx="248" cy="106" r="4.5" /><circle cx="295" cy="69" r="4.5" /><circle cx="310" cy="77" r="4.5" />
+    <circle cx="342" cy="193" r="4.5" /><circle cx="373" cy="164" r="4.5" /><circle cx="388" cy="142" r="4.5" /><circle cx="435" cy="128" r="4.5" /><circle cx="450" cy="142" r="4.5" />
+    <circle cx="482" cy="142" r="4.5" /><circle cx="513" cy="113" r="4.5" /><circle cx="528" cy="91" r="4.5" /><circle cx="575" cy="55" r="4.5" /><circle cx="590" cy="69" r="4.5" />
+  </g>
+
+  <!-- chord track -->
+  <g>
+    <rect x="60" y="244" width="138" height="26" rx="5" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+    <rect x="200" y="244" width="138" height="26" rx="5" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+    <rect x="340" y="244" width="138" height="26" rx="5" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+    <rect x="480" y="244" width="138" height="26" rx="5" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+  </g>
+  <g font-size="12" fill="#11171d" text-anchor="middle">
+    <text x="129" y="262">Dm</text>
+    <text x="269" y="262">Bb</text>
+    <text x="409" y="262">F</text>
+    <text x="549" y="262">C</text>
+  </g>
+
+  <!-- legend -->
+  <circle cx="70" cy="292" r="5" fill="#006a90" />
+  <text x="84" y="297" font-size="12" fill="currentColor">the piano, which follows the chord</text>
+  <circle cx="70" cy="316" r="5" fill="#f0b35a" />
+  <text x="84" y="321" font-size="12" fill="currentColor">the handchimes, which do not</text>
+</svg>

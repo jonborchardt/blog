@@ -1,0 +1,17 @@
+[
+  {
+    "out": "never-read-the-code/hook-arrival-contact",
+    "song": "arrival.strudel",
+    "section": "contact",
+    "cycles": 4
+  },
+  {
+    "out": "never-read-the-code/arrival-contact-drums",
+    "song": "arrival.strudel",
+    "section": "contact",
+    "layer": "drums",
+    "cycles": 2
+  },
+  { "out": "never-read-the-code/euclid-day-one", "song": "euclid.strudel", "cycles": 4 },
+  { "out": "never-read-the-code/demo-drop", "song": "demo.strudel", "section": "drop", "cycles": 4 }
+]

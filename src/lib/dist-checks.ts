@@ -23,7 +23,7 @@ export interface DistCheckInput {
 
 export interface DistCheckResult {
   errors: string[];
-  stats: { pages: number; links: number; images: number };
+  stats: { pages: number; links: number; images: number; clips: number };
 }
 
 const parse = (html: string) => new JSDOM(html).window.document;
@@ -53,6 +53,22 @@ export function checkDist({ pages, files, base, site }: DistCheckInput): DistChe
   };
   let links = 0;
   let images = 0;
+  let clips = 0;
+
+  /** Resolve an asset URL the way a browser would and say whether dist/ actually serves it. */
+  const resolves = (raw: string, file: string): boolean => {
+    if (!raw || /^(https?:)?\/\//.test(raw) || raw.startsWith("data:")) return true;
+    let pathname: string;
+    if (raw.startsWith("/")) {
+      pathname = new URL(raw, "http://x").pathname;
+      if (!pathname.startsWith(base + "/") && pathname !== base) return false;
+    } else {
+      const route = "/" + file.replace(/index\.html$/, "");
+      pathname = new URL(raw, `http://x${base}${route}`).pathname;
+    }
+    const target = routeToFile(pathname, base);
+    return Boolean(target && (fileSet.has(target) || docs.has(target)));
+  };
 
   for (const [file, doc] of docs) {
     // --- internal links -------------------------------------------------------------------------
@@ -156,6 +172,28 @@ export function checkDist({ pages, files, base, site }: DistCheckInput): DistChe
       }
     }
 
+    // --- audio clips ------------------------------------------------------------------------------
+    // A clip is fetched on click, so a wrong path is a silent failure for the reader rather than a
+    // build error. Play buttons carry the file on data-src, and a button's accessible name is the
+    // only thing telling a screen-reader user which sound it is about to play.
+    for (const el of doc.querySelectorAll("audio[src], audio source[src], button[data-src]")) {
+      const attr = el.tagName === "BUTTON" ? "data-src" : "src";
+      const raw = el.getAttribute(attr) ?? "";
+      clips++;
+      if (!resolves(raw, file)) {
+        errors.push(
+          `${file}: audio ${attr}="${raw}" does not resolve to a file in dist/ → import the clip in MDX (import clip from "./clip.mp3") and pass the import; a literal path string is not processed by the build`,
+        );
+      }
+      if (el.tagName !== "BUTTON") continue;
+      const name = (el.getAttribute("aria-label") ?? el.textContent ?? "").trim();
+      if (!name) {
+        errors.push(
+          `${file}: audio play button for "${raw}" has no accessible name → give it aria-label saying what it plays, e.g. "Play contact, drums only"`,
+        );
+      }
+    }
+
     // --- SEO essentials ---------------------------------------------------------------------------
     const title = doc.querySelector("head > title")?.textContent?.trim();
     if (!title) errors.push(`${file}: missing <title> → pass meta.title to BaseLayout`);
@@ -195,7 +233,7 @@ export function checkDist({ pages, files, base, site }: DistCheckInput): DistChe
     }
   }
 
-  return { errors, stats: { pages: pages.length, links, images } };
+  return { errors, stats: { pages: pages.length, links, images, clips } };
 }
 
 /**

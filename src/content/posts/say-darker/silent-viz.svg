@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="272" viewBox="0 0 640 272" font-family="system-ui, sans-serif" font-size="13">
+  <text x="10" y="20" font-size="12" fill="currentColor" fill-opacity="0.75">A WORD FOR EACH DIRECTION, WHERE ONE EXISTS</text>
+
+  <g font-size="11" fill="currentColor" fill-opacity="0.75" text-anchor="middle">
+    <text x="250" y="46">when it rises</text>
+    <text x="450" y="46">when it falls</text>
+  </g>
+  <line x1="120" y1="54" x2="560" y2="54" stroke="currentColor" stroke-opacity="0.35" stroke-width="1" />
+
+  <g font-size="12" fill="currentColor" text-anchor="end">
+    <text x="112" y="74">density</text>
+    <text x="112" y="90">drive</text>
+    <text x="112" y="106">brightness</text>
+    <text x="112" y="122">weight</text>
+    <text x="112" y="138">space</text>
+    <text x="112" y="154">articulation</text>
+    <text x="112" y="170">aggression</text>
+    <text x="112" y="186">groove</text>
+    <text x="112" y="202">variation</text>
+    <text x="112" y="218">organicness</text>
+    <text x="112" y="234">width</text>
+  </g>
+
+  <g font-size="12" fill="currentColor" text-anchor="middle">
+    <text x="250" y="74">busy</text><text x="450" y="74">sparse</text>
+    <text x="250" y="90">frantic</text><text x="450" y="90">floating</text>
+    <text x="250" y="106">bright</text><text x="450" y="106">dark</text>
+    <text x="250" y="122">massive</text><text x="450" y="122">light</text>
+    <text x="250" y="138">dreamy</text><text x="450" y="138">dry</text>
+    <text x="250" y="154">punchy</text>
+    <text x="250" y="170">aggressive</text><text x="450" y="170">smooth</text>
+    <text x="250" y="186">swung</text><text x="450" y="186">straight</text>
+    <text x="250" y="218">human</text><text x="450" y="218">mechanical</text>
+    <text x="250" y="234">wide</text><text x="450" y="234">narrow</text>
+  </g>
+
+  <!-- the silent directions -->
+  <g fill="none" stroke="#f0b35a" stroke-width="2">
+    <rect x="392" y="142" width="116" height="18" rx="4" />
+    <rect x="192" y="190" width="116" height="18" rx="4" />
+    <rect x="392" y="190" width="116" height="18" rx="4" />
+  </g>
+  <g font-size="11" fill="currentColor" fill-opacity="0.75" text-anchor="middle">
+    <text x="450" y="155">no word</text>
+    <text x="250" y="203">no word</text>
+    <text x="450" y="203">no word</text>
+  </g>
+
+  <!-- register: both directions silent, drawn as one span -->
+  <rect x="192" y="242" width="316" height="0.1" fill="none" />
+  <g font-size="12" fill="currentColor" text-anchor="end">
+    <text x="112" y="250">register</text>
+  </g>
+  <rect x="192" y="238" width="316" height="18" rx="4" fill="none" stroke="#f0b35a" stroke-width="2" />
+  <text x="350" y="251" font-size="11" text-anchor="middle" fill="currentColor" fill-opacity="0.75">no word in either direction</text>
+</svg>

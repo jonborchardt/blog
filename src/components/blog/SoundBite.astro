@@ -1,0 +1,124 @@
+---
+/**
+ * SoundBite — a row of play buttons for short audio clips.
+ *
+ * For figures that make a claim about sound: the diagram says what changed, the button proves it.
+ * Nothing is fetched until a button is pressed (`preload="none"`), one clip sounds at a time across
+ * the whole page, and every button is a real toggle with an accessible name that says what it plays.
+ *
+ * Clips are rendered small and mono by strudel-bench (`npm run snippets`) and imported from the post
+ * directory so they go through the asset pipeline and get a hashed, cacheable URL.
+ *
+ * Props:
+ * - `clips` — `{ src, label }[]`; `src` is an imported audio URL, `label` names what is heard.
+ * - `label?` — accessible name for the group (default "Audio examples"). Give one when a page has
+ *   several SoundBites, so they are told apart in a list of landmarks.
+ * - `note?` — one short line under the buttons (clip length, what to listen for).
+ *
+ * Inside a `VizFigure`, set `interactive` on it: these are focusable controls, not picture internals.
+ *
+ * ```mdx
+ * import SoundBite from "@/components/blog/SoundBite.astro";
+ * import before from "./drop-before.mp3";
+ * import after from "./drop-after.mp3";
+ *
+ * <SoundBite
+ *   label="The drop, before and after much darker"
+ *   note="Two bars each, drums and bass only."
+ *   clips={[
+ *     { src: before, label: "before" },
+ *     { src: after, label: "after: much darker" },
+ *   ]}
+ * />
+ * ```
+ */
+export interface Clip {
+  src: string;
+  label: string;
+}
+interface Props {
+  clips: Clip[];
+  label?: string;
+  note?: string;
+}
+const { clips, label = "Audio examples", note } = Astro.props;
+---
+
+<div class="soundbite not-prose my-4">
+  <div class="flex flex-wrap gap-2" role="group" aria-label={label}>
+    {
+      clips.map((clip) => (
+        <button
+          type="button"
+          class="sb-btn border-border text-primary hover:bg-accent inline-flex items-center gap-2 rounded-md border px-3 py-1.5 text-sm"
+          data-src={clip.src}
+          data-label={clip.label}
+          aria-pressed="false"
+          aria-label={`Play ${clip.label}`}
+        >
+          <span class="sb-icon" aria-hidden="true">
+            &#9654;
+          </span>
+          <span>{clip.label}</span>
+        </button>
+      ))
+    }
+  </div>
+  {note && <p class="text-muted-foreground mt-2 text-sm">{note}</p>}
+</div>
+
+<script>
+  // One clip at a time across the page: starting another stops the one playing.
+  let current: { audio: HTMLAudioElement; btn: HTMLButtonElement } | null = null;
+
+  const PLAY = "▶"; // triangle
+  const STOP = "■"; // square
+
+  function show(btn: HTMLButtonElement, playing: boolean) {
+    const name = btn.dataset.label ?? "";
+    btn.setAttribute("aria-pressed", String(playing));
+    btn.setAttribute("aria-label", `${playing ? "Stop" : "Play"} ${name}`);
+    const icon = btn.querySelector(".sb-icon");
+    if (icon) icon.textContent = playing ? STOP : PLAY;
+  }
+
+  function stop() {
+    if (!current) return;
+    current.audio.pause();
+    current.audio.currentTime = 0;
+    show(current.btn, false);
+    current = null;
+  }
+
+  for (const group of document.querySelectorAll<HTMLElement>(".soundbite")) {
+    const audio = new Audio();
+    audio.preload = "none";
+    audio.addEventListener("ended", stop);
+
+    for (const btn of group.querySelectorAll<HTMLButtonElement>("button[data-src]")) {
+      btn.addEventListener("click", () => {
+        const wasMine = current?.btn === btn;
+        stop();
+        if (wasMine) return; // pressing the playing button stops it
+        audio.src = btn.dataset.src ?? "";
+        current = { audio, btn };
+        show(btn, true);
+        audio.play().catch(() => {
+          // autoplay policy does not apply (this is a click), so a failure here is the file
+          stop();
+          btn.title = "this clip could not be played";
+        });
+      });
+    }
+  }
+</script>
+
+<style>
+  .soundbite .sb-btn[aria-pressed="true"] {
+    background: var(--color-accent);
+  }
+  .soundbite .sb-icon {
+    font-size: 0.75em;
+    line-height: 1;
+  }
+</style>

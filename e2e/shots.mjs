@@ -1,7 +1,9 @@
 // Ad-hoc screenshot helper (not a test): node e2e/shots.mjs <outdir> [paths...]
+// Defaults to the preview build on 4322. A draft is not in that build, so shoot one against the dev
+// server instead: BASE=http://localhost:4321/blog/ node e2e/shots.mjs <outdir> <slug>/
 import { chromium } from "@playwright/test";
 const [out = "shots", ...paths] = process.argv.slice(2);
-const base = "http://localhost:4322/blog/";
+const base = process.env.BASE ?? "http://localhost:4322/blog/";
 const browser = await chromium.launch();
 for (const p of paths.length
   ? paths

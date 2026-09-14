@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360" font-family="system-ui, sans-serif" font-size="13">
+  <!-- legend -->
+  <rect x="180" y="20" width="26" height="14" rx="3" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+  <text x="214" y="31" fill="currentColor">Phase one: spec, plan, briefs with the tests written first</text>
+  <rect x="180" y="44" width="26" height="14" rx="3" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" />
+  <text x="214" y="55" fill="currentColor">Phase two: a description and a done criterion</text>
+
+  <!-- row 1: planning documents -->
+  <text x="162" y="98" text-anchor="end" fill="currentColor">Planning material</text>
+  <text x="162" y="114" text-anchor="end" fill="currentColor">and diffs, in lines</text>
+  <rect x="180" y="84" width="330" height="20" rx="3" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+  <text x="518" y="99" fill="currentColor">20,264</text>
+  <line x1="180" y1="110" x2="180" y2="130" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" />
+  <text x="188" y="125" fill="currentColor">0</text>
+
+  <!-- row 2: source added -->
+  <text x="162" y="170" text-anchor="end" fill="currentColor">Source lines added</text>
+  <rect x="180" y="156" width="209" height="20" rx="3" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+  <text x="397" y="171" fill="currentColor">2,098</text>
+  <rect x="180" y="182" width="330" height="20" rx="3" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" />
+  <text x="518" y="197" fill="currentColor">3,317</text>
+
+  <!-- row 3: test density -->
+  <text x="162" y="234" text-anchor="end" fill="currentColor">Tests written per 100</text>
+  <text x="162" y="250" text-anchor="end" fill="currentColor">lines of new source</text>
+  <rect x="180" y="228" width="330" height="20" rx="3" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+  <text x="518" y="243" fill="currentColor">4.4</text>
+  <rect x="180" y="254" width="105" height="20" rx="3" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" />
+  <text x="293" y="269" fill="currentColor">1.4</text>
+
+  <!-- row 4: hours -->
+  <text x="162" y="314" text-anchor="end" fill="currentColor">Active hours</text>
+  <rect x="180" y="300" width="171" height="20" rx="3" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+  <text x="359" y="315" fill="currentColor">7.1</text>
+  <rect x="180" y="326" width="330" height="20" rx="3" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" />
+  <text x="518" y="341" fill="currentColor">13.7</text>
+
+</svg>
