@@ -96,7 +96,7 @@ That is what makes it feel like talking rather than filling in a form. You do no
 current value to ask for less of something, which is exactly the position you are in when you are
 listening rather than reading.
 
-Two consequences worth knowing. A layer that never mentioned an axis is treated as sitting at the
+Consequentially, a layer that never mentioned an axis is treated as sitting at the
 baseline of 0.5, so a single word can **insert** properties that were not there. And the result is
 clamped to the range, at apply time, with the clamp reported rather than hidden.
 
@@ -129,7 +129,7 @@ drop.pad.register .3 → .1      octave 3
 
 `applied +0 of requested -0.60` is the line that matters. Nothing happened, and it says so.
 
-This is the part I would tell anyone building a delta interface. **Report the delta you achieved, not
+**We report the delta you achieved, not
 the one you were asked for.** If the second identical command silently claims success, the user
 learns within two turns that the system's reports are decoration, and after that they stop reading
 them.
@@ -172,8 +172,7 @@ drive: dreamier -0.15   punchier +0.20   net +0.05  (contradictory)
 "Brighter and darker" nets exactly zero on brightness and emits no edit for it. But it does not net
 to zero overall, because `bright` moves register by +0.05 and `dark` moves it by -0.10. The vectors
 are not opposites, they are just vectors, so cancellation happens per axis and a residue leaks
-through. That is either a bug or an accurate model of what those two words mean, and I think it is
-the second one.
+through.
 
 ## The language reads back, and it is lossy
 
@@ -202,7 +201,7 @@ The sharpest case is `hypnotic`. It is a real word, it applies cleanly, it moves
 read-back for the result is **nothing at all**. Its largest move is on variation, and variation has no
 word in either direction.
 
-And the consequence you can check: the file after one "much darker" and the file after two have
+The file after one "much darker" and the file after two have
 **word-for-word identical** descriptions, on all five parts, even though four of them changed. Every
 change in the second pass either landed on register, which is mute, or moved a value without moving
 it out of its word: `0.1` and `0` are both "very dark".
@@ -239,9 +238,6 @@ What convinces me this is principle rather than laziness: the same function, cal
 the real current values in, and then the edit is honest. One function, two levels of confidence,
 decided entirely by whether the caller can actually see the baseline.
 
-There is a nice irony in it. The most elaborate piece in the repo is written almost entirely with
-shared definitions, so the command-line resolver can barely touch it.
-
 ## Harmony is deliberately not an axis
 
 Key and chord progression sit outside the whole system, and the reason is structural rather than
@@ -267,9 +263,10 @@ Writing `V` in capitals does not give you a major dominant. You get one when the
 raised seventh, and not before. The system refuses to infer that you meant harmonic minor, and makes
 you say so.
 
-The word list has a wart worth admitting. The progression words are named for how they sound in a
+The progression words are named for how they sound in a
 minor key, and nothing checks that the name still fits elsewhere. Ask for `tense` in a major key and
-you get a diminished chord on the seventh degree, which is not tension, it is an accident.
+you get a diminished chord on the seventh degree, which is not tension, it is an accident. 
+This is worth further thought in the future.
 
 ## Taste, as a linter
 
