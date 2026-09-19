@@ -1,7 +1,7 @@
 ---
 title: Knobs in the code
 description: "A tour of the Compose page: three views on one source string that all write back through one door, and the four controls that only change what you hear."
-publishedAt: 2026-09-13
+publishedAt: 2026-09-15
 updatedAt: 2026-09-19
 series: strudel-bench
 seriesOrder: 3
@@ -43,7 +43,7 @@ undo stack, and if the song is playing it re-evaluates in place so you hear it l
 The four things that do not work that way are named in the interface as "what you hear, not the
 song": solo, mute, the A/B button and the preview level. They never touch the file.
 
-That is the whole design, and this post is a tour of what it buys. The two posts before this one
+That is the whole design. The two posts before this one
 covered [the language](/a-language-on-top-of-strudel/) the page edits and
 [the words](/say-darker/) it accepts; this one is about the mouse.
 
@@ -107,25 +107,10 @@ known ceiling gets a slider. A number with only a floor gets a spinner, because 
 to invent a maximum**, and inventing a maximum is lying about the language at sixty frames a second
 under someone's cursor.
 
-Across the small demo song that ships with the page, 51 of 58 literals get a control. The seven that
-do not are three section names and four hand-written melodic lines.
-
-And there is a test that keeps the schema honest in both directions: every key the language accepts
-must either have a spec or be listed as free **with a written reason**, and the test checks the
-reason is there. Add a key to the language without deciding what its control is, and the build fails.
-
-<Callout variant="warning" title="Where this falls down, and it is my fault">
-  The schema matches on a key's name and nesting depth, not on whether the key is legal where it
-  appears. So the editor will happily offer a chord picker for a chord progression written on a drum
-  part, which the language rejects outright. "Nothing outside the schema gets a control" is enforced.
-  The converse, "everything with a control is legal here", is not. The build catches it; the
-  interface invited it.
-</Callout>
-
 ## One number, and what it costs to be wrong about it
 
-Here is why any of this exists. The drum part in one section sits at `density: .9`. Drag it to `.84`,
-which is about twelve pixels of mouse movement:
+The drum part in one section sits at `density: .9`. Drag it to `.84`, which is about twelve pixels
+of mouse movement:
 
 <SoundBite
   label="Two bars of drums, one value apart"
@@ -183,7 +168,7 @@ of material, and names the voices a kit lacks.
 
 ## What you hear and what is written
 
-The rule I am most pleased with, and the one that took the longest to see:
+Every control on the page falls on one side of this line:
 
 **Solo, mute, A/B and the preview level change what you hear and never touch the file.**
 
@@ -201,27 +186,27 @@ Solo is a question about a mix, not a decision about a song. "Is the pad doing a
 cost an edit, an undo, and a diff you have to remember to notice. Here it costs a click:
 
 <SoundBite
-  label="One part alone, then the same two bars with everything"
+  label="Two bars with everything, then the same two bars with one part alone"
   note="Soloing did not change the file. The isolated part is bit-identical to that part inside the song."
   clips={[
-    { src: soloPad, label: "the pad alone" },
     { src: dropFull, label: "the whole section" },
+    { src: soloPad, label: "the pad alone" },
   ]}
 />
 
-That bit-identical claim is structural rather than a nice-to-have. The function that arranges a
+That bit-identical claim comes out of the structure. The function that arranges a
 song's sections into one pattern takes an optional filter, and solo and mute are that function
 handed a filter. There is no second mixer. Because the solo path goes through the same arranger, the
 mixer **cannot** drift from the renderer. It is the renderer.
 
-There is one more payoff. The file stays a clean record of intent, which is what an agent editing it
-reads. A mixer that wrote solo state into the source would be quietly lying to the next request.
+The file also stays a clean record of intent, which is what an agent editing it reads. A mixer that
+wrote solo state into the source would be quietly lying to the next request.
 
 Two more things bypass the stack, and they are about where you are rather than what you hear:
 pinning a section and scrubbing the playhead. Nothing that changes the music escapes it.
 
-<Callout variant="note" title="One stack, on purpose">
-  The code editor ships with its own undo history. It was deliberately not installed. With three
+<Callout variant="note" title="One undo stack">
+  The code editor ships with its own undo history, and it is not wired up. With three
   editors on the page plus the knobs, the pills, the chord picker and the section operations, there
   would have been four separate undo stacks and no way to step back through a session. Typing and
   knob drags coalesce into one step per second; section operations and kit changes never coalesce.
@@ -229,9 +214,8 @@ pinning a section and scrubbing the playhead. Nothing that changes the music esc
 
 ## Why a drum voice previews alone
 
-A small thing that shows someone thought it through. When you audition a single drum voice from the
-menu, it plays on its own rather than inside the part. The comment says why: the whole part would
-drown it, or not even contain it.
+When you audition a single drum voice from the menu, it plays on its own rather than inside the
+part. The comment says why: the whole part would drown it, or not even contain it.
 
 That second clause is literal. Voices join a drum part at thresholds, and the clap's is 0.85:
 
@@ -262,7 +246,7 @@ moved the way you asked. Then it applies the edit, puts both renders on a pair o
 you listen.
 
 The verdict is a sign test, one row per axis, and it is deliberately not a stronger claim than that.
-Here is the case that shows why. The word `punchier` moves four axes at once:
+The word `punchier` moves four axes at once:
 
 ```text
 Requested:  articulation +0.40, weight +0.15, drive +0.20, space -0.15
@@ -288,7 +272,7 @@ It is unmistakably punchier:
 A tool that said "verified" there would be more pleasant and less useful. Four axes moved, three of
 them cannot be separated by these metrics, and the strongest available claim is about one of them.
 "Verified directionally" is the ceiling written into the project's own instructions, and this is what
-enforcing it costs. Two caveats for the precise reader: the page's Verify measures the whole section
+enforcing it costs. Two caveats: the page's Verify measures the whole section
 mix and applies a plain sign test, while the command-line version renders one part alone and adds a
 two percent floor, so the same request can score differently in the two places.
 
@@ -297,9 +281,7 @@ part alone and writes, next to every level slider, how many decibels under the m
 That turns "is the choir too loud?" into a number, and [the mixing post](/mixing-as-a-scene/) is
 about what to do with it.
 
-## Listening notes into a request
-
-Which brings me to the mechanism I like best in the whole page, because it is barely a mechanism.
+## Notes you pin while listening become the next request
 
 Press play. The transport position follows the clock, so wherever the slider is *is* where your ear
 is. When something bothers you, type a sentence and press a button. The comment pins at that exact
@@ -407,7 +389,7 @@ section('threshold', 12, { role: 'climax', progression: 'i VI III VII',
 
 </Details>
 
-The rule I did not expect, and the one that shows somebody thought about it:
+That works because of a rule in the request builder:
 
 ```js
 // A note in a section's first bar also quotes the section before it: the ear often reacts a moment late.
@@ -416,18 +398,18 @@ The rule I did not expect, and the one that shows somebody thought about it:
 A note landing in the first bar of a section quotes the *previous* section's source too. Because what
 bothered you probably started before you noticed it.
 
-## What works where
+## What the public site cannot do
 
-The same page is deployed on GitHub Pages with no server behind it, and nearly everything above still
-works there, because it all runs in the browser: play, the Mix card, Verify, measure, the MP3 export
-(rendered offline in the browser, one cycle at a time, and encoded there too), the Strudel export, and
-the Link button, which packs the whole song into the URL with the browser's own compression API so
-nobody needs a paste bin. Saving goes to the browser's local storage instead of a file.
+The same page is deployed on GitHub Pages with no server behind it, and four things there need the
+local one, because they touch disk: saving to the song file, the change comments card, importing a
+sample file, and the Samples workshop page where a pack's named regions are defined. Saving goes to
+the browser's local storage instead. And the page wants a desktop window: under about 60rem it shows
+a warning row rather than hiding anything, because the Mix card does not fit.
 
-Four things need the local server, because they touch disk: saving to the song file, the change
-comments card, importing a sample file, and the Samples workshop page where a pack's named regions
-are defined. And the page wants a desktop window: under about 60rem it shows a warning row rather
-than hiding anything, because the Mix card does not fit.
+Everything else above still works online, because it all runs in the browser anyway: play, the Mix
+card, Verify, measure, the MP3 export (rendered offline in the browser, one cycle at a time, and
+encoded there too), the Strudel export, and the Link button, which packs the whole song into the URL
+with the browser's own compression API so nobody needs a paste bin.
 
 <StrudelEmbed
   song="demo.strudel"

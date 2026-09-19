@@ -1,18 +1,22 @@
 [
   {
-    "out": "a-language-on-top-of-strudel/intro-declarative",
+    "out": "a-language-on-top-of-strudel/audio/intro-declarative",
     "song": "demo.strudel",
     "section": "intro",
     "cycles": 4
   },
   {
-    "out": "a-language-on-top-of-strudel/intro-raw-strudel",
+    "out": "a-language-on-top-of-strudel/audio/intro-raw-strudel",
     "song": "demo-intro-raw.strudel",
     "cycles": 4
   },
-  { "out": "a-language-on-top-of-strudel/euclid-day-one", "song": "euclid.strudel", "cycles": 4 },
   {
-    "out": "a-language-on-top-of-strudel/arrival-void",
+    "out": "a-language-on-top-of-strudel/audio/euclid-day-one",
+    "song": "euclid.strudel",
+    "cycles": 4
+  },
+  {
+    "out": "a-language-on-top-of-strudel/audio/arrival-void",
     "song": "arrival.strudel",
     "section": "void",
     "cycles": 1,
@@ -20,7 +24,7 @@
     "mono": false
   },
   {
-    "out": "a-language-on-top-of-strudel/arrival-threshold",
+    "out": "a-language-on-top-of-strudel/audio/arrival-threshold",
     "song": "arrival.strudel",
     "section": "threshold",
     "cycles": 4,
@@ -28,7 +32,7 @@
     "mono": false
   },
   {
-    "out": "a-language-on-top-of-strudel/threshold-melody-alone",
+    "out": "a-language-on-top-of-strudel/audio/threshold-melody-alone",
     "song": "arrival.strudel",
     "section": "threshold",
     "layer": "melody",
@@ -37,7 +41,7 @@
     "mono": false
   },
   {
-    "out": "a-language-on-top-of-strudel/threshold-melody2-alone",
+    "out": "a-language-on-top-of-strudel/audio/threshold-melody2-alone",
     "song": "arrival.strudel",
     "section": "threshold",
     "layer": "melody2",

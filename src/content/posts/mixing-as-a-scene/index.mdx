@@ -1,7 +1,8 @@
 ---
 title: Mixing as a scene
 description: "A mix is where things are, not how loud they are: one hall, a position each, levels by role, a played feel, and a tool that measures whether it worked."
-publishedAt: 2026-09-19
+publishedAt: 2026-09-16
+updatedAt: 2026-09-19
 series: strudel-bench
 seriesOrder: 4
 tags: [music, live-coding]
@@ -88,9 +89,8 @@ fader. Here they are.
 Before the pass, arrival's parts were in five different reverbs, because each kind of part sets its
 own reverb size from its `space` axis, and superdough keeps one reverb per bus. Put two parts that
 want different reverbs on one bus and the engine rebuilds the impulse response under whichever note
-arrives next. The piece's own notes record that happening under the piano, and blame it for a pop
-that turned out to have a second cause as well, a delay line that [the last post](/arrival/) still
-finds in the file.
+arrives next. The piece's own notes record that happening under the piano, and blame it for the
+piano's pop.
 
 The fix is a `room` on the song:
 
@@ -100,9 +100,8 @@ song({ bpm: 64, key: 'D:minor', seed: 41, kit: 'RolandTR808', packs: ['rooms'],
 ```
 
 With a room set, every part in the section shares one convolver, and each part's `space` value stops
-meaning "which reverb" and becomes "how much of it": its send. (On a melody, a value above the
-midpoint still opens a delay line too, which matters later.) Thirteen parts, one hall, each with its
-own amount of it.
+meaning "which reverb" and becomes "how much of it": its send. Thirteen parts, one hall, each with
+its own amount of it.
 
 <VizFigure
   name="The same thirteen parts, and how many reverbs they run through"
@@ -131,8 +130,8 @@ reverbs with no positions, then under one hall with a position each.
 />
 
 The perceptual claim is a modest one. Sources that share a room signature are grouped as being in
-the same place; sources that each carry a different one read as a collage. One main reverb is the
-oldest advice in mixing, and here it is one key.
+the same place; sources that each carry a different one read as a collage. Mixing engineers have
+worked that way for decades, on one main reverb. Here it is one key.
 
 ## A position, and then a width
 
@@ -142,7 +141,7 @@ part occupies; on most parts it is a slow pan sweep, on wide pads a mirrored cop
 Position is where the centre of that is. Set both and the sweep moves around the position, and a
 drum kit's per-voice spread moves as one block.
 
-Two things the measurement taught me about this. The rendered pan of a wet part sits near the centre
+The measurement taught me two things about this. The rendered pan of a wet part sits near the centre
 whatever its position says, because the hall's stereo return dominates its energy: the bowed
 vibraphone is written at -.35, its notes carry that pan, and the measured stem reads as almost
 centred. And the piano sample is right-heavy on its own, reading at .74 with no position at all. What
@@ -201,7 +200,7 @@ fully into the hall, and placed behind and to the right.
   ]}
 />
 
-The surprising number is what moved the masking. The organ and choir shared the mids at .72 on the
+The level cut is not what moved the masking. The organ and choir shared the mids at .72 on the
 measurement's scale before, and .45 after, comfortably under its .6 warning line. **The ten decibel
 level cut did nothing to that score**, because the masking measure is level-independent by
 construction: it asks where two parts' energy sits and whether they sound at the same time, not how
@@ -245,8 +244,6 @@ author's defaults, marked as heuristics in the code, not laws of hearing.
   </VizFigure>
 </Figure>
 
-Two rows on that chart are the whole argument for measuring rather than guessing.
-
 The timpani pulse was thirty decibels under the mix at a level of 1, and the top of the level range,
 2, only brought it to twenty-one. The sample is quiet. Meanwhile, by the score's own per-event gain,
 the triangle in that same pulse is the loudest voice in the finale by a wide margin. The number the
@@ -259,9 +256,9 @@ per intention, and no amount of reasoning about the file would have found that. 
 
 ## Making room: the sidechain
 
-The oldest trick for a bass and a kick that want the same air is not to lower either one. It is to
-dip the bass for the instant the kick hits and let it recover. The transient gets through, the
-sustain comes back, and the two never sound at the same moment in the band that matters.
+When a bass and a kick want the same air, you can dip the bass for the instant the kick hits and let
+it recover. The transient gets through, the sustain comes back, and the two never sound at the same
+moment in the band that matters.
 
 ```js
 bass: { ...sub, duck: 'drums', duckDepth: .5, duckAttack: .12 },
@@ -287,7 +284,7 @@ Arrival ducks nothing. A sixty-four beat-per-minute score with a timpani pulse h
 room for. The industrial track in the same repository ducks its bass and its sub pad, and still fails
 the tool's headroom check, because its kit is distorted and the distortion happens after the gain:
 a distorted part peaks at full scale whatever its level says. There is no master limiter, and the
-tool says so rather than pretending.
+tool says so.
 
 ## A played feel, not dice
 
@@ -316,12 +313,9 @@ every play and in every render.
   <HumanizeViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
 </VizFigure>
 
-Two honesty notes. The timing is late-only, and the reason is engineering rather than perception:
+The timing is late-only, and the reason is engineering rather than perception:
 a note moved earlier than its grid point can fall before the start of a render and be dropped, and
-renders, the checker and live playback must agree. And the three curves are not as independent as the
-design describes. Their phases are rounded in a way that makes them identical, so a late note is
-always a proportionally louder and longer one. The correlation the design wanted is there; the
-independence between the three is not, and the fix is one character.
+renders, the checker and live playback must agree.
 
 Hear the same marimba line and rim three ways: dead on the grid, with dice, and played.
 
@@ -374,7 +368,7 @@ nothing clipped in either version.
   something to retune from renders, not by argument.
 </Callout>
 
-The tool is honest about its proxies, and so should this post be. The masking score is three fixed
+Every number above is a proxy. The masking score is three fixed
 bands and a co-occurrence count, not a critical-band model; it is symmetric and level-independent,
 where real masking is neither. The level column is unweighted RMS, not loudness, so a low pulse at
 twenty-one decibels under is perceptually further down than a chime would be at the same number.
@@ -385,8 +379,8 @@ section by default.
 What it does do is turn a mix into a described object: a table of where things are and what is in
 the way, with a verdict per rule. That is a thing a person can argue with, and it is a thing a program
 that cannot hear can act on. The whole of [the piece it was built on](/arrival/) got its second draft
-that way, and the two bugs that survived it survived because they were not in the section that was
-measured, which is exactly what you would expect from a tool that looks where it is pointed.
+that way, and what the pass missed, it missed because it was not in the section that was measured. A
+tool looks where it is pointed.
 
 <Callout variant="info" title="Try it yourself">
   Everything in this series runs in strudel-bench:

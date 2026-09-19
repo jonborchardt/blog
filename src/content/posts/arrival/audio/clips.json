@@ -1,6 +1,6 @@
 [
   {
-    "out": "arrival/walk-1-void",
+    "out": "arrival/audio/walk-1-void",
     "song": "arrival.strudel",
     "section": "void",
     "cycles": 1,
@@ -8,7 +8,7 @@
     "mono": false
   },
   {
-    "out": "arrival/walk-2-signal",
+    "out": "arrival/audio/walk-2-signal",
     "song": "arrival.strudel",
     "section": "signal",
     "cycles": 2,
@@ -16,7 +16,7 @@
     "mono": false
   },
   {
-    "out": "arrival/walk-3-approach",
+    "out": "arrival/audio/walk-3-approach",
     "song": "arrival.strudel",
     "section": "approach",
     "cycles": 2,
@@ -24,7 +24,7 @@
     "mono": false
   },
   {
-    "out": "arrival/walk-4-contact",
+    "out": "arrival/audio/walk-4-contact",
     "song": "arrival.strudel",
     "section": "contact",
     "cycles": 2,
@@ -32,7 +32,7 @@
     "mono": false
   },
   {
-    "out": "arrival/walk-5-will",
+    "out": "arrival/audio/walk-5-will",
     "song": "arrival.strudel",
     "section": "will",
     "cycles": 2,
@@ -40,7 +40,7 @@
     "mono": false
   },
   {
-    "out": "arrival/walk-6-plea",
+    "out": "arrival/audio/walk-6-plea",
     "song": "arrival.strudel",
     "section": "plea",
     "cycles": 2,
@@ -48,7 +48,7 @@
     "mono": false
   },
   {
-    "out": "arrival/walk-7-threshold",
+    "out": "arrival/audio/walk-7-threshold",
     "song": "arrival.strudel",
     "section": "threshold",
     "cycles": 2,
@@ -56,7 +56,7 @@
     "mono": false
   },
   {
-    "out": "arrival/walk-8-after",
+    "out": "arrival/audio/walk-8-after",
     "song": "arrival.strudel",
     "section": "after",
     "cycles": 2,
@@ -64,7 +64,7 @@
     "mono": false
   },
   {
-    "out": "arrival/human-contact",
+    "out": "arrival/audio/human-contact",
     "song": "arrival.strudel",
     "section": "contact",
     "layer": "melody",
@@ -73,7 +73,7 @@
     "mono": false
   },
   {
-    "out": "arrival/alien-contact",
+    "out": "arrival/audio/alien-contact",
     "song": "arrival.strudel",
     "section": "contact",
     "layer": "melody2",
@@ -82,7 +82,7 @@
     "mono": false
   },
   {
-    "out": "arrival/alien-plea",
+    "out": "arrival/audio/alien-plea",
     "song": "arrival.strudel",
     "section": "plea",
     "layer": "melody4",
@@ -91,25 +91,7 @@
     "mono": false
   },
   {
-    "out": "arrival/pop-will-piano",
-    "song": "arrival.strudel",
-    "section": "will",
-    "layer": "melody",
-    "cycles": 4,
-    "kbps": 96,
-    "mono": false
-  },
-  {
-    "out": "arrival/dry-piano",
-    "song": "arrival.strudel",
-    "section": "contact",
-    "layer": "melody",
-    "cycles": 4,
-    "kbps": 96,
-    "mono": false
-  },
-  {
-    "out": "arrival/triangle-climax",
+    "out": "arrival/audio/triangle-climax",
     "song": "arrival.strudel",
     "section": "threshold",
     "layer": "drums",
@@ -118,7 +100,7 @@
     "mono": false
   },
   {
-    "out": "arrival/hook-arrival-contact",
+    "out": "arrival/audio/hook-arrival-contact",
     "song": "arrival.strudel",
     "section": "contact",
     "cycles": 4,
@@ -126,7 +108,7 @@
     "mono": false
   },
   {
-    "out": "arrival/arrival-full",
+    "out": "arrival/audio/arrival-full",
     "song": "arrival.strudel",
     "kbps": 96,
     "mono": false,

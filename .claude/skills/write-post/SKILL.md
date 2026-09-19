@@ -27,12 +27,110 @@ Expert-call lifecycle for a normal post — maximize information per call:
 
 An additional call is justified only when genuinely needed: the expert flagged an ambiguity, authoritative data wasn't available at brief time, implementation surfaces a new domain question, or a correction materially changes a claim or visual. The expert may satisfy a data or asset need by running the authority repo's own tooling (renders, pinned metric/simulation runs) rather than only reading files — record the reproduction commands in the brief. Never send the expert styling, spacing, typography, responsive layout, theme usage, accessibility mechanics, or MDX/component conventions — those are blog-side.
 
+## Voice
+
+Write like the person who built the thing, not like a narrator introducing it. The patterns below
+read as machine-written. Cut them on sight, in a new draft and in a revision, and in frontmatter
+`description` and `VizFigure` `summary` text too.
+
+**Never pre-announce.** Do not tell the reader what is coming and how to feel about it and then show
+it. Show it.
+
+| Instead of                                                                        | Write                                 |
+| --------------------------------------------------------------------------------- | ------------------------------------- |
+| "And here is the rule that makes the holes trustworthy rather than embarrassing:" | the rule                              |
+| "And here is the bug that proves it"                                              | the mechanism, in plain present tense |
+| "The interesting part of that grid is the empty cells."                           | "The empty cells are on purpose."     |
+| "And then there is the line that summarises a piece better than any paragraph."   | "The last line it prints is the arc:" |
+| "Which brings me to the mechanism I like best."                                   | the mechanism                         |
+
+**No counted teasers.** "Three ideas carry the whole thing." "It has four faces." "Two honest
+limits." "Two honesty notes." "Two parts against thirteen." The number adds nothing the reader
+cannot see, and the sentence exists only to fill the gap before the real one. Delete it and let the
+items start. A count inside a working sentence is fine ("Four parts: a kick, a snare, hats, and a
+bass line in E phrygian").
+
+**No self-congratulation.** "The rule I am most pleased with." "A small thing that shows someone
+thought it through." "The system gets both right in the same sentence." State the thing; the reader
+decides whether it is clever.
+
+**Do not narrate your own noticing.** "The rule I did not expect." "One rule sorts every control on
+the page, and it took a long time to see." "The one that took the longest." "It was deliberately not
+installed." The reader wants the rule and why it holds, not the story of you arriving at it. Say
+what the thing does and what it is for: "That works because of a rule in the request builder:".
+(`deliberately` and `on purpose` are fine where they carry a real claim: "thirty-two cells are
+deliberately empty", "the verdict is deliberately not a stronger claim than that".)
+
+**A heading is a subject or a claim, never a mood.** "Listening notes into a request" and "What
+works where" tell the reader nothing; "Notes you pin while listening become the next request" and
+"What the public site cannot do" do. If the heading needs the first paragraph to explain it, it is
+not a heading. And the section has to answer its own heading first: a section called "What the
+public site cannot do" opens with what it cannot do, not with everything that works.
+
+**Never announce your own honesty.** "I want to be clear-eyed about this, because the piece is
+better than my ability to defend it and overselling it would cost more than the honesty does." "This
+post is the honest version." "The tool is honest about its proxies, and so should this post be."
+"The honest footnote is…" Claiming candour is not candour, and a reader who is about to be told the
+limits does not need warming up for it. Delete the announcement and state the limit: the section
+heading ("What it cannot do") plus the limits themselves do the whole job. Same for congratulating
+the work on its restraint ("the tool says so rather than pretending") where the behaviour alone
+would carry it.
+
+**No imagined authorities.** "A trained listener would say it is…" "A trained ear hears parallel
+fifths." "Any engineer knows…" You are putting your own judgement in a stranger's mouth to borrow
+credibility for it. Own it ("I think it is…") or state the fact without the witness ("There are
+parallel fifths across the whole piece").
+
+**No appeals to tradition.** "The oldest trick for a bass and a kick that want the same air is…"
+"One main reverb is the oldest advice in mixing." "The classic move here is…" The age of a technique
+is not evidence and the reader cannot check it. Either name who does it and when ("mixing engineers
+have worked that way for decades, on one main reverb") or drop the framing and just describe the
+technique.
+
+**Do not announce significance instead of showing it.** "Two rows on that chart are why the tool
+exists." "Here is why any of this exists." The rows either make the case or they do not; telling the
+reader they are about to be convinced does not help. Cut the sentence and start on the evidence.
+
+**Do not grade the design in passing.** A sentence whose job is to award marks rather than say what
+is true: "I would rather have this than a system that pretends." "What the design gets right is…"
+"The numerals earn their keep." "No new mechanism." "And one that is a principle rather than a
+pattern match." "That turns out to be a useful diagnostic rather than a limitation." Cut the verdict
+and keep the fact: "A verb runs through the same resolver, prints the same per-axis report, and
+lands on the same undo stack as a slider drag" already tells the reader nothing new was built. The
+same goes for over-written metaphors reaching for the same effect ("a guess wearing the costume of a
+feature" is "a guess").
+
+**No label before a sentence that can stand alone.** "Why it matters: the abstraction is
+falsifiable" is "The abstraction is falsifiable." Same for "The load-bearing decision." and "The
+thing I did not expect:" as standalone fragments.
+
+**Do not open cold.** The first line of a post, and of any section that introduces something new,
+has to say what the reader is looking at. "Here is a complete piece of music, in eight lines:" names
+neither the language nor the point. "Strudel is a live-coding music language that runs in a browser.
+Eight lines of it make a complete piece:" does.
+
+**Cut what no reader asked for.** Byte counts of a snippet, build tooling ("no bundler, no build
+step beyond copying files"), deploy plumbing, the commit message that fixed a bug and its
+before-and-after numbers. A bug is worth space only when the reader will hit it; the rule that came
+out of it is worth one sentence.
+
+**Show the artefact you are describing.** If the sentence says four lines become thirty-seven, print
+the four and print the thirty-seven. A transformation the reader cannot see is a claim.
+
+**Retire the tic phrasings.** "X is not a defect to be fixed; it is the shape of the problem."
+"which is exactly what you would expect." "which is exactly where it should." "the tell is." "is
+structural rather than a nice-to-have." "which is its own small lesson." Each is a shape rather than
+an observation. Rewrite as a plain statement of what is true.
+
+**Superlatives earn their place once.** "the sharpest case", "the best detail", "the line that
+matters": at most one per post, and only where you would defend it out loud.
+
 ## Steps
 
 1. Scaffold: `npm run new-post -- <slug> --title "…" [--series <id>] [--tags a,b]`. It refuses reserved/duplicate slugs and unknown series/tags with a fix message. The post starts as `draft: true`; leave it that way. Add the required `authority` field to the post frontmatter.
    **Revising an existing post:** skip this step; add `authority` to its frontmatter if missing, and the published post is the author material for step 2 — everything else (brief, visual pass, review) is the same. If `research/brief.md` already exists, work from it and re-ask the expert only for what it doesn't cover.
 2. If `authority` is set (any technical/project post), delegate one substantial investigation to the authority agent before writing (see Authority). Give it the author's material (outline, notes, or draft) and ask for a **domain brief**: the strongest overall story and what is surprising or worth emphasizing; the important technical ideas; factual corrections and missing context in the supplied material; key terminology and caveats; which claims deserve evidence, with that evidence; and its proposed visuals — for each quantitative one, all authoritative data and semantics needed to build it correctly (values, units, what each axis/series means, thresholds); for each conceptual one, the states, relationships, ordering, transitions, and caveats. Save the brief verbatim to `src/content/posts/<slug>/research/brief.md` — it is committed with the post (the repo is public: nothing in it you wouldn't publish) and is what visuals, hero, and review work from instead of re-asking; a later targeted expert answer gets appended there too. Then write `src/content/posts/<slug>/index.mdx`:
-   - Real prose for a technical reader; open with why it matters; body headings start at `##` and never skip levels.
+   - Real prose for a technical reader; open with why it matters; body headings start at `##` and never skip levels. Hold every paragraph against **Voice** above before moving on.
    - No em dash (`—`) anywhere a reader sees it — prose, frontmatter, captions/alt/`summary`, SVG labels. Use a colon, comma, parentheses, or a new sentence instead; double-quote a YAML `description` containing a colon.
    - The authority repo keeps moving after publication. Avoid phrasing that a routine repo change falsifies: exact counts of growing things, "the most recent X", predictions of the repo's next step. Hedge ("at last count", "one of the later") or state the target/mechanism instead of the tally; caption screenshots of a living app as dated snapshots.
    - Use primitives from `src/components/blog/README.md` (import at the top) only where the writing calls for them; no per-post styling.
@@ -62,3 +160,4 @@ An additional call is justified only when genuinely needed: the expert flagged a
 ## Don'ts
 
 - Don't set `draft: false` here. Don't hardcode `/blog/`. Don't add dependencies for one post. Don't invent tags outside the registry.
+- Don't pre-announce, count, or congratulate your way into a paragraph (see **Voice**). If a sentence's only job is to introduce the next one, delete it.

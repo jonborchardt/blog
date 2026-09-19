@@ -1,7 +1,7 @@
 ---
 title: Say darker
-description: Twenty-nine words that edit a song by moving numbers. Say darker twice and the second one barely lands, which turns out to be the interesting part.
-publishedAt: 2026-09-13
+description: "Twenty-nine English words, each a set of deltas on a song's numeric axes: how they apply, what they refuse, what saturates, and how much reads back."
+publishedAt: 2026-09-14
 updatedAt: 2026-09-19
 series: strudel-bench
 seriesOrder: 2
@@ -17,6 +17,7 @@ import SoundBite from "@/components/blog/SoundBite.astro";
 import Callout from "@/components/blog/Callout.astro";
 import Figure from "@/components/blog/Figure.astro";
 import VizFigure from "@/components/blog/VizFigure.astro";
+import WordsViz from "./where-words-land.svg";
 import VocabViz from "./vocab-viz.svg";
 import SaturationViz from "./saturation-viz.svg";
 import SilentViz from "./silent-viz.svg";
@@ -50,10 +51,19 @@ The first one does a great deal. The second does almost nothing, and it is loud 
 [The previous post](/a-language-on-top-of-strudel/) was about the layer that turns a piece of music
 into named sections and parts, each sitting at some position on twelve numeric axes. This post is
 about the layer above that: a vocabulary of English words that move those numbers, the words that
-shape a number over time, the verbs that rearrange a whole section, and the three decisions that
-make a deliberately small natural-language surface work.
+shape a number over time, the verbs that rearrange a whole section, and what keeps a deliberately
+small natural-language surface working.
 
 ## The whole language is a table
+
+A word is not part of a song file. It is an edit to one:
+
+<VizFigure
+  name="A phrase, the deltas it stands for, and the numbers in the song file they land on"
+  summary="The phrase much darker resolves to brightness minus 0.60 and register minus 0.20. Those deltas are added to the brightness value written on every part in the named section, so the melody's 0.7 and the pad's 0.5 both move. The phrase itself is not written to the file; only the changed numbers are."
+>
+  <WordsViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
 
 Not a parser. Not a model. A handful of JSON files.
 
@@ -86,31 +96,24 @@ confidence. Ten modifiers, which are a multiplication table: `slightly` is 0.5, 
 </Figure>
 
 Seventy-three numbers in a grid of 348. Five words touch exactly one axis. One word, `dreamy`,
-touches five. No delta anywhere in the table is larger than 0.40.
-
-The thing I did not expect: **the twenty-five original vectors have never been retuned.** They were
-written once, and a catalogue of songs got built on them without the table needing a pass. It has
-been extended exactly once, when the mixing tools arrived and needed four depth words (`closer`,
-`forward`, `farther`, `background`), and those four are the gentlest entries in the file, each moving
-brightness, space and weight together by a fraction of what the older words do. The honest footnote
-is that there has only ever been one user, who learned the words. But the version of this that would
-have failed is obvious enough to name: a vocabulary that grows every time someone wants a word, until
-nobody can predict what any of it does.
+touches five. No delta anywhere in the table is larger than 0.40. The gentlest entries are the four
+depth words the mixing tools needed (`closer`, `forward`, `farther`, `background`), which move
+brightness, space and weight together by a fraction of what the older words do.
 
 ## Deltas, not states
 
-The load-bearing decision. `darker` does not mean "set brightness to 0.2." It means "subtract 0.30
-from wherever brightness currently is."
+`darker` does not mean "set brightness to 0.2." It means "subtract 0.30 from wherever brightness
+currently is."
 
 That is what makes it feel like talking rather than filling in a form. You do not need to know the
 current value to ask for less of something, which is exactly the position you are in when you are
 listening rather than reading.
 
-Consequentially, a part that never mentioned an axis is treated as sitting at the baseline of 0.5,
+Consequently, a part that never mentioned an axis is treated as sitting at the baseline of 0.5,
 so a single word can **insert** properties that were not there. And the result is clamped to the
 range, at apply time, with the clamp reported rather than hidden.
 
-## Which is why saying it twice is interesting
+## Saying it twice
 
 <VizFigure
   name="The same command applied twice, and how much of it landed each time"
@@ -137,7 +140,7 @@ drop.melody.brightness .1 → 0  lpf 438 Hz -> 300 Hz   applied -0.1 of requeste
 drop.pad.register .3 → .1      octave 3
 ```
 
-`applied +0 of requested -0.60` is the line that matters. Nothing happened, and it says so.
+`applied +0 of requested -0.60`. Nothing happened, and the report says so.
 
 **It reports the delta you achieved, not the one you asked for.** If the second identical command
 silently claimed success, the user would learn within two turns that the system's reports are
@@ -163,8 +166,7 @@ and then to 0, and it is the place where the second command is most audible:
 <Callout variant="note" title="One number that moves for the wrong reason">
   The analyser also reports fewer onsets per second in the darker renders. That is not the language
   removing notes: the onset detector works on amplitude, and quieter, lower notes stop registering.
-  The event table shows the same number of events in all three files. Worth stating because it is
-  exactly the kind of number that would make a tidier story if you did not check it.
+  The event table shows the same number of events in all three files.
 </Callout>
 
 ## Contradictions are summed, never refused
@@ -208,7 +210,7 @@ simply moves that axis harder. The four depth words are all among the mute: they
 move three axes gently, so none of them will ever own a column. Invisible to the read-back by
 construction.
 
-The sharpest case is `hypnotic`. It is a real word, it applies cleanly, it moves three axes, and the
+`hypnotic` is the worst of it. It is a real word, it applies cleanly, it moves three axes, and the
 read-back for the result is **nothing at all**. Its largest move is on variation, and variation has no
 word in either direction.
 
@@ -217,14 +219,12 @@ The file after one "much darker" and the file after two have
 change in the second pass either landed on register, which is mute, or moved a value without moving
 it out of its word: `0.1` and `0` are both "very dark".
 
-I would rather have this than a system that pretends. A lossy projection between a small discrete
-vocabulary and a continuous space is not a defect to be fixed; it is the shape of the problem. The
-design decision that matters is that the loss is *measurable*, which is why I can tell you it is
-19 of 29 rather than "mostly fine."
+A small discrete vocabulary projected onto a continuous space is going to lose things. The loss is
+measurable, though, which is why I can tell you it is 19 of 29 rather than "mostly fine."
 
 ## What the resolver refuses to touch
 
-Applying a word means editing source code, and this is where the system is at its most careful.
+Applying a word means editing source code, which is the part that can actually lose your work.
 
 It parses the file with a real JavaScript parser, finds the numeric literals that are direct values
 of axis keys inside a section, and splices those byte ranges. Back to front, so earlier offsets stay
@@ -238,29 +238,30 @@ Then it refuses, and every refusal names the reason and the fix. Three that come
 - **A key or progression that is not a plain string.** The harmony half is refused.
 - **An axis with no implementation on that kind of part.** Skipped, and reported as skipped.
 
-And one that is a principle rather than a pattern match. A part built by spreading a shared
+There is a fourth refusal that no pattern match would catch. A part built by spreading a shared
 definition (`{ ...theme, density: .55 }`) has its baseline hidden behind a value the parser would
 have to run the program to see. **A delta needs a baseline**, and guessing 0.5 would throw away
 whatever the shared definition contributed. So the library refuses to edit such a part unless the
 caller hands it the evaluated values. Both callers now do: the page has already evaluated the song in
-order to play it, and the command-line resolver evaluates it first for the same reason. The refusal
-survives only where no baseline can be had, which is exactly where it should.
+order to play it, and the command-line resolver evaluates it first for the same reason. What is left
+of the refusal is the case where no baseline can be had at all.
 
 ## Harmony is deliberately not an axis
 
-Key and chord progression sit outside the whole system, and the reason is structural rather than
-aesthetic. An axis is a number from 0 to 1, per part, with a baseline at the midpoint. Harmony is none
-of those: there is no 0.5 of a chord progression, `I IV V I` does not interpolate toward anything, and
-a progression is shared by every part rather than owned by one.
+Key and chord progression sit outside the whole system, and you can see it in
+[the map of a song file](/a-language-on-top-of-strudel/#sections-and-parts): `key` and `progression`
+are on the section line, outside the box that holds the parts. An axis is a number from 0 to 1, per
+part, with a baseline at the midpoint. Harmony is none of those: there is no 0.5 of a chord
+progression, `I IV V I` does not interpolate toward anything, and a progression is shared by every
+part rather than owned by one.
 
 So harmony words are **states**, not deltas, and the parser treats them differently on purpose:
 modifiers are discarded, negation does not apply, and applying the same harmony word twice is a no-op.
-That last property is the tell. Deltas are not idempotent and states are, and the system gets both
-right in the same sentence.
+Deltas are not idempotent; states are.
 
-What the numerals buy you is real: chords are computed from the section's own scale, so the same
-progression string produces correctly spelled chords in any key. What they do not buy you is a
-shortcut past knowing what you asked for:
+Writing the progression in numerals means chords are computed from the section's own scale, so the
+same progression string produces correctly spelled chords in any key. What numerals do not give you
+is a shortcut past knowing what you asked for:
 
 ```text
 C:minor            i iv V i   →  Cm Fm Gm Cm
@@ -279,15 +280,10 @@ bar's chord tones instead of the key's scale. Voice leading is still not modelle
 per-bar chord picker refuses a progression that uses `@n`, because one bar in a picker cannot stand
 for a hand-written repeat count.
 
-The progression words are named for how they sound in a minor key, and nothing checks that the name
-still fits elsewhere. Ask for `tense` in a major key and you get a diminished chord on the seventh
-degree, which is not tension, it is an accident. This is worth further thought.
-
 ## Words that move
 
-A number is a position. Some words write a *shape* instead, and they are the newest part of the
-vocabulary. Put a motion word next to an axis name and the resolver replaces the number with a
-movement centred on it:
+A number is a position. Some words write a *shape* instead. Put a motion word next to an axis name
+and the resolver replaces the number with a movement centred on it:
 
 ```text
 wobbling brightness   .7 -> wobble(.5, .9)
@@ -320,8 +316,10 @@ and two movements on one axis in one phrase is refused, one per axis.
 
 ## Verbs
 
-The last kind of word is a macro. An arrangement verb is a phrase plus a material change plus a
-part cut, stored in JSON, and applied to a whole section at once. There are four:
+The last kind of word is a macro. An arrangement verb is a phrase plus a material change plus a part
+cut, stored in JSON, and applied to everything inside one `section(` block at once: in
+[the map of a song file](/a-language-on-top-of-strudel/#sections-and-parts), the middle box. There
+are four:
 
 | Verb        | What it is                                                   |
 | ----------- | ------------------------------------------------------------ |
@@ -330,9 +328,9 @@ part cut, stored in JSON, and applied to a whole section at once. There are four
 | `strip`     | keep drums, bass, sample, perc and raw; cut the rest         |
 | `halftime`  | the drum template becomes `halftime`, then `slightly sparser` |
 
-No new mechanism. A verb runs through the same resolver, prints the same per-axis report, saturates
-in the same places, and lands on the same undo stack as a slider drag. A reader can check what
-`breakdown` does in ten seconds by opening the file.
+A verb runs through the same resolver, prints the same per-axis report, saturates in the same
+places, and lands on the same undo stack as a slider drag. A reader can check what `breakdown` does
+in ten seconds by opening the file.
 
 <SoundBite
   label="A drop before and after the verb breakdown"
@@ -351,24 +349,23 @@ should be identical, two raw sawtooths in one section are mud, a bass or melody 
 default should be given a written line, and no section should ask the audio thread for more
 simultaneous voices than a laptop can render.
 
-Errors and warnings are split on a defensible line: **errors are things that cannot be true** (a value
+Errors and warnings are split on one line: **errors are things that cannot be true** (a value
 outside the range has no defined meaning), **warnings are things that are usually not what you meant.**
 Every musical judgement is a warning. Across the songs the page lists there are zero errors.
 
 There are a couple of dozen warnings, though, and reading them is more instructive than the rules:
 
 - The largest piece, the one iterated on hardest, passes completely clean, and so do the four songs
-  written most recently. That is evidence the rules describe real craft rather than one person's
-  habits.
+  written most recently, so the rules are not just describing one song.
 - Fifteen of the twenty-nine warnings, counted on 2026-09-19 over the eleven listed songs, come from
   a **single song that is violating the rules on purpose.** It is an industrial track whose header
   comment says everything corrodes; colliding sawtooths are the genre, and a machine's bass is a loop
   rather than a hook. Essentially every one of those warnings is wrong, and there is no way to
   suppress them.
 - One listed song is reported clean because it has no sections at all, so the linter has no opinion.
-  Clean and silent look identical in the output, which is its own small lesson.
+  Clean and silent look identical in the output.
 
-And the limit, which is the sharpest thing in this section. Drive the climax to the state you heard at
+Then there is the limit. Drive the climax to the state you heard at
 the top of this post, where every part has had its brightness pushed to the floor, and the linter's
 verdict is **unchanged**. Its notion of energy counts events, not spectrum. You can turn a climax into
 inaudible mud and it will still certify that the arc peaks in the right place.

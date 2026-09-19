@@ -1,7 +1,7 @@
 ---
 title: arrival
-description: Eight sections, 62 parts, two wills that never merge, and two bugs that survived a measured mixing pass. One piece of music, examined honestly.
-publishedAt: 2026-09-13
+description: "Eight sections, 62 parts, 28 instruments, and two wills that never merge. One piece of music taken apart: what carries it, and what it cannot do."
+publishedAt: 2026-09-17
 updatedAt: 2026-09-19
 series: strudel-bench
 seriesOrder: 5
@@ -33,31 +33,25 @@ import hookContact from "./audio/hook-arrival-contact.mp3";
 import humanContact from "./audio/human-contact.mp3";
 import alienContact from "./audio/alien-contact.mp3";
 import alienPlea from "./audio/alien-plea.mp3";
-import popWillPiano from "./audio/pop-will-piano.mp3";
-import dryPiano from "./audio/dry-piano.mp3";
 import triangleClimax from "./audio/triangle-climax.mp3";
 import arrivalFull from "./audio/arrival-full.mp3";
 
-The brief was one sentence: an epic orchestral score, aliens coming to earth, not a battle but an
-emotional battle of will, lots of instruments, designed rather than chaotic, fear and hope at once.
+The brief was one sentence:
+
+> an epic orchestral score, aliens coming to earth, not a battle but an emotional battle of will,
+> lots of instruments, designed rather than chaotic, fear and hope at once.
 
 What came back was 64 BPM in D minor, eight sections, 59 bars, 62 parts, 28 distinct instruments, and
 three minutes forty-one seconds. This is what a piece written in the language from
-[the first post](/a-language-on-top-of-strudel/) actually looks like, and this post is the honest
-version: the one idea that carries it, the numbers behind its balance, the mixing pass it just got,
-what it cannot do, and the two bugs that are still in the file.
+[the first post](/a-language-on-top-of-strudel/) actually looks like, and this post takes it apart:
+the one idea that carries it, the numbers behind its balance, the mixing pass it just got, and what
+it cannot do.
 
 <SoundBite
   label="arrival, the first climax"
   note="Four bars of contact. Timpani, a pedal organ, bowed strings, piano, handchimes, tubular bells, harp."
   clips={[{ src: hookContact, label: "arrival: contact" }]}
 />
-
-<Callout variant="note" title="Everything here is one commit">
-  Every number, clip and figure below describes the file at commit `3517d4d`, read on 2026-09-19.
-  The piece is still being worked on, and two of the things I point at are live bugs, so this post is
-  a description of a version.
-</Callout>
 
 ## The idea that carries it
 
@@ -110,15 +104,12 @@ phrase is one, so the human breathes slower. And in the fifth section, where the
 phrygian, the human theme shrinks to a half-step sigh that *bends with the chord*, while the chimes
 sit exactly where they always were.
 
-Since the mixing pass there is a third difference, and it is a real mechanism rather than a dice
-roll. The piano carries a `humanize` setting: every note lands up to twelve milliseconds late, by an
-amount that follows a slow curve over the phrase and a fixed lean per beat, the same way every play.
-The chimes carry nothing, and land exactly on the grid. The human side is played; the alien side is
-sequenced. (The older `organicness` axis, which the chimes still set to zero, does nothing at or
-below its midpoint, so writing zero there is identical to leaving it out. The checker still reports
-them as "very mechanical", which happens to be right.)
+Since the mixing pass there is a third difference. The piano carries a `humanize` setting: every
+note lands up to twelve milliseconds late, by an amount that follows a slow curve over the phrase
+and a fixed lean per beat, the same way every play. The chimes carry nothing, and land exactly on
+the grid. The human side is played; the alien side is sequenced.
 
-## Where the idea breaks, and it is a good break
+## Where the idea breaks
 
 There is one section, `plea`, that modulates to F major. And `follow: false` turns out to mean
 something narrower than I thought.
@@ -169,8 +160,8 @@ wins. `threshold` is the peak, twelve bars, thirteen parts. `after` is six bars 
 
 ### Who is winning
 
-The brief said neither side wins at the climaxes. That is close to true, and the more interesting
-thing is what happens in between.
+The brief said neither side wins at the climaxes. That is close to true. The arc between them is the
+story.
 
 <Figure caption="Summed per-event gain is a balance measure, not loudness. The chimes sit an octave above the piano, where the ear is more sensitive, so a small gain lead is not necessarily a perceptual one.">
   <VizFigure
@@ -245,24 +236,14 @@ climb into the hope half as the piece opens up, drop back down for the standoff 
 again at the finale. One part moving between the halves section by section is the "both at once"
 idea living in a single instrument.
 
-Two corrections to my own header comment, though. The tubular bells are described as part of the
-alien signal in one sentence and part of the hope-high group in the next, and by register they are the
-**lowest** of the high voices: they alternate D3 and middle C, so half their notes sit below it. And
-the pedal organ plays a D at about 18 hertz, from a sample library that bottoms out at 55. Every note
-is stretched down as much as nineteen semitones. On a laptop speaker you are not hearing the
-fundamental at all; you are hearing the harmonics and a very slow attack. Fear in the low half is
-partly fear below the speaker.
-
 ## The mixing pass
 
 Everything above was true of the first finished version. What the file gained since is a mix, in the
-sense [the next post](/mixing-as-a-scene/) is about: not louder and quieter, but a scene.
+sense [the previous post](/mixing-as-a-scene/) is about: not louder and quieter, but a scene.
 
-Measured before the pass, the loudest thing in the climax was the impact hit, five decibels under
-the whole mix. The choir was a decibel louder than the piano theme it was meant to sit behind, and
-shared the midrange with the organ. The timpani pulse was thirty decibels under the mix and the
-glockenspiel doubling forty, which is to say neither could be heard. Nothing had a position, and the
-parts were spread over five separate reverbs.
+The previous post opens with the measurements from before the pass: an impact hit as the loudest
+thing in the climax, a choir louder than the theme it was meant to sit behind, two parts too quiet
+to hear, nothing with a position, five separate reverbs.
 
 After it: one hall on the whole song, with each part's `space` value reduced to its send into that
 hall. A position for every part, so the piano is in front and a little right, the chimes and bells
@@ -274,14 +255,12 @@ strikes a bar given a compressor. And the piano and the pulse given the correlat
 described above in place of the old dice-per-hit jitter.
 
 The measure tool's verdict went from five warnings to clean, and the mix's peak fell by more than
-half, because the impact had been the peak. Two numbers from the pass are worth keeping because they cut against
-intuition. First, by the score's own summed per-event gain the triangle is still the loudest voice in
-the finale, by a factor of two and a half over the harp, because the pulse is at the top of its
-level range and the triangle sits in the slot that fires most often; by the rendered measurement the
-whole pulse sits twenty-one decibels under the mix. The number the language exposes and the number
-the ear reports disagree, and the pass sided with the ear. Second, the piano's `weight: .58` that the
-pass wrote is a no-op: the melody layer has no weight cell, the language accepts any axis on any
-layer as documented, and the value sits in the file doing nothing.
+half, because the impact had been the peak. One number from the pass cuts against intuition: by the
+score's own summed per-event gain the triangle is still the loudest voice in the finale, by a factor
+of two and a half over the harp, because the pulse is at the top of its level range and the triangle
+sits in the slot that fires most often. By the rendered measurement the whole pulse sits twenty-one
+decibels under the mix. The number the language exposes and the number the ear reports disagree, and
+the pass sided with the ear.
 
 <SoundBite
   label="The drums at the peak"
@@ -289,50 +268,13 @@ layer as documented, and the value sits in the file doing nothing.
   clips={[{ src: triangleClimax, label: "threshold, drums only" }]}
 />
 
-## The bugs that survived it
-
-Two things are wrong in the file as it stands, both were known before the mixing pass, and the
-mixing pass touched neither. That is worth a paragraph, because the tools it used looked exactly
-where they were pointed.
-
-**The piano is on a delay line in two sections.** The header comment says the piano keeps one
-setting for the whole song, with `space` held at or below the midpoint, because anything above that
-sends the melody layer to a delay line that lands three-quarters of a beat behind each note and
-reads as a pop. The shared definition obeys that (the header still quotes the old value, .5, while
-the definition now says .32; both are under the line). Two per-section overrides do not: the piano in
-`will` and in `after` is written well above the line, and so is the new vibraphone doubling in
-`threshold`. Eighteen piano events and forty-two vibraphone events carry the delay.
-
-<SoundBite
-  label="The pop, in the file as it stands"
-  note="The piano in the section where the delay is on, then the same instrument where the setting holds."
-  clips={[
-    { src: popWillPiano, label: "with the delay send" },
-    { src: dryPiano, label: "without it" },
-  ]}
-/>
-
-The mixing pass measured `threshold`, where the piano is dry, and its recorded note even says the
-header's rule still holds. It checked the constant and not the overrides forty lines down.
-
-**The textures are one bar long.** Alongside the sections there are eleven hand-written Strudel
-textures, gong swells and a wind bed and a heartbeat, sequenced separately, and they still add up to
-sixty bars against the score's fifty-nine. So every gong, swell and heartbeat lands **one bar after**
-the section it was written for: the gong announcing the first climax fires a bar into it. And because
-the two halves are different lengths, they drift by another bar every time the piece loops. Nothing
-in the system noticed, because nothing in the system knows the textures were meant to line up with
-anything, and every tool that renders a section alone drops the textures entirely.
-
 ## What it cannot do
-
-I want to be clear-eyed about this, because the piece is better than my ability to defend it and
-overselling it would cost more than the honesty does.
 
 **There is no counterpoint.** The pads stack triads on the chord root and every voice moves in
 parallel, every time. The language now has inversions and a chord-tone follow mode; this piece uses
-none of them, and voice leading is not modelled anywhere. A trained ear hears parallel fifths across
-the whole piece, and the fifth section, where organ and strings and drone and piano all step
-together, is parallel motion as the entire dramatic device.
+none of them, and voice leading is not modelled anywhere. There are parallel fifths across the whole
+piece, and the fifth section, where organ and strings and drone and piano all step together, is
+parallel motion as the entire dramatic device.
 
 **The development is one line, transposed, mostly unchanged.** One sixteen-step phrase carries the
 entire human side. There are three further hand-written versions of it: a truncated sigh in the
@@ -350,7 +292,7 @@ has none.
 
 ## What I actually think
 
-A trained listener would say it is a well-voiced, convincingly orchestrated three and a half minutes
+It is a well-voiced, convincingly orchestrated three and a half minutes
 with a real dramatic shape and one genuinely good idea about two incompatible musics coexisting,
 built from one melodic cell repeated without development over four chords repeated without
 variation, at one unwavering tempo. A very good sketch for a cue, played by a very good sample
