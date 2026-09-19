@@ -75,8 +75,11 @@ const teaserOpt = await getImage({ src: teaser, format: "webp" });
       >
     </summary>
     <div class="museum-scaler">
-      <iframe src={href(demo)} title={title} loading="lazy" width={nativeWidth} height={height}
-      ></iframe>
+      {
+        /* src is set on open: a hidden iframe is exempt from lazy loading, so an eager src here
+          would download the demo's dataset while the details is still closed. */
+      }
+      <iframe data-src={href(demo)} title={title} width={nativeWidth} height={height}></iframe>
     </div>
   </details>
   <figcaption class="text-muted-foreground mt-3 text-center text-sm">
@@ -91,6 +94,10 @@ const teaserOpt = await getImage({ src: teaser, format: "webp" });
   for (const scaler of document.querySelectorAll<HTMLElement>(".museum-scaler")) {
     const iframe = scaler.querySelector("iframe");
     if (!iframe) continue;
+    const details = scaler.closest("details");
+    details?.addEventListener("toggle", () => {
+      if (details.open && !iframe.src) iframe.src = iframe.dataset.src ?? "";
+    });
     const nativeW = Number(iframe.getAttribute("width"));
     const nativeH = Number(iframe.getAttribute("height"));
     const fit = () => {
