@@ -1,500 +1,430 @@
-# Domain brief: `arrival` (strudel-bench), for blog post part 6
+# Domain brief: `arrival` (strudel-bench), for the closing post of the Strudel Bench series
 
-Repo: `E:\github2\strudle`. Song: `songs/arrival.strudel` (133 lines), provenance: `songs/arrival.notes.json` (8 requests, 31 change entries). Every number below is from the code or from `node scripts/check.mjs songs/arrival.strudel` (2751 events over 59 cycles), not from the docs.
-
----
-
-## 1. The strongest story
-
-Your outline has two candidate "debugging" beats. **The piano pop is the weaker one.** The stronger one is the **whistle**, and the strongest thing in the whole artefact is a third thing your outline does not have at all.
-
-**A. The whistle: four commits, two confident wrong answers, one tooling change.**
-Over four requests the human kept reporting a whistle at the start of the piece. The agent:
-
-1. Blamed the wind bed and the bowed wineglass, turned both down (`c3a8550`). Wrong.
-2. Removed the wind and space beds from `void` entirely (`128626f`). Wrong: the human came back with *"the whistle you removed was wrong"*.
-3. Restored them and blamed the reverb impulse-response rebuild (`45e8f03`). That fix was correct about a *different* artefact, and the whistle survived.
-4. Rendered audio, ran an FFT, and produced a beautiful, specific, physically literate diagnosis (`f3f8bb3`): a naked 440 Hz line, the sixth harmonic of the shared D2, the one partial surviving the 300 Hz lowpass, the psaltery sample map "an octave off", both pads doubling it in phase. It swapped the string sound and rebuilt the void pad as a triad. **Also wrong.**
-5. The human gave the decisive clue: *"gone when a section is pinned or a pad is muted"*. That is an architectural fact, not an acoustic one: pinning and muting rebuild the song from the section layers and drop the raw `textures` stack entirely. The whistle had to be a texture. It was `didgeridoo:0`, which is a 0.7 s **bark**, pitched down to `d1` and repeated once a bar: a descending whoop (`33eb354`).
-6. Then the honest part: `e5c5e80 "song revert"` undid the FFT theory in full, and `4c0c306` added a permanent fix to the *tooling*, not the song: `npm run check` now prints a `sounds` block naming the actual `.wav` behind every `sound:index`, so "a bark, a bowed cymbal or a blip is visible before it is called a drone."
-
-That is the story. The agent's failure mode was not being vague; it was being *precise about the wrong thing*. It measured, it reasoned from harmonics, it was internally coherent, and it was wrong for four rounds because it never asked what a sample index actually was. The human's contribution was not a better ear: it was one structural observation the agent could not have had by listening.
-
-**B. The undocumented revert that contradicts the file's own comment.** This is the best "and then reality" beat, and nobody has noticed it.
-
-Commit `128626f` did a careful consolidation: one piano setting for the whole song, `space: .5` so the melody layer stops sending to a delay line, and a comment at the top of the file explaining exactly that. Commit `45e8f03` gave the `will` piano held notes so it stopped dying at short slots. Then commit **`4accadc "fixes"`**, one file, ten lines, no notes entry, no message, **put all of it back**: the per-section overrides on the piano in five sections, the short `will` melody, and the glockenspiel's `space: .95`.
-
-The comment that documents the removal is still at the top of the file (lines 7 to 8). The code now disagrees with it. In the shipped HEAD, **18 piano events and 42 glockenspiel events carry a `delay` control**, the exact thing the comment says was taken out. `will.melody` has `space: .9` giving `delay: 0.32`; `after.melody` has `space: .95` giving `delay: 0.36`.
-
-So: the agent's fix was real, the comment is real, and a later hand-edit quietly reverted two-thirds of it and left the comment standing. That is a much more interesting ending than "one value, and the comment is still there."
-
-**C. What makes it interesting as music, honestly.** The two-wills idea *is* implemented, literally and measurably. The low/high split *is* in the numbers with a clean gap. What it is not is counterpoint. It is one 16-step degree string transposed by chord root, one 3-note ostinato that refuses to transpose, and a gain balance that the piece wins or loses on. The development is knob moves. Say that plainly and the achievement reads larger, not smaller.
-
-**Your outline's claims, scored:**
-
-| Claim | Verdict |
-|---|---|
-| 64 BPM, D minor, eight sections, 59 bars | True. 3 min 41 s. |
-| Two wills, side by side | **True and verifiable to the note.** Stronger than you think. |
-| Alien "never follows the chords" | True everywhere. `follow: false`. |
-| Alien "never changes its intervals" | **False in one section.** In `plea` (F major) the intervals change from two perfect fourths to a fourth plus a tritone. |
-| "At the climaxes neither wins" | Defensible but close. Human side is 17% louder in `contact`, 12% in `threshold`, by summed event gain. |
-| Fear low, hope high | **True, with a clean register gap and one deliberate straddler.** Not a story told after the fact. |
-| "a heartbeat drum" in the low half | True, and it starts one bar late. |
-| "the pop behind every piano note, one value" | **Two bugs, two mechanisms, and the fix is partly undone.** |
-| "a revert in the log" | True, and there are *two*, one labelled and one not. |
-| "the git log as a session diary" | True for 9 of 11 commits. The last two break the discipline, which is a better point than the diary itself. |
+Repo: `E:\github2\strudle` (public: github.com/jonborchardt/strudel-bench). Song: `songs/arrival.strudel` (147 lines), provenance: `songs/arrival.notes.json` (10 requests). Every number below comes from the code or from `npm run check -- songs/arrival.strudel` (2434 events over 59 cycles) at the commit named in section 1, not from the docs. The old brief's two-wills, balance and register methods are kept and re-run; the whistle/"four rounds" narrative and the agent-feedback framing are dropped on purpose.
 
 ---
 
-## 2. The piece, structurally and exactly
+## 1. The piece as it stands
 
-Song header: `song({ bpm: 64, key: 'D:minor', seed: 41, kit: 'RolandTR808' }, ...)`.
-4/4, so cps = 64/60/4 = 0.2667, one cycle = one bar = **3.75 s**. 59 bars = **221.25 s (3:41)**.
+**Commit.** `songs/arrival.strudel` was last changed in **`3517d4d`, 2026-09-19 00:07:35 -0700, "promoted mixed versions"** (the `-mixed` twin written in `ef3dcd2` 21:41 and `caac41e` 23:43 on 09-18 replaced the original; `songs/arrival-mixed.strudel` was deleted in the same commit). Repo HEAD when read: `828c550` (00:16:45 same day), working tree clean. `npm run check` ok, `npm run lint` clean. Pin every number to `3517d4d`.
 
-`kit: 'RolandTR808'` is **vestigial**: all five drum voices are overridden with orchestral samples, and `fx.impact` calls `s('bd')` with no bank, so it resolves to the Dirt kick, not an 808 one.
+The old post cites `7a4d1b0` (2026-09-13 00:52, a dump change; the song then was the `bc61b6e` state). Between that and now the song changed in `7d93908` (09-13, `// @blog` line only), `4b97ac9` (09-18 21:01, threshold pad widths .95/.9 to .75, ~49 to ~37 voices) and `3517d4d` (the mixing pass).
 
-| # | Section | Bars | Range | Role | Key | Progression | Chords | Parts | Energy |
-|---|---|---|---|---|---|---|---|---|---|
-| 1 | void | 1 | 0 | establish | D minor | `i` | Dm | 2 | 1.7 |
-| 2 | signal | 8 | 1-8 | establish | D minor | `i VI` | Dm Bb | 4 | 5.6 |
-| 3 | approach | 8 | 9-16 | develop | D minor | `i VI VII` | Dm Bb C | 9 | 25.2 |
-| 4 | contact | 8 | 17-24 | **climax** | D minor | `i VI III VII` | Dm Bb F C | 11 | 49.4 |
-| 5 | will | 8 | 25-32 | develop | **D phrygian** | `i II i II` | Dm Eb Dm Eb | 7 | 13.7 |
-| 6 | plea | 8 | 33-40 | develop | **F major** | `I V vi IV` | F C Dm Bb | 10 | 36.6 |
-| 7 | threshold | 12 | 41-52 | **climax** | D minor | `i VI III VII` | Dm Bb F C | 13 | 65.3 |
-| 8 | after | 6 | 53-58 | release | D minor | `i VI` | Dm Bb | 6 | 9.7 |
+**Header facts.** `song({ bpm: 64, key: 'D:minor', seed: 41, kit: 'RolandTR808', packs: ['rooms'], room: { ir: 'hall', size: 3.2, damping: 4500 } }, ...)`. 4/4, cps 64/60/4 = 0.2667, one cycle = one bar = 3.75 s. **59 bars = 221.25 s (3:41).** `kit: 'RolandTR808'` is still vestigial: all five drum voices are overridden and `fx.impact` resolves to the Dirt kick `bd` (`10_bd_switchangel.wav`).
 
-**Energy units:** a section's energy is the sum over parts of (onsets per cycle x level). Level-weighted onsets per bar. Not loudness. `threshold` is the peak, which is what `npm run lint` requires of a `climax`.
+| # | Section | Bars | Cycles | Role | Key | Progression | Chords | Parts | Voices (outside) | Energy | Form |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | void | 1 | 0 | establish | D minor | `i` | Dm | 2 | 7 (4) | 1.1 | A |
+| 2 | signal | 8 | 1-8 | establish | D minor | `i VI` | Dm Bb | 4 | 12 (4) | 4.1 | B |
+| 3 | approach | 8 | 9-16 | develop | D minor | `i VI VII` | Dm Bb C | 9 | 22 (4) | 21.6 | C |
+| 4 | contact | 8 | 17-24 | climax | D minor | `i VI III VII` | Dm Bb F C | 11 | 31 (2) | 57.6 | D |
+| 5 | will | 8 | 25-32 | develop | D phrygian | `i II i II` | Dm Eb Dm Eb | 7 | 14 (4) | 14.4 | E |
+| 6 | plea | 8 | 33-40 | develop | F major | `I V vi IV` | F C Dm Bb | 10 | 26 (3) | 37 | F |
+| 7 | threshold | 12 | 41-52 | climax | D minor | `i VI III VII` | Dm Bb F C | 13 | 37 (3) | 67.3 | G |
+| 8 | after | 6 | 53-58 | release | D minor | `i VI` | Dm Bb | 6 | 18 (4) | 7.4 | H |
 
-Events per bar, all 59 bars (for the arc visual):
-`6,11,13,14,15,12,14,13,15,26,28,30,31,37,35,37,46,69,68,64,64,66,69,64,64,19,24,24,25,22,22,23,25,49,48,49,49,56,57,55,65,97,97,90,91,92,98,91,94,88,94,93,92,16,19,22,20,17,17`
+"Cycles" are 0-based cycle indices, which is how the old post's "bars 17-20" was counted. One-based, contact is bars 18-25. Say "cycles 17 to 20" or "the first four bars of contact" and the ambiguity goes away; void was already one bar when the old numbers were taken, so nothing shifted.
 
-**Counts:**
-- **62 part instances** across 8 sections (2/4/9/11/7/10/13/6).
-- **28 distinct sound sources** heard: 26 named samples plus brown and white noise synths.
-- **25 `const` declarations**: 11 material constants, 11 raw-Strudel texture constants, plus `score`, `textures`, `out`.
+**Arc line, verbatim:** `arc: void 1.1 ▁ A · signal 4.1 ▁ B · approach 21.6 ▃ C · contact 57.6 ▇ D · will 14.4 ▂ E · plea 37 ▅ F · threshold 67.3 █ G · after 7.4 ▂ H`. Energy = onsets per cycle summed over parts, each scaled by `level` (level-weighted onsets per bar, not loudness). Threshold is the peak, as lint requires of a climax. Form letters are all different: every section has a different set of sounding parts, so the form is through-composed by the checker's own rule. Voices = simultaneous hits (length plus release) per the check header; "outside" = the hand-written textures. Threshold's 37 is under the lint's 40 ceiling since `4b97ac9`.
 
-**Declarative vs raw.** The split is clean and load-bearing:
-- **Declarative** (lines 9-100, ~80 lines): everything inside `song()`/`section()`. This is what the resolver, the mixer knobs and the vocabulary can edit.
-- **Raw Strudel** (lines 102-125, ~24 lines): eleven texture patterns and their `arrange()`. Hand-written chains. The resolver refuses to touch them, and the page's pin/mute drops them entirely.
-- **The seam** (lines 127-133): `stack(score, textures).size(.9)`, then `out.strudel = score.strudel` to put back the metadata `stack()` throws away.
+**Counts.** 62 part instances (2/4/9/11/7/10/13/6). 2434 events (was 2751 before the pass: the wide pads no longer `jux` a doubled copy). 28 distinct `s` values: 26 named samples plus `brown` and `white` noise synths.
 
-Signals used as axis values: six `saw.range(a, b).slow(n)` brightness ramps, in `approach`, `plea` and `after`.
+**Distinct instruments, with the file the check's sounds block names:**
+
+```
+pipeorgan_quiet          pitched, 21 samples A1..F#5
+psaltery_bow             pitched, 11 samples A#3..G#4
+super64_vib              pitched, 13 samples C2..G5
+handchimes               pitched, 19 samples A#3..G#5
+pipeorgan_loud_pedal     pitched, 11 samples A1..F#3
+piano                    pitched, 29 samples A0..C8
+recorder_alto_sus        pitched, 12 samples A#3..G#4
+tubularbells             pitched, 9 samples A#3..G#3
+harp                     pitched, 23 samples A2..G5
+pipeorgan_loud           pitched, 21 samples A1..F#5
+vibraphone_bowed         pitched, 6 samples A2..G3
+vibraphone               pitched, 11 samples A2..G3
+wineglass_slow           pitched, 4 samples D#4..D5
+belltree                 pitched, 6 samples A#5..G#5
+timpani:0                Timpani1_Hit_v2_rr1_Sum.wav (30 variants)
+snare_low:0              RopeSnare_low_ns_Main_vl1_rr2.wav (20 variants)
+triangles:0              Triangle1_HitFM_v1_rr1_Mid.wav (37 variants)
+sus_cymbal:0             susCymb1_bow_13.wav (25 variants)
+bassdrum2:0              bassdrum_cresc_med.wav (30 variants)
+bd:0                     10_bd_switchangel.wav (8 variants)       <- the fx impact, a Dirt kick
+timpani_roll:0           Timpani1_Roll_v3_rr1_Sum.wav (10 variants)
+gong:0                   gong_2_f.wav (7 variants)
+gong2:0                  hit_full1.mp3 (6 variants)
+framedrum:0              HDrumL_Hand_rr1_Sum.wav (18 variants)
+didgeridoo:8             Didgeridoo1_Sus2_Main.wav (12 variants)
+wind:0/1/2               000_wind1.wav, 001_wind10.wav, 002_wind2.wav (10 variants)
+brown, white             noise synths
+hall:0                   hall.wav (1 variant)                     <- the room impulse, not an instrument
+```
+
+(The sample ranges are listed alphabetically by the pack, not by pitch: "A#3..G#3" for the bells means nine samples all inside octave 3.)
+
+A small surprise in the textures: `shimmer = s("<belltree marktrees>").struct("<x ~ ~ ~>")`. Inside an `arrange` block the pattern's cycle count restarts at 0, the struct fires on cycles 0, 4, 8 and the sound alternation picks `belltree` on even cycles, so **`marktrees` never sounds** (it is absent from the sounds block; belltree plays 7 times). Harmless, but a nice one-line example of "the name in the file is not what plays".
 
 ---
 
-## 3. The two-wills idea, verified against the source
+## 2. Claim-by-claim audit of the existing post against `3517d4d`
 
-**It is real, implemented in four independent ways, and it has one hole.**
+### Theme and signal definitions (post lines 81-84)
 
-### `follow` on every melodic part
+The post quotes a trimmed pair. The current lines are (file lines 19 and 21):
 
-| Constant | Sound | `follow` | Line |
+```js
+const theme    = { sound: 'piano', follow: true, phrase: 2, notes: '0 ~ 2 4@2 ~ 5 4@2 0 ~ 2 4@2 ~ 7 6@2', register: .55, articulation: .05, brightness: .6, space: .32, weight: .58, width: .5, position: .1, velocity: '.85 1 .9 1 .8 1 .9 .95', humanize: { timingMs: 12, velocity: .1, correlation: 'phrase' } }; // closer; played (a seeded, phrase-correlated feel), not diced per hit
+const signal   = { sound: 'handchimes', follow: false, notes: '0 ~ ~ 6 ~ ~ 3 ~ ~ 0 ~ ~ 6 3 ~ ~', register: .85, articulation: .35, space: .9, width: .7, level: .6, organicness: 0, position: .35 };
+```
+
+The trimmed quote (`sound`, `follow`, `notes`) is still accurate as a trim. "One boolean is the entire difference" is still true of pitch: `buildMelody` adds `S.n(ctx.chords)` and `S.note(ctx.chordAcc)` only when `plan.follow`. But the theme now also carries `position .1`, a `velocity` line and `humanize`, which the signal does not; if the post wants "one boolean" to stand, say "one boolean is the entire difference in *pitch*; the mixing pass added three more differences in placement and feel".
+
+### The four-bar MIDI table for contact (post lines 62-77)
+
+Recomputed by querying events (cycles 17-20, chords Dm Bb F C):
+
+| Cycle (bar) | Chord | Piano, `follow: true` | Handchimes, `follow: false` |
 |---|---|---|---|
-| `theme` / `answer` | `piano` | **`true`** | `'0 ~ 2 4@2 ~ 5 4@2 0 ~ 2 4@2 ~ 7 6@2'` |
-| `harp` | `harp` | **`true`** | `'0 2 4 7 2 4 7 2 4 7 2 4 7 4 2 0'` |
-| `winds` | `recorder_alto_sus` | **`true`** | `'~ ~ ~ ~ 4@4 ~ ~ ~ ~ 2@4'` |
-| `signal` | `handchimes` | **`false`** | `'0 ~ ~ 6 ~ ~ 3 ~ ~ 0 ~ ~ 6 3 ~ ~'` |
-| `bells` | `tubularbells` | **`false`** | `'0 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 6 ~ ~ ~'` |
+| 17 (18) | Dm | 62, 62, 65, 69, 70, 69 | 74, 84, 79, 74, 84, 79 |
+| 18 (19) | Bb | 70, 74, 77, 82, 82, 81 | 74, 84, 79, 74, 84, 79 |
+| 19 (20) | F | 65, 69, 72, 74, 72 | 74, 84, 79, 74, 84, 79 |
+| 20 (21) | C | 72, 76, 79, 84, 82 | 74, 84, 79, 74, 84, 79 |
 
-No exceptions: every human voice follows, every alien voice does not. The mechanism is one branch in `buildMelody`:
+Cycles 21-24 repeat with one more doubling (cycle 22: 70, 70, 74, 77, 82, 81, 81). Tubular bells: 50 (D3) at beat 1, 60 (C4) at beat 4, every bar.
 
-```js
-let line = S.n(plan.line).slow(plan.phrase);
-if (plan.follow) line = line.add(S.n(ctx.chords));      // add the chord root degree
-let p = midi(line.scale(keyAt(ctx.key, plan.octave)));
-if (plan.follow) p = p.add(S.note(ctx.chordAcc));
-```
+The old post's rows (62, 65, 69, 70, 69 etc.) are the same events with the **doubled notes dropped**: `density: .55` is above the midpoint, so `sometimesBy(.1, ply(2))` splits a seeded 10% of notes into two, and the old table listed distinct pitches per bar. I ran the same script on the file at `7a4d1b0` and got byte-identical piano events, so nothing moved; the old table was a simplification, not an error. Either keep it (say "distinct pitches") or print the repeats. The chime line is exactly identical in all 8 bars of contact and, sorted, in every D-minor and D-phrygian section (74 D5, 79 G5, 84 C6). Bar numbers: contact starts at cycle 17; label the rows as cycles or as bars 18-21.
 
-### The real note strings, from the rendered events
+The onset times show the new mechanism: chimes in contact land at exactly 0, .188, .375, .563, .75, .813 of the bar; the piano at .003, .058, .225, .335, .668, .78 (0 to 12 ms late, `humanize.timingMs: 12`, late only by design so a render never drops a hit moved before its start).
 
-**`contact`, bars 17-24, chords Dm Bb F C Dm Bb F C.**
+### "Humanise does nothing below its midpoint" (post lines 102-105)
 
-Piano (human, `follow: true`), the same scale degrees, a new pitch level every bar:
+Still true, of `organicness`: `defineOrganic` returns the pattern untouched for any number at or below .5, and the chimes and bells still write `organicness: 0`, which the check still prints as "very mechanical". So "writing zero is identical to leaving it out" stands.
 
-```
-bar 17 (Dm):  62 D4 · 65 F4 · 69 A4 · 70 A#4 · 69 A4
-bar 18 (Bb):  70 A#4 · 74 D5 · 77 F5 · 82 A#5 · 81 A5
-bar 19 (F):   65 F4 · 69 A4 · 72 C5 · 74 D5 · 72 C5
-bar 20 (C):   72 C5 · 76 E5 · 79 G5 · 84 C6 · 82 A#5
-bars 21-24:   identical repeat
-```
+What changed: the **theme no longer uses organicness at all** (`organicness: .6` is gone). It has `humanize: { timingMs: 12, velocity: .1, correlation: 'phrase' }`, and the pulse has `humanize: { timingMs: 15, velocity: .12, correlation: 'bar' }`. `humanize` is mix material in `lib/song.mjs` (`withHumanize`), not an axis: three seeded curves (a slow wave over the correlation span, a fixed lean per beat position, a small residual) move timing (0..timingMs late), gain (plus or minus `velocity`) and clip length together, the same way every play. Organicness is `rand` per hit (dice); humanize is correlated and reproducible. So the post's sentence "The human line carries timing jitter, which the alien line does not" is now true by a real mechanism (12 ms correlated lateness on the piano, none on the chimes) rather than by a dice roll. Rewrite the caveat as: the axis word (`organicness: 0`) still cannot say "dead on the grid" any louder than omitting it; the piece now gets its human/alien timing difference from a different, honest control that the mixing pass introduced.
 
-Handchimes (alien, `follow: false`), **byte-identical in all eight bars, and in all 43 bars they play in a D-minor/phrygian section**:
+### The plea modulation (post lines 107-131)
 
-```
-every bar:    74 D5 @0.000 · 84 C6 @0.188 · 79 G5 @0.375 · 74 D5 @0.563 · 84 C6 @0.750 · 79 G5 @0.813
-```
+Recomputed. Handchime pitch sets per section: signal, approach, contact, will, threshold, after: **74 D5, 79 G5, 84 C6** (two stacked perfect fourths). plea (F major): **77 F5, 82 Bb5, 88 E6**: F to Bb is 5 semitones (a fourth), Bb to E is 6 (a tritone). In line order the degrees 0, 6, 3 give D5, C6, G5 in D minor and F5, E6, Bb5 in F major. Bells do not play in plea. `follow: false` skips the chord root only; `keyAt(ctx.key, octave)` still runs the degrees through the section key. Still true, still unfixed, still the most alien moment by accident. `alien-plea` renders `plea` layer `melody4` (the signal is `melody4` in plea; harp is `melody2`, winds `melody3`).
 
-Tubular bells: `50 D3 @0.000 · 60 C4 @0.750`, every bar, everywhere. Interval fixed at 10 semitones.
+### The balance table (post lines 161-182)
 
-So the alien intervals in D minor are **D5 to G5 to C6: two stacked perfect fourths**. *Honest caveat: a stack of fourths on D-G-C is consonant against most of `i VI III VII`. It reads as immovable, not as dissonant.*
+Same method as the old brief: sum of the per-event `gain` control per side per section, human = piano + harp + recorder + (threshold only) the doubling voice, alien = handchimes + tubular bells. Textures excluded. Numbers now include the mixing pass's level changes (harp .55 to .8 and .6 to .9 in threshold; winds .45 to .35; bells .5 to .7, 1 in threshold; chimes .8 to .7 in threshold; the doubling .45 glockenspiel to .2 vibraphone). The theme now also carries a `velocity` line, which superdough multiplies under gain; the second number counts it.
 
-**`threshold`, bars 41-52.** Same chord loop, but the piano plays `answer`: the second half of the phrase is inverted and comes home.
+| Section | Human (gain) | Human (gain x velocity) | Alien | H : A | Old post |
+|---|---:|---:|---:|---:|---|
+| void | 0 | 0 | 0 | | 0 / 0 |
+| signal | 0 | 0 | 8.35 | alien alone | 0 / 8.4 |
+| approach | 21.32 | 20.07 | 8.35 | 2.6 : 1 | 22.1 / 8.4 |
+| contact | 82.51 | 80.43 | 24.19 | 3.4 : 1 | 66.9 / 22.3 |
+| will | 7.41 | 6.30 | 22.08 | 0.34 : 1 (alien) | 7.3 / 20.2 |
+| plea | 78.53 | 76.93 | 5.14 | 15.3 : 1 (human) | 63.2 / 5.1 |
+| threshold | 150.54 | 146.50 | 53.81 | 2.8 : 1 | 129.2 / 53.0 |
+| after | 3.22 | 3.01 | 7.74 | 0.42 : 1 (alien) | 3.3 / 6.8 |
 
-```
-bar 41 (Dm):  62 · 65 · 69 · 70 · 69              degrees 0 2 4 5 4   (rise, same as theme)
-bar 42 (Bb):  82 · 81 · 79 · 77 · 74 · 70         degrees 7 6 5 4 2 0 (descend to the root)
-```
+The arc is unchanged in shape: alien alone, human arrives, human leads at contact, alien wins will, human wins plea by more than before, human leads at the peak, alien has the last word. The velocity column barely moves it.
 
-The `theme`'s second half ends on degree 6 and hangs; the `answer`'s descends and lands on 0. That is the one genuine motivic development in the piece, and it is exactly one string edit apart:
+**Per-instrument climax comparisons (post line 184-186: "17 percent" and "12 percent").** Both stale.
+- contact: piano 26.45 vs chimes 17.47 + bells 6.72 = 24.19: **piano +9%** (with velocity: 24.37 vs 24.19, **+0.7%**, a dead heat). Was +17%.
+- threshold: piano 50.10 + vibraphone 4.39 = 54.49 vs chimes 34.61 + bells 19.20 = 53.81: **+1.3%** (with velocity: 50.45 vs 53.81, **alien +6.7%**). Was +12%.
+The bells went from .7 to level 1 at the peak and the doubling voice dropped from .45 to .2, so "the human side wins on headcount, not on level" is now more true than when it was written: per instrument the two climaxes are within a few percent, and counting the velocity line the alien side edges the finale.
 
-```js
-const theme  = { ..., notes: '0 ~ 2 4@2 ~ 5 4@2 0 ~ 2 4@2 ~ 7 6@2', ... };
-const answer = { ...theme, notes: '0 ~ 2 4@2 ~ 5 4@2 7 6 5 4@2 ~ 2 0@2' };
-```
+Caveat to keep: summed gain is not loudness; the chimes sit an octave above the piano. New caveat: the measured mix (notes.json, 09-19) put the piano theme 8 dB under the mix, the choir 20, the organ 11 and the doubling 15 at threshold. Gain sums and dB readings are different instruments; say which one a sentence uses.
 
-### Three more implementations of the same idea
+### The register table (post lines 198-222)
 
-1. **Phrase length.** `theme` sets `phrase: 2`, so its 16-step line is slowed over two bars. The alien lines are one bar. The human breathes slower.
-2. **Timing.** `theme` has `organicness: .6` giving jitter. `signal` and `bells` have `organicness: 0`, dead on the grid. *Caveat, and a good one: the cell is one-sided, so `organicness: 0` is **identical in sound to omitting it**. The check still prints "very mechanical" from the vocabulary table. The word describes an intention the engine has no way to act on.*
-3. **The `will` section.** The human theme shrinks in D phrygian, and because `follow: true` its interval *changes with the chord*: on the `i` bars D4 to E flat 4 (a half step, the phrygian sigh), on the `II` bars E flat 4 to F4 (a whole step). The chimes are unmoved. The two wills are literally distinguished by whether the interval bends.
+Recomputed, all sections, numeric notes only (the 25 wineglass texture notes are note names and are skipped):
 
-### The hole: `plea`
-
-In `plea` the key is F major. The chimes' degrees map to **F5 (77), B flat 5 (82), E6 (88)**: a perfect fourth then a **tritone**. Verified in the events.
-
-`follow: false` means "do not track the chords *within* a section". It does not mean "do not transpose with the section key": `buildMelody` always runs the degrees through the section key. So in the one section that modulates, the immovable signal moves, and the interval that was supposed to be a signature changes. Nothing in the code prevents this; nothing in the notes mentions it.
-
-This is not a bug to apologise for. It is the exact place where a declarative system's semantics ("degrees in the section key") and the composer's intent ("these three absolute pitches, always") come apart, and the piece never noticed because nobody soloed the chimes in `plea`. It is also arguably the most alien-sounding moment in the piece, by accident.
-
-### "Neither wins", the numbers
-
-Summed event gain per section (gain is the only per-event level control; this is not perceived loudness):
-
-| Section | Human | Alien | H : A |
-|---|---:|---:|---:|
-| signal | 0.0 | 8.4 | **alien alone** |
-| approach | 22.1 | 8.4 | 2.6 : 1 |
-| **contact** | 66.9 | 22.3 | **3.0 : 1** |
-| will | 7.3 | 20.2 | **0.36 : 1 (alien wins)** |
-| plea | 63.2 | 5.1 | **12.3 : 1 (human wins)** |
-| **threshold** | 129.2 | 53.0 | **2.4 : 1** |
-| after | 3.3 | 6.8 | 0.48 : 1 (alien has the last word) |
-
-Per-part it is closer than the totals suggest: in `contact`, piano 26.15 vs chimes 17.47 plus bells 4.80 = 22.27 (human +17%). In `threshold`, piano 49.62 plus glockenspiel 9.98 = 59.60 vs chimes 39.55 plus bells 13.44 = 52.99 (human +12%). That is genuinely "neither wins". The human side wins on headcount, not on level.
-
-The dramatic arc is measurable: alien alone, human arrives, near-parity at contact, **alien wins `will`**, **human wins `plea`**, near-parity at threshold, **alien has the last word in `after`**. That is a better structure than "neither wins", and it is in the data.
-
----
-
-## 4. Fear low, hope high
-
-**Borne out, with a clean gap at middle C and one deliberate straddler.** Median MIDI over all 2220 pitched events:
-
-| Sound | Events | Min | Median | Max | Median Hz |
+| Instrument | Events | Min | Median | Max | Median Hz |
 |---|---:|---|---|---|---:|
-| didgeridoo | 8 | D0 (14) | **D#0 (15)** | D#0 (15) | 19.4 |
-| pipeorgan_loud_pedal | 112 | D0 (14) | **C1 (24)** | A2 (45) | 32.7 |
-| pipeorgan_quiet | 101 | D2 (38) | **A#2 (46)** | A3 (57) | 116.5 |
-| pipeorgan_loud | 48 | D2 (38) | **C3 (48)** | A#3 (58) | 130.8 |
-| tubularbells | 72 | D3 (50) | **C4 (60)** | C4 (60) | 261.6 |
-| *middle C, 60* | | | | | |
-| psaltery_bow | 346 | D2 (38) | **F4 (65)** | A#5 (82) | 349.2 |
-| super64_vib | 264 | D4 (62) | **C5 (72)** | A#5 (82) | 523.3 |
-| piano | 217 | D4 (62) | **C5 (72)** | C6 (84) | 523.3 |
-| recorder_alto_sus | 92 | F4 (65) | **F5 (77)** | D6 (86) | 698.5 |
-| handchimes | 278 | D5 (74) | **G5 (79)** | E6 (88) | 784.0 |
-| vibraphone_bowed | 192 | D5 (74) | **C6 (84)** | G6 (91) | 1046.5 |
-| glockenspiel | 42 | D5 (74) | **C6 (84)** | C7 (96) | 1046.5 |
-| harp | 448 | D5 (74) | **D6 (86)** | D7 (98) | 1174.7 |
+| didgeridoo (will bass) | 8 | D0 (14) | 14.5 (D0/D#0) | D#0 (15) | 18.9 |
+| pedal organ (`pipeorgan_loud_pedal`) | 112 | D0 (14) | C1 (24) | A2 (45) | 32.7 |
+| quiet organ | 101 | D2 (38) | A#2 (46) | A3 (57) | 116.5 |
+| loud organ | 48 | D2 (38) | C3 (48) | A#3 (58) | 130.8 |
+| tubular bells | 72 | D3 (50) | 55 (36 each of 50 and 60) | C4 (60) | 196 |
+| bowed strings (`psaltery_bow`) | 173 | D2 (38) | F4 (65) | A#5 (82) | 349.2 |
+| choir (`super64_vib`) | 216 | D4 (62) | C5 (72) | A#5 (82) | 523.3 |
+| piano | 217 | D4 (62) | C5 (72) | C6 (84) | 523.3 |
+| recorder | 92 | F4 (65) | F5 (77) | D6 (86) | 698.5 |
+| handchimes | 278 | D5 (74) | G5 (79) | E6 (88) | 784.0 |
+| bowed vibraphone | 96 | D5 (74) | B5 (83) | G6 (91) | 987.8 |
+| **vibraphone** (was glockenspiel) | 42 | D5 (74) | C6 (84) | C7 (96) | 1046.5 |
+| harp | 448 | D5 (74) | D6 (86) | D7 (98) | 1174.7 |
 
-There is a **two-semitone gap** between the top of the low group (C4 = 60) and the bottom of every high-group voice (D4 = 62). Nothing lives in between. Not a coincidence: `register` quantises to octaves, so the axis itself enforces the separation.
+Every median and range in the post's table is unchanged except the row label: **glockenspiel is now vibraphone** (same notes, different sample; the glockenspiel sample measured 41 dB under the mix and could not be placed). Event counts halved for strings (346 to 173), choir (264 to 216) and bowed vibraphone (192 to 96) because width .8 and above was `jux(rev)`, a doubled copy of every hap, and the pass brought those widths to .75 (a pan sweep). The two-semitone gap between C4 (60) and D4 (62) still holds; nothing sounds in it. `register` still quantises to octaves (`melodyOctave`, pad `octave` 3/4/5, bass 1/2/3).
 
-**The straddler is the string pad**, and it is the piece's best structural detail. `psaltery_bow` spans D2 to A#5 and moves section by section:
+Strings per section, unchanged: void D2 only; signal 50-65; approach 62-79; contact 62-82; will 50-58; plea 65-81; threshold 50-70 (`weight: .8` drops the voicing an octave); after 62-77. The straddler paragraph stands as written.
 
-| Section | Strings register | MIDI range |
-|---|---|---|
-| void | `.2` | 38 (D2 only) |
-| signal | `.3` | 50-65 |
-| approach | `.4` | 62-79 |
-| contact | default | 62-82 |
-| **will** | `.2` | **50-58 (back down)** |
-| plea | `.5` | 65-81 |
-| **threshold** | default, `weight: .8` | **50-70 (octave down)** |
-| after | default | 62-77 |
+**Tubular bells alternating D3 and middle C**: true, 50 at beat 1 and 60 at beat 4 in every bar they play (contact, will, threshold, after; register .3 or .2 both give octave 3). The 9-sample map is all inside octave 3, so C4 is a resample. **Pedal organ at ~18 Hz stretched 19 semitones**: true, lowest note 14 = D0 = 18.35 Hz, map bottoms at A1 (55 Hz, MIDI 33), 19 semitones.
 
-The strings start in the fear half, climb into the hope half as the piece opens up, drop back for the `will` standoff, and drop again at the finale, because `pad.weight > 0.7` triggers a low voicing. One voice crossing the line eight times is the whole "both at once" idea in a single part.
+### The piano delay-send bug (post lines 312-342)
 
-**Two corrections to the header comment's own grouping:**
-- It calls the tubular bells part of the *alien signal*, and part of the *hope-high* group. By register they are the **lowest** "high" voice, at or below middle C.
-- The pedal organ plays **D0 = 18.35 Hz**. Its sample map bottoms out at A1 (55 Hz), so every note is pitch-shifted down as much as 19 semitones. It is inaudible as a fundamental on any laptop speaker and reads as "huge" only through the stretched harmonics and the unnaturally slow attack. Fear in the low half is partly fear below the speaker.
+**Still live, and now doubly misdescribed by the header.** The header (lines 17-18) still says "The piano keeps one setting for the whole song: space .5 (room only; anything above sends it to a delay line...)". The theme's space is now **.32** (room send .128, no delay: the cell is `noopBelow` at .5 and `piece(0, .2, .9)(.32) = .128`). But two per-section overrides restored by the 09-12 `fixes` commit are still there and above .5:
+
+- `will.melody` `space: .8` -> `delay .24`, **12 piano events**
+- `after.melody` `space: .9` -> `delay .32`, **6 piano events**
+- `threshold.melody6` (the vibraphone doubling, `space: .8`) -> `delay .24`, **42 vibraphone events**
+
+Same counts as the old post (18 piano, 42 doubling), with the doubling voice renamed. Delay time is superdough's default `delaysync: 3/16` cycle = 0.703 s at this tempo, three quarters of a beat, feedback default. The mixing agent's own note (09-19, "closer on the theme") says: "the piano's delay-line note in the header still holds, .32 is below the .5 line". It checked the constant and not the overrides. Two measured mixing passes did not touch it because they measured `threshold`, where the piano is at .32.
+
+Events carrying `delay` in total: 950 (harp 448, handchimes 278, recorder 92, bells 72, vibraphone 42, piano 18). The others are by design (their space is above .5 on purpose).
+
+Note also that since the pass every part in a section shares **one orbit** (`room.size` is set, so `orbitKey` returns `'room'` for every part), and superdough's delay lives on the orbit: the piano's 18 delayed events feed the same delay line as the harp and chimes. Not a new bug, just what "one bus" means.
+
+### Textures: 60 bars against 59 (post lines 344-350)
+
+Still true. `arrange([2],[8],[8],[8],[8],[8],[12],[6])` = 60 bars against the score's 59 (void is 1 bar; the first texture block is still 2). Verified in events: the gong that belongs to contact (cycle 17) first fires at cycle **18**; the deep bass drum at 18; the heartbeat frame drum runs cycles **26 to 33** (will is 25-32, so it bleeds one bar into plea); the timpani roll (approach block) fires at 13, 37, 41; the closing gong at 54 (after starts 53). `stack(score, textures.size(.9))` stacks a 59-cycle loop with a 60-cycle loop, so on every repeat the textures slip one more bar. The mixing pass moved `.size(.9)` from the stack onto the textures and rewrote the reverb comment, but did not change the block lengths.
+
+### Two bars of `will` with no human theme (post lines 370-373)
+
+Still true. Piano onsets per cycle in will: **0, 1, 3, 2, 1, 0, 3, 2** (cycles 25 and 30 empty). `density: .3` -> `degradeBy(.32)`. The notes played are D4 (62), Eb4 (63), F4 (65): the phrygian half-step sigh on `i`, whole step on `II`. The didgeridoo bass plays D0 and Eb0 (14, 15).
+
+### "No counterpoint / parallel motion" (post lines 359-362)
+
+Still true for this song. `buildPad` stacks `chordTones(n)` on the chord root; all voices move in parallel. The **language** now has inversions (`/1`, `/2` after a numeral) and `follow: 'tones'` for melodies, so "inversions are explicitly not modelled" is outdated as a statement about the language: say "arrival uses none of them". Its six progressions (`i`, `i VI`, `i VI VII`, `i VI III VII`, `i II i II`, `I V vi IV`) contain no `/1`, `/2`, `@n` or seventh. Voice leading is still not modelled (README: "Not modeled: voice leading, chord symbols").
+
+### One tempo (post line 375)
+
+True. `bpm: 64` on the song, no section `bpm`/`cps`. 221.25 s.
+
+### The triangle loudest at the finale (post lines 378-388)
+
+By summed per-event gain in threshold, recomputed with `level: 2` and `weight: .9`:
+
+| Voice | Sum gain | Events | Mean gain |
+|---|---:|---:|---:|
+| triangles (hh slot) | **222.68** | 96 | 2.32 |
+| harp | 88.13 | 192 | 0.46 |
+| timpani (bd) | 56.60 | 24 | 2.36 |
+| piano | 50.10 | 79 | 0.63 |
+| pedal organ | 42.24 | 48 | 0.88 |
+| handchimes | 34.61 | 95 | 0.36 |
+| bowed strings | 27.35 | 48 | 0.57 |
+| snare_low (sd) | 27.18 | 12 | 2.27 |
+| tubular bells | 19.20 | 32 | 0.60 |
+| loud organ | 15.60 | 48 | 0.32 |
+| bowed vibraphone | 15.39 | 96 | 0.16 |
+| recorder | 7.92 | 38 | 0.21 |
+| vibraphone | 4.39 | 42 | 0.10 |
+| choir | 4.09 | 48 | 0.09 |
+
+The triangle's lead doubled (was 111.36 vs harp 58.75) because the whole pulse now has `level: 2`. **But the claim needs reframing**, because the mixing pass measured the opposite: at level 1 the timpani pulse was 30 dB under the mix ("inaudible"), and level 2, the top of level's range, brought it to 21 dB under ("felt"). The triangle and timpani samples are quiet files; a gain of 2.3 on a quiet file is still quiet. So: by the score's own per-event gain the triangle is the loudest voice in the finale by a factor of 2.5; by the render the entire pulse sits 21 dB under the mix; the number the language exposes and the number the ear reports disagree, and the pass sided with the ear by turning the knob all the way up. That is a better sentence than the old one.
+
+### The `answer` string and the hand-written variants
+
+`const answer = { ...theme, notes: '0 ~ 2 4@2 ~ 5 4@2 7 6 5 4@2 ~ 2 0@2' };` unchanged. In threshold cycle 42 (over Bb) it plays 82, 81, 79, 77, 74, 74, 70: descends and lands on the chord root Bb4 (70). Four hand-written strings in total: `theme`, `answer`, the will sigh (`'0 ~ ~ ~ 1 ~ 0@2 ~ ~ ~ ~ 1 ~ 0@2'`), the after fragment (`'0 ~ 2 4@2 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~'`); `melody6` reuses `theme.notes`. "Three further hand-written versions" stands.
+
+### Other lines in the post to check
+
+- "62 parts, 28 distinct instruments, three minutes forty-one": all still true.
+- "`void` is one bar: an organ chord and a drone": pad (quiet organ, D2) + pad2 (bowed strings, D2 at level .5) + textures (wind .1, drone .25, brown .1). Fine.
+- "`threshold` ... thirteen parts": true.
+- "Try muting the handchimes" (StrudelEmbed): still `melody2` in threshold.
+- The `Callout` "commit `7a4d1b0`, read on 2026-09-13" must become `3517d4d`, read 2026-09-19.
+- The description ("four rounds of being confidently wrong") goes with the dropped section.
+- "the piano was at 0.75" (line 317) describes the 09-12 original; the constant is now .32 and the bug is the two overrides.
 
 ---
 
-## 5. The full commit history
+## 3. The mixing pass as it landed in this song
 
-Eleven commits, all on 2026-09-12, from **19:01:06 to 23:14:56, 4 hours 14 minutes**. Eight requests are recorded in the notes; the last two commits are not.
+**Header paragraph, verbatim (lines 7-15):**
 
-| # | Hash | Time | Message | What changed |
-|---|---|---|---|---|
-| 1 | `f88eca0` | 19:01 | `arrival: orchestral score in D minor, an alien arrival as a battle of wills` | The whole file: 132 lines, 8 sections, the two-wills design, the textures block. From one prompt. |
-| 2 | `bd1930f` | 19:10 | `arrival: timpani, low snare, triangle, cymbal and bass drum as the drum voices in place of the 808 kit` | One line of drum voice overrides. Deleted three now-redundant textures. |
-| 3 | `c3a8550` | 19:37 | `arrival: listening notes; melody vibrato only on synths` | Seven `space` values cut in `will`; `after` 8 to 6 bars; wind and wineglass down. Also a **library** change: vibrato gated to synths only. |
-| 4 | `128626f` | 20:33 | `arrival: one piano setting with no delay send, intro two bars, wind out of the opening` | **Piano pop, fix 1.** `theme.space .75 to .5`, per-section piano overrides stripped from six sections. The two-line comment is added here. |
-| 5 | `45e8f03` | 20:47 | `arrival: one reverb size for every event, wind back in the opening, held piano notes in will` | **Piano pop, fix 2.** `stack(score, textures).size(.9)`. `will.melody` held notes, density .3 to .5. |
-| 6 | `f3f8bb3` | 20:58 | `arrival: tremolo strings in place of the bowed psaltery; void and signal strings as a triad` | **The wrong answer.** Backed by the most detailed reasoning in the whole notes file. |
-| 7 | `33eb354` | 21:05 | `arrival: sustained didgeridoo and a brown rumble in place of a bark and blips` | **The right answer.** `// :8 is a sustained note; :0 is a bark`. |
-| 8 | **`e5c5e80`** | 21:07 | **`song revert`** | **The revert.** Exactly undoes #6. Two minutes after #7 confirmed the real cause. |
-| 9 | `4c0c306` | 21:09 | `check: name the file behind every sound:index; arrival: strings and pads restored, will bass on the sustained didgeridoo` | The real payload is in the checker: the `sounds` block. |
-| 10 | **`4accadc`** | 21:32 | **`fixes`** | **The undocumented revert.** No notes entry. `steinway` to `piano`; `void` 2 to 1 bar; and **the piano consolidation from #4 and the held `will` notes from #5 are put back**. |
-| 11 | `bc61b6e` | 23:14 | `update examples and add to skills` | One character of the song: the header comment `60 cycles` to `59 cycles`. Nobody caught the rest. |
+> Mixed as a scene: before the mixing pass `threshold` had the impact as the mix (4.8 dB under it), the choir as loud as the piano theme (9 dB down, and sharing the mids with the organ and the bowed vibraphone), the timpani pulse 30 dB down and the glockenspiel doubling 41 dB down (both inaudible), and every part dead centre in its own room. Now: one hall on the song with each part's space as its send (the textures keep their own sizes, so the outer .size() moved onto them); the impact and riser set back; the pulse up to where it is felt; the piano theme kept in front, a little right, with a phrase-shaped velocity line; the alien signal and the bells together on the right, the harp and the recorders on the left; the doubling a vibraphone (the glockenspiel sample is too quiet to place) far left; the choir behind and to the right, darker, so the organ keeps the low mids; the strings wide and a little left; the bowed vibraphone left. `npm run measure -- songs/arrival.strudel threshold` shows the table.
 
-**The revert to quote: `e5c5e80`.** Two minutes after the real bug was found, reversing the single most confidently argued change in the file. Its `why` is exemplary:
+And lines 31-32: "second pass: a generated hall (samples/user/rooms, 3.2 s, 30 ms pre-delay) instead of the synthetic tail; the piano and the pulse humanized (seeded, correlated) instead of organicness (dice per hit); the bells compressed; depth by the closer/farther words on the theme, choir and arp."
 
-> "strings back to psaltery_bow, void and signal pad2 back to their single low note: those were not the whistle"
+**Every mix material now in the file** (mix keys live in `lib/song.mjs` `MIX_KEYS`: level, position, duck, duckDepth, duckAttack, velocity, humanize, compressor; `room` is a song/section key):
 
-**The second revert, `4accadc`, is the post's ending.** The notes file stops at request 8. The last two commits have no provenance entry, and one contradicts a comment still in the file. The session diary works right up until the moment a human opens the file and just fixes it.
+| Where | Material | Value | Before the pass |
+|---|---|---|---|
+| song | `packs` | `['rooms']` | none |
+| song | `room` | `{ ir: 'hall', size: 3.2, damping: 4500 }` | none (`stack(score, textures).size(.9)`) |
+| theme (piano) | `space` | .32 | .5 |
+| theme | `weight` | .58 | unset. **No-op:** the melody layer has no `weight` cell (only density, variation, register, brightness, space, articulation, aggression, groove, organicness, width); the `closer` word writes `{ brightness +.12, space -.18, weight +.08 }` and the weight part landed on nothing. Piano gains confirm no multiplier. |
+| theme | `position` | .1 | 0 |
+| theme | `velocity` | `'.85 1 .9 1 .8 1 .9 .95'` (one bar of 8 steps, so it repeats per bar under the two-bar phrase) | none |
+| theme | `humanize` | `{ timingMs: 12, velocity: .1, correlation: 'phrase' }` | `organicness: .6` |
+| signal (chimes) | `space` .9, `width` .7, `position` .35 | | .95, .8, none |
+| bells | `space` .95, `width` .8, `level` .7, `position` .35, `compressor { threshold: -18, ratio: 3 }` | | 1, .9, .5, none, none |
+| harp | `space` .75, `width` .6, `level` .8, `position` -.3 | | .8, .7, .55, none |
+| winds | `space` .7, `level` .35, `position` -.2 | | .85, .45, none |
+| strings | `width` .75, `position` -.15 | | .85, none |
+| organ | `space` .85, `level` .6 | | .9, .7 |
+| choir | `width` .8, `brightness` .23, `space` 1 (the literal has `space: .9` and then `space: 1`; the second wins), `weight` .42, `level` .2, `position` .3 | | .9, .4, .9, unset, .4, none |
+| pedal | `space` .4, `level` .8 | | .6, unset |
+| pulse (drums) | `space` .8, `humanize { timingMs: 15, velocity: .12, correlation: 'bar' }`, `level` 2 | | .9, `organicness: .3`, unset |
+| signal.pad3 | level .15 | | .25 |
+| approach.fx, plea.fx | level .5 | | unset |
+| contact | melody width .6; melody5 level .4; pad width .75; pad3 brightness .4 level .2; fx level .3 | | .7; .5; .9; .5/.5; unset |
+| will | bass space .35; melody space .8; melody3 level .8 | | .4; .9; .6 |
+| plea | drums space .9; melody3 level .4; pad width .75; pad2 brightness .4 level .2; pad3 level .45 | | .95; .5; .9; .5/.5; .5 |
+| threshold | melody width .6; melody2 level .7; melody3 level 1; melody4 level .9; melody5 level .4; **melody6 = `{ sound: 'vibraphone', follow: true, phrase: 2, notes: theme.notes, articulation: .05, register: .8, density: .3, level: .2, space: .8, width: .6, position: -.45 }`**; pad level 1; pad2 brightness .3 level .5; pad3 brightness .4 level .2; pad4 brightness .68 space .98 weight .52 position -.35; fx level .3 | | .8; .8; .7; .6; .55; glockenspiel spread from theme with register .9 density .3 level .45 space .95 width .9; 1.1; .35/.6; .6/.55; .8/unset/unset/none; unset |
+| after | melody space .9; melody3 level .6; pad width .75; pad3 level .2 | | .95; .4; .8; .3 |
+| textures | `stack(score, textures.size(.9))` | | `stack(score, textures).size(.9)` |
+
+No `duck` anywhere. On the haps: `pan` on 2169 events, `velocity` on 217 (piano only), `compressor` on 72 (bells), `roomsize`/`roomlp`/`ir` on all 2261 part events (3.2 s hall, damping 4500; the 173 texture events keep `roomsize .9` and no ir), one orbit per section for every part (the textures on the default orbit), `shape` on 276 (drums weight above .5, bass aggression), `distort` on 56 (bass aggression .55 in will and threshold).
+
+The hall: `samples/user/rooms/hall.wav`, CC0, "generated by scripts/ir.mjs (npm run ir): shoebox impulse responses ... hall.wav 30 ms pre-delay, 3.2 s decay, 128 early reflections" (pack.json). `room.size` truncates an IR, never stretches it; `damping` is superdough's `roomlp`.
+
+**Recorded whys, notes.json, briefly.** Request 9 (09-19, "add a -mixed version ... without altering the originals"): room size 2.6 fade .5 damping 4500, "one hall for the score, each part's space as its send"; threshold fx level 1 to .3, "the impact was the mix (4.8 dB under it); now 12"; drums level 1 to 2, "the timpani pulse was 30 dB under the mix (inaudible); the sample is quiet, at the top of level's range it is felt at 21"; melody6 glockenspiel to vibraphone, "the doubling was 41 dB under the mix (inaudible); a vibraphone at register .8 is loud (3 dB under the mix at level 1), so level .2 puts it at 15, far left"; pad3 level .55 to .2, "the choir was as loud as the piano theme (9 dB under the mix) and sharing the mids with the organ; darker, behind and to the right at 20; the organ keeps the low mids at 11"; pad4 "the bowed vibraphone arp set left; it still shares the mids with the organ and choir by the masking table (level-independent), left as the register already separates them"; melody position 0 to .1, "the piano theme kept in front (8 dB under the mix) with a phrase-shaped velocity line; the alien signal and bells right, the harp and recorders left". Request 10 (09-19, "use the new mixing tools on the -mixed songs: impulse-response rooms, humanize, compressor, depth words"): room synthetic to `hall`; melody humanize "organicness .6 (dice per hit) replaced by a seeded, phrase-correlated feel (12 ms, velocity .1)"; drums humanize "the pulse's organicness .3 replaced by a bar-correlated feel (15 ms)"; bells compressor "threshold -18 ratio 3: the bells strike twice a bar, spiky"; melody space .5 to .32, "closer on the theme: weight up (.58); the piano's delay-line note in the header still holds, .32 is below the .5 line"; pad3 space .9 to 1, "farther on the choir: darker (.23), lighter (.42)"; pad4 space .8 to .98, "farther on the bowed arp: darker (.68), lighter (.52)". Both requests were written against `arrival-mixed`; `3517d4d` promoted that file over `arrival` and the notes are keyed to `arrival.notes.json`.
+
+Do not run `measure` here (the mixing post's agent does); the dB readings above are the recorded ones.
 
 ---
 
-## 6. The piano pop
+## 4. The story for a product-review reader
 
-There were **two** pops with **two** mechanisms. Both comments are still in the source. One fix is intact; the other is partly undone.
+**What a piece made in this language looks like, honestly.** One 16-step degree string transposed by chord root (the human theme), one 3-note ostinato that refuses to transpose (the signal), six roman-numeral progressions, twelve constants of instrument settings spread into 62 parts over eight sections, eleven hand-written Strudel textures stacked around it, and now a mixing layer of positions, one hall, a velocity line, two humanize curves and one compressor. It has a real dramatic arc that the checker can print as one line, a two-wills idea that is verifiable to the note, a fear/hope split that the register control enforces by octave, and it cannot write a second phrase, change tempo, or voice a chord in anything but parallel.
 
-### Pop 1: the melody layer's delay send
+**Strongest beats, in order:**
 
-The human's report (request 4, verbatim): *"piano pops behind presses in approach, contact and threshold"*
+1. **The two wills are one boolean, and you can read the proof off the event stream.** The table in section 2. Then the plea break: `follow: false` is narrower than the composer's intent, and the language has no way to say "these three absolute pitches, always". The most alien moment is an accident of semantics.
+2. **The balance is measurable and has a shape**: alien alone, human arrives, human leads, alien wins will, human wins plea, near-parity at the peak (per instrument the finale is within 1.3%, or the alien edges it once the velocity line counts), alien last word. "Neither wins" was the brief; the file does something better.
+3. **Fear low, hope high is in the numbers with a two-semitone gap at middle C** and one straddling voice, the strings. Unchanged by the pass.
+4. **The mixing pass is the "what a second draft looks like" beat.** Before: impact louder than the mix, choir as loud as the theme, pulse and doubling inaudible, everything centred in its own room. After: one measured hall, a stage (piano front-right, alien right, harp/recorders left, doubling far left, choir behind-right), the pulse turned up to the top of the knob because the sample is quiet, the glockenspiel swapped for a vibraphone because it could not be placed, dice-per-hit organicness replaced by a correlated humanize on the two "played" parts, a compressor on the one spiky part. The gain-sum "triangle is loudest" number and the dB measurement disagree; the pass believed the measurement.
+5. **What survived two measured passes untouched: both live bugs.** The delay send on the piano in will and after (and on the new vibraphone) and the one-bar texture offset. The mixing agent even wrote "the delay-line note in the header still holds, .32 is below the .5 line" while the overrides above .5 sat forty lines down. Measurement was of `threshold`, where neither bug lives; pin, mute and section renders drop the textures. The tools looked exactly where they were pointed.
 
-The source comment added by the fix, lines 7-8, still present:
+**Surprising findings this time:**
+- `weight: .58` on the piano is a no-op: the melody layer has no weight cell, and the `closer` depth word wrote it anyway. The language accepted it (any axis name is a valid key on any layer; "an empty cell honestly says no implementation") and the check prints nothing for it.
+- `marktrees` never sounds (see section 1).
+- Every part of a section is on one orbit now, so the piano's residual delay sends share a delay line with the harp and chimes.
+- The `choir` literal sets `space` twice (.9, then 1).
+- Event count fell from 2751 to 2434 with no notes removed: the wide pads were being doubled by `jux`.
+- The header's piano sentence is now wrong twice: the constant is .32 not .5, and two sections override it above .5.
+
+**Caveats:** summed gain is not loudness (say "by the score's own per-event gain"); dB readings are from the mixing agent's measure run on `threshold` and are quoted, not re-measured; `npm run check` runs in Node with no sound map, so drum-voice names resolve as written; the doubling in the two-wills table is seeded and stable but is a density artefact, not a written note; the humanize offsets are up to 12 ms and only ever late.
+
+**Phrasing to avoid** (routine repo change falsifies it; pin to `3517d4d` instead): "two bugs in it right now"; "the file still carries a comment describing a state it is no longer in" (true today, one edit away from false); "the last two commits have no entry" (they do now, ten requests); "13 parts"/"37 voices" if anyone touches threshold; "the loudest voice is the triangle" without the gain-vs-dB qualifier; any dB number as if it were current; "glockenspiel" anywhere (it is a vibraphone now); "inversions are not modelled" (the language has them; arrival does not use them); "commit called `fixes`" (that narrative is dropped, and the `4accadc` diff is now buried under the mixing diff).
+
+---
+
+## 5. Proposed visuals (three), with current data
+
+### V1: The two wills (contact, cycles 17-20, chords Dm | Bb | F | C)
+
+Two pitch contours over a chord track, y = MIDI, plus a flat bell line. Human (piano): cycle 17: 62, 62, 65, 69, 70, 69 / 18: 70, 74, 77, 82, 82, 81 / 19: 65, 69, 72, 74, 72 / 20: 72, 76, 79, 84, 82 (or the distinct-pitch version: 62 65 69 70 69 / 70 74 77 82 81 / 65 69 72 74 72 / 72 76 79 84 82; say which). Onset fractions within the bar, piano: .003, .058, .225, .335, .668, .78 (cycle 17); chimes: 0, .188, .375, .563, .75, .813 every bar. Alien (handchimes), identical every bar: 74, 84, 79, 74, 84, 79. Bells: 50 at 0, 60 at .75. Companion panel for the plea break: chimes 77, 88, 82 (sorted 77, 82, 88) with interval brackets 5+5 in D minor vs 5+6 in F major.
+
+### V2: Who is winning (balance)
+
+Diverging bars per section, human above, alien below. Data: void 0/0; signal 0/8.35; approach 21.32/8.35; contact 82.51/24.19; will 7.41/22.08; plea 78.53/5.14; threshold 150.54/53.81; after 3.22/7.74. Unit: summed per-event gain, dimensionless, not dB. Optional per-instrument inset for the two climaxes: contact piano 26.45 vs chimes 17.47 + bells 6.72; threshold piano 50.10 + vibraphone 4.39 vs chimes 34.61 + bells 19.20. Optional energy line: 1.1, 4.1, 21.6, 57.6, 14.4, 37, 67.3, 7.4.
+
+### V3: Fear low, hope high (register)
+
+Horizontal range plot, one row per instrument sorted by median, a rule at middle C (60), the empty band 60-62 shaded. Rows (min, median, max): didgeridoo 14, 14.5, 15; pedal organ 14, 24, 45; quiet organ 38, 46, 57; loud organ 38, 48, 58; tubular bells 50, 55, 60; bowed strings 38, 65, 82; choir 62, 72, 82; piano 62, 72, 84; recorder 65, 77, 86; handchimes 74, 79, 88; bowed vibraphone 74, 83, 91; vibraphone 74, 84, 96; harp 74, 86, 98. Strings per section for the straddler annotation: 38 / 50-65 / 62-79 / 62-82 / 50-58 / 65-81 / 50-70 / 62-77.
+
+(Skip a waveform/spectrogram: nothing rendered lives in the repo, and the two live bugs are timing and routing, not spectra.)
+
+---
+
+## 6. Audio clips
+
+The song changed (positions, hall, levels, humanize), so every arrival clip must be re-rendered with `--force`. `scripts/snippets.mjs` takes `{ out, song, section?, layer?, cycles?, kbps?, mono? }`, defaults **64 kbps mono**, skips existing files unless `--force`, and needs the page open (`npm run headless`, owned by the other agent). At 64 BPM one bar is 3.75 s: 2 bars = 7.5 s, 4 bars = 15 s.
+
+**Stereo recommendation.** The pass's whole point is placement (piano front-right, alien right, harp left, doubling far left), so mono clips would erase what the post is describing. Set `"mono": false` on every arrival clip. At 96 kbps stereo a 2-bar clip is about 90 KB and a 4-bar clip about 180 KB. The old `arrival-full.mp3` was 1,770,266 bytes for 221.25 s, i.e. exactly the 64 kbps mono default. Stereo 96 kbps for the full song is about 2.65 MB (80 kbps: about 2.2 MB). Recommend 96 stereo; if 2.65 MB is too much, 80 stereo; do not go back to mono.
+
+**Manifest for `src/content/posts/arrival/audio/clips.json`** (`out` prefixed `arrival/`; `alien-plea` stays on `melody4`, which is the signal in plea; the pop clips stay because the bug is still live, and a third one shows the vibraphone doubling on the same delay):
+
+```json
+[
+  { "out": "arrival/walk-1-void", "song": "arrival.strudel", "section": "void", "cycles": 1, "kbps": 96, "mono": false },
+  { "out": "arrival/walk-2-signal", "song": "arrival.strudel", "section": "signal", "cycles": 2, "kbps": 96, "mono": false },
+  { "out": "arrival/walk-3-approach", "song": "arrival.strudel", "section": "approach", "cycles": 2, "kbps": 96, "mono": false },
+  { "out": "arrival/walk-4-contact", "song": "arrival.strudel", "section": "contact", "cycles": 2, "kbps": 96, "mono": false },
+  { "out": "arrival/walk-5-will", "song": "arrival.strudel", "section": "will", "cycles": 2, "kbps": 96, "mono": false },
+  { "out": "arrival/walk-6-plea", "song": "arrival.strudel", "section": "plea", "cycles": 2, "kbps": 96, "mono": false },
+  { "out": "arrival/walk-7-threshold", "song": "arrival.strudel", "section": "threshold", "cycles": 2, "kbps": 96, "mono": false },
+  { "out": "arrival/walk-8-after", "song": "arrival.strudel", "section": "after", "cycles": 2, "kbps": 96, "mono": false },
+  { "out": "arrival/human-contact", "song": "arrival.strudel", "section": "contact", "layer": "melody", "cycles": 4, "kbps": 96, "mono": false },
+  { "out": "arrival/alien-contact", "song": "arrival.strudel", "section": "contact", "layer": "melody2", "cycles": 4, "kbps": 96, "mono": false },
+  { "out": "arrival/alien-plea", "song": "arrival.strudel", "section": "plea", "layer": "melody4", "cycles": 4, "kbps": 96, "mono": false },
+  { "out": "arrival/pop-will-piano", "song": "arrival.strudel", "section": "will", "layer": "melody", "cycles": 4, "kbps": 96, "mono": false },
+  { "out": "arrival/pop-vibraphone", "song": "arrival.strudel", "section": "threshold", "layer": "melody6", "cycles": 4, "kbps": 96, "mono": false },
+  { "out": "arrival/dry-piano", "song": "arrival.strudel", "section": "contact", "layer": "melody", "cycles": 4, "kbps": 96, "mono": false },
+  { "out": "arrival/triangle-climax", "song": "arrival.strudel", "section": "threshold", "layer": "drums", "cycles": 2, "kbps": 96, "mono": false },
+  { "out": "arrival/hook-arrival-contact", "song": "arrival.strudel", "section": "contact", "cycles": 4, "kbps": 96, "mono": false },
+  { "out": "arrival/arrival-full", "song": "arrival.strudel", "kbps": 96, "mono": false }
+]
+```
+
+Notes: `pop-will-piano` also demonstrates the two empty bars (cycles 25 and 30 of the piece are bars 1 and 6 of will; a 4-bar clip from the section start catches bar 1). `dry-piano` is the same instrument at space .32 with no delay. A single-layer clip renders that part alone, so both pops are audible in isolation. `triangle-climax` plays the whole drums part (all five voices), not the triangle alone; the layer is the smallest unit a render takes.
+
+**Clips other posts take from arrival** (their own audio dirs, their own prefixes; same stereo settings so the series does not mix mono and stereo renders of one song):
+
+```json
+[
+  { "out": "a-language-on-top-of-strudel/arrival-void", "song": "arrival.strudel", "section": "void", "cycles": 1, "kbps": 96, "mono": false },
+  { "out": "a-language-on-top-of-strudel/arrival-threshold", "song": "arrival.strudel", "section": "threshold", "cycles": 4, "kbps": 96, "mono": false },
+  { "out": "a-language-on-top-of-strudel/threshold-melody-alone", "song": "arrival.strudel", "section": "threshold", "layer": "melody", "cycles": 4, "kbps": 96, "mono": false },
+  { "out": "a-language-on-top-of-strudel/threshold-melody2-alone", "song": "arrival.strudel", "section": "threshold", "layer": "melody2", "cycles": 4, "kbps": 96, "mono": false },
+  { "out": "never-read-the-code/hook-arrival-contact", "song": "arrival.strudel", "section": "contact", "cycles": 4, "kbps": 96, "mono": false },
+  { "out": "never-read-the-code/arrival-contact-drums", "song": "arrival.strudel", "section": "contact", "layer": "drums", "cycles": 2, "kbps": 96, "mono": false },
+  { "out": "never-read-the-code/arrival-full", "song": "arrival.strudel", "kbps": 96, "mono": false }
+]
+```
+
+`never-read-the-code` currently holds `arrival-full.mp3` and `hook-arrival-contact.mp3` (its clips.json lists the hook and the drums but not the full render, which was made by hand); the arrival manifest above duplicates both under `arrival/` as asked. Render one and copy, or accept two copies. Run with `--force` since the files exist.
+
+---
+
+## 7. Reproduction
+
+All Node-only, from `E:\github2\strudle`:
+
+```
+npm run check -- songs/arrival.strudel        # 2434 events in 59 cycles, sounds block, section table, arc line
+npm run lint -- songs/arrival.strudel         # clean
+npm run dump -- songs/arrival.strudel         # the plain Strudel it reduces to (read-only)
+git log --format='%h %ad %s' --date=iso -- songs/arrival.strudel songs/arrival-mixed.strudel
+git show 3517d4d -- songs/arrival.strudel     # the mixing diff (twin promoted over the original)
+git show 7a4d1b0:songs/arrival.strudel        # the file the old post described
+```
+
+The tables come from this script (run from anywhere; it imports the checker by absolute URL, so `@strudel/*` resolves inside the repo). Sections 2 and 5 are its output verbatim; the balance method is the old brief's (sum of the `gain` control per event), with a second column multiplying by `velocity` where a hap carries one.
 
 ```js
-// Axis values are 0..1 with 0.5 = the layer's baseline. The piano keeps one setting for the whole song: space .5 (room only;
-// anything above sends it to a delay line, which reads as a pop behind each note) and articulation .05 so every note rings out.
+// arrival-analysis.mjs: re-derive the post's tables from the event stream scripts/check.mjs produces
+import { checkFile } from 'file:///E:/github2/strudle/scripts/check.mjs';
+const r = await checkFile(process.argv[2] ?? 'E:/github2/strudle/songs/arrival.strudel');
+const ev = r.events.map((line) => { const m = /^(\S+) \+(\S+) (.*)$/.exec(line); return { t: +m[1], d: +m[2], v: JSON.parse(m[3]) }; });
+const secs = r.sections.map((s) => ({ name: s.name, off: s.offset, end: s.offset + s.span, cycles: s.cycles }));
+const secOf = (t) => secs.find((s) => t >= s.off && t < s.end)?.name;
+const base = (s) => String(s ?? '').split(':')[0];
+const eff = (v) => (v.gain ?? 1) * (v.velocity ?? 1);
+const median = (a) => { const b = [...a].sort((x, y) => x - y); return b.length % 2 ? b[(b.length - 1) / 2] : (b[b.length / 2 - 1] + b[b.length / 2]) / 2; };
+
+// two wills: notes per cycle for one sound over a window
+const notesIn = (sound, from, to) => { for (let c = from; c < to; c++) console.log(c, ev.filter((e) => base(e.v.s) === sound && e.t >= c && e.t < c + 1).map((e) => `${e.v.note}@${(e.t - c).toFixed(3)}`).join(' ')); };
+const contact = secs.find((s) => s.name === 'contact');
+for (const snd of ['piano', 'handchimes', 'tubularbells']) { console.log(snd); notesIn(snd, contact.off, contact.off + 4); }
+for (const s of secs) console.log('chimes in', s.name, [...new Set(ev.filter((e) => base(e.v.s) === 'handchimes' && e.t >= s.off && e.t < s.end).map((e) => e.v.note))].sort((a, b) => a - b));
+
+// balance: summed gain per side per section
+const HUMAN = ['piano', 'harp', 'recorder_alto_sus', 'vibraphone'], ALIEN = ['handchimes', 'tubularbells'];
+for (const s of secs) {
+  const pick = (list) => ev.filter((e) => list.includes(base(e.v.s)) && e.t >= s.off && e.t < s.end);
+  const sum = (x, f) => x.reduce((n, e) => n + f(e.v), 0).toFixed(2);
+  console.log(s.name, 'human', sum(pick(HUMAN), (v) => v.gain ?? 1), sum(pick(HUMAN), eff), 'alien', sum(pick(ALIEN), (v) => v.gain ?? 1));
+}
+// per instrument in a section (the climax comparisons, the triangle)
+for (const name of ['contact', 'threshold']) {
+  const s = secs.find((x) => x.name === name), by = {};
+  for (const e of ev.filter((e) => e.t >= s.off && e.t < s.end)) { const k = base(e.v.s); (by[k] ??= { n: 0, g: 0 }); by[k].n++; by[k].g += e.v.gain ?? 1; }
+  console.log(name, Object.entries(by).sort((a, b) => b[1].g - a[1].g).map(([k, x]) => `${k} ${x.g.toFixed(2)} (${x.n})`).join(', '));
+}
+// register: min / median / max MIDI per sound
+const bySound = {};
+for (const e of ev) if (typeof e.v.note === 'number') (bySound[base(e.v.s)] ??= []).push(e.v.note);
+for (const [k, a] of Object.entries(bySound).sort((x, y) => median(x[1]) - median(y[1]))) console.log(k, a.length, Math.min(...a), median(a), Math.max(...a));
+// delay sends, will piano onsets per bar, texture first onsets
+const dl = {}; for (const e of ev.filter((e) => e.v.delay !== undefined)) { const k = `${base(e.v.s)} @ ${secOf(e.t)} delay ${e.v.delay.toFixed(2)}`; dl[k] = (dl[k] ?? 0) + 1; } console.log(dl);
+const will = secs.find((s) => s.name === 'will');
+console.log('will piano per bar', Array.from({ length: 8 }, (_, i) => ev.filter((e) => base(e.v.s) === 'piano' && e.t >= will.off + i && e.t < will.off + i + 1).length));
+for (const snd of ['gong', 'bassdrum2', 'framedrum', 'timpani_roll']) { const a = ev.filter((e) => base(e.v.s) === snd && !e.v.bank).map((e) => e.t); console.log(snd, 'first', a[0], 'last', a.at(-1), a.length); }
+console.log('mix controls', ['pan', 'velocity', 'compressor', 'roomsize', 'ir', 'orbit', 'delay'].map((k) => `${k}:${ev.filter((e) => e.v[k] !== undefined).length}`).join(' '));
 ```
 
-**The mechanism, exactly** (`lib/layers.mjs:284`):
+Delay time: superdough `delaysync: 3/16` cycle (node_modules/superdough/superdough.mjs line 194), `delaytime = cycleToSeconds(delaysync, cps)` = 0.703 s at cps 0.2667.
 
-```js
-defineCell('melody', 'space', {
-  spatial: (p, v) => ctl(ctl(p, 'room', v, piece(0, 0.2, 0.9)), 'delay', v, (x) => Math.max(0, x - 0.5) * 0.8, { noopBelow: true }),
-});
-```
-
-`noopBelow: true` returns the pattern **untouched** at `v <= 0.5`. So:
-- `space: .5` emits no `delay` control at all.
-- `space: .75` (the original) gives `delay = 0.20` wet.
-- `space: .9` gives `delay = 0.32`. `space: .95` gives `delay = 0.36`.
-
-`delay` is a **wet send into an orbit-level feedback delay**, not a per-note effect. Its time comes from `delaysync: 3/16` cycles and the song's cps: `(3/16) / 0.2667 =` **0.703 s**, with feedback 0.5.
-
-**Correct the notes file here: it is not a quarter-second repeat.** At 64 BPM one beat is 0.9375 s, so the echo lands **three-quarters of a beat** after each strike, a dotted eighth, at 20% wet. It falls between the theme's own notes, so it reads as an extra attack that is not in the score. That is the pop.
-
-**Three things make this "only a human catches this":**
-1. The word is `space`. Nothing in the documentation says there is a **discrete behavioural change at 0.5**, or that a delay line is involved at all.
-2. `space` means something different on every layer. **Only the melody layer routes to a delay.** So the pop was piano-shaped by construction.
-3. The verification proxy for `space` is `tail`. A delay send **raises** `tail`. The measurement said the axis moved the right way. The metric agreed with the bug.
-
-**And the fix is partly undone in HEAD.** `delay` is present on: harp 448 events (by design), handchimes 278 (by design), recorder 92 (by design), tubular bells 72 (by design), **glockenspiel 42** (removed in `128626f`, restored in `4accadc`), **piano 18** (`will.melody` 12 events at 0.32, `after.melody` 6 at 0.36, both removed in `128626f`, both restored in `4accadc`).
-
-The comment says "The piano keeps one setting for the whole song." In two of the six sections it does not.
-
-### Pop 2: the reverb impulse-response rebuild, the better bug
-
-After fix 1 the human came back (request 5): **"piano still pops on key strike"**, with the clue *"trace what makes a sound at the void to signal edge that no single part has."*
-
-The comment that went in, lines 127-130, still present:
-
-```js
-// One reverb size for everything: superdough keeps one reverb per orbit and rebuilds its impulse response whenever an
-// event arrives with a different size, swapping the buffer under whatever is sounding. The pads and beds here carried
-// four sizes, so the rebuild ran many times a bar and popped under every piano strike and at the void to signal edge.
-```
-
-**This is correct, and superdough's own source says so:** one reverb node per orbit, regenerated whenever the size changes, with a comment saying "only regenerate when something has changed". The fix is one method call: `stack(score, textures).size(.9)`. Verified: **every one of the 2751 events now carries `roomsize: 0.9`**.
-
-**This is the bug worth the section heading**, because of the property the human named: it is emergent. Solo any part and it vanishes, because alone each part has exactly one size. No per-part render reproduces it. No axis value is wrong. It exists only in the sum, and the only way to find it is to know how the audio backend allocates its nodes. That is genuinely outside what a system of 0..1 axes can reason about.
-
----
-
-## 7. The notes file, verbatim
-
-8 requests, 31 change entries, all dated `2026-09-13` (the commits are `2026-09-12`; quote one).
-
-### The prompt
-
-> Epic orchestral score at 64 BPM in D minor: aliens arriving, a battle of wills rather than arms; fear in the low half, hope in the high half, both at once in the climaxes
-
-### The eight asks, verbatim
-
-1. > add a new song: an epic motion picture score, very large and orchestral, aliens coming to earth, not a battle but an emotional battle of will, lots of instruments, designed not chaotic, fear and hope at once
-2. > do what is right: put the orchestral percussion under the axes
-3. > listening notes: whistle too loud in void and signal; piano not real in approach and after; too much reverb in will; end too long
-4. > listening notes: whistle still too loud in void, intro too long, piano pops behind presses in approach, contact and threshold, piano lost sustain in will, piano should be consistent through the song
-5. > the whistle you removed was wrong; trace what makes a sound at the void to signal edge that no single part has; piano still pops on key strike; will piano still has no sustain
-6. > right when the song starts it whistles; only with pad and pad2 both on; is this an odd effect
-7. > still whistles at the start; gone when a section is pinned or a pad is muted; different pad sounds still whistle
-8. > the bark was the issue; undo the other whistle attempts; keep it from happening again
-
-### Selected `why` entries, verbatim
-
-**Request 1:**
-- *signal.melody*: "handchimes with follow off and a fixed 0 6 3 line: the alien signal never moves with the harmony"
-- *will*: "D phrygian i II: didgeridoo bass, theme shrunk to a half-step sigh, chimes and bells louder: the alien will against the human one"
-- *threshold.melody*: "the answered theme ending on the root at level 1.2 over a low loud organ and a full bass: hope over fear on the same chords"
-
-**Request 3:**
-- *melody*: "vibrato removed for sampled sounds in lib/layers.mjs: the layer put a 4 Hz wobble on every melody, which is what made the steinway sound fake; only raw synths get it now"
-
-**Request 4:**
-- *theme.space*: ".75>.5: the melody layer sends anything above .5 to a delay line, and that quarter-second repeat was the pop behind each piano note"
-- *approach, contact, will, plea, threshold, after melody*: "the per-section brightness, register, width and space overrides on the piano are gone, so it is one instrument through the song; only density and level differ"
-
-**Request 5:**
-- *song*: "reverb size .9 on every event: superdough keeps one reverb per orbit and rebuilds its impulse response whenever an event arrives with a different size, and the pads and beds carried four sizes; the rebuild swapped the reverb buffer under every piano strike and at the section edge, which no soloed part reproduces because alone each part has one size"
-
-**Request 6, the wrong answer, quoted in full because it is the best paragraph in the file:**
-- *song*: "strings sound psaltery_bow>dantranh_tremolo: rendered and measured, the void pair produced one naked 440 Hz line that each pad alone left faint and both doubled in phase. It is the sixth harmonic of the shared D2, the one partial surviving the 300 Hz lowpass. The psaltery sample map is an octave off and its strong third harmonic lands exactly there; the saxophone was worse; a tremolo zither triad has no line at all"
-
-**Request 7, the right answer:**
-- *textures*: "drone didgeridoo:0 with note d1 > didgeridoo:8 at its own pitch: index 0 is a 0.7 s bark, and pitched down it is a descending whoop once a bar; pin and mute rebuild the song from the sections' layer patterns and drop the textures, which is why either hid it"
-
-**Request 8:**
-- *check:*: "the single-song check now prints a sounds block naming the file behind every sound:index heard, so a bark, a bowed cymbal or a blip is visible before it is called a drone"
-
-**Notes on the 440 Hz theory:** partly checkable. D2 = 73.42 Hz, sixth harmonic = 440.5 Hz, the arithmetic is right. The void pad lowpass really is around there. The "doubled in phase" part is real and visible: `pad.width: .85` triggers a hard-panned duplicate. "The psaltery sample map is an octave off" is not checkable from the code. It was reverted, so treat it as unverified.
-
----
-
-## 8. What it cannot do
-
-1. **There is no counterpoint, and no voice leading.** The pads stack scale-degree triads on the chord root, every voice moves in parallel, every time. A trained ear hears parallel fifths and octaves across the whole piece. The `will` section is parallel motion as the entire dramatic device.
-2. **The "development" is one line, transposed, forever.** One 16-step degree string, transposed by chord root, played 22 times. The only variant is `answer`. No augmentation, diminution, fragmentation or inversion.
-3. **The rhythm cannot change.** `density` is the only rhythmic control on a melody, and it is a dice roll: below .5 a random note dropper, above .5 a random note doubler. At `will` (`density: .3`) the dropper **deletes the human theme entirely in 2 of the section's 8 bars**: piano onsets per bar are `0, 1, 3, 2, 1, 0, 3, 2`. The section named for the human will asserting itself has two bars with no human voice at all, and that is `4accadc` undoing the fix that had raised it.
-4. **No tempo flexibility.** 64 BPM exactly for 221 seconds. Film scores live on rubato; this has none.
-5. **No dynamics inside a note and no crescendo except six brightness ramps.**
-6. **No mix bus, no compression, no levelling.** And the loudest single voice in the finale, by summed gain, is **the triangle**: 96 events x mean gain 1.16 = 111.36, ahead of the strings (60.18), the harp (58.75), the pedal organ (52.80) and the piano (49.62). `drums.weight: .9` multiplies every drum voice's gain, including the hi-hat slot, which fires 8 times a bar. The word "weight" made the triangle the loudest thing in the climax.
-7. **Sample realism is stretched past its limits.** The tubular bells come from a 9-sample map spanning one octave and play D3 and C4, so every bell note is a resample.
-8. **The 808 is still in there.** Request 2 says "the only non-orchestral sound is gone." It is not: `fx.impact` resolves to a Dirt kick, plus white noise for both risers and brown noise for the bed.
-9. **The two-wills idea has no mechanism to enforce it.** When `plea` changed key, the chimes moved, and nothing reported it.
-10. **`organicness: 0` and `variation: 0` do nothing.** Both cells return the pattern unchanged for any value at or below 0.5. The vocabulary still describes the chimes as "very mechanical". The language can say more than the engine can do.
-11. **The whole texture layer is one bar out of step with the score.**
-
-**What a listener with a trained ear would say**, in one paragraph: it is a well-voiced, convincingly orchestrated three-and-a-half minutes with a real dramatic shape and a genuinely good idea about two incompatible musics coexisting; and it is built from one melodic cell repeated without development over four chords repeated without variation, at one unwavering tempo, with a percussion balance that puts a triangle on top of the climax. It sounds like a very good sketch for a cue, played by a very good sample library, by someone who has not yet learned to write a second phrase.
-
----
-
-## 9. Factual corrections to the outline
-
-1. **"59 bars"**: correct for the score. The **textures arrange totals 60 bars**. Commit `4accadc` cut `void` from 2 bars to 1 and did not update the textures. Consequence, verified in the events: **every texture block starts exactly one bar after the section it was written for.** The gong that announces `contact` (bar 17) fires at bar **18**. The heartbeat frame drum for `will` runs bars **26-33**, bleeding into `plea`. And because 59 is not 60, the score and the textures drift by a further bar on every loop.
-2. **"A pop behind every piano note, which turned out to be the space axis above 0.5"**: that was pop #1. Pop #2 was the reverb rebuild, and it is the more interesting one. Also: the fix for #1 is **partly undone in the shipped file**, while the comment documenting it is still in place.
-3. **"One value, and the comment explaining it is still in the source"**: there are **two** such comments, and the first one is now inaccurate.
-4. **"The alien signal never changes its intervals"**: true in all six D-minor/phrygian sections, **false in `plea`**.
-5. **"Hope in the high half (bells, harp, a rising line)"**: the **tubular bells sit at D3/C4**, at or below middle C, the lowest of the "high" group.
-6. **"Eight sections"**: correct, but `void` is **one bar / 3.75 s**.
-7. **"Timpani" in the fear list**: correct, but the timpani is a *drums voice*, not a texture.
-8. **"The compositional idea that survived everything"**: it survived because nothing ever challenged it. Every one of the eight requests was about sound quality. **Not one listening note was about the music.** The human never asked for a different melody, a different harmony, or a different form. The structure the agent produced in the first commit is still the structure.
-9. **"A revert in the log"**: there are two, and they are different species.
-10. **The piano is `piano`, not `steinway`.** `4accadc` swapped it. The notes and the first six commits all say "steinway"; the shipped file says `piano`.
-
----
-
-## 10. Terminology and caveats
-
-- **bar = cycle.** The piece is written at one cycle per bar.
-- **part**: a key in a `section()` object. 62 of them. **layer**: the kind of part.
-- **axis**: one of twelve 0..1 dimensions. 0.5 is the baseline no-op.
-- **level** is *not* an axis: a plain gain multiplier.
-- **energy**: sum of (onsets per cycle x level) per section. Say the unit.
-
-**Caveats:**
-- Summed event gain is **not loudness**. The chimes sit an octave above the piano, where the ear is more sensitive, so a 12% gain lead for the piano may not be a perceptual one.
-- `npm run check` runs in Node with no sound map, so drum-voice resolution can differ from the browser.
-- Dates: the commits are 2026-09-12, the notes say 2026-09-13.
-
-**What will go stale:** any energy figure or gain sum if `lib/layers.mjs` changes; the delay time if superdough's default moves; the off-by-one between the 59-bar score and the 60-bar textures (a live bug, and if fixed the "every gong lands a bar late" beat stops being true); the undocumented revert (if cleaned up, the "comment and code disagree" beat evaporates). Pin claims to the hash.
-
----
-
-## 11. Proposed visuals
-
-### V1 — Two wills (the centrepiece)
-Two pitch-contour lines over a chord track, 4 bars, y = MIDI note.
-**Data (`contact`, bars 17-20, chords Dm | Bb | F | C):**
-- Human (piano, `follow: true`): bar 17 62, 65, 69, 70, 69 / bar 18 70, 74, 77, 82, 81 / bar 19 65, 69, 72, 74, 72 / bar 20 72, 76, 79, 84, 82
-- Alien (handchimes, `follow: false`), identical in all four bars: 74, 84, 79, 74, 84, 79
-- Optional third line (tubular bells): 50, 60, every bar.
-
-The human line is a staircase climbing as the chord track moves; the alien line is four identical copies.
-
-**Optional companion panel, the hole:** the same chimes in `plea` bar 35, F major: **77, 82, 88**. Mark the interval brackets: 5, 5 semitones in D minor vs 5, 6 in F major.
-
-### V2 — The 59-bar arrangement grid
-Heat map, one row per sound, 59 columns, cell shaded by onsets in that bar. Section boundaries as vertical rules at bars 1, 9, 17, 25, 33, 41, 53; a second offset set for the **texture block boundaries at bars 2, 10, 18, 26, 34, 42, 54**, so the one-bar drift becomes visible. Units: onsets per bar.
-
-### V3 — Who is winning (the balance arc)
-Diverging bars, one per section, human above the axis, alien below, plus the energy line overlaid. Data in section 3. Units: summed per-event gain (dimensionless, not dB); energy = level-weighted onsets per bar. **Say both.**
-
-### V4 — Fear low, hope high
-Horizontal range plot, one row per instrument, sorted by median MIDI; a rule at middle C. Data: the 13-row table in section 4. Annotate the empty band between 60 and 62, and the string pad's bar spanning D2 to A#5.
-
-### V5 (optional) — The whistle hunt as a timeline
-Eleven ticks, 19:01 to 23:14, each labelled with hash, message and outcome (fixed / wrong / reverted / undocumented). The visual payload is the shape: four consecutive attempts at one bug, one revert two minutes after the truth, two commits at the end with no notes entry.
-
-*Skip* a waveform or spectrogram: the artefact is emergent in the browser's audio graph and there is no render of it in the repo.
-
----
-
-## 12. Proposed audio clips
-
-**Two constraints:** a `layer` clip renders exactly one part, so "both at once" has to be a whole-section clip. A `section` clip renders the full mix in that bar window, textures and one-bar drift included.
-
-**Already rendered, reuse:** `arrival-void.mp3`, `arrival-threshold.mp3`, `threshold-melody-alone.mp3`, `threshold-melody2-alone.mp3` (post 2), `hook-arrival-contact.mp3`, `arrival-contact-drums.mp3`, `arrival-full.mp3` (post 1).
-
-### The section walk (8 clips)
-
-```json
-[
-  { "out": "arrival/walk-1-void",      "song": "arrival.strudel", "section": "void",      "cycles": 1 },
-  { "out": "arrival/walk-2-signal",    "song": "arrival.strudel", "section": "signal",    "cycles": 2 },
-  { "out": "arrival/walk-3-approach",  "song": "arrival.strudel", "section": "approach",  "cycles": 2 },
-  { "out": "arrival/walk-4-contact",   "song": "arrival.strudel", "section": "contact",   "cycles": 2 },
-  { "out": "arrival/walk-5-will",      "song": "arrival.strudel", "section": "will",      "cycles": 2 },
-  { "out": "arrival/walk-6-plea",      "song": "arrival.strudel", "section": "plea",      "cycles": 2 },
-  { "out": "arrival/walk-7-threshold", "song": "arrival.strudel", "section": "threshold", "cycles": 2 },
-  { "out": "arrival/walk-8-after",     "song": "arrival.strudel", "section": "after",     "cycles": 2 }
-]
-```
-
-**will = the alien wins (0.36 : 1) and you can hear the human theme drop out in two bars.** plea = the human wins (12.3 : 1) and this is the modulation where the chimes change interval.
-
-### The two wills (4 clips)
-
-```json
-[
-  { "out": "arrival/human-contact",  "song": "arrival.strudel", "section": "contact",   "layer": "melody",  "cycles": 4 },
-  { "out": "arrival/alien-contact",  "song": "arrival.strudel", "section": "contact",   "layer": "melody2", "cycles": 4 },
-  { "out": "arrival/human-answer",   "song": "arrival.strudel", "section": "threshold", "layer": "melody",  "cycles": 4 },
-  { "out": "arrival/alien-plea",     "song": "arrival.strudel", "section": "plea",      "layer": "melody4", "cycles": 4 }
-]
-```
-
-**`alien-plea` is the clip the post is really for**: the only clip that proves a negative claim, the immovable signal moving. Play it back to back with `alien-contact`.
-
-### The bugs (4 clips)
-
-```json
-[
-  { "out": "arrival/pop-will-piano",  "song": "arrival.strudel", "section": "will",      "layer": "melody",  "cycles": 4 },
-  { "out": "arrival/pop-glock",       "song": "arrival.strudel", "section": "threshold", "layer": "melody6", "cycles": 4 },
-  { "out": "arrival/dry-piano",       "song": "arrival.strudel", "section": "contact",   "layer": "melody",  "cycles": 4 },
-  { "out": "arrival/drone-now",       "song": "arrival.strudel", "section": "will",      "layer": "bass",    "cycles": 4 }
-]
-```
-
-**`pop-will-piano`**: this is the pop, still in the shipped file, audible in isolation. It also demonstrates the density dropper deleting whole bars. **`dry-piano`**: the same instrument in `contact`, no delay at all. Play the two back to back; the difference is one character in the source.
-
-For the bark itself, a one-line edited copy (`arrival-bark.strudel` with `drone = note("d1").s("didgeridoo")`) rendered as `{ "section": "void", "cycles": 4 }` reproduces the original opening: "this is what four rounds of debugging were chasing."
-
-### Optional
-
-```json
-[
-  { "out": "arrival/triangle-climax", "song": "arrival.strudel", "section": "threshold", "layer": "drums", "cycles": 2 }
-]
-```
-
-Proves the triangle is the loudest single voice in the finale.
-
-At 64 BPM, 4 bars = **15 seconds**, which is at the long end for a blog page. Use 2 bars for the walk clips and keep 4 bars only where the claim needs a full chord cycle (the two-wills clips, where the point *is* four different chords).
+Terminology: bar = cycle (one cycle per bar at this tempo); part = a key in a `section()` object; layer = its kind; axis = one of the twelve 0..1 controls, .5 = no-op; level and the mix keys are material, not axes; energy = level-weighted onsets per bar; voices = simultaneous hits per the check header.

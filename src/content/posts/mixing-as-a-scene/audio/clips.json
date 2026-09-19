@@ -1,0 +1,110 @@
+[
+  {
+    "out": "mixing-as-a-scene/audio/threshold-pre",
+    "song": "arrival-premix.strudel",
+    "section": "threshold",
+    "cycles": 4,
+    "kbps": 96,
+    "mono": false
+  },
+  {
+    "out": "mixing-as-a-scene/audio/threshold-mixed",
+    "song": "arrival.strudel",
+    "section": "threshold",
+    "cycles": 4,
+    "kbps": 96,
+    "mono": false
+  },
+  {
+    "out": "mixing-as-a-scene/audio/choir-pre",
+    "song": "arrival-premix.strudel",
+    "section": "threshold",
+    "layer": "pad3",
+    "cycles": 4,
+    "kbps": 96,
+    "mono": false
+  },
+  {
+    "out": "mixing-as-a-scene/audio/choir-mixed",
+    "song": "arrival.strudel",
+    "section": "threshold",
+    "layer": "pad3",
+    "cycles": 4,
+    "kbps": 96,
+    "mono": false
+  },
+  {
+    "out": "mixing-as-a-scene/audio/piano-pre",
+    "song": "arrival-premix.strudel",
+    "section": "threshold",
+    "layer": "melody",
+    "cycles": 4,
+    "kbps": 96,
+    "mono": false
+  },
+  {
+    "out": "mixing-as-a-scene/audio/piano-mixed",
+    "song": "arrival.strudel",
+    "section": "threshold",
+    "layer": "melody",
+    "cycles": 4,
+    "kbps": 96,
+    "mono": false
+  },
+  {
+    "out": "mixing-as-a-scene/audio/duck-off",
+    "song": "mix-demo.strudel",
+    "section": "noduck",
+    "cycles": 4,
+    "kbps": 96,
+    "mono": false
+  },
+  {
+    "out": "mixing-as-a-scene/audio/duck-on",
+    "song": "mix-demo.strudel",
+    "section": "duck",
+    "cycles": 4,
+    "kbps": 96,
+    "mono": false
+  },
+  {
+    "out": "mixing-as-a-scene/audio/feel-stiff",
+    "song": "mix-demo.strudel",
+    "section": "stiff",
+    "cycles": 4,
+    "kbps": 96,
+    "mono": false
+  },
+  {
+    "out": "mixing-as-a-scene/audio/feel-dice",
+    "song": "mix-demo.strudel",
+    "section": "dice",
+    "cycles": 4,
+    "kbps": 96,
+    "mono": false
+  },
+  {
+    "out": "mixing-as-a-scene/audio/feel-played",
+    "song": "mix-demo.strudel",
+    "section": "played",
+    "cycles": 4,
+    "kbps": 96,
+    "mono": false
+  },
+  {
+    "out": "mixing-as-a-scene/audio/rooms-separate",
+    "song": "mix-demo.strudel",
+    "section": "separate",
+    "cycles": 4,
+    "kbps": 96,
+    "mono": false
+  },
+  {
+    "out": "mixing-as-a-scene/audio/rooms-onehall",
+    "song": "mix-demo.strudel",
+    "section": "onehall",
+    "cycles": 4,
+    "kbps": 96,
+    "mono": false
+  }
+]

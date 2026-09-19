@@ -41,7 +41,7 @@ export const series = {
   "strudel-bench": {
     title: "Strudel Bench",
     description:
-      "A language for describing music: why 59 bars of live-coded Strudel needed a layer on top, how the word darker becomes an edit, and what an agent did with it.",
+      "A tour of strudel-bench, a language on top of Strudel: sections and axes, words that edit a song, the editor, mixing as a scene, one piece examined honestly.",
     hero: {
       src: "series/strudel-bench.png",
       alt: "Word pills feeding a stack of axis sliders that raise a strip of section blocks into an energy arc",

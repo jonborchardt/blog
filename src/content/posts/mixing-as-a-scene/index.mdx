@@ -1,0 +1,396 @@
+---
+title: Mixing as a scene
+description: "A mix is where things are, not how loud they are: one hall, a position each, levels by role, a played feel, and a tool that measures whether it worked."
+publishedAt: 2026-09-19
+series: strudel-bench
+seriesOrder: 4
+tags: [music, live-coding]
+authority: "E:\\github2\\strudle"
+hero:
+  src: ./hero.png
+  alt: Thirteen instruments placed on a stage seen from above, one in front, all inside one hall
+draft: false
+---
+
+import SoundBite from "@/components/blog/SoundBite.astro";
+import Callout from "@/components/blog/Callout.astro";
+import Figure from "@/components/blog/Figure.astro";
+import VizFigure from "@/components/blog/VizFigure.astro";
+import LevelsViz from "./levels-viz.svg";
+import StageViz from "./stage-viz.svg";
+import OrbitsViz from "./orbits-viz.svg";
+import HumanizeViz from "./humanize-viz.svg";
+import thresholdPre from "./audio/threshold-pre.mp3";
+import thresholdMixed from "./audio/threshold-mixed.mp3";
+import choirPre from "./audio/choir-pre.mp3";
+import choirMixed from "./audio/choir-mixed.mp3";
+import pianoPre from "./audio/piano-pre.mp3";
+import pianoMixed from "./audio/piano-mixed.mp3";
+import duckOff from "./audio/duck-off.mp3";
+import duckOn from "./audio/duck-on.mp3";
+import feelStiff from "./audio/feel-stiff.mp3";
+import feelDice from "./audio/feel-dice.mp3";
+import feelPlayed from "./audio/feel-played.mp3";
+import roomsSeparate from "./audio/rooms-separate.mp3";
+import roomsOneHall from "./audio/rooms-onehall.mp3";
+
+Here is the peak of a thirteen-part orchestral section, twice. The notes are identical. Nothing was
+added or removed. Between the two, every part was given a place.
+
+<SoundBite
+  label="The climax of arrival, before and after the mixing pass"
+  note="Four bars each, in stereo. Same notes, same instruments, same tempo."
+  clips={[
+    { src: thresholdPre, label: "before" },
+    { src: thresholdMixed, label: "after" },
+  ]}
+/>
+
+Measured before, the loudest thing in that climax was the impact hit, five decibels under the whole
+mix. The choir was a decibel louder than the piano theme it was supposed to sit behind, and shared
+the midrange with the organ. The timpani pulse was thirty decibels under the mix and the
+glockenspiel doubling was forty, which is to say neither could be heard at all. Nothing had a
+position, and the parts were spread over five separate reverbs.
+
+This post is about what "give every part a place" means when the tool has no faders, only a
+language: the handful of keys strudel-bench added for mixing, the perception each one leans on, and
+the measurement that says whether it worked. The earlier posts covered [the language](/a-language-on-top-of-strudel/),
+[the words](/say-darker/) and [the editor](/knobs-in-the-code/); this one is about the newest and
+least finished part of the system.
+
+## What a mix is, if it is not volume
+
+A mixing engineer's first move is not the fader. It is deciding where each thing is: how far
+forward, how far left, how much of the room it sits in, and which two things are fighting for the
+same air. Volume falls out of those decisions.
+
+Perception gives you a few handles for "where":
+
+- **Level** tells you how far away, but only roughly, because a quiet close sound and a loud distant
+  one can arrive at the same loudness.
+- **Brightness** tells you distance more reliably: air and rooms swallow high frequencies, so a dull
+  version of a sound reads as farther away than a bright one at the same level.
+- **The reverb tail**, and how the direct sound sits in front of it, tells you the size of the room and
+  where in it the source is. If the first reflections arrive a few tens of milliseconds after the
+  direct sound, the ear localises the direct sound and folds the reflections into it. That is the
+  precedence effect, and it is why a reverb with a short silent head in front of it keeps a part in
+  place while a reverb with none smears it.
+- **Masking**: a louder sound at a nearby frequency raises the threshold at which a quieter one can be
+  heard at all. Two parts in the same band at the same time do not add; one of them disappears.
+- **Timing**: a line whose notes land exactly on the grid reads as a machine. One whose notes lean
+  late and early together, in a shape that repeats, reads as played.
+
+strudel-bench encodes each of those as a key you can write in a part or a section. None of it is a
+fader. Here they are.
+
+## One room
+
+Before the pass, arrival's parts were in five different reverbs, because each kind of part sets its
+own reverb size from its `space` axis, and superdough keeps one reverb per bus. Put two parts that
+want different reverbs on one bus and the engine rebuilds the impulse response under whichever note
+arrives next. The piece's own notes record that happening under the piano, and blame it for a pop
+that turned out to have a second cause as well, a delay line that [the last post](/arrival/) still
+finds in the file.
+
+The fix is a `room` on the song:
+
+```js
+song({ bpm: 64, key: 'D:minor', seed: 41, kit: 'RolandTR808', packs: ['rooms'],
+       room: { ir: 'hall', size: 3.2, damping: 4500 } }, [
+```
+
+With a room set, every part in the section shares one convolver, and each part's `space` value stops
+meaning "which reverb" and becomes "how much of it": its send. (On a melody, a value above the
+midpoint still opens a delay line too, which matters later.) Thirteen parts, one hall, each with its
+own amount of it.
+
+<VizFigure
+  name="The same thirteen parts, and how many reverbs they run through"
+  summary="One bus per part means thirteen convolvers. Grouping parts whose reverb would be identical gets it to five. A room with a size on the song puts all thirteen on one bus, each keeping its own send amount."
+>
+  <OrbitsViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
+
+The `ir` is a generated impulse response, not a recording. A small script builds a shoebox room from
+its dimensions and absorption, places the mirror-image reflections as taps, then appends a seeded
+noise tail that darkens as it decays. Three ship with the repo: a small room with an 8 ms silent
+head, a plate with 15 ms, and a hall with 30 ms and a 3.2 second decay. The silent head is the
+pre-delay, and it is baked into the file because the engine has no pre-delay control of its own; a
+song can shorten it by starting the impulse partway in.
+
+Here is the difference one hall makes on a small demo section: five parts, first in separate
+reverbs with no positions, then under one hall with a position each.
+
+<SoundBite
+  label="Five parts in separate reverbs, then in one hall with positions"
+  note="Four bars each, in stereo. The second is the same material with a room on the section, each part's space as its send, and a position each."
+  clips={[
+    { src: roomsSeparate, label: "separate reverbs, no positions" },
+    { src: roomsOneHall, label: "one hall, a position each" },
+  ]}
+/>
+
+The perceptual claim is a modest one. Sources that share a room signature are grouped as being in
+the same place; sources that each carry a different one read as a collage. One main reverb is the
+oldest advice in mixing, and here it is one key.
+
+## A position, and then a width
+
+`position` runs from -1 (left) to 1 (right) and shifts every note's pan by half of it. It is
+deliberately separate from `width`, which the language already had. Width is how much of the field a
+part occupies; on most parts it is a slow pan sweep, on wide pads a mirrored copy in the other ear.
+Position is where the centre of that is. Set both and the sweep moves around the position, and a
+drum kit's per-voice spread moves as one block.
+
+Two things the measurement taught me about this. The rendered pan of a wet part sits near the centre
+whatever its position says, because the hall's stereo return dominates its energy: the bowed
+vibraphone is written at -.35, its notes carry that pan, and the measured stem reads as almost
+centred. And the piano sample is right-heavy on its own, reading at .74 with no position at all. What
+the ear gets is the position plus the sample plus the room, and the number in the file is only the
+first of those.
+
+The low end stays centred. Localisation below about a hundred hertz is poor, stereo bass wastes
+headroom, and it falls apart on a mono speaker, so the measurement's flat-stage rule exempts the
+drums and the bass from ever needing a position.
+
+<VizFigure
+  name="The stage of arrival's climax after the pass, seen from above"
+  summary="The piano theme is in front and slightly right. The organ pedal and the impact sit centre and close, with the timpani pulse behind them. The handchimes and tubular bells are together on the right, the harp and recorders on the left, the vibraphone doubling far left. The bowed strings, the choir and the bowed vibraphone arp are the farthest back."
+  data={{
+    caption: "Each part's written position, measured depth and level under the mix, threshold section, 2026-09-19",
+    columns: ["Part", "Position", "Depth", "dB under the mix"],
+    rows: [
+      ["piano theme", "+0.10", "0.41", "-7.5"],
+      ["organ pedal", "0", "0.43", "-9.9"],
+      ["impact hit", "0", "0.46", "-12.0"],
+      ["loud organ", "0", "0.76", "-12.1"],
+      ["recorders", "-0.20", "0.77", "-12.9"],
+      ["handchimes", "+0.35", "0.66", "-13.1"],
+      ["vibraphone doubling", "-0.45", "0.65", "-13.6"],
+      ["tubular bells", "+0.35", "0.71", "-13.8"],
+      ["harp", "-0.30", "0.74", "-15.9"],
+      ["bowed strings", "-0.15", "0.81", "-15.9"],
+      ["choir", "+0.30", "0.85", "-18.7"],
+      ["timpani pulse", "0", "0.58", "-20.9"],
+      ["bowed vibraphone", "-0.35", "0.90", "-22.2"],
+    ],
+  }}
+>
+  <StageViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
+
+## Depth, in words
+
+Depth is the axis the fader cannot do alone. The vocabulary got four words for it: `closer` and
+`forward` raise brightness, lower space and add a little weight; `farther` and `background` do the
+reverse. They move three axes at once, gently, because that is what distance does to a sound: it gets
+duller, wetter and thinner together. The measurement's depth number is built from the same three
+things, level, high-frequency share and reverb tail, and the tool insists you read it with its three
+inputs, because a high depth from level alone is a quiet part, not a distant one.
+
+The choir is the worked example. Before the pass it was as loud as the piano theme and sharing the
+midrange with the organ. After: level cut, `farther` applied, brightness down from .6 to .4, sent
+fully into the hall, and placed behind and to the right.
+
+<SoundBite
+  label="The choir alone, before and after"
+  note="Four bars each, the part on its own. The second is much quieter on purpose: at its new level it sits nineteen decibels under the mix."
+  clips={[
+    { src: choirPre, label: "choir, before" },
+    { src: choirMixed, label: "choir, after" },
+  ]}
+/>
+
+The surprising number is what moved the masking. The organ and choir shared the mids at .72 on the
+measurement's scale before, and .45 after, comfortably under its .6 warning line. **The ten decibel
+level cut did nothing to that score**, because the masking measure is level-independent by
+construction: it asks where two parts' energy sits and whether they sound at the same time, not how
+loud either is. What moved it was the choir getting darker. Its centroid fell from 1376 Hz to 877
+Hz, out of the organ's band. A quieter part in the same band is still in the way; a darker one is
+not.
+
+## Levels by role, not by feel
+
+Once every part has a place, the fader is the last thing you touch, and the project writes down what
+it should do. Name each part's role and give it a band under the mix: a foreground part six to
+twelve decibels under, support ten to eighteen, background sixteen to twenty-six, with the kick and
+bass as foundation. Below thirty is inaudible: cut it or raise it, never leave it. These are the
+author's defaults, marked as heuristics in the code, not laws of hearing.
+
+<Figure caption="Before is the file at the last commit before the mixing pass; after is the file on 2026-09-19. Both measured with the same tool on the same four bars.">
+  <VizFigure
+    name="Each part's level under the mix, before and after the pass"
+    summary="The impact drops seven decibels and the choir ten. The timpani pulse rises nine, the tubular bells twelve, and the doubling voice twenty-seven. Two parts start below the inaudible line and none end there. After the pass every part sits inside or near one of the three role bands."
+    data={{
+      caption: "dB under the mix, threshold section",
+      columns: ["Part", "Before", "After"],
+      rows: [
+        ["piano theme", "-9.6", "-7.5"],
+        ["organ pedal", "-11.1", "-9.9"],
+        ["impact hit", "-5.0", "-12.0"],
+        ["loud organ", "-13.3", "-12.1"],
+        ["recorders", "-14.1", "-12.9"],
+        ["handchimes", "-15.4", "-13.1"],
+        ["doubling (glockenspiel, then vibraphone)", "-40.4", "-13.6"],
+        ["tubular bells", "-25.8", "-13.8"],
+        ["harp", "-22.2", "-15.9"],
+        ["bowed strings", "-18.7", "-15.9"],
+        ["choir", "-8.6", "-18.7"],
+        ["timpani pulse", "-30.2", "-20.9"],
+        ["bowed vibraphone", "-22.8", "-22.2"],
+      ],
+    }}
+  >
+    <LevelsViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+  </VizFigure>
+</Figure>
+
+Two rows on that chart are the whole argument for measuring rather than guessing.
+
+The timpani pulse was thirty decibels under the mix at a level of 1, and the top of the level range,
+2, only brought it to twenty-one. The sample is quiet. Meanwhile, by the score's own per-event gain,
+the triangle in that same pulse is the loudest voice in the finale by a wide margin. The number the
+language exposes and the number the render reports disagree, and only one of them is what you hear.
+
+The doubling voice came up twenty-seven decibels by having its level **lowered**, from .45 to .2,
+because it stopped being a glockenspiel and became a vibraphone. The glockenspiel sample was too
+quiet to place at any level; a vibraphone at the same register is loud. Levels are per sample, not
+per intention, and no amount of reasoning about the file would have found that. A render did.
+
+## Making room: the sidechain
+
+The oldest trick for a bass and a kick that want the same air is not to lower either one. It is to
+dip the bass for the instant the kick hits and let it recover. The transient gets through, the
+sustain comes back, and the two never sound at the same moment in the band that matters.
+
+```js
+bass: { ...sub, duck: 'drums', duckDepth: .5, duckAttack: .12 },
+pad:  { ...bed, duck: 'drums', duckDepth: .6, duckAttack: .25 },
+```
+
+`duck` names another part in the section. Its hits are pointed at this part's bus as a sidechain,
+the depth sets how far the dip goes, and the recovery time sets whether it breathes or pumps. It is
+superdough's own ducking, wired up by name. Before that existed the pad layer faked it, dipping a
+hard-driven pad's gain once per chord, and the fake is still there as the fallback when no source is
+named.
+
+<SoundBite
+  label="A kit, a sub bass and a pad, without and with the sidechain"
+  note="Four bars each. In the second, the bass and the pad dip under every kick and recover."
+  clips={[
+    { src: duckOff, label: "no duck" },
+    { src: duckOn, label: "ducked under the kick" },
+  ]}
+/>
+
+Arrival ducks nothing. A sixty-four beat-per-minute score with a timpani pulse has no kick to make
+room for. The industrial track in the same repository ducks its bass and its sub pad, and still fails
+the tool's headroom check, because its kit is distorted and the distortion happens after the gain:
+a distorted part peaks at full scale whatever its level says. There is no master limiter, and the
+tool says so rather than pretending.
+
+## A played feel, not dice
+
+The language has always had an `organicness` axis: above its midpoint it nudges every hit by a fresh
+random amount and scales its gain by another. It sounds like what it is. Independent per-hit jitter
+does not sound like a person; it sounds like a machine imitating one, because a player's timing is
+not noise. Neighbouring notes lean together. The lean is different at different points in the bar. And
+it is broadly the same on the next play, because it comes from the player's body and the phrase, not
+from a coin.
+
+`humanize` is the replacement, and it is material rather than an axis:
+
+```js
+humanize: { timingMs: 12, velocity: .1, correlation: 'phrase' }
+```
+
+Three seeded curves, evaluated at each note's time: a slow wave over the correlation span (a bar, a
+phrase, or a count of bars), a fixed lean for each beat position inside the bar, and a small residual.
+Their sum moves timing, gain and note length together, and because it is seeded it is the same on
+every play and in every render.
+
+<VizFigure
+  name="How late each sixteenth of the piano theme lands under humanize, against dice per hit"
+  summary="Under humanize every note lands between zero and twelve milliseconds late, following a slow wave over the four-bar phrase with a repeating lean inside each bar, so neighbouring notes move together. The dice-per-hit alternative scatters independently across the whole range."
+>
+  <HumanizeViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
+
+Two honesty notes. The timing is late-only, and the reason is engineering rather than perception:
+a note moved earlier than its grid point can fall before the start of a render and be dropped, and
+renders, the checker and live playback must agree. And the three curves are not as independent as the
+design describes. Their phases are rounded in a way that makes them identical, so a late note is
+always a proportionally louder and longer one. The correlation the design wanted is there; the
+independence between the three is not, and the fix is one character.
+
+Hear the same marimba line and rim three ways: dead on the grid, with dice, and played.
+
+<SoundBite
+  label="The same line on the grid, with dice, and played"
+  note="Four bars each. The middle one uses the older axis at its maximum; the last uses humanize with a phrase-length correlation on the marimba and a bar-length one on the rim."
+  clips={[
+    { src: feelStiff, label: "on the grid" },
+    { src: feelDice, label: "dice per hit" },
+    { src: feelPlayed, label: "played" },
+  ]}
+/>
+
+And the piano theme itself, alone, before and after. The notes are the same. The second one is
+closer, a little to the right, has a phrase-shaped velocity line, and leans.
+
+<SoundBite
+  label="The piano theme alone, before and after"
+  note="Four bars each. Before: dice-per-hit organicness, no position, a shared default reverb. After: humanize, a velocity line, position .1, sent into the hall."
+  clips={[
+    { src: pianoPre, label: "piano, before" },
+    { src: pianoMixed, label: "piano, after" },
+  ]}
+/>
+
+One more key rounds out the set: a `compressor` per part, for the rare part that is spiky enough to
+need it. The tubular bells strike twice a bar with a crest factor over nine, so they got one at a
+threshold of -18 dB and a ratio of 3. The engine builds a compressor node per hit, so the linter
+warns if you put one on anything dense.
+
+## Measuring whether it worked
+
+None of the above would be worth much if the only judge were my ear on my speakers. The measure
+command renders a section's mix, then renders each part alone, and prints a table: each part's level
+under the mix, its depth with the three inputs beside it, its measured pan, its peak, and then the
+masking pairs, every pair of parts that shares a band at the same time, sorted by how badly. A second
+linter reads that file and applies rules with written thresholds: no headroom, an inaudible part, a
+dominant part, a flat stage where three or more parts all sit centre, two parts sharing the low band
+or the mids past a line, no depth contrast.
+
+Before the pass, arrival's climax drew five warnings: two inaudible parts and three pairs sharing the
+mids. After it: clean. The mix's peak fell from .92 to .39, because the impact had been the peak, and
+nothing clipped in either version.
+
+<Callout variant="note" title="What clean does not mean">
+  Two of the three masking pairs that were over the line, the choir and the organ each against the
+  bowed vibraphone, now sit at .59 and .58 against a warning line of .6. The recorded note says so
+  plainly: "left, as the register already separates them". Clean means under the lines, and the
+  lines are heuristics from the first songs that were measured. The code marks every one of them as
+  something to retune from renders, not by argument.
+</Callout>
+
+The tool is honest about its proxies, and so should this post be. The masking score is three fixed
+bands and a co-occurrence count, not a critical-band model; it is symmetric and level-independent,
+where real masking is neither. The level column is unweighted RMS, not loudness, so a low pulse at
+twenty-one decibels under is perceptually further down than a chime would be at the same number.
+Depth is a weighted sum with hand-picked weights. Pan reads the rendered stem, room included. There is
+no per-part EQ beyond one tilt, no true pre-delay control, no master bus. It measures four bars of a
+section by default.
+
+What it does do is turn a mix into a described object: a table of where things are and what is in
+the way, with a verdict per rule. That is a thing a person can argue with, and it is a thing a program
+that cannot hear can act on. The whole of [the piece it was built on](/arrival/) got its second draft
+that way, and the two bugs that survived it survived because they were not in the section that was
+measured, which is exactly what you would expect from a tool that looks where it is pointed.
+
+<Callout variant="info" title="Try it yourself">
+  Everything in this series runs in strudel-bench:
+  <a href="https://jonborchardt.github.io/strudel-bench/" target="_blank" rel="noopener">play with the live instrument</a>,
+  or read
+  <a href="https://github.com/jonborchardt/strudel-bench" target="_blank" rel="noopener">the source on GitHub</a>.
+</Callout>

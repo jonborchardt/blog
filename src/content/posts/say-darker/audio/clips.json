@@ -1,7 +1,22 @@
 [
-  { "out": "say-darker/drop-0-base", "song": "darker0.strudel", "section": "drop", "cycles": 2 },
-  { "out": "say-darker/drop-1-darker", "song": "darker1.strudel", "section": "drop", "cycles": 2 },
-  { "out": "say-darker/drop-2-darker", "song": "darker2.strudel", "section": "drop", "cycles": 2 },
+  {
+    "out": "say-darker/drop-0-base",
+    "song": "darker0.strudel",
+    "section": "drop",
+    "cycles": 2
+  },
+  {
+    "out": "say-darker/drop-1-darker",
+    "song": "darker1.strudel",
+    "section": "drop",
+    "cycles": 2
+  },
+  {
+    "out": "say-darker/drop-2-darker",
+    "song": "darker2.strudel",
+    "section": "drop",
+    "cycles": 2
+  },
   {
     "out": "say-darker/pad-0-base",
     "song": "darker0.strudel",
@@ -21,6 +36,32 @@
     "song": "darker2.strudel",
     "section": "drop",
     "layer": "pad",
+    "cycles": 2
+  },
+  {
+    "out": "say-darker/pad-wobble-before",
+    "song": "darker0.strudel",
+    "section": "drop",
+    "layer": "pad",
+    "cycles": 4
+  },
+  {
+    "out": "say-darker/pad-wobble-after",
+    "song": "darker0-wobble.strudel",
+    "section": "drop",
+    "layer": "pad",
+    "cycles": 4
+  },
+  {
+    "out": "say-darker/drop-breakdown-before",
+    "song": "darker0.strudel",
+    "section": "drop",
+    "cycles": 2
+  },
+  {
+    "out": "say-darker/drop-breakdown-after",
+    "song": "darker0-breakdown.strudel",
+    "section": "drop",
     "cycles": 2
   }
 ]

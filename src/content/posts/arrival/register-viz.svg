@@ -1,10 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="640" height="340" viewBox="0 0 640 340" font-family="system-ui, sans-serif" font-size="13">
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360" font-family="system-ui, sans-serif" font-size="13">
   <text x="10" y="20" font-size="12" fill="currentColor" fill-opacity="0.75">RANGE OF EVERY INSTRUMENT, LOWEST MEDIAN FIRST</text>
 
   <!-- x: MIDI 12..100 over 150..620 -> 5.34 px per semitone ; x = 150 + (m-12)*5.34 -->
   <!-- middle C = 60 -> 150 + 48*5.34 = 406 -->
-  <path d="M406 34V296" stroke="#f0b35a" stroke-width="2.5" stroke-dasharray="6 5" />
-  <text x="406" y="326" font-size="11" text-anchor="middle" fill="currentColor">middle C</text>
+  <path d="M406 34V316" stroke="#f0b35a" stroke-width="2.5" stroke-dasharray="6 5" />
+  <text x="406" y="346" font-size="11" text-anchor="middle" fill="currentColor">middle C</text>
 
   <g font-size="12" fill="currentColor" text-anchor="end">
     <text x="142" y="50">didgeridoo</text>
@@ -17,8 +17,9 @@
     <text x="142" y="190">piano</text>
     <text x="142" y="210">recorder</text>
     <text x="142" y="230">handchimes</text>
-    <text x="142" y="250">glockenspiel</text>
-    <text x="142" y="270">harp</text>
+    <text x="142" y="250">bowed vibraphone</text>
+    <text x="142" y="270">vibraphone</text>
+    <text x="142" y="290">harp</text>
   </g>
 
   <!-- ranges: x1 = 150+(min-12)*5.34, x2 = 150+(max-12)*5.34 ; median dot -->
@@ -33,26 +34,26 @@
     <line x1="417" y1="186" x2="534" y2="186" />
     <line x1="433" y1="206" x2="545" y2="206" />
     <line x1="481" y1="226" x2="556" y2="226" />
-    <line x1="481" y1="246" x2="598" y2="246" />
-    <line x1="481" y1="266" x2="609" y2="266" />
+    <line x1="481" y1="246" x2="572" y2="246" />
+    <line x1="481" y1="266" x2="598" y2="266" />
+    <line x1="481" y1="286" x2="609" y2="286" />
   </g>
   <g fill="#006a90">
     <circle cx="166" cy="46" r="5" /><circle cx="214" cy="66" r="5" /><circle cx="332" cy="86" r="5" /><circle cx="342" cy="106" r="5" />
     <circle cx="380" cy="126" r="5" /><circle cx="433" cy="146" r="5" /><circle cx="470" cy="166" r="5" /><circle cx="470" cy="186" r="5" />
-    <circle cx="497" cy="206" r="5" /><circle cx="508" cy="226" r="5" /><circle cx="534" cy="246" r="5" /><circle cx="545" cy="266" r="5" />
+    <circle cx="497" cy="206" r="5" /><circle cx="508" cy="226" r="5" /><circle cx="529" cy="246" r="5" /><circle cx="534" cy="266" r="5" /><circle cx="545" cy="286" r="5" />
   </g>
 
   <!-- the straddler, marked -->
   <rect x="283" y="138" width="247" height="17" rx="8" fill="none" stroke="#f0b35a" stroke-width="2.5" />
   <path d="M530 146H566" stroke="#f0b35a" stroke-width="2" fill="none" />
-  <text x="570" y="150" font-size="11" fill="currentColor">crosses</text>
+  <text x="570" y="150" font-size="11" fill="currentColor">straddles</text>
 
-  <line x1="150" y1="288" x2="620" y2="288" stroke="currentColor" stroke-opacity="0.35" stroke-width="1" />
+  <line x1="150" y1="308" x2="620" y2="308" stroke="currentColor" stroke-opacity="0.35" stroke-width="1" />
   <g font-size="11" fill="currentColor" fill-opacity="0.75" text-anchor="middle">
-    <text x="150" y="304">C0</text>
-    <text x="278" y="304">C2</text>
-    <text x="406" y="304">C4</text>
-    <text x="534" y="304">C6</text>
+    <text x="150" y="324">C0</text>
+    <text x="278" y="324">C2</text>
+    <text x="406" y="324">C4</text>
+    <text x="534" y="324">C6</text>
   </g>
-  
 </svg>

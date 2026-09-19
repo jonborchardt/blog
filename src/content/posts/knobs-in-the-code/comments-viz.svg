@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="436" viewBox="0 0 640 436" font-family="system-ui, sans-serif" font-size="13">
+  <defs>
+    <marker id="cmv-fg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="currentColor" fill-opacity="0.6" />
+    </marker>
+  </defs>
+
+  <!-- header -->
+  <text x="24" y="18" font-size="12" fill="currentColor" fill-opacity="0.8">arrival.strudel, 59 cycles</text>
+
+  <!-- the quoted-but-unpinned section -->
+  <path d="M357 44V36H433V44" stroke="#f0b35a" stroke-width="2.5" fill="none" />
+  <text x="395" y="29" font-size="11" text-anchor="middle" fill="currentColor">quoted too</text>
+
+  <!-- section bands: x = 24 + cycle * 10.034 -->
+  <g stroke="currentColor" stroke-opacity="0.3" fill="currentColor">
+    <rect x="24" y="48" width="10" height="30" fill-opacity="0.14" />
+    <rect x="34" y="48" width="80" height="30" fill-opacity="0.06" />
+    <rect x="114" y="48" width="80" height="30" fill-opacity="0.14" />
+    <rect x="194" y="48" width="81" height="30" fill-opacity="0.06" />
+    <rect x="275" y="48" width="80" height="30" fill-opacity="0.14" />
+    <rect x="355" y="48" width="80" height="30" fill-opacity="0.06" />
+    <rect x="435" y="48" width="120" height="30" fill-opacity="0.14" />
+    <rect x="555" y="48" width="61" height="30" fill-opacity="0.06" />
+  </g>
+  <g font-size="12" fill="currentColor" text-anchor="middle">
+    <text x="29" y="40">void</text>
+    <text x="74" y="67">signal</text>
+    <text x="154" y="67">approach</text>
+    <text x="234" y="67">contact</text>
+    <text x="315" y="67">will</text>
+    <text x="395" y="67">plea</text>
+    <text x="495" y="67">threshold</text>
+    <text x="585" y="67">after</text>
+  </g>
+
+  <!-- transport slider, playhead at cycle 41.3 -->
+  <path d="M24 100H616" stroke="currentColor" stroke-opacity="0.3" stroke-width="4" stroke-linecap="round" />
+  <path d="M24 100H438" stroke="#006a90" stroke-width="4" stroke-linecap="round" />
+  <circle cx="438" cy="100" r="8" fill="#deeef5" stroke="#006a90" stroke-width="2" />
+  <g font-size="11" fill="currentColor" fill-opacity="0.75">
+    <text x="24" y="120">0</text>
+    <text x="616" y="120" text-anchor="end">59</text>
+  </g>
+
+  <!-- comment lane -->
+  <path d="M24 146H616" stroke="currentColor" stroke-opacity="0.4" stroke-dasharray="3 4" />
+  <!-- drag re-pin: from 27.5 back to 26.5 -->
+  <circle cx="300" cy="146" r="10" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-dasharray="3 3" />
+  <path d="M317 170H296" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" fill="none" marker-end="url(#cmv-fg)" />
+  <text x="323" y="174" font-size="11" fill="currentColor" fill-opacity="0.85">drag to re-pin</text>
+  <g fill="#deeef5" stroke="#006a90" stroke-width="1.5">
+    <circle cx="28" cy="146" r="10" />
+    <circle cx="84" cy="146" r="10" />
+    <circle cx="126" cy="146" r="10" />
+    <circle cx="290" cy="146" r="10" />
+    <circle cx="438" cy="146" r="10" />
+  </g>
+  <g font-size="11" font-weight="600" fill="#11171d" text-anchor="middle">
+    <text x="28" y="150">1</text>
+    <text x="84" y="150">2</text>
+    <text x="126" y="150">3</text>
+    <text x="290" y="150">4</text>
+    <text x="438" y="150">5</text>
+  </g>
+
+  <!-- the comments, as they land in the request -->
+  <g fill="#fafcfe" stroke="#006a90" stroke-width="1">
+    <rect x="24" y="192" width="592" height="42" rx="6" />
+    <rect x="24" y="240" width="592" height="42" rx="6" />
+    <rect x="24" y="288" width="592" height="42" rx="6" />
+    <rect x="24" y="336" width="592" height="42" rx="6" />
+    <rect x="24" y="384" width="592" height="42" rx="6" />
+  </g>
+  <g fill="#deeef5" stroke="#006a90" stroke-width="1.5">
+    <circle cx="46" cy="213" r="10" />
+    <circle cx="46" cy="261" r="10" />
+    <circle cx="46" cy="309" r="10" />
+    <circle cx="46" cy="357" r="10" />
+    <circle cx="46" cy="405" r="10" />
+  </g>
+  <g font-size="11" font-weight="600" fill="#11171d" text-anchor="middle">
+    <text x="46" y="217">1</text>
+    <text x="46" y="265">2</text>
+    <text x="46" y="313">3</text>
+    <text x="46" y="361">4</text>
+    <text x="46" y="409">5</text>
+  </g>
+  <g font-size="11" fill="#555f69">
+    <text x="68" y="208">cycle 0.4 (void, bar 1 of 1)</text>
+    <text x="68" y="256">cycle 6.0 (signal, bar 6 of 8)</text>
+    <text x="68" y="304">cycle 10.2 (approach, bar 2 of 8)</text>
+    <text x="68" y="352">cycle 26.5 (will, bar 2 of 8)</text>
+    <text x="68" y="400">cycle 41.3 (threshold, bar 1 of 12)</text>
+  </g>
+  <g font-size="13" fill="#11171d">
+    <text x="68" y="225">the whistle is still too loud here</text>
+    <text x="68" y="273">the intro is too long</text>
+    <text x="68" y="321">the piano pops behind every key press</text>
+    <text x="68" y="369">the piano lost its sustain, every note dies early</text>
+    <text x="68" y="417">the piano still pops, and it should sound the same all the way through</text>
+  </g>
+</svg>

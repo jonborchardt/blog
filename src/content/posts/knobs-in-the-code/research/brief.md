@@ -1,500 +1,274 @@
-# Domain brief: `knobs-in-the-code` (Strudel Bench, part 5)
+# Domain brief: `knobs-in-the-code` (Strudel Bench, the "how to use the editor" post)
 
-Repo: `E:\github2\strudle` (strudel-bench). All numbers below are measured, not recalled. Working tree at the time of writing is `7a4d1b0` plus uncommitted mp3/snippets work.
+Repo: `E:\github2\strudle` (strudel-bench) at `828c550` (2026-09-19), clean working tree. Everything below was read from code or run with Node-only commands on 2026-09-19; where a number comes from the old brief (2026-09-13) it says so. Code wins over `README.md`/`CLAUDE.md`, both of which still say "textarea" in places and still call the inline controls "an experiment ahead of moving the main pane to CodeMirror" (the move happened; the main pane is CodeMirror).
 
----
-
-## 1. The strongest story
-
-Your outline has the right *events* but the wrong *thesis*. The thesis that survives contact with the code is:
-
-> **The harness was never replaced. The UI is the harness with a face on it.**
-
-Every control in the Mix card and every widget in the editor routes back through modules that already existed for the CLI. The knobs call `setAxis` in `lib/resolve.mjs` — the same function `npm run resolve` calls. The word pills call `planEdits` — the same one. Verify calls `lib/analyze.mjs` — the pure half that `scripts/analyze.mjs` was split into (that split *is* commit `aa9b142`, "added mixer": `scripts/analyze.mjs` shrank 132 lines and `lib/analyze.mjs` appeared with 129). And the thing that actually decides what you hear, `audible()`, calls `arrange()` from `lib/song.mjs` — the very function `song()` itself uses to lay sections end to end, with one extra `patternOf` argument threaded through so the page can drop parts:
-
-```js
-// lib/song.mjs:21
-export const arrange = (sections, total, patternOf = (s) => s.pattern) =>
-  S.stepcat(...sections.map((s) => [s.span, patternOf(s).fast(s.cycles)])).slow(total);
-```
-
-That default-argument hook is the whole reason solo and mute are trustworthy. There is no second mixer. There is one arranger, and the page passes it a filter.
-
-**That is why the pivot was cheap.** Not "an agent is fast", but "nothing was thrown away". A pivot that costs a few evenings is a pivot into a layer that was already factored to receive it. Say that and the post is about architecture. Say "agents make pivots cheap" and the post is a vibe.
-
-The second-strongest thread, and the one a technical reader will actually steal: **the schema is a whitelist of semantics, and the default is silence.** A literal the schema does not describe gets no control, no underline, no drag. There is a test asserting that every key the language accepts is either specified or explicitly listed as free *with a written reason*. That is a small, copyable idea that generalises far past music.
-
-**Weak or unsupported outline claims, in order of severity:**
-
-- **"Every control is a source edit, not a runtime override."** False as written. There are exactly four runtime-only controls: solo, mute, A/B, and the preview-level slider (`pvGain`, stored in `localStorage` under `strudel:pvlvl`, explicitly `never written to the song`). Your own bullet four contradicts your bullet two. The line is real and worth drawing, but the claim needs the exception baked in, not bolted on.
-- **"A pivot this size would normally be the thing you avoid."** It wasn't a pivot away from anything. The CLI, the checker, the resolver, the verifier and the render chain all still work and are all still the agent's interface. Nothing was deleted. Calling it a pivot oversells it; calling it *additive* and asking why it was cheap is the better, truer, more interesting move.
-- **"A section auditioned alone versus in the full mix."** A section rendered alone and the same section inside the song are *the same audio*. Sections are sequential, not stacked. What isolates a *part* is solo (or the renderer's `--layer`). What pinning isolates is *time*, and its audible signature is that it loops instead of moving on.
-- **"I could not understand a song I did not write."** Fine as motivation, but note that the engine already answered it: `npm run check` prints per-layer axis values translated back into English by `describeAxes`, and an `arc:` line of section energies with bar glyphs. The UI's contribution to comprehension is *simultaneity* (see it while it plays), not the existence of the information.
+The post is now a product-review "how to use it" piece. The Compose page inventory (section 1) is the core; the claim audit (section 2) says which sentences from the old post survive; sections 3 to 8 cover Verify, story, visuals, clips, screenshots and reproduction.
 
 ---
 
-## 2. The pivot, from git
+## 1. The Compose page, top to bottom, as a user meets it
 
-124 commits, `02d19e4` (2026-09-10 19:35) to `7a4d1b0` (2026-09-13 00:52). Span: **2 days, 5 hours, 17 minutes.** Grouping commits into sessions with a 90-minute gap threshold gives **8 sessions, 21.9 hours of in-session wall time.** That is consistent with post 1's "about twenty hours" and its 7.1 / 13.7 phase split; do not contradict it.
+The page is `index.html` (served at `http://localhost:3000/` locally, `https://jonborchardt.github.io/strudel-bench/` deployed). One screen, three cards of controls over one source string. **DOM order is: nav, song header, transport, Mix card, Song source, Expanded Strudel, then Change comments beside Why it sounds this way.** The old post and `CLAUDE.md` list the source pane before the Mix card; on the live page the Mix card sits above the source.
 
-| Session | Window | In-session | Commits | Character |
-| --- | --- | --- | --- | --- |
-| 1 | 09-10 19:35 to 00:25 | 4.83 h | 43 | harness + engine |
-| 2 | 09-11 07:27 to 09:44 | 2.28 h | 20 | material, harmony, meter |
-| 3 | 09-11 16:55 to 22:32 | 5.62 h | 15 | **UI turn**: layout, examples page, kits, export |
-| 4 | 09-12 00:02 | single commit | 1 | **`aa9b142` "added mixer"** |
-| 5 | 09-12 07:41 to 09:44 | 2.06 h | 6 | materials + audition |
-| 6 | 09-12 13:54 to 14:35 | 0.69 h | 6 | kit preview, first source panel in the card |
-| 7 | 09-12 16:47 to 21:32 | 4.76 h | 26 | **inline controls**, song-source pane, then songs |
-| 8 | 09-12 23:14 to 00:52 | 1.62 h | 7 | review fixes |
+### 1.1 Nav and the desktop-only rule
 
-**When UI work started.** The textarea existed from minute three: `05a60f0` (09-10 19:38) "play page with song picker, textarea editor, live reload". It stayed a textarea for **23 hours of calendar time and 240 lines of `index.html`**. The first commit whose entire subject is interface is **`44b1155` (09-11 18:20) "updated layout"** — `index.html` 240 to 337 lines, `examples.html` created, `web/boot.mjs` extracted.
+`web/boot.mjs` `nav()`: `strudel-bench` brand, links Compose / Examples / Samples / About, a status span (the "packs: ..." line after boot, "saved", "importing ..."), and a `role="alert"` span: **"Made for a desktop browser: this window is too narrow for the mix card and panes."** `web/strudel.css` line 27: `@media (max-width: 60rem) { .top { flex-wrap: wrap; } .top .narrow { display: block; } }`. That is the whole rule: under 60rem an orange warning row appears in the nav; nothing is hidden or disabled. (The blog's `StrudelEmbed` is what swaps the iframe for a link under that width, on the blog side.) The **Samples** link carries `hidden` until Compose's `/events` SSE connection opens, so it only shows with a local server.
 
-**The commit where the plan visibly changed** is **`aa9b142`, 2026-09-12 00:02, "added mixer"**: 1,051 insertions / 306 deletions across 20 files, of which `index.html` +385 and `web/strudel.css` +132. It is a single unlabelled commit landing at midnight after a 90-minute gap, and it is the largest single-commit jump in the page's life. It is also the commit that split `lib/analyze.mjs` and `lib/resolve.mjs` out of their scripts so the browser could import them. The plan changed there.
+### 1.2 Song header (`#head`)
 
-**The second pivot, controls inside the code, is `d4f000f`, 2026-09-12 16:47**, and it has the only properly written commit message in the whole UI arc:
+- **Song** select: `songs/index.json` (the server filters out `// @hidden` songs) plus this browser's localStorage drafts (`strudel:<name>.strudel`) plus a hidden song opened by URL hash (`#knobs0.strudel` loads even though it is off the list) plus a `#s=` shared song.
+- **+ New song**: prompts for a name, writes the minimal `TEMPLATE` (a two-section `song()`), to `songs/` locally or localStorage on Pages.
+- **Packs** badge (hidden unless the song declares `packs: [...]`): each pack tagged `deployed` / `local` / `missing`.
+- **Save** (disabled until the source differs from what was loaded; ctrl+s): PUT `songs/<name>` locally, localStorage on Pages. Save also appends the mixer's pending edits to `songs/<name>.notes.json` as one request `ask: "edits made in the mixer"` (local server only; no shipped notes file contains one).
+- **Export** group: **MP3** (stops playback, renders offline in the browser one cycle at a time, encodes with lamejs in the browser, downloads `<song>.mp3`, or `<song>.<section>.mp3` when a section is pinned; with a server the file also lands in `renders/`), **Strudel** (downloads the expanded pane as `<song>.strudel.txt`), **REPL ↗** (opens strudel.cc with the expansion in the hash), **Link** (copies `<page>#s=<base64url(deflate-raw("name\nsource"))>`, the song itself in the URL; opening one lands the source in the editor unsaved). An `xstate` badge reports `rendering 40%`, `✓ demo.mp3 32.0 s`, `✗ why`; the buttons lock while a render runs.
 
-> `mix card: the section pane is a CodeMirror 6 editor with schema-driven inline controls`
-> *web/cm-editor.mjs builds the editor (no history: the page keeps the undo stack), web/cm-controls.mjs re-finds every literal web/hll-schema.mjs knows from the lezer tree after each change and, behind a controls checkbox, puts a range or select after it; alt-drag on a known number changes it in place. […] everything else stays plain code.*
+### 1.3 Transport (`#transport`)
 
-**The inline-controls arc: `d4f000f` 16:47 to `fe25841` 18:45. One hour fifty-eight minutes. Twelve commits.** Diff across that window:
+`▶ Play` / `❚❚ Pause` / `▶ Resume` (one toggle; pause remembers the cycle), `■ Stop`, `↻ Update` (appears only while playing when the source differs from what was evaluated; ctrl+enter re-evaluates in place at the current cycle), the position slider with a tick per section (scrub: jumps the clock while playing, moves the resume point otherwise), the **scope** canvas (superdough analyser 1 over the live mix, peak held one second and printed in dBFS, red at clipping), and the readout `drop · bar 3/8 · 14.5/20 · Cm` (section, bar, cycle/total, the chord under that bar). Space toggles play outside text fields.
+
+### 1.4 The Mix card (`#mix`, a `<details>` open by default)
+
+Header row: **Mix**, `↶ ↷` undo/redo, **A/B** (hear the source before the last undo step, on the same clock; the button reads `hearing: before` while on; any edit turns it off; refuses with "the previous version does not evaluate" rather than going silent), **measure** (render the shown section, then each part alone; a dB reading relative to the mix lands next to every level slider in materials; the mix's own dBFS rms and `peak ok` / `no headroom` on the `mstate` badge; writes nothing), `mstate` badge. Then, in order:
+
+1. **song** pane (`#songsrc`, closed `<details>`): a CodeMirror 6 editor over the header object of `song({...})` parsed as one expression with `root: 'song'`, so `cps`, `bpm`, `key`, `seed`, `kit`, `meter`, `packs`, `room` read as song keys. Its summary carries a **controls** checkbox (`#tweak0`). Hidden for plain (non-`song()`) files.
+2. **Arrangement strip** (`#strip`): one block per section, flex-grown by its span (song cycles, so a section with its own tempo is wider or narrower than its bar count), title `name: 8 bars, climax`. Inside each block: the name, an ops row, one row per layer kind (eight: drums, bass, melody, pad, fx, sample, perc, raw) whose opacity is `(.3 + .7 × density) × min(1, level)`, then the transition into the next block, then the tail pickers. Ops: **📌 pin** (loop this section on its own pattern at its own cps, Play starts here, the card stays on it; a plain click on another block moves the pin; unpin hands the song back at the equivalent cycle), **◀ ▶** move earlier/later (`moveSection` swaps the two call texts), **⧉** duplicate (next free numbered name: `verse` → `verse2`), **✎** rename (or double-click the name; Enter/blur commits, Escape cancels; refuses empty, quoted or taken names), **⚡** a verb pick over `lib/verbs.json`: `breakdown` (phrase "sparser, more spacious, darker", drops fx), `lift` ("busier, brighter, more driving"), `strip` (keep drums, bass, sample, perc, raw), `halftime` (drums template `'halftime'` + "slightly sparser"); a refused layer count is appended to the status. **×** remove. A plain click scrubs to the block (or re-pins when pinned). **Transition** picks on every block but the last: `riser` (bars of noise sweep at the end of this section, `fx.riser`, from 1/2/4/8 or none) and `hit` (the next section's `fx.impact`, any loaded sound, with a ▶ preview); an fx part is added when the section has none. **Tail** picks on every block: `dropout` (bars of silence, all but fx) and `sweep` (bars of low-pass sweep down to 150 Hz), from 1/2/4/8 capped by the section's length.
+3. **section** pane (`#secsrc`, closed): the same editor over the shown section's whole `section(...)` call, with its own **controls** checkbox (`#tweak`). Typing here splices the source at that span; while it has focus the card re-finds the section by position (the name may be mid-edit) and leaves its text alone.
+4. **axes** panel (open): the **harmony strip** (`#harm`) then the **knobs** grid then an **add part…** select.
+   - Harmony strip: a key button (`Cm`, marked `song` when the section inherits the song's key) opening a pick over every root × mode; one button per bar showing the chord name over its numeral (`Cm` / `i`), bars beyond the progression's length greyed as repeats and editing the bar they repeat; a `+` bar. Picks go through `setSectionField` (key / progression). A progression using `@n` is read-only here (status: "@n is hand-written: edit the progression in the source"); an unparseable one shows in italics.
+   - Knobs grid: a header of the twelve axis names, one row per part: the part name, **mute** and **solo** buttons (what you hear, not the song), **remove** (trash icon, `removeLayer`, undoable), then one cell per axis. A cell is empty when the layer has no adapter for that axis (`cells[layer][axis]`), a **slider** (0..1, step .01) when it does, with the title saying `(from the spread; dragging adds an override)` or `(not in the source: baseline)` when there is no literal, and a **▾ shape** button on every continuous axis (`constant`, `ramp up`, `ramp down`, `wobble`, `drift`, `pulse`, `swell`, written centred on the cell's current value through `setAxisText`). A cell whose value is a signal or expression is drawn as an **automation lane** (`web/lane.mjs`: the evaluated attr pattern sampled 16× per bar as a polyline with bar lines) instead of a slider, and clicking it opens the same shape pick. Under each row an **event strip** draws the part's onsets across the section's bars from the evaluated song (filled one bar per task after render, so a section change does not stall the scheduler), with a **playhead** (`--ph`) sweeping while that section sounds.
+   - Slider drags coalesce into one undo step per second and commit through `setAxis` (or `setAxisScoped` with **all sections** ticked: every section that has the part, signals skipped).
+5. **materials** panel (closed): one row per part. By kind:
+   - **drums**: `template` pick (`house`, `breaks`, `minimal`, `halftime` from `TEMPLATES`) or, once the template is a written `{ voice: grid }` object, the **step grid** (`web/stepgrid.mjs`: voices × steps, click cycles rest → hit → accent → ghost, a `+ voice` box adds a row for a kit voice or a pack sound); an **edit as grid** button copies the named template into the source as a grid. `sounds`: one pick per kit voice (`bd sd hh oh cp`), each with a ▶ that auditions the voice alone.
+   - **bass / melody / pad**: `sound` pick (synths + every loaded sample, ▶ per row), `patch` pick (`pluck reese hollow glass breath sub wide`, `lib/patches.json`).
+   - **bass / melody**: `notes` text box (placeholder "seeded line"; a ▶ shows while focused) with a closed **roll** `<details>` under it (opens when the box takes focus; `web/roll.mjs`: degrees × slots, click sets a note, again rests it, click inside a hold splits it, shift-click holds the note before through the slot; a line with notation beyond degrees, `~` and `@n` says "this line uses notation the roll does not edit"; the roll's summary ▶ auditions the part with the line as the box has it).
+   - **melody**: `bars` (phrase; 1 is dropped from the source), the **line** row: "written by hand" when notes are set, else a **seed stepper** `◀ seed 3 song ▶` showing the generated line as text with a ▶; `follow the chords` checkbox.
+   - **pad**: `arp` pick (`up`, `down`, `updown`, or a written order stays text).
+   - **sample**: `sound` pick (synths, samples and the packs' named definitions, labelled `loop-kick · demo-pack sample`), **import…** (local server only; also drag-and-drop on the row: the file lands in `samples/user/<song>/`, a license prompt writes `pack.json`, the song declares the pack, the part's sound is set), `bars`, `slices` (count) or `breaks` (seconds into the file; empty = equal slices), `play` (slice-index pattern), `fit each slice to its step` (stretch), `transpose` (semitones), then the **waveform** (`web/waveform.mjs`: the file's peaks with the region lit and a line per slice; click adds a break, click a line removes it, drag a line or a region edge; `start`/`end` sliders with time readouts; a `snap` select `off 1/4 1/8 1/16`, a browser setting under `strudel:snap`; one numbered button per slice that plays it alone; an info line `2.00 s · stereo · region 1.98 s as 2 bars · ≈ 120 bpm · 1 bars?` with **use** (write this part's bars) and **song bpm 120** (set the song's tempo) buttons from the tempo detector). Values inherited from a pack definition are greyed with a tooltip saying which definition. A refusal ("slices: the pattern plays slice 7; remove it from the pattern first") is written to the status instead of writing a song that will not build.
+   - **perc**: `sound` pick, `rhythm` text. **raw**: `pattern` shown as `expr` (edit in the source).
+   - Every row ends with a **level** slider (0..2, ×1 dropped from the source) with a `dB` slot that **measure** fills.
+   - At the bottom: **preview level** (`input.pvin`, log ×0.1..×50, `strudel:pvlvl`, never written to the song; a running preview restarts on release). An **add part…** select ends the list too.
+6. The **pick menu** (`#pick`, one native popover behind every pick button on the page, the section pane's inline picks included): a filter box (Enter picks the first visible row), the same preview-level slider (hidden when the rows have no ▶), rows with a ▶ that **auditions without selecting**, an empty row meaning "unset" where allowed, and for the kit menu each kit's icon plus a legend key. Closing the menu ends its preview.
+7. **adjust via vocabulary** (open): the **phrase** box with a native datalist of terms (control words, moods/genres, modifiers incl. `less`, harmony words, and this section's part names); only a known term becomes a **pill** (Enter, Tab or comma on the word, or on a prefix only one term starts with; a pick from the list); unknown text is marked red and never becomes a pill; Backspace on an empty box removes the last pill; a **part pill** scopes the pills after it to that part. **Apply** runs `planEdits` per clause and commits (status like `drums.density .6→.85, pad.space .6→.8` or `those words change nothing here`, or `melody.brightness refused (brightness is a signal here...)`). **Verify** (section 3 below). **all sections** checkbox: words and knobs land in every section that has the part. A `vstate` badge and the `#vout` comparison live here; `#mixstatus` under the card is the one status line every control writes.
+
+### 1.5 Song source (`.card.pane`)
+
+**Song source** · `editable · axes 0..1, 0.5 is baseline`, a third **controls** checkbox (`#tweak2`), `unsaved` when it differs from disk, `↶ ↷`. The editor is the same `createEditor` factory as the two panes, in the page's light look, over the whole file. `#err` under it shows evaluation errors and "sound not found" lines. All three controls checkboxes are one setting (`setTweak`, `strudel:tweak`); **off by default**, so the code reads clean until asked.
+
+**What the controls do in any of the three editors** (`web/cm-controls.mjs`, `web/cm-widgets.mjs`, `web/hll-schema.mjs`):
+- Every literal the schema knows gets a dotted underline and a hover title (`drums.density: amount of musical activity (alt-drag to change)`), whether or not controls are on.
+- **Alt-drag** on a known number changes it in place, controls on or off: a bounded number crosses its whole range in 200 px, a log one (`cps`) multiplies, an open one steps every 8 px. The gesture re-finds the control on every mousemove and gives up if it is gone.
+- With controls on, a widget follows each literal: **slider** (number with a max), **spinner** (number with a min and no max: `seed`, `phrase`, `riser`, `dropout`, `sweep`, `bars`, `slices`, a section's cycle count, `.slow()`/`.fast()`/`.segment()` arguments), **check** (bool: `fill`, `follow`, `stretch`), **pick** (an enum through the shared menu: `sound`, `kit`, `key`, `meter`, `role`, `template`, `patch`, `arp`, `impact`, each drum voice in `sounds`; with a ▶ when the value can be heard), **tokens** (the progression as a row of chord buttons plus `+`, brackets kept as text), and a **signal** pick on a bare `saw`/`sine`/`perlin`/... standing in for a number. Arguments of `.range()`, `ramp()`, `wobble()`, `drift()`, `pulse()`, `swell()` **inherit** the bounds of the number they stand in for (`ramp(0, 1.5)` under `level` gets 0..2 sliders; `sine.range(1, 5)` under free-text `notes` gets nothing).
+- A widget writes exactly its literal (`editFor`), quantized to the spec (clamped, rounded to the step, `.35` not `0.35`, the quote character kept). The edit goes through the page's `commit` like typing.
+- **The schema is a whitelist** (`web/hll-schema.mjs` header: "a literal without an entry here never gets a control, so a wrong range cannot be invented for it"). Literals outside `song(...)`/`section(...)` objects, or of keys not in `props`, stay plain code; `gain(0.72)` gets nothing because `gain` is Strudel, not the language. A `const` the file spreads into a layer (`...theme`) counts as a layer object, so arrival's shared consts get controls too.
+- **The test** (`test/cm.test.mjs`, "every key the HLL accepts has a control spec or is listed as free, with the reason"): `META_KEYS` + a hand-written section-key list + the twelve axes + every layer's materials must each be in `SCHEMA.props` or `SCHEMA.free`, every free entry must be an HLL key, and its reason must be longer than eight characters. Measured today: **50 keys the language accepts, 40 with a spec, 10 free**: `packs`, `room`, `duck`, `velocity`, `humanize`, `compressor`, `notes`, `rhythm`, `chord`, `pattern` (the old post said 33 / 30 / 3; the mix material landed on 2026-09-18). One nit: the test's section-key list is `role key progression meter bpm cps kit` and omits `dropout`/`sweep`, which have specs anyway; a new section key would slip past it. `SCHEMA.props` has 42 entries: 21 sliders, 7 spinners, 9 enums, 1 tokens, 1 map, 3 bools.
+- **Where it falls down, still true today**: `specFor` matches on key name and nesting depth, never on whether the key is legal on that layer. Verified: `section('a', 4, { drums: { kit, phrase, arp, progression, begin } })` yields controls `drums.kit` (pick), `drums.phrase` (spinner), `drums.arp` (pick), `drums.progression` (chord row), `drums.begin` (slider), none of which the language accepts on drums; `section('a', 4, { density: .5, dropout: 2 })` gives `density` a slider at section level, which `song()` rejects as `unknown layer "density"`. The build (and the page's `#err`) catches it; the editor invited it.
+
+### 1.6 Expanded Strudel (`#xpane`, a closed `<details>`)
+
+`generated · read-only · follows the source as you type`: the plain Strudel the file reduces to (`lib/dump.mjs` in the browser), re-expanded 300 ms after each edit and on play; lines the last edit changed flash and the pane scrolls its own box (never the page) to the first changed line. Still a `<pre>`, not an editor.
+
+### 1.7 Change comments (`#feedback`, local server only: hidden when `/events` 404s)
+
+Subtitle: "each one is pinned where the playhead is; its dot on this slider can be clicked to edit and dragged to move". A second position slider mirrors the transport (both scrub). A textarea (placeholder "Make this heavier and less predictable."), **Add comment here** (pins at the transport slider's current value, 0.05-cycle steps, tagged with the section under it; disabled with no sections), **Cancel** (while editing), **Copy request** (clipboard), a status. Each comment is a coloured **dot** on the lane and a numbered list row `1. drop cycle 15.0 less hats ×`. A still press on a dot edits its text (the button reads **Save comment here**); a **drag re-pins it in 0.1-cycle steps** and re-tags its section live. The paste-ready request (`buildRequest` in `web/compose.mjs`) is shown under the list and follows every source edit. Comments are page state: they never touch the source or the undo stack, and switching songs clears them.
+
+**Current request text shape** (verbatim structure from `buildRequest`):
 
 ```
- index.html          | 248 +++++++++++++++-------------
- test/cm.test.mjs    | 176 ++++++++++++++++++++
- web/cm-controls.mjs | 200 +++++++++++++++++++++++
- web/cm-widgets.mjs  |  96 ++++++++++
- web/hll-schema.mjs  |  85 +++++++++
- web/cm-editor.mjs   |  52 ++++++
- web/strudel.css     |  76 +++++++--
- 15 files changed, 997 insertions(+), 110 deletions(-)
+Song: songs/<name>
+Sections: intro (4 bars from cycle 0), verse (8 bars from cycle 4), drop (8 bars from cycle 12)
+
+I listened and pinned each note at the cycle the playhead was on. A note is about what I heard there: that exact
+spot, the section it is in, or what led into it just before. Please make these changes and keep everything else as it is:
+1. cycle 15.0 (drop, bar 4 of 8): less hats
+2. cycle 6.2 (verse, bar 3 of 8): darker pad
+
+Current source of the parts around those spots:
+```
+song({ cps: .5, key: 'C:minor', seed: 3, kit: 'RolandTR909' }
+
+section('verse', 8, { ... }),
+
+section('drop', 8, { ... }),
+```
 ```
 
-Four new modules, a test file, and CodeMirror added as a dependency, in under two hours. Five dependencies were added in that window (`@codemirror/{state,view,language,commands,lang-javascript}`) and `scripts/pages.mjs` was taught to ship them package by package in the same commit, so the static build never broke.
+The rule and its comment, verbatim from `web/compose.mjs`:
 
-**Page growth, `index.html` line count at each commit that touched it** (this is visual candidate 1):
+```js
+ * A note in a section's first bar also quotes the section before it: the ear often reacts a moment late.
+ ...
+    if (s && n.cycle - s.offset < 1 && i > 0) quoted.add(sections[i - 1].name);
+```
 
-| Commit | When | Lines | What |
-| --- | --- | --- | --- |
-| `05a60f0` | 09-10 19:38 | 100 | the textarea |
-| `56db237` | 09-11 00:23 | 233 | exports, render routes |
-| `8eab386` | 09-11 17:23 | 240 | end of the textarea plan |
-| `44b1155` | 09-11 18:20 | 337 | layout turn |
-| `9d09e4e` | 09-11 22:32 | 556 | kits, exports, packs |
-| `aa9b142` | 09-12 00:02 | **891** | the mixer |
-| `724d277` | 09-12 14:19 | 985 | kit + voice auditioning |
-| `d4f000f` | 09-12 16:47 | 1023 | inline controls |
-| `fe25841` | 09-12 18:45 | 1064 | controls everywhere |
-| HEAD | 09-13 00:52 | 1221 | |
-| working tree | | **1243** | |
+The song header is quoted with a regex (`song\(\s*\{[^}]*\}`), so a header containing a nested object (arrival's `room: {...}` today) is cut at the first `}`; a cosmetic wart worth knowing before quoting arrival's header in the post. The 78-line request in the old `handing-over` Details block matches the current section map of arrival (void 0, signal 1, approach 9, contact 17, will 25, plea 33, threshold 41, after 53) but its quoted section sources are the 2026-09-13 text; arrival's consts and header changed on 2026-09-18 (`room`, `packs: ['rooms']`, `position`, `humanize`, levels). Treat that block as a historical record.
 
-**Engine versus UI, by commit.** Classifying each commit by the directories it touches (`index.html`/`web/`/`examples.html` = UI; `lib/`/`scripts/`/`gen/`/`server.mjs` = engine):
+### 1.8 Why it sounds this way
 
-- 53 of 124 commits touch the UI, 70 touch the engine.
-- **26 UI-only, 43 engine-only, 27 both.**
-- `index.html` total churn across its whole life: **+1,922 / -701**.
+Header count `3 requests, 7 changes, last 2026-09-12`; the song's `prompt` paragraph; then one list per section (in source order, `song` first) merging the `//` comments in the source with `songs/<name>.notes.json` changes: a `layer.axis` tag, the why, `from → to` when recorded, and the request's date and ask as a tooltip. "no comments in this song yet" otherwise. Refreshes when the notes file changes on disk (`npm run note`).
 
-**Verdict on "a few evenings": accurate, and slightly understated in one direction.** The Mix card through the inline controls, `44b1155` to `fe25841`, is **33 commits over 24 hours 25 minutes of calendar time and roughly 9 hours of in-session work**: three evenings and two mornings. So say "a few evenings" and you are right. But do not let a reader infer the *whole system* was a few evenings: it was ~22 hours over 2 days 5 hours, and the UI is the *back* ~9 of those, standing on a finished engine. The honest sentence is: "the interface cost about as much as the engine did, and got no planning at all."
+### 1.9 Undo, coalescing, keys
+
+One undo stack in the page (`commit`): whole-document snapshots, capped at 200, `future` cleared on a new edit. **Coalesce within one second: typing (in any of the three editors) and knob drags**; a drag's end resets the window so the next drag is its own step. Everything else is its own step: pills/Apply/Verify, section ops, verbs, harmony picks, materials picks and boxes, the level slider (commits on release), waveform gestures, step grid and roll clicks, seed steps, imports, kit. Undo/redo buttons on the Mix header and the Song source header; **ctrl+z**, **ctrl+shift+z** or **ctrl+y**; undo blurs a focused pane first so it re-reads the restored source, closes the Verify comparison, and turns A/B off. CodeMirror's history extension is deliberately not installed (`web/cm-editor.mjs` header comment), so three editors share one stack.
+
+Other keys: **space** play/pause outside text fields, **ctrl+s** save, **ctrl+enter** Update, **Enter** in the pick filter picks the first row, **Enter/Escape** in a rename box, **alt-drag** on a known number, Enter/Tab/comma in the phrase box. `beforeunload` asks when there are unsaved edits.
+
+### 1.10 Save and localStorage on Pages
+
+With a server: PUT to `songs/`, and `fs.watch` reloads the page's copy when the file changes on disk (re-evaluating if playing; a "file changed on disk. reload" link instead when there are unsaved edits). On GitHub Pages (`/events` 404s): Save and New song go to localStorage (`strudel:<name>.strudel`), the song list merges those drafts, the Change comments card is hidden, import is hidden, and everything else (play, Mix card, Verify, measure, exports, Link) works because it all runs in the browser. Browser settings, never the song: `strudel:tweak` (controls), `strudel:pvlvl` (preview level), `strudel:snap` (waveform snap).
+
+### 1.11 Embedding
+
+`?play=1` starts on load (needs user activation; a refused autoplay leaves the button saying Play with a tooltip explaining), `?section=<name>` opens pinned to that section. Query, not hash: the hash is the song name.
+
+### 1.12 The Examples page (`examples.html`)
+
+An intro, a **map** figure of the shape of a song whose labels link to groups, a sub-nav by arc, then the groups. Today (`web/examples.mjs` at `828c550`): **16 groups, 134 cards, 0 stubs**, in four arcs: The language (Song and section, Axes, Axes across layers, Trajectories), Words (Descriptors, Overlays, Modifiers), Harmony (Harmony, Progression syntax), then Material, Drums and written rhythm, Samples, Mix routing, Section-level edits, Transitions, Full songs. Each card: title, blurb, tags, an optional SVG, **variant buttons** (`▶ Low / ▶ Baseline / ▶ High`, or `▶ Before / ▶ dreamy`) that load and play (an A/B), `■`, an editable **HLL pane** (still a plain textarea here) that re-expands 300 ms after an edit and re-evaluates while that card plays, a `▶` to play the pane as edited, and a closed **Expanded Strudel**. Only one card plays at a time; **ctrl+.** stops. `test/examples.test.mjs` evaluates every variant with the checker. Counts move with every commit: do not print them.
+
+### 1.13 The Samples workshop (`samples.html`, local only)
+
+Not in `PAGES`, so never deployed; `noindex`; linked only once a server answers. Left: the local packs (`samples/user/<pack>/`) with their sounds and named definitions, a **+ new pack** form (name, license; blank license = local-only), and a drop target on the selected pack ("what you drop ships with the site" when the pack deploys). Right: one definition on the same waveform component Compose uses: name, sound, start/end in seconds, bars, slices or breaks, snap, stretch, an audition pattern and bpm (page settings), `▶ region`, `▶ pattern`, a button per slice, **Save / Duplicate / Delete** into the pack's `pack.json` (confirm before replacing or deleting). It makes definitions a song can name (`sample: { sound: 'loop-kick' }`); it never edits a song.
 
 ---
 
-## 3. The schema that decides what gets a control
+## 2. Claim audit of the kept parts of the old post
 
-`web/hll-schema.mjs`, 86 lines. It is data. The header comment says so:
+| Old claim | Verdict today |
+|---|---|
+| The literal → control table on the verse melody line of `demo.strudel` (`.5` slider, `saw` menu, `.3`/`.7` sliders inheriting the axis bounds, `8` spinner, `'piano'` menu, `true` toggle, `2` spinner, the note string nothing) | **Holds exactly.** Re-run of `findControls` on that line: `.5 melody.density slider 0..1`, `saw melody.brightness.signal pick`, `.3 melody.brightness.range(0) slider 0..1`, `.7 range(1) slider 0..1`, `8 slow(0) spinner min .125`, `'piano' melody.sound pick`, `true melody.follow check`, `2 melody.phrase spinner min 1`; the notes string is the one literal on the line without a control. Same line in `knobs0.strudel` and `punchier1.strudel`. (The task called it "the knobs-cp line": `knobs-cp.strudel` is a plain Strudel one-liner, `s("cp").struct(...).bank("RolandTR909")`, with 3 literals and **0** controls, because nothing outside `song()`/`section()` is the language.) |
+| "Across a whole song, 51 of 58 literals get a control. The seven that do not are three section names and four hand-written melodic lines." | **Holds** for `demo.strudel` and `knobs0.strudel`: literals 58, controls 52 (51 literals + the `saw` identifier), the seven without: `'intro' 'verse' 'drop'` and the four `notes` strings. Widgets over the file: 30 sliders, 10 picks, 8 spinners, 3 checks, 1 chord row. `punchier1.strudel` is 55 of 62. `arrival.strudel` is 324 of 450 (the many free-text and inline-object values of the mix material). Tie the number to `demo.strudel` by name; `demo` is `// @blog`-locked and unchanged musically since 2026-09-12. |
+| Slider vs spinner rule ("a number with a known ceiling gets a slider, one with only a floor a spinner, because a slider would have to invent a maximum") | **Holds**: `widgetFor`: `c.spec.max == null ? spinner : slider`. The schema comment says it: "without: a spinner from min up, nothing invented". |
+| "The schema matches on a key's name and nesting depth, not on whether the key is legal where it appears... a chord picker for a chord progression written on a drum part" | **Still true**, verified today (section 1.5). No test pins it either way. |
+| density `.9` → `.84` drops the clap: 28 → 26 onsets per bar, section energy 59 → 57, clap threshold 0.85 | **Holds, recomputed with `npm run check`**: `knobs0` drop drums `28/cyc density=0.9 ... very busy, frantic, punchy`, `arc: intro 9 · verse 29.5 · drop 59`; `knobs1` drop drums `26/cyc density=0.84 ... busy, frantic, punchy`, `arc: ... drop 57`. `DRUM_THRESH = { bd: .1, sd: .3, hh: .5, oh: .7, cp: .85 }` (`lib/layers.mjs` line 116); 16th hats join at `>= .8` (both sides of the example have them). `voicesAt` also requires the template to have a line for the voice, and any written extra voice is never density-gated. |
+| "Six things bypass the undo stack. Four are what you hear: solo, mute, compare, and the preview volume. Two are where you are: pinning a section, and scrubbing the playhead." | **Holds as the musical statement**, with more page state around it now: what you hear (solo, mute, A/B, preview level), where you are (pin, scrub), and browser settings that touch neither the song nor the stack (the controls checkbox, the waveform snap select, a roll being open), plus **measure** (writes nothing) and the **Change comments** list (page state). Nothing that changes the music escapes the stack; the Verify button's edit does go on it. |
+| One undo stack, coalescing rule | **Holds**: see 1.9. The editor's own history is not installed; three editors, one stack. Typing and knob drags coalesce within a second; section ops and kit changes never do. |
+| Why a drum voice previews alone | **Holds**: `index.html` comment "a drum voice alone on its template grid: the whole part would drown it, or not even include it, since voices join as density rises"; `audition()` builds the voice through `voiceSound` on its template row (or `x...` on the beats when the template has no line for it). Clip C's logic is unchanged (`verse` drums at `.6` have `bd sd hh` only; the clap is absent). |
+| The `arrange` default-argument trick | **Still in `lib/song.mjs` line 22**, verbatim: `export const arrange = (sections, total, patternOf = (s) => s.pattern) => S.stepcat(...sections.map((s) => [s.span, patternOf(s).fast(s.cycles)])).slow(total);` and `audible()` in `index.html` still calls `arrange(secs, pat.strudel.total, filt)` with a filter over solo/mute. Solo and mute are the same arranger with a function handed in. |
+| "Every control in the interface calls a function that already existed for the command line" | **Mostly, and say it precisely.** Pills and Apply call `planEdits`/`applyEdits` (`lib/resolve.mjs`), which `scripts/resolve.mjs` calls. The ⚡ verbs call `applyVerb`, which `scripts/resolve.mjs --verb` calls. Verify and measure call `analyze` in `lib/analyze.mjs`, which `scripts/analyze.mjs`, `scripts/verify.mjs` and `scripts/measure.mjs` call; measure's dB rows are `levelRows` in `web/compose.mjs`, which `scripts/measure.mjs` imports too. Solo/mute call `arrange`, which `song()` calls. **The knobs call `setAxis`, which no CLI calls**: it is page-only, built on the same acorn `locate` and `applyEdits` the resolver uses (same module, same parse, same splice, not the same function). Likewise `setMaterial`, `setSectionField`, `moveSection` and friends are page-only helpers in the resolver's module. The honest sentence: every control edits the source through `lib/resolve.mjs`, the module the CLI resolver is, and the ones that measure or arrange go through the very functions the CLI uses. |
 
-> *Adding a key is a data edit here; the editor reads the shape, not the names.*
-
-**The five buckets.**
-
-| Bucket | Matches | Example |
-| --- | --- | --- |
-| `props` | an object key inside a `song(...)` header, a `section(...)` spec, one of its layer objects, or inside a `map` such as `drums.sounds` | `density`, `bpm`, `kit`, `template` |
-| `calls` | positional arguments by callee name; `null` means "no control for this position" | `section: { args: [null, int(1,...), null] }` |
-| `methods` | positional arguments of a Strudel method **anywhere** in the file | `.range`, `.slow`, `.fast`, `.segment` |
-| `signals` | bare identifiers that may stand in for a number | `sine cosine saw isaw tri square rand perlin` |
-| `free` | keys that take hand-written text or structure, **with a written reason** | 3 of them |
-
-**The six spec kinds.**
-
-```
-{ type:'number', min, max?, step, scale?:'log' }   max present -> slider; max absent -> spinner, nothing invented
-{ type:'enum', values, labels?, list? }            values may be a function (host-supplied lists)
-{ type:'bool' }
-{ type:'map', keys?, values }                      an object whose string values are each an enum
-{ type:'tokens', values, sep }                     a string of tokens, any number of them
-'inherit'                                          (argument specs only) the bounds of the HLL number this expression is the value of
-```
-
-`'inherit'` is the best idea in the file. `ramp(0, 1.5)` sitting as the value of `level` gets sliders bounded 0..2, because `enclosingNumber()` walks up the tree to the enclosing `Property`, resolves *its* spec, and hands it down. `sine.range(1, 5)` sitting as the value of `notes` gets **nothing**, because `notes` is free and has no bounds to lend. That exact case is pinned by a test.
-
-**The test.** `test/cm.test.mjs`, "every key the HLL accepts has a control spec or is listed as free, with the reason":
-
-```js
-const all = new Set([...META_KEYS, ...section, ...AXIS_NAMES, ...layerNames().flatMap(layerMaterial)]);
-const missing = [...all].filter((k) => !SCHEMA.props[k] && !SCHEMA.free[k]);
-assert.deepEqual(missing, [], 'keys without a spec or a reason');
-for (const [k, why] of Object.entries(SCHEMA.free)) {
-  assert.ok(all.has(k), `free key ${k} is not an HLL key`);
-  assert.ok(why.length > 8, `free ${k}: say why`);
-}
-```
-
-It is bidirectional: a new language key with no spec fails the build, and a `free` entry naming a key the language no longer accepts also fails. And `why.length > 8` is a test that a sentence exists. I measured the actual sets:
-
-- **33 keys the language accepts** (7 `META_KEYS`, 7 section-level, 12 axes, 19 layer materials across `drums bass melody pad fx`, deduplicated).
-- **30 have specs. 3 are free.** The three, verbatim:
-  ```
-  packs: 'a list of sample pack names'
-  notes: 'a line in mini-notation, written by hand'
-  chord: 'a scale degree or a pattern of them'
-  ```
-
-**Why "not in the schema stays plain text" is the important half.** Because the alternative is a UI that guesses. A slider has a range; if the range is invented, it is a lie about the language drawn at 60fps under the user's cursor. The file's own comment states the rule: *"a literal without an entry here never gets a control, so a wrong range cannot be invented for it."* The open-ended number spec is the same principle applied inside a kind: `seed`, `phrase`, `riser` and `section()`'s cycle count have a floor and **no ceiling**, so they render as spinners rather than sliders, because a slider would have to invent a maximum.
-
-**Real examples of both halves.** I ran `findControls` over the actual `songs/demo.strudel`:
-
-```
-controls: 52        literals total: 58        literals with a control: 51
-literals WITHOUT a control:
-  'intro'
-  'verse'
-  '0 2 3@2 ~ 4 3 2 0 2 3@2 ~ 5@2 4'
-  'drop'
-  '0 7 0 4'
-  '0 2 4 7@2 6 4 2 0 2 4 7@2 5 4@2'
-  '~ 7 ~ ~ 5 ~ 4 ~'
-```
-
-Seven literals in a whole song stay plain text: three section names (`calls.section.args[0]` is `null`) and four hand-written melodic lines (`notes` is free). Everything else gets a control. And the tests pin the negative space too:
-
-```js
-assert.equal(controls(`gain(0.72)\nfilter(2400)\nfoo(3, 'bar')\nconst x = { density: .5, template: 'house' }`).length, 0);
-assert.equal(byPath(`other('a', 4, { drums: { density: .5 } })`)['drums.density'], undefined,
-  'an unknown command is ordinary code');
-```
-
-`gain(0.72)` is a number with obvious semantics and gets nothing, because `gain` is Strudel, not the HLL. A `density: .5` in a loose object gets nothing, *unless* the file spreads that object into a layer (`hllKeys` collects every `...name` in the file first, then treats those consts as layer material, pathed `M.organicness`, `B.level`). That is three separate tests.
+Dropped narratives (page growth, "the plan was a textarea", what it cost, the feature that never fired) were not audited. One fact in passing, in case a sentence survives: no `songs/*.notes.json` contains `ask: "edits made in the mixer"` today either.
 
 ---
 
-## 4. The widgets
+## 3. The Verify button, and the verification chain behind it
 
-`web/cm-widgets.mjs`, 97 lines, six factories, one chooser. The contract is one line of comment: `{ dom(control, ctx) -> element, update?(element, control) -> true to keep the element when the value changed }`.
+**What the page's Verify does** (`index.html` `$('verify').onclick`): plan the pills (`planEdits` per clause, deltas summed per axis), refuse with `those words change nothing here` when nothing would change, stop playback, **render the shown section as it stands, then the section with the words applied** (`renderSong({ code, section: mixSection })`: the whole section mix, every part, at the section's own tempo), measure both with `lib/analyze.mjs`, show a table `axis | asked | metric | before | after | ✓ moved as asked / ✗ did not` (or `no audio metric (verified by the event stream)` for drive and register), a `before` and `after` `<audio>` player, and a `× close`; then **apply the edit** (one undo step, `applied: ...` in the status) and put `✓ 2/3 moved as asked` on the `vstate` badge. Apply and measure lock while it runs (one offline renderer). It runs entirely in the browser, so **it works on GitHub Pages too**; the CLI chain needs a page open.
 
-```js
-export function widgetFor(c, ui = {}) {
-  if (c.kind === 'number') return c.spec.max == null ? spinner : slider;
-  if (c.kind === 'bool') return check;
-  if (c.kind === 'tokens') return ui.pick ? tokens : null;
-  return ui.pick ? pick : select;                 // enum, ident
-}
+**The verdict on the page is a plain sign test** (`verifyRows` in `web/compose.mjs`): `ok: Math.sign(after - before) === Math.sign(requested) * sign`. **There is no 2% floor on the page.** The 2% relative-change floor lives only in `scripts/verify.mjs`: `moved > 0 && rel > 0.02 ? 'verified' : 'NOT verified'`. Two other differences from the CLI: the CLI renders **one layer of one section alone** (`renderVia({ section, layer })`), the page renders **the section mix**; and the CLI code-checks `drive` through the onset count from `checkFile` and prints `register code-checked: applied (pitch not measured in v1)`, while the page prints `no audio metric` for both. Do not write "the button is the CLI's verify" without those three caveats.
+
+**Which axes have a metric** (`lib/axes.mjs`, canonical): direct: density → `onsetsPerSec`, brightness → `centroidHz`, weight → `lowRatio`, width → `width`; proxy: space → `tail`, articulation → `crest`, aggression → `flatness`, groove → `swing`, variation → `novelty`, organicness → `jitter`; code (no metric): drive, register. Ten of twelve; every `sign` is `+1`. (`CLAUDE.md` still lists six "measurable axes"; the code judges ten.)
+
+**The punchier example** (`songs/punchier0.strudel` → `punchier1.strudel`, verse drums, both unchanged since they were committed in `7d93908` on 2026-09-13): the resolver's edit is exactly `drums: { density: .6, groove: .6 }` → `{ density: .6, groove: .6, articulation: .9, weight: .65, drive: .7, space: .35 }` (the one-line diff). `npm run check` today: verse drums `15/cyc` on both sides (`drive code-checked: onset count unchanged (15/cyc)` still holds), words `very punchy, massive, frantic, dry` after. The **audio metrics cannot be recomputed browser-free today**: `renders/` holds no punchier wavs, and `renders/verify.before.wav`/`verify.after.wav` (2026-09-13 12:19) are the `much wider` run (width 0.006 → 0.139, onsets 3.94/s = drop drums), not punchier. So quote the old brief's numbers and mark them **recorded 2026-09-13 with `npm run verify -- songs/demo.strudel verse drums "punchier"`**:
+
+```
+Requested:  articulation +0.40, weight +0.15, drive +0.20, space -0.15
+Render:     crest 5.11 -> 4.27   lowRatio 0.518 -> 0.482   centroidHz 573 -> 449   tail 0.022 -> 0.016   width 0.002 -> 0.001   onsetsPerSec 4.06 -> 2.25
+Result:     articulation NOT verified (crest 5.11 -> 4.27), weight NOT verified (lowRatio 0.518 -> 0.482),
+            drive code-checked: onset count unchanged (15/cyc), positions not measured, space verified (tail 0.022 -> 0.016)
 ```
 
-Two axes decide everything: **does the number have a ceiling**, and **does the host offer a menu**. In Node, with no host, an enum falls back to a native select and the chord row returns `null`: no widget rather than a broken one. That fallback is tested.
+The reading stands: articulation is judged by crest factor, drive re-places the onsets that crest measures, so a compound word confounds its own verdict; on the page's table the same run would show `articulation ✗ did not`, `weight ✗ did not`, `space ✓ moved as asked`, `drive no audio metric`, and the ear says punchier. (`lib/analyze.mjs` gained metrics on 2026-09-18 for `measure`: masking, depth, bands. The six the verify line prints and the ten the axes name are unchanged in meaning; a re-render could shift the numbers slightly because reverb routing changed, see section 6.)
 
-| Widget | What it is |
-| --- | --- |
-| `slider` | a range input. Log specs (`cps`) map position 0..1 through `s.min * (s.max/s.min) ** t`. Sets a `--v` custom property so the rack's track fill works. `update` refuses to clobber the element while it has focus, so a drag is not fought by a re-render. |
-| `spinner` | a number input with a floor and no ceiling. Enter blurs. |
-| `check` | a checkbox, styled as a toggle switch in CSS. |
-| `pick` | a `button.pick` showing the value, opening the page's shared `#pick` popover; carries a play glyph when `ui.canAudition(path, control)` says the value can be heard; may show an image via `ui.icon` (kit glyphs). Captures its live position with `at()` so the host can tell which section it now sits in. |
-| `tokens` | the progression as a row of chord buttons plus a plus button. Brackets survive as literal text, so `[i VI]` sub-bar groups are preserved. Picking an empty value at an existing index splices the chord out. |
-| `select` | the no-host fallback. |
-
-**The alt-drag gesture** (`web/cm-controls.mjs`, credited in the source as "the codemirror-interact model, driven by the schema instead of a regex"):
-
-```js
-const DRAG_PX = 200;
-const dragValue = (v0, dx, s) =>
-  s.max == null       ? v0 + Math.trunc(dx / 8) * s.step
-  : s.scale === 'log' ? v0 * (s.max / s.min) ** (dx / DRAG_PX)
-  :                     v0 + (dx / DRAG_PX) * (s.max - s.min);
-```
-
-A bounded number crosses its **entire range in 200 px**. An open number steps once every **8 px**. A log number multiplies. The handler bails unless `altKey && button === 0` and the position lands inside a known **number** control; enums and strings are not draggable. Crucially it re-finds the control on every mousemove and gives up if it is gone: the document is authoritative even mid-gesture. **The drag works whether or not the widgets are shown**, because `drag` is always in the extension and only the `Decoration.widget` is gated on `controlsShown`.
-
-**How an edit gets into the document.** Never through a remembered offset:
-
-```js
-function setFrom(view, dom, path, value) {
-  if (!dom.isConnected) return;   // the document was swapped under an open menu: no guessing which literal was meant
-  const pos = view.posAtDOM(dom);
-  const c = controlsOf(view.state).find((x) => x.to === pos && x.path === path);
-  if (c) view.dispatch({ changes: editFor(c, value), userEvent: 'hll.control' });
-}
-```
-
-The widget asks the view where its own DOM node currently is, matches the control by `(position, path)`, and dispatches a change. `editFor` is pure and does the quantizing:
-
-```js
-export function editFor(c, value) {
-  if (c.kind === 'number') return { from: c.from, to: c.to, insert: fmtNum(quantize(value, c.spec), c.spec) };
-  if (c.kind === 'bool')   return { from: c.from, to: c.to, insert: String(!!value) };
-  if (c.kind === 'ident')  return { from: c.from, to: c.to, insert: String(value) };
-  const q = c.quote ?? "'";
-  return { from: c.from, to: c.to, insert: `${q}${String(value).replaceAll(q, `\\${q}`)}${q}` };
-}
-```
-
-Three details worth quoting in the post: it **clamps and rounds to the spec** (`quantize(-3, level) === 0`, `quantize(0.7000000001, density) === 0.7`); it **preserves the existing quote character**; and `fmtNum` strips the leading zero (`.35`, not `0.35`) so a knob-edited file is spelled the way a hand-written one is. There is a test asserting each of those against the real source text. An identifier is written bare, so picking `perlin` over `saw` produces `density: perlin.range(...)` and not a quoted string.
-
-`CtlWidget.eq()` compares `(make, path, spec, value)`, and `updateDOM` delegates to the factory's `update`, which returns `true` to keep the element: that is how a slider survives a drag and a spinner survives being typed into without the DOM being rebuilt under the pointer.
+**To rerun when a browser is available** (not now, the browser belongs to another agent): `npm run headless -- songs/punchier0.strudel` in one terminal, then `npm run verify -- songs/punchier0.strudel verse drums "punchier"` (it writes the edit into the file and restores it on failure; copy `punchier0` to a scratch song first so the committed pair stays as it is).
 
 ---
 
-## 5. What you hear versus what is written
+## 4. The story for a product reviewer
 
-The comment in `index.html` states the rule before the code does:
+**Strongest line:** the Compose page is one source string with three views on it that all write back through one door. Type in the source, drag a slider in the Mix card, alt-drag a number in the section pane, click a chord button, click a step in the drum grid, pick a sample and hear it before choosing: every one of those is the same kind of edit (unsaved until Save, one undo stack, re-evaluated in place while the song plays), and the file stays a clean, diffable record that the agent can read next. The four things that only change what you hear (solo, mute, A/B, preview level) are named as such in the UI ("what you hear, not the song") and never touch the file.
 
-```js
-// solo and mute are what you hear, not what is written: sets of part names, applied whenever the scheduler is handed a
-// pattern. A/B swaps in the source before the last undo step, evaluated without the scheduler, on the same clock.
-const solo = new Set(), muted = new Set();
-let ab = false, abPat = null;
-const passes = (l) => (solo.size ? solo.has(l) : !muted.has(l));
+**Second line:** the controls are honest by construction. A widget appears only where the language's schema says what the number means; the schema is a whitelist with a test that every key is either specified or listed free with a written reason; a number with a floor and no ceiling gets a spinner rather than an invented slider; hand-written lines stay text. And the one dishonesty (a control offered where the key is illegal) is admitted.
 
-function audible(pat) {
-  const filt = (s) => { const ps = Object.entries(s.layers).filter(([l]) => passes(l)).map(([, x]) => x.pattern);
-                        return ps.length ? strudel.stack(...ps) : strudel.silence; };
-  if (!pat.strudel || (!pinned && !solo.size && !muted.size)) return pat;
-  const secs = pat.strudel.sections;
-  if (pinned) { const s = secs.find((x) => x.name === pinned); return s ? filt(s) : strudel.silence; }
-  return arrange(secs, pat.strudel.total, filt);
-}
-async function setLive() { if (playing && songPat) (await ready).scheduler.setPattern(audible(ab && abPat ? abPat : songPat)); }
-```
+**Third line:** the page closes the loop with the agent in both directions. Change comments pin what you heard at the cycle you heard it and assemble the request with the source around it (quoting the previous section when the note lands in a first bar). Verify renders before and after, plays both, and prints a sign test per axis, so a word's effect is heard and measured in the same place; A/B does the same for any edit.
 
-Three things to pull out:
+**Surprising bits worth a sentence each:** alt-drag works with the controls checkbox off; the underlines are always on. The Verify button on the page has no 2% floor and measures the whole section mix, unlike the CLI. Verify, measure and MP3 export need no server: the page renders offline in the browser, so they work on GitHub Pages. A pinned section loops by being a short pattern handed to the scheduler, not by a scheduled jump, so the loop is seamless. A drum voice auditions alone because at `density .6` the clap is not in the part at all. The kit menu plays every kit through the same two bars (twelve voices, a house groove, ride, crash, clap, a tom fill) and names the voices a kit lacks. The tempo detector under a sample's waveform offers two buttons: write this part's bar count, or set the song's bpm. The Examples page still edits in a textarea. The share link is the song (deflate-raw, base64url), nothing is stored.
 
-1. **Solo wins over mute**: `passes` checks `solo.size` first, which is the hardware convention and the only sane one.
-2. **There is exactly one place a pattern reaches the scheduler**: `setLive()`. `play`, `applyPin`, the A/B button and every solo/mute click all go through it. That is why the rule holds: it is not four rules, it is one funnel.
-3. **`audible` takes an evaluated song and produces another pattern.** The source is an input, never an output. Nothing writes back. Refreshing, saving, exporting or handing the file to the agent all see a song with no memory of what was soloed.
+**Terminology** (use the code's words): **HLL** or "the song language" for `song()`/`section()` (pick one); **axis** (twelve, 0..1, 0.5 the baseline no-op); **layer** in code, **part** in the UI (`drums2` is a second drums part); **material** for the non-axis keys (harmony is material: `key`, `progression`); **control** (a literal the schema knows) vs **widget** (its DOM element); **pane** (the two CodeMirror spans in the Mix card, and the Song source card), **card**, **strip** and **block**, **pin** and **scrub**, **audition**/**preview** (the ▶ that plays without selecting); **cycle** vs **bar** vs **span** (a section's bars in song cycles); **cps** vs **bpm**; **verb** (breakdown, lift, strip, halftime); **movement**/**shape** (ramp, wobble, drift, pulse, swell) and **lane** (its drawing); **roll** and **step grid**; **take** (one of a sample part's list of sounds), **definition** (a pack's named region), **pack**.
 
-**A/B** takes `past.at(-1)`, literally the string on top of the undo stack, runs it through `evalCode` (an evaluation with no scheduler attached), and hands the result to the same `setLive()`, on the same clock, at the same cycle. If the previous version does not evaluate, the button reverts itself and says so rather than going silent. **Any commit turns A/B off**, because "before the last change" stops meaning anything the moment there is a newer last change.
+**Caveats to state:** desktop-only warning under 60rem (nothing hides, it just does not fit); controls are off by default; Change comments, import, save-to-disk and the Samples page need the local server; the mixer's own notes recording is server-only; Verify is ordinal (sign only on the page) over a section mix; a signal-valued axis refuses the knob ("brightness is a signal here") and takes the shape pick instead; a spread layer's knob writes an override after the spread; `@n` progressions are read-only in the harmony strip.
 
-**What it buys.** Solo is a question about a mix ("is the pad doing anything?"), not a decision about a song. If solo edited the source, asking the question would cost an edit, an undo, and a diff you have to notice. Because it does not, the source stays a clean record of intent and stays diffable by the agent, which matters enormously when the agent's entire view of the song is the file. There is a second, subtler payoff: because `audible()` reuses `arrange()`, a soloed part is *bit-identical* to that part inside the song. The mixer cannot drift from the renderer, because it is the renderer.
-
-**The undo stack.**
-
-```js
-let current = ''; const past = [], future = []; let stamp = 0;
-function commit(src, coalesce = false) {
-  if (src === current) return;
-  if (!coalesce || Date.now() - stamp > 1000) { past.push(current); if (past.length > 200) past.shift(); future.length = 0; }
-  stamp = Date.now(); current = src;
-  code.setText(src);
-  if (ab) { ab = false; abPat = null; }
-  syncUndo();
-}
-```
-
-Whole-document snapshots, capped at 200, coalesced by a **one-second window** when the caller passes `coalesce`. Typing coalesces, knob drags coalesce; section ops, kit changes and vocabulary pills do not. A drag's end explicitly resets the window, so the next drag starts a fresh step instead of merging into the previous one. `code.setText` diffs common prefix and suffix and dispatches only the changed span, so a knob drag reparses one literal instead of the file.
-
-The critical architectural decision is in `web/cm-editor.mjs`, stated in its header comment: **"No history extension: the page keeps one undo stack for every way the source changes, and ctrl+z reaches its document-level handler from here."** CodeMirror ships an undo stack. It was deliberately not installed, because there would then be two (the editor's and the page's) and the section pane, the song pane, the main editor, the knobs, the pills, the harmony picks and the section ops would not share one. `travel()` even blurs a focused pane before restoring, so the pane re-reads the restored source instead of being treated as mid-edit.
-
-**What deliberately bypasses it:** solo, mute, A/B, `pvGain` (preview level), pinning, and scrubbing. Four of those six are "what you hear"; two are "where you are". Nothing that bypasses the stack is a musical decision.
+**Phrasing to avoid because routine repo change falsifies it:** counts of Examples groups and cards; line counts of anything; test counts; the number of keys / specs / free keys (50 / 40 / 10 today, 33 / 30 / 3 a week ago); "three editors" is safe, "six widget kinds" is safe; the 51/58 figure only when tied to `demo.strudel`; `DRUM_THRESH` values are stable but print them as "today"; "the page is around N lines"; the list of verbs and shapes is data (`lib/verbs.json`, `SHAPES`) and could grow.
 
 ---
 
-## 6. Pinning and auditioning
+## 5. Proposed visuals
 
-**Pinning.** A song's sections are laid out by `arrange` as `stepcat` weighted by `span`, where
+**V1 (keep, refresh): which literals on one line get which control.** Verbatim line from `songs/demo.strudel` verse: `melody: { density: .5, brightness: saw.range(.3, .7).slow(8), sound: 'piano', follow: true, phrase: 2, notes: '0 2 3@2 ~ 4 3 2 0 2 3@2 ~ 5@2 4' }`. Rows (re-verified today): `.5` slider (axis 0..1); `saw` pick (a signal standing in for a number); `.3`, `.7` sliders (inherit the axis bounds); `8` spinner (floor .125, no ceiling); `'piano'` pick (the sounds actually loaded); `true` check; `2` spinner (floor 1); the notes string nothing (`free.notes: 'a line in mini-notation, written by hand'`). Caption with the whole-file count: 58 literals in `demo.strudel`, 51 with a control, the seven without being three section names and four note lines. `literals-viz.svg` exists; check its rows against this list (they match the old post, which matches today).
 
-```js
-const span = cycles * ctx.cps / cps;   // lib/song.mjs:50
-```
+**V2 (keep, refresh): two paths out of one source.** Left, writes through `commit` into the one undo stack: typing in any of the three editors, a widget, alt-drag, a knob, a shape pick, a chord button, a pill/Apply/Verify, a section op or verb, a materials pick, the step grid, the roll, a waveform gesture, import. Right, reads an evaluated copy and never writes: solo, mute, A/B, preview level, plus pin and scrub as "where you are". Label the join: `audible()` takes the evaluated song and hands `arrange()` a filter; `setLive()` is the one place a pattern reaches the scheduler. `paths-viz.svg` exists; the left side has grown (verbs, shapes, harmony, grid, roll, waveform, import) since it was drawn.
 
-`cycles` is bars of the section; `span` is how many *song* cycles those bars occupy, which differs from `cycles` whenever the section carries its own `bpm`/`cps`. Pinning hands the scheduler the section's own pattern, un-`fast`ed, at the section's own cps:
+**V3 (new): comment pin → request.** A transport lane with three dots (say cycles 6.2 in verse, 12.4 in drop's first bar, 15.0 in drop), an arrow from each to its numbered line `cycle 12.4 (drop, bar 1 of 8): too sudden`, and the fenced block underneath showing the header plus `verse` and `drop` quoted, with `verse` highlighted as "quoted because note 2 is in drop's first bar". The old `comments-viz.svg` from `handing-over` (five dots on arrival) is already copied into this post's directory untracked; either reuse it with its arrival caption (section map unchanged) or redraw on `demo` so the fenced block is short enough to show whole.
 
-```js
-async function applyPin(at) {
-  const r = await ready;
-  setcps(loop ? loop.cps : songPat.strudel.meta.cps);
-  await setLive();
-  r.scheduler.setCycle(loop ? toLocal(at) : at);
-}
-const toSong  = (local) => loop.offset + (local % loop.cycles) * loop.span / loop.cycles;
-const toLocal = (c) => Math.max(0, Math.min(loop.cycles, (c - loop.offset) * loop.cycles / loop.span));
-```
-
-So a pinned section loops **by itself**: the comment is explicit, *"no clock jumps, nothing scheduled past its edges."* The page never loops it by scheduling a jump back; it simply gives the scheduler a short pattern and lets it repeat, which is why the loop point is seamless. Everything displayed stays in song cycles, and `toSong`/`toLocal` convert at the section's tempo. Unpinning computes the equivalent song cycle from the current local position and hands the song pattern back at that point. Play from stopped starts at the pin. Export renders the pinned section alone.
-
-**Auditioning** is one primitive, `preview(btn, build)` / `run(btn, build)`, where `build()` returns `{ pattern, cps, what }`. Two bars, every time, at the section's tempo (`2000 / cps` ms plus a 200 ms tail). Pressing the same play glyph again stops it. It uses the repl's own `setCps` rather than the `setcps` global, because that global only exists once a song has been evaluated, so auditioning works before the first Play. It resumes the AudioContext itself, because superdough's `initAudio` does not.
-
-Three builds sit on top:
-
-- **A material**: `audition()` evaluates `setMaterial(src, section, layer, key, text)` and plays that section's layer pattern. This is a *speculative evaluation*: the candidate value is spliced into a copy of the source, the whole song is evaluated, and one layer is pulled out. Nothing is committed. Picking a value is a separate act from hearing it: menu rows carry a play glyph that auditions **without selecting**.
-- **A drum voice, alone.** This is the one with a real argument behind it. The comment gives the reason: *"the whole part would drown it, or not even include it, since voices join as density rises."* That is literally true. `DRUM_THRESH = { bd: .1, sd: .3, hh: .5, oh: .7, cp: .85 }`. Auditioning a clap inside a part at `density: .6` would play you silence, because at .6 the clap is not in the part. So the voice is previewed on its own template grid, through `voiceSound`, which carries the drums layer's own kit rule: a name the kit has keeps the kit; any other sample plays bare.
-- **A kit**: `auditionKit` plays the same fixed two bars through every kit, so kits are compared on identical material. Voices a kit lacks are dropped and **named in the status line** instead of logging "sound not found".
-
-**Preview level** (`pvGain`) is a log-scaled slider, x0.1 to x50, duplicated in the materials panel and the menu header, persisted in `localStorage`, and never written to the song. x50 exists because a single hi-hat sample next to nothing is very quiet.
+**V4 (new, optional): arrangement-strip anatomy.** One block annotated: name, 📌 ◀ ▶ ⧉ ✎ ⚡ ×, the eight layer rows shaded by density × level, `riser 2 | hit bd` into the next block, `dropout | sweep` on the tail, the outline for "playing", the pin state. Better as a screenshot with callouts than as an SVG.
 
 ---
 
-## 7. The honest costs
+## 6. Audio clips
 
-**`index.html` is 1,243 lines and 101,048 bytes on disk** (1,221 lines at HEAD). Of that:
+**Existing clips, validity.** All seven clips in `knobs-in-the-code/audio/clips.json` and the two punchier clips in `handing-over-the-instrument/audio/` were rendered 2026-09-13 12:32. The songs behind them: `knobs0`, `knobs1`, `knobs-cp`, `punchier0`, `punchier1` were created in `7d93908` (2026-09-13 14:13) and have not changed since; `demo.strudel` got only the `// @blog` line in that commit and is musically unchanged since `b2a5aca` (2026-09-12). The event streams are pinned: `demo.strudel` is a golden fixture, `test/golden.json` was last regenerated 2026-09-12, and `node --test test/golden.test.mjs` passes at HEAD today, so every hap of `demo` (and therefore of `knobs0`/`knobs1`/`punchier0`/`punchier1`, which are `demo` plus one literal) is byte-identical to what the clips were rendered from. Caveat: `lib/song.mjs` changed how parts are routed to reverb buses on 2026-09-18 (orbits per reverb signature instead of one shared bus, not visible in the golden values), so a **whole-section** clip (`drop-full`) re-rendered today could differ subtly in reverb; **layer-alone** clips (`drag-*`, `solo-pad`, `part-*`, `punchier-*`) and the plain-Strudel `voice-clap-alone` are unaffected. Verdict: the clips remain valid; if any are re-rendered, re-render all nine together so they share one engine state.
 
-- **one inline module script block of 1,110 lines and 88,147 characters: 89% of the file's lines and 88% of its bytes.**
-- The mixer, its two source panes, the undo stack, the transport/strip and the audition path occupy roughly lines 272 to 480 and 605 to 1030: **about 635 of those 1,110 lines, ~57% of the page's JavaScript.**
-- `web/strudel.css` is 384 lines, of which **139 (36%)** are mixer and control styles.
-
-**Test coverage of that 1,110-line module: zero.** The repo has **141 tests across 22 files (1,892 lines)**. Exactly one of them reads `index.html`, and it is `test/pages.test.mjs`, which does two regex checks on the built output: a URL lint and a string search. Nothing evaluates a line of the page's behaviour. There is no Playwright test suite; `playwright-core` is a dev dependency used by `scripts/headless.mjs` to *open* the page for renders, not to assert anything about it. There is no CI job that loads the page in a browser.
-
-The extracted modules are the exception and are well covered: `web/cm-controls.mjs` (205 lines), `web/cm-widgets.mjs` (97) and `web/hll-schema.mjs` (86), **388 lines**, are exercised by 11 tests in `test/cm.test.mjs` (178 lines), running against `EditorState` in Node with no DOM. `web/cm-editor.mjs` (58 lines) is untested because it constructs an `EditorView`. That is the right seam and the right trade: *the pure part was extracted so it could be tested, and the DOM part was left untested on purpose.*
-
-**Specifically what breaks silently.**
-
-1. **The schema is flat, so it underlines keys in the wrong place.** `specFor` matches on key name and depth only; it never checks that the enclosing object is actually a layer, or that this layer accepts this key. Verified:
-   ```
-   section('a', 4, { drums: { kit: 'RolandTR909', phrase: 3, arp: 'up', progression: 'i VI' } })
-     -> controls: drums.kit (pick), drums.phrase (spinner), drums.arp (pick), drums.progression (chord row)
-   ```
-   None of those are legal. `npm run check` rejects them with a good message. Same for a section-level axis: `section('a', 4, { density: .5 })` gets a slider and the language answers `unknown layer "density" in section "a"`. So **"anything not in the schema stays plain text" is enforced; the converse, "everything the editor underlines is legal here", is not.** The editor will happily offer you a chord picker for a chord progression on the drums. The build catches it; the UI invited it. This is the single most concrete honest cost in the post, and it is a five-minute fix nobody has made.
-2. **`canAudition` is a hand-written regex over control paths**, sitting in `index.html` with no test. Add a previewable material key to a layer and the play glyph silently does not appear. Nothing fails.
-3. **Provenance is parsed back out of a status string.** `saveNotes` recovers structured data from the human-readable message `did()` wrote: `const m = /^(\w+) (\w+) ([\d.]+)/.exec(p.text);`. Reword a status message and the notes file quietly degrades from structured data to a free-text blob. No test covers it.
-4. **And nobody has used it.** I checked every provenance file in the repo: **`songs/*.notes.json` contains zero requests with `ask: 'edits made in the mixer'`.** `arrival.notes.json` has 8 requests and 31 changes, all of them asks written to the agent. The mixer's own record-keeping shipped and has never fired, partly because it is local-server-only, partly because the song that came *after* the mixer was still made by talking to the agent. That is an uncomfortable, interesting fact and the post is better with it than without it.
-5. **Regex-based source surgery under the CodeMirror layer.** `web/compose.mjs` locates the song header and whole sections with regexes. Those are fine today and will mis-fire on a nested brace or an unusual layout. `lib/resolve.mjs` uses acorn and is safe; `web/compose.mjs` does not and is not.
-6. **`sectionAround` swallows every error**: a parse failure becomes "no section", which becomes "no audition", silently.
-
-**The blunt summary for the post:** the interface is 57% of the page's JavaScript, has no behavioural test of any kind, and its correctness rests entirely on three things: that its edits go through the same pure modules the CLI uses, that `npm run check` runs on every song, and that the author was sitting there listening. Two of those three are real engineering. The third does not scale to a second person.
-
----
-
-## 8. Factual corrections to your outline
-
-| Your line | Correction |
-| --- | --- |
-| "no UI beyond a textarea" was the plan | Accurate, and datable: the textarea shipped at 09-10 19:38 and was replaced at 09-12 18:05 (`932b9b5`). It lasted 47 hours and 240 lines. But the "harness" was never only a textarea: by then `check`, `resolve`, `render`, `verify`, `lint` and `dump` all existed as CLIs and all still exist. |
-| "Every control is a source edit, not a runtime override" | Four exceptions, by design: solo, mute, A/B, preview level. Rewrite as "every control that changes the *song* is a source edit; the four that change only what you hear are named and kept out of the file." |
-| "arrangement strip, harmony row, axis grid with mute and solo, materials, a vocabulary phrase row" | Incomplete and out of order. Top to bottom the card is: **song pane, arrangement strip, section pane, harmony row, axes grid (with an event strip under each row and a playhead), materials, add-part dropdown, vocabulary phrase row**. The two source panes are the part this post is actually about and are missing from your list. |
-| "a slider, spinner, chord picker or sound menu" | Six widgets: slider, spinner, check (toggle), pick (menu button, with a play glyph when audible), tokens (the chord row), select (the no-host fallback). |
-| "the editor underlines exactly those" | The underline and the alt-drag are **always on**; only the widgets are behind the `controls` checkbox, which is **off by default** and remembered in `localStorage`. A test asserts the default: *"hidden by default: the code reads clean."* |
-| "one undo stack, coalesced so a knob drag is not forty undo steps" | Correct, and worth the extra beat: CodeMirror's own history extension was deliberately **not** installed, because there would then be four stacks (three editors plus the page). |
-| "Pin a section and it loops alone at its own tempo" | Correct and precise. Add that it loops by *being* a short pattern, not by a scheduled jump. |
-| "Audition a kit, or one drum voice, before committing" | Correct. The reason a voice plays alone is stronger than "before committing": at `density: .6` the clap is not in the part at all (`DRUM_THRESH.cp = .85`). |
-| "a few evenings" | Holds: 33 commits, ~9 in-session hours, 24 calendar hours for the Mix card through inline controls. Do not extend it to the whole system. |
-| "a pivot this size would normally be the thing you avoid" | It was additive, not a rewrite. Nothing was deleted; the CLI still works. That is the reason it was cheap, and burying it costs you the post's best idea. |
-
----
-
-## 9. Terminology and caveats
-
-**Terms to use precisely**
-
-- **HLL**: the repo's own name for the `song()`/`section()` layer. Introduce it once, or say "the song language"; do not switch between them.
-- **axis**: one of 12 named 0..1 dimensions where **0.5 is the baseline no-op** (enforced by test). Not "a parameter".
-- **layer / part**: `drums bass melody pad fx`. The code says "layer"; the UI says "part". Pick one for the prose and note the other once.
-- **material**: the non-axis keys in a layer. Harmony (`key`, `progression`) is material, not an axis.
-- **control**: the schema's word for "a literal the editor knows". **widget** is the DOM element. They are different things and the code is careful about it.
-- **cycle vs bar**: a Strudel *cycle*; a section's *bars* (`cycles`) versus its *span* in song cycles.
-- **cps vs bpm**: `cps` is cycles per second, the native unit; `bpm` is a convenience, and giving both throws.
-
-**Caveats to state in the post**
-
-- Every claim about what something *sounds* like in this repo is at best "verified directionally".
-- The page is desktop-only by explicit decision.
-- The controls checkbox is off by default, so a reader who opens the live site will not see widgets until they tick it. Say so, or the screenshots will not match what they get.
-
-**What will go stale**
-
-- Every line count and commit count. Timestamp them (as of `7a4d1b0`, 2026-09-13).
-- The three `free` keys and the 30/33 split: one new material key moves both.
-- `DRUM_THRESH` values, which the clap clip depends on.
-- `web/cm-editor.mjs`'s header comment says the factory "is meant to take over the page's main source pane later"; it already has. The comment is stale in the repo.
-- `CLAUDE.md` calls the inline controls "an experiment ahead of moving the main pane to CodeMirror": also already done. Code wins.
-
----
-
-## 10. Proposed visuals
-
-**Recommended three: V1, V2, V3.** V4 is a good fallback.
-
-**V1 — "The textarea lived for 240 lines" (quantitative).**
-A step line of `index.html` line count against commit time, 09-10 19:35 to 09-13 00:52, with two annotated markers: `aa9b142` (09-12 00:02, 556 to 891, "added mixer") and `d4f000f` (09-12 16:47, 1000 to 1023, "inline controls"). Units: lines of `index.html`; x-axis: hours since the first commit. The shape is the argument: flat for 22 hours, then a cliff at midnight.
-
-**V2 — One real line, annotated (the best one).**
-Verbatim from `songs/demo.strudel`:
-
-```
-melody: { density: .5, brightness: saw.range(.3, .7).slow(8), sound: 'piano', follow: true, phrase: 2, notes: '0 2 3@2 ~ 4 3 2 0 2 3@2 ~ 5@2 4' },
-```
-
-I ran `findControls` on it. Verbatim output, nine controls:
-
-| Literal | Path | Widget | Why |
-| --- | --- | --- | --- |
-| `.5` | `melody.density` | slider | axis, 0..1 |
-| `saw` | `melody.brightness.signal` | pick | a signal standing in for a number |
-| `.3` | `melody.brightness.range(0)` | slider | `inherit`: the axis bounds |
-| `.7` | `melody.brightness.range(1)` | slider | `inherit` |
-| `8` | `slow(0)` | spinner | floor .125, no ceiling |
-| `'piano'` | `melody.sound` | pick | enum, host list |
-| `true` | `melody.follow` | check | bool |
-| `2` | `melody.phrase` | spinner | floor 1, no ceiling |
-| `'0 2 3@2 ~ ...'` | none | **none** | `notes` is `free`: "a line in mini-notation, written by hand" |
-
-Draw it as the code line with callouts under each literal, the last one visually different: no underline, no widget, the reason quoted. Caption with the whole-file figure: 58 literals in `demo.strudel`, 51 with a control, 7 without.
-
-**V3 — One source, two paths (conceptual).**
-A single "source" node. Down-left, the **written** path: knob / widget / alt-drag / pill / section op, then `commit()`, then the one undo stack, then the document. Down-right, the **heard** path: solo / mute / A/B / preview level, then `audible()`, then `setLive()`, then the scheduler. The two paths meet at "the song file" only on the left. Label the right-hand arrows "never writes". Include the join: `audible()` reads an *evaluated* copy of the same source, so the right path depends on the left but never feeds back.
-
-**V4 — The schema decision tree (conceptual, fallback).**
-`literal in the syntax tree`, then *inside a `song`/`section` object, a layer object, or a `map`?*, no gives **plain text**; yes then *key in `props`?*, no gives **plain text**; yes then kind: `number` then *has `max`?* yes gives **slider**, no gives **spinner**; `bool` gives **check**; `tokens` gives **chord row**; `enum`/`ident` then *host menu?* yes gives **pick**, no gives **select**. Every terminal on the left-hand side is "plain text", which is the point.
-
----
-
-## 11. Proposed audio clips
-
-Format is the `npm run snippets` manifest. All clips below are 2 bars. Precedent: `say-darker` used `songs/darker0|1|2.strudel` as committed intermediate files; do the same here.
-
-### Clip set A: one knob drag, before and after (needs two intermediate song files)
-
-The knob: `drums.density` in `demo.strudel`'s `drop`, `.9` to `.84`. Six hundredths of travel on a slider that crosses its whole range in 200 px, about 12 px of mouse movement. `DRUM_THRESH.cp = .85`, so the clap leaves the part. Verified with `npm run check`:
-
-```
-.9:   drums  28/cyc  density=0.9   drive=0.8 articulation=0.7
-.84:  drums  26/cyc  density=0.84  drive=0.8 articulation=0.7
-arc:  drop 59   ->   drop 57
-```
-
-**How to produce it.** Copy `songs/demo.strudel` to `songs/knobs0.strudel`. Copy again to `songs/knobs1.strudel` and change exactly one literal in the `drop` section's drums line: `density: .9` to `density: .84`, which is exactly the replacement `editFor` would dispatch. Commit both. Then:
+**Manifest for `scripts/snippets.mjs`** (the punchier pair moves into this post; the two mp3s were already copied into `knobs-in-the-code/audio/` on 2026-09-19 08:31 and are untracked in the blog):
 
 ```json
-{ "out": "knobs-in-the-code/drag-before", "song": "knobs0.strudel", "section": "drop", "layer": "drums", "cycles": 2 },
-{ "out": "knobs-in-the-code/drag-after",  "song": "knobs1.strudel", "section": "drop", "layer": "drums", "cycles": 2 }
+[
+  { "out": "knobs-in-the-code/drag-before", "song": "knobs0.strudel", "section": "drop", "layer": "drums", "cycles": 2 },
+  { "out": "knobs-in-the-code/drag-after", "song": "knobs1.strudel", "section": "drop", "layer": "drums", "cycles": 2 },
+  { "out": "knobs-in-the-code/solo-pad", "song": "demo.strudel", "section": "drop", "layer": "pad", "cycles": 2 },
+  { "out": "knobs-in-the-code/drop-full", "song": "demo.strudel", "section": "drop", "cycles": 2 },
+  { "out": "knobs-in-the-code/voice-clap-alone", "song": "knobs-cp.strudel", "cycles": 2 },
+  { "out": "knobs-in-the-code/part-no-clap", "song": "demo.strudel", "section": "verse", "layer": "drums", "cycles": 2 },
+  { "out": "knobs-in-the-code/part-with-clap", "song": "demo.strudel", "section": "drop", "layer": "drums", "cycles": 2 },
+  { "out": "knobs-in-the-code/punchier-before", "song": "punchier0.strudel", "section": "verse", "layer": "drums", "cycles": 2 },
+  { "out": "knobs-in-the-code/punchier-after", "song": "punchier1.strudel", "section": "verse", "layer": "drums", "cycles": 2 }
+]
 ```
 
-### Clip set B: a part alone versus the section (no intermediate files)
+Run with `npm run headless -- songs/demo.strudel` open, then `npm run snippets -- clips.json --out-dir <blog>/src/content/posts/knobs-in-the-code/audio`; existing files are skipped unless `--force`. (Not run here: the browser is owned by another agent.)
 
-This is exactly what solo does, and the renderer's `--layer` takes the same path, so the clip *is* the feature.
+**Optional new pairs** (each needs a new committed `// @hidden` `// @blog` song, the `knobs0/1` precedent; propose to Jon rather than doing it from here): a ⚡ verb, `cp songs/knobs0.strudel songs/knobs-breakdown.strudel && npm run resolve -- songs/knobs-breakdown.strudel drop --verb breakdown --write`, clip `drop` whole section 2 cycles before/after (hear the fx dropped and the room open); a shape pick, `knobs0` with `pad: { space: .5, brightness: wobble(.5, .9, 2), ... }` in the drop, clip the pad alone 4 cycles.
 
-```json
-{ "out": "knobs-in-the-code/solo-pad",   "song": "demo.strudel", "section": "drop", "layer": "pad", "cycles": 2 },
-{ "out": "knobs-in-the-code/drop-full",  "song": "demo.strudel", "section": "drop", "cycles": 2 }
+---
+
+## 7. Screenshots wanted (for a blog-side Playwright script, later)
+
+All local: `http://localhost:3000/` (the deployed URL works for everything except Change comments and import). The page needs a wide viewport (≥ 61rem; 1400 px wide is safe). `?section=<name>` pins and opens the card on that section without playing; add `&play=1` only if a playhead is wanted. Controls: set `localStorage.setItem('strudel:tweak', '1')` before load, or click `#tweak2` / `#tweak` / `#tweak0` (they are one setting).
+
+1. **The whole Compose page** on `demo`, drop pinned: `?section=drop#demo.strudel`, full page.
+2. **Section pane with controls on** (the old `section-controls.png` state): `?section=signal#arrival.strudel`, open `#secsrc` (`details#secsrc[open]`), controls on, crop `#secsrc`. **The existing `section-controls.png` is stale**: arrival's `signal` section changed on 2026-09-18 (`pad3: { ...choir, ..., level: .25 }` is now `level: .15`) and the spread consts it draws on changed too. Retake.
+3. **Song source with controls on**, `demo`, crop `.card.pane` around the verse melody line (this is V1 as a photo).
+4. **Arrangement strip**: `?section=drop#demo.strudel`, crop `#strip`; also `#arrival.strudel` for eight blocks with dropout/sweep/riser/hit picks visible (arrival has `riser: 4` into contact and `impact: true` on it).
+5. **Axes grid with a signal lane**: `?section=verse#demo.strudel`, crop `#axes` (melody brightness is `saw.range(.3, .7).slow(8)`, drawn as a lane; fx has empty cells).
+6. **Harmony strip** on the drop (`i VI III VII`, chord names over numerals) and on `arrival` `will` (`D:phrygian`, own key marked): crop `#harm`.
+7. **Materials open on `demo` drop**: click `summary` of `#mats`; shows drum template and five voice picks, bass/melody notes with the roll (focus the notes box to open it), melody line/seed row, pad arp, level sliders. Also with **measure** pressed: dB readings next to levels and the `mstate` badge.
+8. **A pick menu with audition rows**: click a `button.pick[data-mat=sound]` in materials; screenshot `#pick` (filter box, preview level, rows with ▶).
+9. **Kit menu**: open `#songsrc`, controls on, click the `kit` pick; `#pick` with icons and the legend key.
+10. **Sample row**: `?section=<first section>#chop.strudel` (`npm run check -- songs/chop.strudel` prints the section names), materials open: waveform with region, slice lines, slice buttons, the tempo readout and `use` / `song bpm` buttons.
+11. **Step grid**: a song with a written template, `foundry.strudel` (materials open on its first section), or press **edit as grid** on `demo`.
+12. **Phrase row with pills and a Verify result**: `?section=verse#demo.strudel`, type `drums` Enter, `punchier` Enter, press Verify, wait for `#vout:not([hidden])`; crop `#words` (the table and the two players). Needs audio to render, which works headless.
+13. **A/B and undo state**: after a knob drag, the Mix header with `A/B` enabled and `hearing: before` on.
+14. **Change comments** (local only): two comments added via the UI (set `#pos` value, fill `#fbcomment`, click `#fbadd`), crop `#feedback` with dots, list and the request text. Put one in a section's first bar so the request quotes the previous section.
+15. **Why it sounds this way** on `demo` (3 requests recorded): crop the second card of `.panes`.
+16. **Examples page**, one card with variants and its SVG: `examples.html#descriptors`, crop the `Punchy` card; and the map figure at the top.
+17. **Narrow window**: viewport 700 px wide, the nav alert row.
+
+---
+
+## 8. Reproduction commands (Node only, no browser)
+
+```
+cd E:\github2\strudle
+npm run check -- songs/knobs0.strudel      # drop drums 28/cyc, arc drop 59
+npm run check -- songs/knobs1.strudel      # drop drums 26/cyc, arc drop 57
+npm run check -- songs/punchier0.strudel   # verse drums 15/cyc
+npm run check -- songs/punchier1.strudel   # verse drums 15/cyc, articulation .9 weight .65 drive .7 space .35
+npm run check -- songs/arrival.strudel     # section map: void 0, signal 1, approach 9, contact 17, will 25, plea 33, threshold 41, after 53
+node --test test/cm.test.mjs               # the schema/controls tests incl. the every-key-spec'd-or-free test
+node --test test/compose.test.mjs          # buildRequest (first-bar rule), notesView, verifyRows, levelRows, share links
+node --test test/golden.test.mjs           # demo's event stream still matches the 2026-09-12 golden (33 s)
+node scripts/analyze.mjs renders/verify.before.wav renders/verify.after.wav   # the 2026-09-13 "much wider" run, not punchier
+git log --format='%h %ad %s' --date=short -- songs/knobs0.strudel songs/punchier1.strudel songs/demo.strudel
+git diff 7d93908 HEAD -- songs/arrival.strudel   # what moved under section-controls.png
 ```
 
-Do **not** label this "a section auditioned alone versus in the full mix": a section alone and the same section in the song are identical audio. Label it "one part solo'd, then the same two bars with everything", and say in the prose that solo did not touch the file.
+Count literals vs controls (the script is not in the repo; it is the twelve lines that build an `EditorState` with `hllControls(SCHEMA)`, iterate the lezer tree for `Number`/`String`/`BooleanLiteral` nodes, and diff them against `findControls`; normalise `\r\n` first, the working-tree copies of `demo`/`knobs0` have mixed line endings and CodeMirror's doc positions are on `\n`).
 
-### Clip set C: a drum voice alone versus the part that does not contain it (one intermediate file)
-
-The strongest of the three, because it demonstrates *why* per-voice auditioning exists rather than just showing it.
-
-`songs/knobs-cp.strudel`:
-```
-s("cp").struct("~ ~ ~ ~ x ~ ~ ~ ~ ~ ~ ~ x ~ ~ ~").bank("RolandTR909")
-```
-
-Two claps per cycle at .25 and .75, the house `cp` grid, verbatim. A plain file gets the default `cps: 0.5`, which is `demo.strudel`'s tempo, so the three clips line up.
-
-```json
-{ "out": "knobs-in-the-code/voice-clap-alone", "song": "knobs-cp.strudel", "cycles": 2 },
-{ "out": "knobs-in-the-code/part-no-clap",     "song": "demo.strudel", "section": "verse", "layer": "drums", "cycles": 2 },
-{ "out": "knobs-in-the-code/part-with-clap",   "song": "demo.strudel", "section": "drop",  "layer": "drums", "cycles": 2 }
-```
-
-The order to present them: the clap alone, then `verse` drums at `density: .6` where **the clap is not there at all**, then `drop` drums at `.9` where it is there and buried. Caption: *"this is why a voice is previewed alone: in the middle clip there is nothing to preview."*
-
-### Total: 7 clips, 2 bars each, 64 kbps mono.
-
-New files this requires in `E:\github2\strudle\songs\`: `knobs0.strudel`, `knobs1.strudel`, `knobs-cp.strudel`. All three check clean; all three follow the `darker0/1/2` precedent; all three should be committed so the post is reproducible.
+Browser-needing steps, for whoever owns the page: `npm run headless -- songs/demo.strudel`, then `npm run snippets -- clips.json --out-dir ...` (section 6) and `npm run verify -- <copy of punchier0> verse drums "punchier"` (section 3).

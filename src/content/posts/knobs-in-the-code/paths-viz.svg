@@ -15,7 +15,7 @@
   <!-- left path: writes -->
   <path d="M270 52V78H130V96" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" fill="none" marker-end="url(#pth-fg)" />
   <rect x="20" y="98" width="220" height="30" rx="6" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
-  <text x="130" y="118" font-size="12" text-anchor="middle" fill="#11171d">a knob, a menu, a drag</text>
+  <text x="130" y="118" font-size="12" text-anchor="middle" fill="#11171d">a knob, a pill, a chord, a grid step</text>
   <path d="M130 128V150" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5" fill="none" marker-end="url(#pth-fg)" />
   <rect x="20" y="152" width="220" height="30" rx="6" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
   <text x="130" y="172" font-size="12" text-anchor="middle" fill="#11171d">one commit function</text>

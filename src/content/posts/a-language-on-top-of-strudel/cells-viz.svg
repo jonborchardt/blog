@@ -1,83 +1,107 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="640" height="420" viewBox="0 0 640 420" font-family="system-ui, sans-serif" font-size="13">
-  <!-- column headers -->
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="470" viewBox="0 0 640 470" font-family="system-ui, sans-serif" font-size="13">
+  <!-- column headers: eight layers -->
   <g font-size="12" fill="currentColor" text-anchor="middle">
-    <text x="250" y="34">drums</text>
-    <text x="330" y="34">bass</text>
-    <text x="410" y="34">melody</text>
-    <text x="490" y="34">pad</text>
-    <text x="570" y="34">fx</text>
+    <text x="132" y="34">drums</text>
+    <text x="194" y="34">bass</text>
+    <text x="256" y="34">melody</text>
+    <text x="318" y="34">pad</text>
+    <text x="380" y="34">fx</text>
+    <text x="442" y="34">sample</text>
+    <text x="504" y="34">perc</text>
+    <text x="566" y="34">raw</text>
   </g>
   <g font-size="11" fill="currentColor" fill-opacity="0.75" text-anchor="middle">
-    <text x="250" y="48">11</text>
-    <text x="330" y="48">11</text>
-    <text x="410" y="48">10</text>
-    <text x="490" y="48">10</text>
-    <text x="570" y="48">4</text>
+    <text x="132" y="48">11</text>
+    <text x="194" y="48">11</text>
+    <text x="256" y="48">10</text>
+    <text x="318" y="48">10</text>
+    <text x="380" y="48">4</text>
+    <text x="442" y="48">4</text>
+    <text x="504" y="48">10</text>
+    <text x="566" y="48">4</text>
   </g>
-  <line x1="212" y1="56" x2="610" y2="56" stroke="currentColor" stroke-opacity="0.35" stroke-width="1" />
+  <line x1="104" y1="56" x2="600" y2="56" stroke="currentColor" stroke-opacity="0.35" stroke-width="1" />
 
-  <!-- row labels -->
+  <!-- row labels: twelve axes -->
   <g font-size="12" fill="currentColor" text-anchor="end">
-    <text x="200" y="76">density</text>
-    <text x="200" y="104">drive</text>
-    <text x="200" y="132">brightness</text>
-    <text x="200" y="160">weight</text>
-    <text x="200" y="188">space</text>
-    <text x="200" y="216">articulation</text>
-    <text x="200" y="244">aggression</text>
-    <text x="200" y="272">groove</text>
-    <text x="200" y="300">variation</text>
-    <text x="200" y="328">organicness</text>
-    <text x="200" y="356">width</text>
-    <text x="200" y="384">register</text>
+    <text x="96" y="76">density</text>
+    <text x="96" y="104">drive</text>
+    <text x="96" y="132">brightness</text>
+    <text x="96" y="160">weight</text>
+    <text x="96" y="188">space</text>
+    <text x="96" y="216">articulation</text>
+    <text x="96" y="244">aggression</text>
+    <text x="96" y="272">groove</text>
+    <text x="96" y="300">variation</text>
+    <text x="96" y="328">organicness</text>
+    <text x="96" y="356">width</text>
+    <text x="96" y="384">register</text>
   </g>
 
-  <!-- filled cells: rounded chips. Empty cells: a dashed outline. -->
-  <!-- density: drums bass melody pad -->
+  <!-- implemented cells: filled chips. Columns x = 104 + 62*i, width 56. Rows y = 62 + 28*j, height 20. -->
   <g fill="#deeef5" stroke="#006a90" stroke-width="1.5">
-    <rect x="220" y="62" width="60" height="20" rx="4" /><rect x="300" y="62" width="60" height="20" rx="4" /><rect x="380" y="62" width="60" height="20" rx="4" /><rect x="460" y="62" width="60" height="20" rx="4" />
-    <rect x="220" y="90" width="60" height="20" rx="4" /><rect x="300" y="90" width="60" height="20" rx="4" /><rect x="460" y="90" width="60" height="20" rx="4" />
-    <rect x="220" y="118" width="60" height="20" rx="4" /><rect x="300" y="118" width="60" height="20" rx="4" /><rect x="380" y="118" width="60" height="20" rx="4" /><rect x="460" y="118" width="60" height="20" rx="4" /><rect x="540" y="118" width="60" height="20" rx="4" />
-    <rect x="220" y="146" width="60" height="20" rx="4" /><rect x="300" y="146" width="60" height="20" rx="4" /><rect x="460" y="146" width="60" height="20" rx="4" /><rect x="540" y="146" width="60" height="20" rx="4" />
-    <rect x="220" y="174" width="60" height="20" rx="4" /><rect x="300" y="174" width="60" height="20" rx="4" /><rect x="380" y="174" width="60" height="20" rx="4" /><rect x="460" y="174" width="60" height="20" rx="4" /><rect x="540" y="174" width="60" height="20" rx="4" />
-    <rect x="220" y="202" width="60" height="20" rx="4" /><rect x="300" y="202" width="60" height="20" rx="4" /><rect x="380" y="202" width="60" height="20" rx="4" /><rect x="460" y="202" width="60" height="20" rx="4" />
-    <rect x="220" y="230" width="60" height="20" rx="4" /><rect x="300" y="230" width="60" height="20" rx="4" /><rect x="380" y="230" width="60" height="20" rx="4" /><rect x="460" y="230" width="60" height="20" rx="4" />
-    <rect x="220" y="258" width="60" height="20" rx="4" /><rect x="300" y="258" width="60" height="20" rx="4" /><rect x="380" y="258" width="60" height="20" rx="4" />
-    <rect x="220" y="286" width="60" height="20" rx="4" /><rect x="300" y="286" width="60" height="20" rx="4" /><rect x="380" y="286" width="60" height="20" rx="4" />
-    <rect x="220" y="314" width="60" height="20" rx="4" /><rect x="300" y="314" width="60" height="20" rx="4" /><rect x="380" y="314" width="60" height="20" rx="4" /><rect x="460" y="314" width="60" height="20" rx="4" />
-    <rect x="220" y="342" width="60" height="20" rx="4" /><rect x="380" y="342" width="60" height="20" rx="4" /><rect x="460" y="342" width="60" height="20" rx="4" /><rect x="540" y="342" width="60" height="20" rx="4" />
-    <rect x="300" y="370" width="60" height="20" rx="4" /><rect x="380" y="370" width="60" height="20" rx="4" /><rect x="460" y="370" width="60" height="20" rx="4" />
+    <!-- density: drums bass melody pad perc -->
+    <rect x="104" y="62" width="56" height="20" rx="4" /><rect x="166" y="62" width="56" height="20" rx="4" /><rect x="228" y="62" width="56" height="20" rx="4" /><rect x="290" y="62" width="56" height="20" rx="4" /><rect x="476" y="62" width="56" height="20" rx="4" />
+    <!-- drive: drums bass pad perc -->
+    <rect x="104" y="90" width="56" height="20" rx="4" /><rect x="166" y="90" width="56" height="20" rx="4" /><rect x="290" y="90" width="56" height="20" rx="4" /><rect x="476" y="90" width="56" height="20" rx="4" />
+    <!-- brightness: all eight -->
+    <rect x="104" y="118" width="56" height="20" rx="4" /><rect x="166" y="118" width="56" height="20" rx="4" /><rect x="228" y="118" width="56" height="20" rx="4" /><rect x="290" y="118" width="56" height="20" rx="4" /><rect x="352" y="118" width="56" height="20" rx="4" /><rect x="414" y="118" width="56" height="20" rx="4" /><rect x="476" y="118" width="56" height="20" rx="4" /><rect x="538" y="118" width="56" height="20" rx="4" />
+    <!-- weight: all but melody -->
+    <rect x="104" y="146" width="56" height="20" rx="4" /><rect x="166" y="146" width="56" height="20" rx="4" /><rect x="290" y="146" width="56" height="20" rx="4" /><rect x="352" y="146" width="56" height="20" rx="4" /><rect x="414" y="146" width="56" height="20" rx="4" /><rect x="476" y="146" width="56" height="20" rx="4" /><rect x="538" y="146" width="56" height="20" rx="4" />
+    <!-- space: all eight -->
+    <rect x="104" y="174" width="56" height="20" rx="4" /><rect x="166" y="174" width="56" height="20" rx="4" /><rect x="228" y="174" width="56" height="20" rx="4" /><rect x="290" y="174" width="56" height="20" rx="4" /><rect x="352" y="174" width="56" height="20" rx="4" /><rect x="414" y="174" width="56" height="20" rx="4" /><rect x="476" y="174" width="56" height="20" rx="4" /><rect x="538" y="174" width="56" height="20" rx="4" />
+    <!-- articulation: drums bass melody pad perc -->
+    <rect x="104" y="202" width="56" height="20" rx="4" /><rect x="166" y="202" width="56" height="20" rx="4" /><rect x="228" y="202" width="56" height="20" rx="4" /><rect x="290" y="202" width="56" height="20" rx="4" /><rect x="476" y="202" width="56" height="20" rx="4" />
+    <!-- aggression: drums bass melody pad perc -->
+    <rect x="104" y="230" width="56" height="20" rx="4" /><rect x="166" y="230" width="56" height="20" rx="4" /><rect x="228" y="230" width="56" height="20" rx="4" /><rect x="290" y="230" width="56" height="20" rx="4" /><rect x="476" y="230" width="56" height="20" rx="4" />
+    <!-- groove: drums bass melody perc -->
+    <rect x="104" y="258" width="56" height="20" rx="4" /><rect x="166" y="258" width="56" height="20" rx="4" /><rect x="228" y="258" width="56" height="20" rx="4" /><rect x="476" y="258" width="56" height="20" rx="4" />
+    <!-- variation: drums bass melody -->
+    <rect x="104" y="286" width="56" height="20" rx="4" /><rect x="166" y="286" width="56" height="20" rx="4" /><rect x="228" y="286" width="56" height="20" rx="4" />
+    <!-- organicness: drums bass melody pad perc -->
+    <rect x="104" y="314" width="56" height="20" rx="4" /><rect x="166" y="314" width="56" height="20" rx="4" /><rect x="228" y="314" width="56" height="20" rx="4" /><rect x="290" y="314" width="56" height="20" rx="4" /><rect x="476" y="314" width="56" height="20" rx="4" />
+    <!-- width: all but bass -->
+    <rect x="104" y="342" width="56" height="20" rx="4" /><rect x="228" y="342" width="56" height="20" rx="4" /><rect x="290" y="342" width="56" height="20" rx="4" /><rect x="352" y="342" width="56" height="20" rx="4" /><rect x="414" y="342" width="56" height="20" rx="4" /><rect x="476" y="342" width="56" height="20" rx="4" /><rect x="538" y="342" width="56" height="20" rx="4" />
+    <!-- register: bass melody pad -->
+    <rect x="166" y="370" width="56" height="20" rx="4" /><rect x="228" y="370" width="56" height="20" rx="4" /><rect x="290" y="370" width="56" height="20" rx="4" />
   </g>
 
-  <!-- empty cells -->
+  <!-- empty cells: dashed outlines -->
   <g fill="none" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.5" stroke-dasharray="3 3">
-    <rect x="540" y="62" width="60" height="20" rx="4" />
-    <rect x="380" y="90" width="60" height="20" rx="4" /><rect x="540" y="90" width="60" height="20" rx="4" />
-    <rect x="380" y="146" width="60" height="20" rx="4" />
-    <rect x="540" y="202" width="60" height="20" rx="4" />
-    <rect x="540" y="230" width="60" height="20" rx="4" />
-    <rect x="460" y="258" width="60" height="20" rx="4" /><rect x="540" y="258" width="60" height="20" rx="4" />
-    <rect x="460" y="286" width="60" height="20" rx="4" /><rect x="540" y="286" width="60" height="20" rx="4" />
-    <rect x="540" y="314" width="60" height="20" rx="4" />
-    <rect x="300" y="342" width="60" height="20" rx="4" />
-    <rect x="220" y="370" width="60" height="20" rx="4" /><rect x="540" y="370" width="60" height="20" rx="4" />
+    <!-- density: fx sample raw -->
+    <rect x="352" y="62" width="56" height="20" rx="4" /><rect x="414" y="62" width="56" height="20" rx="4" /><rect x="538" y="62" width="56" height="20" rx="4" />
+    <!-- drive: melody fx sample raw -->
+    <rect x="228" y="90" width="56" height="20" rx="4" /><rect x="352" y="90" width="56" height="20" rx="4" /><rect x="414" y="90" width="56" height="20" rx="4" /><rect x="538" y="90" width="56" height="20" rx="4" />
+    <!-- weight: melody -->
+    <rect x="228" y="146" width="56" height="20" rx="4" />
+    <!-- articulation: fx sample raw -->
+    <rect x="352" y="202" width="56" height="20" rx="4" /><rect x="414" y="202" width="56" height="20" rx="4" /><rect x="538" y="202" width="56" height="20" rx="4" />
+    <!-- aggression: fx sample raw -->
+    <rect x="352" y="230" width="56" height="20" rx="4" /><rect x="414" y="230" width="56" height="20" rx="4" /><rect x="538" y="230" width="56" height="20" rx="4" />
+    <!-- groove: pad fx sample raw -->
+    <rect x="290" y="258" width="56" height="20" rx="4" /><rect x="352" y="258" width="56" height="20" rx="4" /><rect x="414" y="258" width="56" height="20" rx="4" /><rect x="538" y="258" width="56" height="20" rx="4" />
+    <!-- variation: pad fx sample perc raw -->
+    <rect x="290" y="286" width="56" height="20" rx="4" /><rect x="352" y="286" width="56" height="20" rx="4" /><rect x="414" y="286" width="56" height="20" rx="4" /><rect x="476" y="286" width="56" height="20" rx="4" /><rect x="538" y="286" width="56" height="20" rx="4" />
+    <!-- organicness: fx sample raw -->
+    <rect x="352" y="314" width="56" height="20" rx="4" /><rect x="414" y="314" width="56" height="20" rx="4" /><rect x="538" y="314" width="56" height="20" rx="4" />
+    <!-- width: bass -->
+    <rect x="166" y="342" width="56" height="20" rx="4" />
+    <!-- register: drums fx sample perc raw -->
+    <rect x="104" y="370" width="56" height="20" rx="4" /><rect x="352" y="370" width="56" height="20" rx="4" /><rect x="414" y="370" width="56" height="20" rx="4" /><rect x="476" y="370" width="56" height="20" rx="4" /><rect x="538" y="370" width="56" height="20" rx="4" />
   </g>
 
-  <!-- three called-out holes -->
-  <g font-size="11" fill="currentColor" fill-opacity="0.75">
-    <text x="10" y="396">a kit has no pitch</text>
-    <text x="10" y="410" fill-opacity="0.55">drums has no register</text>
-  </g>
-  <path d="M112 388H206Q216 388 216 380" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.5" fill="none" />
+  <!-- two called-out holes -->
+  <path d="M132 392V404" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.5" fill="none" />
+  <text x="132" y="418" font-size="11" fill="currentColor" fill-opacity="0.75" text-anchor="middle">a kit has no pitch</text>
+  <path d="M194 364V404" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.5" fill="none" />
+  <text x="230" y="434" font-size="11" fill="currentColor" fill-opacity="0.75" text-anchor="middle">mono low end, on purpose</text>
 
   <!-- legend -->
   <g font-size="11" fill="currentColor">
-    <rect x="10" y="62" width="26" height="14" rx="4" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
-    <text x="42" y="73">implemented</text>
-    <rect x="10" y="86" width="26" height="14" rx="4" fill="none" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.5" stroke-dasharray="3 3" />
-    <text x="42" y="97">a documented</text>
-    <text x="42" y="111">no-op</text>
-    <text x="10" y="140" fill-opacity="0.75">46 of 60</text>
-    <text x="10" y="154" fill-opacity="0.75">cells exist</text>
+    <rect x="352" y="406" width="26" height="14" rx="4" fill="#deeef5" stroke="#006a90" stroke-width="1.5" />
+    <text x="384" y="417">implemented</text>
+    <rect x="352" y="428" width="26" height="14" rx="4" fill="none" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.5" stroke-dasharray="3 3" />
+    <text x="384" y="439">a documented no-op</text>
+    <text x="352" y="461" fill-opacity="0.75">64 of 96 cells exist</text>
   </g>
 </svg>

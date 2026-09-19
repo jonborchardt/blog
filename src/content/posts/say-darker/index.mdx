@@ -1,9 +1,10 @@
 ---
 title: Say darker
-description: Twenty-five words that edit a song by moving numbers. Say darker twice and the second one barely lands, which turns out to be the interesting part.
+description: Twenty-nine words that edit a song by moving numbers. Say darker twice and the second one barely lands, which turns out to be the interesting part.
 publishedAt: 2026-09-13
+updatedAt: 2026-09-19
 series: strudel-bench
-seriesOrder: 3
+seriesOrder: 2
 tags: [music, dsl, live-coding]
 authority: "E:\\github2\\strudle"
 hero:
@@ -19,12 +20,17 @@ import VizFigure from "@/components/blog/VizFigure.astro";
 import VocabViz from "./vocab-viz.svg";
 import SaturationViz from "./saturation-viz.svg";
 import SilentViz from "./silent-viz.svg";
+import MotionViz from "./motion-viz.svg";
 import drop0 from "./audio/drop-0-base.mp3";
 import drop1 from "./audio/drop-1-darker.mp3";
 import drop2 from "./audio/drop-2-darker.mp3";
 import pad0 from "./audio/pad-0-base.mp3";
 import pad1 from "./audio/pad-1-darker.mp3";
 import pad2 from "./audio/pad-2-darker.mp3";
+import wobbleBefore from "./audio/pad-wobble-before.mp3";
+import wobbleAfter from "./audio/pad-wobble-after.mp3";
+import breakdownBefore from "./audio/drop-breakdown-before.mp3";
+import breakdownAfter from "./audio/drop-breakdown-after.mp3";
 
 Here is the same two bars of music three times. Between the first and the second I typed one word.
 Between the second and the third I typed the same word again.
@@ -43,12 +49,13 @@ The first one does a great deal. The second does almost nothing, and it is loud 
 
 [The previous post](/a-language-on-top-of-strudel/) was about the layer that turns a piece of music
 into named sections and parts, each sitting at some position on twelve numeric axes. This post is
-about the layer above that: a vocabulary of English words that move those numbers, and the three
-decisions that make a deliberately small natural-language surface work.
+about the layer above that: a vocabulary of English words that move those numbers, the words that
+shape a number over time, the verbs that rearrange a whole section, and the three decisions that
+make a deliberately small natural-language surface work.
 
 ## The whole language is a table
 
-Not a parser. Not a model. Two JSON files.
+Not a parser. Not a model. A handful of JSON files.
 
 ```json
 "dark":   { "brightness": -0.30, "register": -0.10 },
@@ -56,20 +63,20 @@ Not a parser. Not a model. Two JSON files.
 "sparse": { "density": -0.35 }
 ```
 
-Twenty-five control words, plus eight mood words that work the same way and are documented as lower
+Twenty-nine control words, plus eight mood words that work the same way and are documented as lower
 confidence. Ten modifiers, which are a multiplication table: `slightly` is 0.5, `much` is 2,
 `extremely` is 3, and `more` is 1, a deliberate no-op that exists so "more punchy" reads naturally.
 `less` is not a modifier at all; it is a separate branch that flips the sign of the whole vector.
 
-<Figure caption="Generated from the vocabulary files, so it cannot drift from them. Counted 2026-09-13.">
+<Figure caption="Generated from the vocabulary files, so it cannot drift from them. Counted 2026-09-19.">
   <VizFigure
     name="Every word in the vocabulary and the axes each one moves"
-    summary="The table is sparse: 61 of a possible 300 word-and-axis combinations carry a value, and most words touch one or two axes. No word's largest move is on register or on variation, which is why neither can ever be spoken back."
+    summary="The table is sparse: 73 of a possible 348 word-and-axis combinations carry a value, and most words touch one or two axes. No control word's largest move is on register or on variation, and mood words are never read back, which is why neither axis can ever be spoken. The four depth words added for the mixing pass are small and all four are mute."
     data={{
       caption: "Vocabulary size",
       columns: ["Table", "Words", "Non-zero cells", "Possible cells"],
       rows: [
-        ["control words", "25", "61", "300"],
+        ["control words", "29", "73", "348"],
         ["mood words", "8", "30", "96"],
       ],
     }}
@@ -78,14 +85,17 @@ confidence. Ten modifiers, which are a multiplication table: `slightly` is 0.5, 
   </VizFigure>
 </Figure>
 
-Sixty-one numbers in a grid of three hundred. Five words touch exactly one axis. One word, `dreamy`,
+Seventy-three numbers in a grid of 348. Five words touch exactly one axis. One word, `dreamy`,
 touches five. No delta anywhere in the table is larger than 0.40.
 
-The thing I did not expect: **these files have one commit each in the entire history.** They were
-written once, never tuned, and the whole catalogue of songs got built afterwards without the table
-ever needing a pass. The honest footnote is that there has only ever been one user, who learned the
-twenty-five words. But the version of this that would have failed is obvious enough to name: a
-vocabulary that grows every time someone wants a word, until nobody can predict what any of it does.
+The thing I did not expect: **the twenty-five original vectors have never been retuned.** They were
+written once, and a catalogue of songs got built on them without the table needing a pass. It has
+been extended exactly once, when the mixing tools arrived and needed four depth words (`closer`,
+`forward`, `farther`, `background`), and those four are the gentlest entries in the file, each moving
+brightness, space and weight together by a fraction of what the older words do. The honest footnote
+is that there has only ever been one user, who learned the words. But the version of this that would
+have failed is obvious enough to name: a vocabulary that grows every time someone wants a word, until
+nobody can predict what any of it does.
 
 ## Deltas, not states
 
@@ -96,9 +106,9 @@ That is what makes it feel like talking rather than filling in a form. You do no
 current value to ask for less of something, which is exactly the position you are in when you are
 listening rather than reading.
 
-Consequentially, a layer that never mentioned an axis is treated as sitting at the
-baseline of 0.5, so a single word can **insert** properties that were not there. And the result is
-clamped to the range, at apply time, with the clamp reported rather than hidden.
+Consequentially, a part that never mentioned an axis is treated as sitting at the baseline of 0.5,
+so a single word can **insert** properties that were not there. And the result is clamped to the
+range, at apply time, with the clamp reported rather than hidden.
 
 ## Which is why saying it twice is interesting
 
@@ -106,7 +116,7 @@ clamped to the range, at apply time, with the clamp reported rather than hidden.
   name="The same command applied twice, and how much of it landed each time"
   summary="Both commands ask for the same 0.60 reduction. The first lands almost in full and drops the measured centroid by 89 percent. The second has nowhere to go and moves it by 5 percent."
   data={{
-    caption: "Requested against applied, and the measured result",
+    caption: "Requested against applied, and the measured result (centroid measured 2026-09-13)",
     columns: ["Step", "Requested", "Applied", "Centroid after"],
     rows: [
       ["as written", "n/a", "n/a", "1406 Hz"],
@@ -122,24 +132,23 @@ The report does not say "done." It says what it managed:
 
 ```text
 drop.drums.brightness 0 → 0    lpf 800 Hz            applied +0 of requested -0.60   saturated
-drop.bass.brightness 0 → 0     lpf 80 Hz → 80 Hz     applied +0 of requested -0.60   saturated
-drop.melody.brightness .1 → 0  lpf 438 Hz → 300 Hz   applied -0.1 of requested -0.60   saturated
+drop.bass.brightness 0 → 0     lpf 80 Hz -> 80 Hz     applied +0 of requested -0.60   saturated
+drop.melody.brightness .1 → 0  lpf 438 Hz -> 300 Hz   applied -0.1 of requested -0.60   saturated
 drop.pad.register .3 → .1      octave 3
 ```
 
 `applied +0 of requested -0.60` is the line that matters. Nothing happened, and it says so.
 
-**We report the delta you achieved, not
-the one you were asked for.** If the second identical command silently claims success, the user
-learns within two turns that the system's reports are decoration, and after that they stop reading
-them.
+**It reports the delta you achieved, not the one you asked for.** If the second identical command
+silently claimed success, the user would learn within two turns that the system's reports are
+decoration, and after that they would stop reading them.
 
 The measurement backs it up, because the rendered audio can be analysed: the spectral centroid falls
 from 1406 Hz to 149 Hz, then to 141 Hz. An 89 percent move, then a 5 percent one, from the same
 command.
 
-One layer had headroom in both steps. Its pad was at 0.7, so it went to 0.1 and then to 0, and it is
-the only place where the second command is really audible:
+Two parts had headroom in both steps, the piano and the pad. The pad was at 0.7, so it went to 0.1
+and then to 0, and it is the place where the second command is most audible:
 
 <SoundBite
   label="Just the pad, across the same three states"
@@ -180,7 +189,7 @@ The same table runs backwards. The checker prints every part's numbers as words,
 a section sounds like and get English, computed from the values that English put there. Round trip:
 word, number, word.
 
-It does not survive the trip cleanly. **Nineteen of the twenty-five control words come back. None of
+It does not survive the trip cleanly. **Nineteen of the twenty-nine control words come back. None of
 the eight mood words ever do.** And five of the twenty-four axis directions have no word at all:
 
 <VizFigure
@@ -194,8 +203,10 @@ The mechanism is one owner per column. A word is a candidate for an axis only if
 word's own largest move, and then the largest of those candidates takes the column outright.
 `spacious` raises space by 0.35, but so does `dreamy`, and `dreamy` was defined first, so `dreamy`
 owns space and `spacious` can never be spoken. `tight` moves articulation by 0.25 and loses to
-`punchy` at 0.40. Six words are mute this way, two of them on ties and four because something else
-simply moves that axis harder.
+`punchy` at 0.40. Ten words are mute this way, two of them on ties and eight because something else
+simply moves that axis harder. The four depth words are all among the mute: they were designed to
+move three axes gently, so none of them will ever own a column. Invisible to the read-back by
+construction.
 
 The sharpest case is `hypnotic`. It is a real word, it applies cleanly, it moves three axes, and the
 read-back for the result is **nothing at all**. Its largest move is on variation, and variation has no
@@ -209,7 +220,7 @@ it out of its word: `0.1` and `0` are both "very dark".
 I would rather have this than a system that pretends. A lossy projection between a small discrete
 vocabulary and a continuous space is not a defect to be fixed; it is the shape of the problem. The
 design decision that matters is that the loss is *measurable*, which is why I can tell you it is
-19 of 25 rather than "mostly fine."
+19 of 29 rather than "mostly fine."
 
 ## What the resolver refuses to touch
 
@@ -220,23 +231,20 @@ of axis keys inside a section, and splices those byte ranges. Back to front, so 
 valid. The parser is only ever used to *locate*; nothing is regenerated, so comments, formatting and
 key order survive untouched.
 
-Then it refuses or declines, in four ways:
+Then it refuses, and every refusal names the reason and the fix. Three that come up:
 
 - **An expression instead of a number.** If brightness is a signal sweeping over the section, it will
   not rewrite it: `refused, brightness is a signal here; change its range by hand`.
-- **A part built by spreading a shared definition.** The whole part is refused, with no edits at all.
 - **A key or progression that is not a plain string.** The harmony half is refused.
 - **An axis with no implementation on that kind of part.** Skipped, and reported as skipped.
 
-The spread refusal is the one worth dwelling on, because the parser understands the code perfectly
-well. It refuses because **a delta needs a baseline, and the baseline is hidden behind a value it
-would have to run the program to see.** Guessing 0.5 would throw away whatever the shared definition
-contributed. Editing only the literals it can see would apply the change to the wrong starting point.
-
-What convinces me this is principle rather than laziness: the same function, called from the browser,
-*does* edit those parts. The page has already evaluated the song in order to play it, so it can pass
-the real current values in, and then the edit is honest. One function, two levels of confidence,
-decided entirely by whether the caller can actually see the baseline.
+And one that is a principle rather than a pattern match. A part built by spreading a shared
+definition (`{ ...theme, density: .55 }`) has its baseline hidden behind a value the parser would
+have to run the program to see. **A delta needs a baseline**, and guessing 0.5 would throw away
+whatever the shared definition contributed. So the library refuses to edit such a part unless the
+caller hands it the evaluated values. Both callers now do: the page has already evaluated the song in
+order to play it, and the command-line resolver evaluates it first for the same reason. The refusal
+survives only where no baseline can be had, which is exactly where it should.
 
 ## Harmony is deliberately not an axis
 
@@ -259,36 +267,106 @@ C:minor            i iv V i   →  Cm Fm Gm Cm
 C:harmonic minor   i iv v i   →  Cm Fm G  Cm
 ```
 
-Writing `V` in capitals does not give you a major dominant. You get one when the key you chose has a
-raised seventh, and not before. The system refuses to infer that you meant harmonic minor, and makes
-you say so.
+Writing a bare `V` in capitals does not give you a major dominant. You get one when the key you chose
+has a raised seventh, and not before. The system refuses to infer that you meant harmonic minor, and
+makes you say so. (Write `V7` and you do get the dominant seventh in any key, because a seventh has to
+commit to a quality.)
 
-The progression words are named for how they sound in a
-minor key, and nothing checks that the name still fits elsewhere. Ask for `tense` in a major key and
-you get a diminished chord on the seventh degree, which is not tension, it is an accident. 
-This is worth further thought in the future.
+The grammar has grown past plain triads: `@n` holds a chord for n bars, `/1` and `/2` invert it and
+the printed name gains its slash bass (`VI/1` in C minor is Ab/C), accidentals and `m`, `M7` and `dim`
+suffixes do what they say, and a melody can be told `follow: 'tones'` so its written degrees walk each
+bar's chord tones instead of the key's scale. Voice leading is still not modelled, and the editor's
+per-bar chord picker refuses a progression that uses `@n`, because one bar in a picker cannot stand
+for a hand-written repeat count.
+
+The progression words are named for how they sound in a minor key, and nothing checks that the name
+still fits elsewhere. Ask for `tense` in a major key and you get a diminished chord on the seventh
+degree, which is not tension, it is an accident. This is worth further thought.
+
+## Words that move
+
+A number is a position. Some words write a *shape* instead, and they are the newest part of the
+vocabulary. Put a motion word next to an axis name and the resolver replaces the number with a
+movement centred on it:
+
+```text
+wobbling brightness   .7 -> wobble(.5, .9)
+brightness rising     .7 -> ramp(.7, 1)
+swelling space        .5 -> swell(.3, .7)
+```
+
+<VizFigure
+  name="The five shapes a motion word can write, over one four-bar section"
+  summary="Rising is a straight ramp across the section. Wobbling is one sine per bar. Swelling is one sine over the whole section, peaking at its midpoint. Pulsing sits high and dips for the second half of every beat. Drifting is seeded noise between the two bounds, the same every play."
+>
+  <MotionViz class="mx-auto h-auto w-full max-w-2xl" aria-hidden="true" />
+</VizFigure>
+
+Each movement already knows how long the section is, so a ramp spans exactly the section and a swell
+peaks in the middle of it. The rules are the same ones the deltas obey: the phrase's own delta is
+applied first, so `much darker, wobbling brightness` wobbles around the darkened value rather than
+the original; a structural axis (density, drive, variation, register) refuses every shape, because it
+decides the grid before there is anything to sample; an axis that is already a signal refuses too;
+and two movements on one axis in one phrase is refused, one per axis.
+
+<SoundBite
+  label="A pad before and after the words wobbling brightness"
+  note="Four bars each. The wobble is one sine per bar, so the filter opens and closes with every bar of the arpeggio."
+  clips={[
+    { src: wobbleBefore, label: "pad, brightness .7" },
+    { src: wobbleAfter, label: "pad, wobble(.5, .9)" },
+  ]}
+/>
+
+## Verbs
+
+The last kind of word is a macro. An arrangement verb is a phrase plus a material change plus a
+part cut, stored in JSON, and applied to a whole section at once. There are four:
+
+| Verb        | What it is                                                   |
+| ----------- | ------------------------------------------------------------ |
+| `breakdown` | the phrase `sparser, more spacious, darker`, and drop the fx |
+| `lift`      | the phrase `busier, brighter, more driving`                  |
+| `strip`     | keep drums, bass, sample, perc and raw; cut the rest         |
+| `halftime`  | the drum template becomes `halftime`, then `slightly sparser` |
+
+No new mechanism. A verb runs through the same resolver, prints the same per-axis report, saturates
+in the same places, and lands on the same undo stack as a slider drag. A reader can check what
+`breakdown` does in ten seconds by opening the file.
+
+<SoundBite
+  label="A drop before and after the verb breakdown"
+  note="Two bars each. Every part sparser, more spacious and darker in one step; the fx part removed."
+  clips={[
+    { src: breakdownBefore, label: "drop, as written" },
+    { src: breakdownAfter, label: "drop, after breakdown" },
+  ]}
+/>
 
 ## Taste, as a linter
 
 The last layer up is a script that turns judgement calls into static analysis over the same table:
 there must be a climax, the climax should be the most energetic section, no two consecutive sections
 should be identical, two raw sawtooths in one section are mud, a bass or melody left on its generated
-default should be given a written line.
+default should be given a written line, and no section should ask the audio thread for more
+simultaneous voices than a laptop can render.
 
 Errors and warnings are split on a defensible line: **errors are things that cannot be true** (a value
 outside the range has no defined meaning), **warnings are things that are usually not what you meant.**
-Every musical judgement is a warning. Across all the songs in the repo today there are zero errors.
+Every musical judgement is a warning. Across the songs the page lists there are zero errors.
 
 There are a couple of dozen warnings, though, and reading them is more instructive than the rules:
 
-- The largest piece, the one iterated on hardest, passes completely clean. That is evidence the rules
-  describe real craft rather than one person's habits.
-- Fifteen of the twenty-nine warnings, counted on 2026-09-13, come from a **single song that is violating the rules on purpose.**
-  It is an industrial track whose header comment says everything corrodes; colliding sawtooths are
-  the genre, and a machine's bass is a loop rather than a hook. Essentially every one of those warnings is wrong,
-  and there is no way to suppress them.
-- One song is reported clean because it has no sections at all, so the linter has no opinion. Clean
-  and silent look identical in the output, which is its own small lesson.
+- The largest piece, the one iterated on hardest, passes completely clean, and so do the four songs
+  written most recently. That is evidence the rules describe real craft rather than one person's
+  habits.
+- Fifteen of the twenty-nine warnings, counted on 2026-09-19 over the eleven listed songs, come from
+  a **single song that is violating the rules on purpose.** It is an industrial track whose header
+  comment says everything corrodes; colliding sawtooths are the genre, and a machine's bass is a loop
+  rather than a hook. Essentially every one of those warnings is wrong, and there is no way to
+  suppress them.
+- One listed song is reported clean because it has no sections at all, so the linter has no opinion.
+  Clean and silent look identical in the output, which is its own small lesson.
 
 And the limit, which is the sharpest thing in this section. Drive the climax to the state you heard at
 the top of this post, where every part has had its brightness pushed to the floor, and the linter's
@@ -296,8 +374,10 @@ verdict is **unchanged**. Its notion of energy counts events, not spectrum. You 
 inaudible mud and it will still certify that the arc peaks in the right place.
 
 Taste encoded as static analysis can only see what the table records, and this table records rhythm.
+There is now a second linter that can see spectrum, because it runs over a rendered measurement
+rather than the table, and [the mixing post](/mixing-as-a-scene/) is about what it sees.
 
-The next post is where the agent finally gets to use all of this.
+The next post is about the place where all of this gets used with a mouse: [the editor](/knobs-in-the-code/).
 
 <Callout variant="info" title="Try it yourself">
   Everything in this series runs in strudel-bench:
