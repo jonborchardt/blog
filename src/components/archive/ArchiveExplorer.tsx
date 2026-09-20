@@ -216,7 +216,7 @@ export default function ArchiveExplorer({ docs, tags, series, indexUrl }: Archiv
       type="button"
       aria-pressed={on}
       onClick={onClick}
-      className="bg-muted hover:bg-accent aria-pressed:bg-primary aria-pressed:text-primary-foreground rounded-full border border-transparent px-2.5 py-0.5 text-xs"
+      className="bg-muted hover:bg-accent aria-pressed:bg-primary aria-pressed:text-primary-foreground inline-flex min-h-6 items-center rounded-full border border-transparent px-2.5 py-0.5 text-xs"
     >
       {label}
     </button>
@@ -294,7 +294,7 @@ export default function ArchiveExplorer({ docs, tags, series, indexUrl }: Archiv
               key={a.label}
               type="button"
               onClick={a.off}
-              className="bg-primary text-primary-foreground rounded-full px-2.5 py-0.5 text-xs"
+              className="bg-primary text-primary-foreground inline-flex min-h-6 items-center rounded-full px-2.5 py-0.5 text-xs"
               aria-label={`Remove filter ${a.label}`}
             >
               {a.label} ×
