@@ -40,7 +40,7 @@ const { hero, series, seriesOrder, tags, title, description, publishedAt, draft 
       )
     }
     <h3 class="text-featured font-semibold">
-      <a href={href(postPath(post))} class="hover:text-primary no-underline">{title}</a>
+      <a href={href(postPath(post))} class="title-link">{title}</a>
       {draft && <DraftBadge />}
     </h3>
     <p class="text-muted-foreground mt-3 text-lg">{description}</p>

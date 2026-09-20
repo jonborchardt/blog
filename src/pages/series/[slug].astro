@@ -58,7 +58,7 @@ const hero = await getSeriesHero(id);
                 <div>
                   <p class="text-primary eyebrow">Part {i + 1}</p>
                   <h2 class="text-title font-semibold">
-                    <a href={href(postPath(post))} class="hover:text-primary no-underline">
+                    <a href={href(postPath(post))} class="title-link">
                       {post.data.title}
                     </a>
                     {post.data.draft && <DraftBadge />}

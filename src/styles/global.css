@@ -78,6 +78,14 @@
   @apply bg-muted hover:bg-accent inline-flex min-h-6 items-center rounded-sm px-1.5 text-xs no-underline;
 }
 
+/* Heading link in a listing row/card (PostList, PostCard, SeriesCard, series page, archive).
+   inline-block gives it the line-height box (>= 24px for text-title/text-featured) instead of the
+   font's content area, which is font-dependent: 24px with Segoe UI, 21px with DejaVu Sans on the
+   Linux CI runner, where axe then fails target-size against the series eyebrow link 4px above. */
+@utility title-link {
+  @apply hover:text-primary inline-block no-underline;
+}
+
 /* Tailwind's built-in max-w-prose is a fixed 65ch; point it at our token instead. */
 @utility max-w-prose {
   max-width: var(--container-prose);

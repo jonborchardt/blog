@@ -93,7 +93,7 @@ function PostRow({
           </p>
         )}
         <h2 className="text-title font-semibold">
-          <a href={doc.url} className="hover:text-primary no-underline">
+          <a href={doc.url} className="title-link">
             {doc.title}
           </a>
           {doc.draft && (
