@@ -2,6 +2,7 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import PostList from "@/components/PostList.astro";
 import PostCard from "@/components/PostCard.astro";
+import Portrait from "@/components/Portrait.astro";
 import { site } from "@/config/site";
 import { getFeaturedPost, getPosts } from "@/lib/posts";
 import { personJsonLd } from "@/lib/seo";
@@ -17,13 +18,16 @@ const recent = posts.filter((p) => p.id !== featured?.id).slice(0, 6);
     title: site.name,
     description: site.description,
     path: "/",
-    jsonLd: [personJsonLd(Astro.site!)],
+    jsonLd: [await personJsonLd(Astro.site!)],
   }}
 >
   <div class="max-w-wide mx-auto">
-    <header class="max-w-prose">
-      <h1 class="text-display font-semibold">{site.name}</h1>
-      <p class="text-muted-foreground mt-4 text-lg leading-relaxed">{site.description}</p>
+    <header class="flex flex-col gap-6 sm:flex-row sm:items-center">
+      <Portrait size="lg" />
+      <div class="max-w-prose">
+        <h1 class="text-display font-semibold">{site.name}</h1>
+        <p class="text-muted-foreground mt-4 text-lg leading-relaxed">{site.description}</p>
+      </div>
     </header>
 
     {

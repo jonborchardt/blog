@@ -2,6 +2,7 @@
 import { site } from "@/config/site";
 import { href } from "@/lib/url";
 import ThemeToggle from "@/components/ThemeToggle.astro";
+import Portrait from "@/components/Portrait.astro";
 // Inlined SVG (no extra request; theme-independent colours).
 import logo from "@/assets/logo.svg?raw";
 
@@ -36,7 +37,10 @@ const isActive = (path: string) => current.startsWith(href(path));
             </li>
           ))
         }
-        <li class="ml-2"><ThemeToggle /></li>
+        <li class="ml-2">
+          <a href={href("/about/")} class="block rounded-full"><Portrait size="sm" /></a>
+        </li>
+        <li><ThemeToggle /></li>
       </ul>
     </nav>
   </div>

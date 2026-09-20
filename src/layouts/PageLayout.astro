@@ -9,7 +9,7 @@ interface Props {
 const { frontmatter } = Astro.props;
 ---
 
-<BaseLayout meta={{ ...frontmatter, jsonLd: [personJsonLd(Astro.site!)] }}>
+<BaseLayout meta={{ ...frontmatter, jsonLd: [await personJsonLd(Astro.site!)] }}>
   <div class="mx-auto max-w-prose">
     <div class="prose dark:prose-invert">
       <slot />

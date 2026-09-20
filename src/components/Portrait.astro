@@ -1,0 +1,24 @@
+---
+/**
+ * The author's photo, cropped to a circle. `sm` is the header avatar, `lg` the homepage/about intro.
+ * The asset is imported directly (like the logo) rather than stored in the author registry.
+ */
+import { Image } from "astro:assets";
+import { author } from "@/config/author";
+import portrait from "@/assets/portrait.png";
+
+interface Props {
+  size: "sm" | "lg";
+}
+const { size } = Astro.props;
+const px = size === "sm" ? 32 : 128;
+---
+
+<Image
+  src={portrait}
+  alt={author.name}
+  width={px}
+  height={px}
+  densities={[1, 2]}
+  class:list={["shrink-0 rounded-full", size === "sm" ? "size-8" : "size-32"]}
+/>

@@ -2,6 +2,8 @@ import { author } from "@/config/author";
 import { site } from "@/config/site";
 import { absoluteUrl } from "@/lib/url";
 import type { Post } from "@/lib/posts";
+import { getImage } from "astro:assets";
+import portrait from "@/assets/portrait.png";
 
 /** Everything a page needs to emit <head> metadata. Built by pages, consumed by BaseLayout. */
 export interface PageMeta {
@@ -26,13 +28,15 @@ export interface PageMeta {
   jsonLd?: object[];
 }
 
-export const personJsonLd = (siteUrl: URL) => ({
+export const personJsonLd = async (siteUrl: URL) => ({
   "@context": "https://schema.org",
   "@type": "Person",
   name: author.name,
   description: author.tagline,
   address: author.location,
   url: absoluteUrl("/", siteUrl),
+  // getImage's src is already base-prefixed, so absolutize it directly rather than via absoluteUrl().
+  image: new URL((await getImage({ src: portrait, width: 512 })).src, siteUrl).href,
   sameAs: Object.values(author.links),
 });
 
